@@ -1,0 +1,664 @@
+nav {
+  height: 75px;
+  position: fixed;
+  width: calc(100% - 290px);
+  background-color: var(--body-color);
+  left: 290px;
+  top: 0;
+  z-index: 3;
+  box-shadow: var(--box-shadow);
+}
+body.arabic nav {
+  right: 290px;
+}
+nav.closed {
+  left: 80px;
+  width: calc(100% - 80px);
+}
+body.arabic nav.closed {
+  right: 80px;
+}
+nav .search {
+  background-color: var(--section-color);
+  border-radius: 6px;
+  padding: 10px 15px;
+  font-size: 19px;
+  color: var(--font-color);
+  text-transform: capitalize;
+}
+
+nav .search > button {
+  color: var(--font-color);
+  opacity: 0.7;
+  font-size: 19px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+
+nav .setting {
+  gap: 20px;
+}
+nav .setting .info .photo {
+  background-color: var(--section-color);
+  color: var(--font-color);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  border-radius: 50%;
+  object-fit: cover;
+  font-size: 14px;
+}
+
+nav .setting .info h4,
+nav .setting .info p {
+  text-transform: capitalize;
+  line-height: 1;
+  color: var(--font-color);
+}
+nav .setting .info h4 {
+  max-width: 100px;
+  text-wrap: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  direction: ltr;
+}
+nav .setting .lang {
+  cursor: pointer;
+  color: var(--font-color);
+}
+
+nav .setting .lang i {
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  border-radius: 50%;
+  display: flex;
+  background: var(--section-color);
+  align-items: center;
+}
+
+nav .setting .lang + div.languages {
+  position: absolute;
+  width: 110px;
+  background: var(--body-color);
+  bottom: -130px;
+  box-shadow: var(--box-shadow);
+  left: -20px;
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+nav .setting .lang + div.languages h2 {
+  font-size: 18px;
+  text-transform: capitalize;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 8px 15px;
+  opacity: 0.7;
+  color: var(--font-color);
+}
+nav .setting .lang + div.languages h2:hover {
+  transform: translateX(5px);
+  opacity: 1;
+}
+nav .setting .lang + div.languages h2.active {
+  opacity: 1;
+
+  font-weight: bold;
+}
+nav .setting .lang + div.languages.active-div {
+  bottom: -150px;
+}
+nav .setting .mode {
+  color: var(--font-color);
+  font-size: 17px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--section-color);
+}
+
+aside {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  max-height: 100vh;
+  background-color: var(--body-color);
+  width: 290px;
+  overflow-y: auto;
+  z-index: 10;
+  overflow-x: hidden;
+}
+body.arabic aside {
+  right: 0;
+}
+aside.closed {
+  width: 80px;
+  overflow: visible;
+}
+aside > article {
+  padding: 20px;
+  height: 75px;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+aside > article a {
+  color: var(--font-color);
+  font-size: 17px;
+  text-transform: uppercase;
+}
+aside.closed > article a {
+  display: none;
+}
+aside.closed > article > i {
+  margin: 0 auto;
+}
+aside > article a h1 {
+  letter-spacing: 2px;
+}
+aside > article a i {
+  margin-right: 4px;
+}
+aside > article i {
+  color: var(--font-color);
+  cursor: pointer;
+  font-size: 18px;
+}
+aside > div {
+  height: calc(100% - 75px);
+  padding: 20px 15px;
+  align-items: flex-start !important;
+}
+aside > div {
+  align-items: center !important;
+  background: #f4f6f8;
+}
+body.dark aside > div {
+  background: #1a1c20;
+}
+aside > div > div {
+  width: 100%;
+}
+aside > div > div > .links {
+  position: relative;
+}
+
+aside > div > div > a,
+aside > div > div > .links > div {
+  cursor: pointer;
+  padding: 13px 15px;
+  background-color: var(--body-color);
+  border-radius: 6px;
+  color: var(--font-color);
+  white-space: nowrap;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+}
+aside > div > div > .links > a.center {
+  margin-top: 10px;
+}
+aside.closed > div > div > .links > .center {
+  justify-content: center;
+}
+aside.closed > div > div > a i,
+body.arabic aside.closed > div > div > a i {
+  margin: auto;
+}
+aside > div > div > .links > .center:hover,
+aside > div > div > .links > .center.active,
+aside > div > div > a:hover,
+aside > div > div > a.active {
+  background-color: var(--main-color);
+}
+
+aside > div > div > .links > .center h1,
+aside > div > div > a h1 {
+  font-size: 20px;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  color: var(--font-color);
+  pointer-events: none;
+}
+aside.closed > div > div > .links > .center h1,
+aside.closed > div > div > a h1 {
+  display: none;
+}
+aside > div > div > .links > .center i {
+  pointer-events: none;
+  font-size: 13px;
+}
+aside.closed > div > div > .links > .center i.arrow {
+  display: none;
+}
+aside > div > div > .links > .center i:not(.arrow),
+aside > div > div > a i {
+  margin-right: 10px;
+  font-size: 14px;
+  color: var(--main-color);
+}
+body.arabic aside > div > div > .links > .center i:not(.arrow),
+body.arabic aside > div > div > a i {
+  margin-left: 10px;
+  margin-right: 0;
+}
+aside.closed > div > div > .links > .center i:not(.arrow),
+body.arabic aside.closed > div > div > .links > .center i:not(.arrow) {
+  margin: 0;
+}
+aside > div > div > .links > .center:hover i,
+aside > div > div > .links > .center.active i,
+aside > div > div > .links > .center:hover h1,
+aside > div > div > .links > .center.active h1,
+aside > div > div > a:hover h1,
+aside > div > div > a.active h1,
+aside > div > div > a:hover i,
+aside > div > div > a.active i {
+  color: white;
+}
+aside > div > div > .links.active i.arrow {
+  rotate: 90deg;
+}
+aside > div > div > .links > article {
+  background-color: var(--body-color);
+  margin-top: 6px;
+  border-radius: 6px;
+  overflow: hidden;
+  max-height: 0px;
+}
+aside.closed > div > div > .links > article {
+  background-color: var(--body-color);
+}
+aside.closed > div > div > .links > article {
+  position: absolute;
+  left: calc(100% + 16px);
+  z-index: 2;
+  top: 0;
+  width: 150px;
+}
+body.arabic aside.closed > div > div > .links > article {
+  right: calc(100% + 16px);
+}
+aside > div > div > .links.active > article {
+  max-height: 200px;
+}
+aside > div > div > .links > article a {
+  display: block;
+  text-transform: capitalize;
+  font-size: 17px;
+  font-weight: bold;
+  color: var(--font-color);
+  padding: 13px 15px;
+}
+aside > div > div > .links > article a.active,
+aside > div > div > .links > article a:hover {
+  background-color: var(--border-color);
+  color: var(--font-color);
+}
+.log-out {
+  color: var(--font-color);
+  gap: 5px;
+}
+nav .log-out {
+  background: #de1e1e;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: capitalize;
+}
+.log-out.aside {
+  padding-bottom: 20px;
+  white-space: nowrap;
+  text-wrap: nowrap;
+  text-overflow: ellipsis;
+}
+.log-out.aside:hover {
+  color: var(--main-color);
+}
+aside.closed .log-out span {
+  display: none;
+}
+
+div.short-cut {
+  position: absolute;
+  right: 60px;
+  bottom: 50px;
+}
+div.short-cut i.plus {
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  font-size: 13px;
+  background-color: var(--body-color);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--font-color);
+  z-index: 1;
+  position: relative;
+  transition: box-shadow 0.4s, rotate 0.4s, border-radius 0.5s;
+}
+div.short-cut i.plus:hover,
+div.short-cut i.plus.active {
+  rotate: 180deg;
+}
+div.short-cut i.plus.active {
+  border-radius: 50% 50% 0% 0%;
+}
+div.short-cut div.short-links {
+  position: absolute;
+  top: -140px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--body-color);
+  padding: 15px 10px;
+  border-radius: 0;
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  width: 50px;
+  border-radius: 10px 10px 0px 0px;
+}
+div.short-cut i.active + div.short-links {
+  top: -150px;
+  opacity: 1;
+  z-index: 1;
+  pointer-events: all;
+}
+div.short-cut div.short-links a {
+  width: 35px;
+  height: 35px;
+  background: var(--section-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--font-color);
+  opacity: 0.9;
+  box-shadow: var(--box-shadow);
+}
+div.short-cut div.short-links a:hover {
+  transform: scale(1.1);
+}
+@media (max-width: 1000px) {
+  aside {
+    width: 240px;
+  }
+  aside > article,
+  nav {
+    height: 60px;
+  }
+  nav {
+    width: calc(100% - 240px);
+    left: 240px;
+  }
+  body.arabic nav {
+    right: 240px;
+  }
+  nav .setting {
+    gap: 10px;
+  }
+  nav .setting .mode {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+  nav .setting .info .photo {
+    width: 30px;
+    height: 30px;
+    font-size: 11px;
+  }
+  nav .log-out,
+  nav .setting .lang span {
+    font-size: 13px;
+  }
+  nav .setting .lang i {
+    font-size: 11px;
+  }
+  nav .setting .info h4,
+  nav .setting .info p {
+    font-size: 14px;
+  }
+  nav .search {
+    padding: 6px 10px;
+  }
+  nav .search > button {
+    font-size: 15px;
+  }
+  aside > article a h1,
+  aside > article i {
+    font-size: 14px;
+  }
+  aside > div {
+    padding: 10px;
+  }
+  aside > div > div > .links > .center i:not(.arrow),
+  aside > div > div > a i {
+    font-size: 13px;
+  }
+  aside > div > div > .links > .center h1,
+  aside > div > div > a h1 {
+    font-size: 17px;
+  }
+  aside > div > div > .links > .center i {
+    font-size: 10px;
+  }
+  aside > div > div > .links > article a {
+    font-size: 15px;
+  }
+  .log-out.aside {
+    font-size: 15px;
+  }
+  aside.closed {
+    width: 65px;
+  }
+  nav.closed {
+    left: 65px;
+    width: calc(100% - 65px);
+  }
+  body.arabic nav.closed {
+    right: 65px;
+  }
+  nav .setting .lang + div.languages.active-div {
+    bottom: -145px;
+  }
+  nav .setting .lang + div.languages {
+    left: -100%;
+  }
+  body.arabic nav .setting .lang + div.languages {
+    right: -100%;
+  }
+}
+@media (max-width: 800px) {
+  nav .setting .info,
+  nav .log-out {
+    display: none;
+  }
+  nav .setting .lang + div.languages h2 {
+    font-size: 15px;
+    padding: 8px;
+  }
+  nav .setting .lang + div.languages.active-div {
+    bottom: -130px;
+  }
+  nav .setting .lang + div.languages {
+    width: 95px;
+    bottom: -110px;
+  }
+  nav .setting .mode {
+    width: 25px;
+    height: 25px;
+    font-size: 12px;
+  }
+  nav .search > button {
+    font-size: 13px;
+  }
+
+  aside {
+    width: 210px;
+  }
+  nav {
+    width: calc(100% - 210px);
+    left: 210px;
+  }
+  body.arabic nav {
+    right: 210px;
+  }
+  aside > article a h1,
+  aside > article i {
+    font-size: 12px;
+  }
+  aside > article,
+  nav {
+    height: 55px;
+  }
+  aside > div > div > .links > .center,
+  aside > div > div > a {
+    padding: 10px;
+  }
+  aside > div > div > .links > .center h1,
+  aside > div > div > a h1 {
+    font-size: 15px;
+  }
+  aside > div > div > .links > article a {
+    font-size: 14px;
+    padding: 10px;
+  }
+  aside > div > div > .links > .center i:not(.arrow),
+  aside > div > div > a i {
+    font-size: 12px;
+    margin-right: 6px;
+  }
+  body.arabic aside > div > div > .links > .center i:not(.arrow),
+  body.arabic aside > div > div > a i {
+    font-size: 12px;
+    margin-right: 6px;
+  }
+  aside > div > div > .links > .center i {
+    font-size: 9px;
+  }
+}
+@media (max-width: 600px) {
+  aside {
+    width: 180px;
+  }
+  nav {
+    width: calc(100% - 180px);
+    left: 180px;
+  }
+  body.arabic nav {
+    right: 180px;
+  }
+  nav .container {
+    gap: 10px;
+  }
+  aside > article a h1,
+  aside > article i {
+    font-size: 11px;
+  }
+  aside > article {
+    padding: 10px;
+  }
+  aside > div > div > .links > .center i:not(.arrow),
+  aside > div > div > a i {
+    font-size: 11px;
+    margin-right: 5px;
+  }
+  body.arabic aside > div > div > .links > .center i:not(.arrow),
+  body.arabic aside > div > div > a i {
+    margin-left: 5px;
+  }
+  aside > div > div > .links > .center h1,
+  aside > div > div > a h1 {
+    font-size: 13px;
+  }
+  aside > div > div > .links > article a {
+    font-size: 13px;
+  }
+  aside.closed {
+    width: 55px;
+  }
+  nav.closed {
+    left: 55px;
+    width: calc(100% - 55px);
+  }
+  body.arabic nav.closed {
+    right: 55px;
+  }
+  nav .setting .lang i {
+    font-size: 10px;
+  }
+  nav .setting .mode {
+    width: 23px;
+    height: 23px;
+    font-size: 10px;
+  }
+  nav .search {
+    font-size: 14px;
+  }
+  .log-out.aside {
+    font-size: 13px;
+  }
+  nav .setting .lang i.fa-earth-americas {
+    display: none;
+  }
+  nav .setting .lang + div.languages h2 {
+    font-size: 13px;
+  }
+  nav .setting .lang + div.languages.active-div {
+    bottom: -119px;
+  }
+  nav .setting .lang + div.languages {
+    width: 70px;
+    bottom: -100px;
+  }
+}
+@media (max-width: 500px) {
+  aside {
+    width: 100%;
+  }
+  nav {
+    width: calc(100% - 55px);
+    left: 55px;
+  }
+  body.arabic nav {
+    right: 55px;
+  }
+  nav .log-out,
+  nav .setting .lang span {
+    font-size: 11px;
+  }
+  nav .setting .lang i {
+    font-size: 9px;
+  }
+  nav .setting .mode {
+    font-size: 9px;
+  }
+  nav .setting {
+    gap: 5px;
+  }
+  nav .search {
+    font-size: 13px;
+  }
+  nav .search > button {
+    font-size: 12px;
+  }
+
+  nav .setting .lang + div.languages {
+    left: -40px;
+  }
+  body.arabic nav .setting .lang + div.languages {
+    right: -40px;
+  }
+}
