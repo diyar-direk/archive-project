@@ -164,8 +164,7 @@ const Navbar = () => {
               </div>
               <article>
                 <NavLink to={"all_admins"}>pepole</NavLink>
-                <NavLink to={"add_admin"}>add person</NavLink>
-                <NavLink to={"add_admin"}>add person info</NavLink>
+                <NavLink to={"/add_person"}>add person</NavLink>
               </article>
             </div>
 

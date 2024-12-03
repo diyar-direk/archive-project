@@ -1,0 +1,117 @@
+form.dashboard-form > div.form {
+  background-color: var(--body-color);
+  padding: 30px;
+  box-shadow: var(--box-shadow);
+  margin-bottom: 40px;
+  border-radius: 6px;
+}
+form.dashboard-form > div.form h1 {
+  color: var(--font-color);
+  text-transform: capitalize;
+  margin-bottom: 30px;
+  font-size: 27px;
+}
+form.dashboard-form > div.form > div {
+  gap: 30px;
+}
+form.dashboard-form > div.form > div label {
+  text-transform: capitalize;
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: var(--font-color);
+  cursor: text;
+  width: fit-content;
+}
+form.dashboard-form > div.form > div .flex-direction {
+  flex: 1;
+  min-width: 300px;
+}
+
+form.dashboard-form > div.form > div .flex-direction .inp {
+  border: solid 2px var(--border-color);
+  padding: 10px;
+  font-size: 18px;
+  color: var(--font-color);
+  width: 100%;
+  border-radius: 4px;
+  background-color: transparent;
+}
+form.dashboard-form > div.form > div .flex-direction .inp:focus {
+  border: solid 2px var(--main-color);
+}
+form.dashboard-form > div.form > div .flex-direction .selecte .inp {
+  background-color: var(--section-color);
+  border: solid 2px transparent;
+}
+.selecte .inp {
+  color: #777;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  padding-right: 20px;
+}
+.selecte .inp::before {
+  position: absolute;
+  content: "\f078";
+  font-weight: 900;
+  font-family: "Font Awesome 6 Free";
+  right: 10px;
+  top: 50%;
+  font-size: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+body.arabic .selecte .inp::before {
+  left: 10px;
+  right: auto;
+}
+.selecte > article {
+  background-color: var(--body-color);
+  box-shadow: var(--box-shadow);
+  position: absolute;
+  width: 100%;
+  padding: 10px 15px;
+  top: 140%;
+  opacity: 0;
+  z-index: -1;
+  pointer-events: none;
+  max-height: 300px;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.selecte .inp.active + article {
+  transition: opacity 0.4s;
+  opacity: 1;
+  z-index: 2;
+  pointer-events: all;
+  top: 110%;
+}
+
+.selecte > article h2 {
+  color: var(--font-color);
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.selecte > article:hover h2 {
+  opacity: 0.5;
+}
+.selecte > article h2:hover {
+  opacity: 1;
+}
+
+form.dashboard-form > div.form > div .flex-direction label.document {
+  border: dotted 3px var(--main-color);
+  cursor: pointer;
+  min-height: 80px;
+}
+form.dashboard-form > div.form > div label.document input {
+  display: none;
+}
+form.dashboard-form > div.form > div label.document i {
+  color: var(--main-color);
+}

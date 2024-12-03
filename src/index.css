@@ -71,9 +71,9 @@ main div.container {
 h1.title {
   position: relative;
   color: var(--font-color);
-  text-transform: capitalize;
+  text-transform: uppercase;
   letter-spacing: 2px;
-  font-size: 32px;
+  font-size: 30px;
   width: fit-content;
   padding-bottom: 10px;
   margin-bottom: 50px;
@@ -87,12 +87,15 @@ body.arabic {
 h1.title::before {
   content: "";
   position: absolute;
-  width: 75%;
-  background-color: var(--body-color);
+  width: 20%;
+  background-color: var(--main-color);
   height: 4px;
-  bottom: 0;
+  bottom: -1px;
   left: 0;
   border-radius: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
 }
 body.arabic h1.title::before {
   right: 0;
@@ -101,9 +104,9 @@ h1.title::after {
   border-radius: 20px;
   content: "";
   position: absolute;
-  width: 25%;
+  width: 100%;
   background-color: var(--main-color);
-  height: 4px;
+  height: 2px;
   bottom: 0;
   left: 0;
 }
