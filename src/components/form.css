@@ -28,21 +28,18 @@ form.dashboard-form > div.form > div .flex-direction {
 }
 
 form.dashboard-form > div.form > div .flex-direction .inp {
-  border: solid 2px var(--border-color);
+  border: none;
   padding: 10px;
   font-size: 18px;
   color: var(--font-color);
   width: 100%;
   border-radius: 4px;
-  background-color: transparent;
+  background-color: var(--aside-color);
 }
 form.dashboard-form > div.form > div .flex-direction .inp:focus {
-  border: solid 2px var(--main-color);
-}
-form.dashboard-form > div.form > div .flex-direction .selecte .inp {
   background-color: var(--section-color);
-  border: solid 2px transparent;
 }
+
 .selecte .inp {
   color: #777;
   cursor: pointer;
@@ -114,4 +111,47 @@ form.dashboard-form > div.form > div label.document input {
 }
 form.dashboard-form > div.form > div label.document i {
   color: var(--main-color);
+}
+
+form .remove-doc {
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #c70000;
+  color: white;
+  font-size: 11px;
+  cursor: pointer;
+  margin-bottom: 5px;
+  margin-left: auto;
+  box-shadow: 0 0 7px #890a0a;
+}
+form .remove-doc:hover {
+  transform: scale(1.2);
+}
+form audio {
+  width: 100%;
+}
+form .files {
+  background-color: var(--aside-color);
+  padding: 10px;
+  border-radius: 4px;
+}
+form .files img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+form .files .flex {
+  padding: 10px;
+}
+form .files .flex h3 {
+  text-transform: capitalize;
+  color: var(--font-color);
+}
+form .files .flex h4 {
+  font-weight: 500;
+  color: var(--font-color);
 }
