@@ -168,6 +168,7 @@ body {
   --body-color: #fff;
   --main-color: #334b7c;
   --border-color: #83838340;
+  --aside-color: #f4f6f8;
   --section-color: #f0f1f3;
   --font-color: #000;
   --box-shadow: 0 0 16px #eeeeee;
@@ -178,6 +179,7 @@ body.dark {
   --border-color: #83838340;
   --body-color: #141419;
   --section-color: #181a1e;
+  --aside-color: #16161b;
   --font-color: #ccc;
   --box-shadow: 0 0 16px #171717;
 }

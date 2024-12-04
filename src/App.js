@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import AddPerson from "./pages/pepole/AddPerson";
 import Login from "./pages/Login/Login";
 import Log from "./pages/Login/log";
+
 function App() {
   return (
     <div className="App">

@@ -179,11 +179,9 @@ aside > div {
 }
 aside > div {
   align-items: center !important;
-  background: #f4f6f8;
+  background: var(--aside-color);
 }
-body.dark aside > div {
-  background: #1a1c20;
-}
+
 aside > div > div {
   width: 100%;
 }
@@ -328,7 +326,7 @@ aside.closed .log-out span {
 }
 
 div.short-cut {
-  position: absolute;
+  position: fixed;
   right: 60px;
   bottom: 50px;
 }
@@ -336,7 +334,7 @@ div.short-cut i.plus {
   cursor: pointer;
   box-shadow: var(--box-shadow);
   font-size: 13px;
-  background-color: var(--body-color);
+  background-color: var(--aside-color);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -361,7 +359,7 @@ div.short-cut div.short-links {
   top: -140px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--body-color);
+  background: var(--aside-color);
   padding: 15px 10px;
   border-radius: 0;
   opacity: 0;
