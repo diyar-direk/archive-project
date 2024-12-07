@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../components/form.css";
-
+import Mammoth from "mammoth";
 const AddPerson = () => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -14,18 +14,73 @@ const AddPerson = () => {
   });
 
   console.log(documents);
-  const getFileSize = (size) => {
-    const units = ["Bytes", "KB", "MB", "GB"];
-    let unitIndex = 0;
-    let fileSize = size;
 
-    while (fileSize >= 1024 && unitIndex < units.length - 1) {
-      fileSize /= 1024;
-      unitIndex++;
+  const [uploadedFiles, setUploadedFiles] = useState({ list: [] });
+  const [activeFile, setActiveFile] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
+
+  const addperson = (file) => {
+    const fileReader = new FileReader();
+
+    fileReader.onload = (event) => {
+      const fileType = file.type;
+
+      if (fileType === "application/pdf") {
+        setActiveFile({
+          content: event.target.result,
+          type: "application/pdf",
+          name: file.name,
+        });
+      } else if (fileType === "text/plain") {
+        setActiveFile({
+          content: event.target.result,
+          type: "text/plain",
+          name: file.name,
+        });
+      } else if (
+        fileType ===
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      ) {
+        const arrayBuffer = event.target.result;
+        Mammoth.extractRawText({ arrayBuffer })
+          .then((result) => {
+            setActiveFile({
+              content: result.value,
+              type: "docx",
+              name: file.name,
+            });
+            setIsPopupOpen(true);
+          })
+          .catch((err) => {
+            console.error("Error reading .docx file:", err);
+            alert("Failed to open .docx file.");
+          });
+        return;
+      } else {
+        alert("Unsupported file type for preview.");
+      }
+
+      setIsPopupOpen(true);
+    };
+
+    if (file.type === "application/pdf") {
+      fileReader.readAsDataURL(file);
+    } else if (file.type === "text/plain") {
+      fileReader.readAsText(file);
+    } else if (
+      file.type ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      alert(
+        "Unsupported file type. Only text, PDF, and DOCX files are allowed."
+      );
     }
-
-    return `${fileSize.toFixed(2)} ${units[unitIndex]}`;
   };
+
   return (
     <>
       <h1 className="title">add person</h1>
@@ -217,26 +272,28 @@ const AddPerson = () => {
               </label>
             </div>
 
-            <div className="flex flex-direction">
-              <label className="inp document gap-10 center">
-                <input
-                  type="file"
-                  id="document"
-                  multiple
-                  accept=".pdf, .doc, .docx, .txt"
-                  onInput={(e) => {
-                    setDocuments((prevDocuments) => ({
-                      ...prevDocuments,
-                      file: [
-                        ...prevDocuments.file,
-                        ...Array.from(e.target.files),
-                      ],
-                    }));
-                  }}
-                />
-                upload document
-                <i className="fa-solid fa-file"></i>
-              </label>
+            <div>
+              <div className="flex flex-direction">
+                <label className="inp document gap-10 center">
+                  <input
+                    type="file"
+                    id="document"
+                    multiple
+                    accept=".pdf, .docx, .txt"
+                    onInput={(e) => {
+                      setUploadedFiles((prevFiles) => ({
+                        ...prevFiles,
+                        list: [
+                          ...prevFiles.list,
+                          ...Array.from(e.target.files),
+                        ],
+                      }));
+                    }}
+                  />
+                  Upload Document
+                  <i className="fa-solid fa-file"></i>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -244,13 +301,15 @@ const AddPerson = () => {
         {documents.image.length > 0 && (
           <div className="form">
             <h1>images selected</h1>
-            <div className="flex wrap">
+            <div className="grid-3">
               {documents.image.map((e, i) => {
                 return (
                   <div className="flex flex-direction relative" key={i}>
                     <i
                       onClick={() => {
-                        const image = documents.image.filter((img) => img != e);
+                        const image = documents.image.filter(
+                          (img) => img !== e
+                        );
                         setDocuments({ ...documents, image });
                       }}
                       className="remove-doc fa-solid fa-trash-can"
@@ -266,7 +325,7 @@ const AddPerson = () => {
         {documents.video.length > 0 && (
           <div className="form">
             <h1>videos selected</h1>
-            <div className="flex wrap">
+            <div className="grid-3">
               {documents.video.map((e, i) => {
                 return (
                   <div className="flex flex-direction relative" key={i}>
@@ -290,7 +349,7 @@ const AddPerson = () => {
         {documents.audio.length > 0 && (
           <div className="form">
             <h1>audios selected</h1>
-            <div className="flex wrap">
+            <div className="grid-3">
               {documents.audio.map((e, i) => {
                 return (
                   <div className="flex flex-direction relative" key={i}>
@@ -311,36 +370,73 @@ const AddPerson = () => {
           </div>
         )}
 
-        {documents.file.length > 0 && (
+        {uploadedFiles.list.length > 0 && (
           <div className="form">
-            <h1>files selected</h1>
-            <div className="flex wrap">
-              {documents.file.map((e, i) => {
-                const src = e.name.split(".");
-                return (
-                  <div className="flex flex-direction relative" key={i}>
-                    <i
-                      onClick={() => {
-                        const updatedfile = documents.file.filter(
-                          (file) => file !== e
-                        );
-                        setDocuments({ ...documents, file: updatedfile });
-                      }}
-                      className="remove-doc fa-solid fa-trash-can"
-                    ></i>
-                    <div className="flex gap-10 files">
-                      <img
-                        src={require(`./${src[src.length - 1]}.png`)}
-                        alt=""
-                      />
-                      <div className="flex flex-direction">
-                        <h3>{e.name}</h3>
-                        <h4> {getFileSize(e.size)} </h4>
-                      </div>
+            <h1>Files Selected</h1>
+            <div className="grid-3">
+              {uploadedFiles.list.map((file, index) => (
+                <div
+                  className="c-pointer flex flex-direction relative"
+                  key={index}
+                >
+                  <i
+                    onClick={() => {
+                      const updatedFiles = uploadedFiles.list.filter(
+                        (f) => f !== file
+                      );
+                      setUploadedFiles({
+                        ...uploadedFiles,
+                        list: updatedFiles,
+                      });
+                    }}
+                    className="remove-doc fa-solid fa-trash-can"
+                  ></i>
+                  <div
+                    className="flex gap-10 files"
+                    onClick={() => addperson(file)}
+                  >
+                    <img
+                      src={require(`./${file.name.split(".").pop()}.png`)}
+                      alt=""
+                    />
+                    <div className="flex flex-direction">
+                      <h3>{file.name}</h3>
+                      <h4>{formatFileSize(file.size)}</h4>
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {isPopupOpen && activeFile && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <h2>File Preview</h2>
+              {activeFile.type === "text/plain" ||
+              activeFile.type === "docx" ? (
+                <div className="file-content">{activeFile.content}</div>
+              ) : activeFile.type === "application/pdf" ? (
+                <>
+                  <iframe
+                    src={activeFile.content}
+                    title="PDF Preview"
+                    width="100%"
+                    height="500px"
+                  ></iframe>
+                  <a
+                    href={activeFile.content}
+                    download={activeFile.name}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn"
+                  >
+                    Open in Browser
+                  </a>
+                </>
+              ) : null}
+              <button onClick={() => setIsPopupOpen(false)}>Close</button>
             </div>
           </div>
         )}

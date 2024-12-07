@@ -1,7 +1,9 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./navbar.css";
+import { useNavigate } from 'react-router-dom'; // استيراد useNavigate للتوجيه
 import { useContext, useEffect } from "react";
 import { Context } from "../../context/context";
+import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
 const Navbar = () => {
   const context = useContext(Context);
   const location = useLocation();
@@ -75,7 +77,11 @@ const Navbar = () => {
   const selectLang = (e) => {
     context.setLanguage(e.target.dataset.lang);
   };
+  const navigate = useNavigate(); 
 
+  const handleLogout = () => {
+    navigate('/login'); 
+  };
   return (
     <>
       <nav className={`${context?.isClosed ? "closed" : ""} center`}>
@@ -125,10 +131,9 @@ const Navbar = () => {
                 </h2>
               </div>
             </article>
-            <h4 className="c-pointer log-out center">
-              <i className="fa-solid fa-right-from-bracket"></i>
-              log out
-            </h4>
+            <h4 className="c-pointer log-out center" onClick={handleLogout}>
+        <i className="fa-solid fa-right-from-bracket"></i> log out
+      </h4>
           </div>
         </div>
       </nav>
@@ -175,7 +180,7 @@ const Navbar = () => {
           </div>
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>
-            <span>fs</span>
+            <span onClick={handleLogout}>fs  </span>
           </h3>
         </div>
       </aside>
