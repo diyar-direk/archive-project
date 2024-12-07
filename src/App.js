@@ -1,8 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import AddPerson from "./pages/pepole/AddPerson";
-import Login from "./pages/Login/Login";
-import Log from "./pages/Login/log";
+import Login from "./pages/login/login";
 
 function App() {
   return (
@@ -12,7 +11,6 @@ function App() {
           <Route path="add_person" element={<AddPerson />} />
         </Route>
         <Route path="login" element={<Login />} />
-        <Route path="login2" element={<Log />} />
       </Routes>
     </div>
   );
