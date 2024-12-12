@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import AddPerson from "./pages/pepole/AddPerson";
-import Login from "./pages/Login/Login";
+import Login from "./pages/login/Login";
 
 function App() {
   return (

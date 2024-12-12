@@ -1,19 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.css";
+import bcrypt from "bcryptjs";
+import ReCAPTCHA from "react-google-recaptcha";
+import "./login.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [captchaVerified, setCaptchaVerified] = useState(false);
   const navigate = useNavigate();
 
+  // بيانات المستخدمين للتجربة
   const correctEmail = "a";
-  const correctPassword = "a";
+  const correctPasswordHash = bcrypt.hashSync("a", 10); // كلمة المرور المشفرة
+
+  // التحقق من reCAPTCHA
+  const handleCaptcha = (value) => {
+    if (value) setCaptchaVerified(true);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (email === correctEmail && password === correctPassword) {
+    if (!captchaVerified) {
+      alert("Please verify the CAPTCHA.");
+      return;
+    }
+
+    // تحقق من كلمة المرور بعد فك التشفير
+    const isPasswordCorrect = bcrypt.compareSync(password, correctPasswordHash);
+
+    if (email === correctEmail && isPasswordCorrect) {
       navigate("/dashboard");
     } else {
       alert("Invalid email or password");
@@ -49,6 +66,13 @@ const LoginForm = () => {
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+        
+          <div className="captcha">
+            <ReCAPTCHA
+              sitekey="6Lfwf5cqAAAAADOoNDVACW1IGhwg16vYHCATSmKL" // ضع مفتاح الموقع هنا
+              onChange={handleCaptcha}
             />
           </div>
           <button type="submit" className="login-button">
