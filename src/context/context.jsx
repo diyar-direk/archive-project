@@ -3,6 +3,9 @@ import { createContext, useEffect, useState } from "react";
 const userLanguage = navigator.language || navigator.userLanguage;
 const userLang = userLanguage.startsWith("ar") ? "AR" : "EN";
 export const Context = createContext({});
+
+export const baseURL = `http://localhost:8000`;
+export const limit = 10;
 const Provider = ({ children }) => {
   const [mode, setMode] = useState(+localStorage.getItem("isDark") || false);
   const [language, setLanguage] = useState(

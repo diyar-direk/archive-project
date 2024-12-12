@@ -59,7 +59,6 @@ main.div-open {
 main > div.dashboard-container {
   width: calc(100% - 290px);
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 main > div.dashboard-container.closed {
@@ -167,7 +166,7 @@ h1 > span.inside-span {
 body {
   --body-color: #fff;
   --main-color: #334b7c;
-  --border-color: #83838340;
+  --border-color: #e6e3e3;
   --aside-color: #f4f6f8;
   --section-color: #f0f1f3;
   --font-color: #000;
@@ -176,7 +175,7 @@ body {
   overflow-x: hidden;
 }
 body.dark {
-  --border-color: #83838340;
+  --border-color: #1c1c1c;
   --body-color: #141419;
   --section-color: #181a1e;
   --aside-color: #16161b;
