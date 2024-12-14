@@ -22,8 +22,6 @@ const People = () => {
     villag: "",
   });
 
-  console.log(filters);
-
   const header = [
     "name",
     "gender",
@@ -50,7 +48,7 @@ const People = () => {
     document.querySelector("th .checkbox")?.classList.remove("active");
     try {
       const data = await axios.get(
-        `${baseURL}/api/people?active=true&limit=${limit}&page=${page}`
+        `${baseURL}/people?active=true&limit=${limit}&page=${page}`
       );
       dataLength.current = data.data.numberOfActivePeople;
 
