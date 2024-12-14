@@ -13,8 +13,6 @@ const AddPerson = () => {
     audio: [],
   });
 
-  console.log(documents);
-
   const [uploadedFiles, setUploadedFiles] = useState({ list: [] });
   const [activeFile, setActiveFile] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);

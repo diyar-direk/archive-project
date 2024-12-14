@@ -329,6 +329,7 @@ div.short-cut {
   position: fixed;
   right: 60px;
   bottom: 50px;
+  z-index: 1;
 }
 div.short-cut i.plus {
   cursor: pointer;

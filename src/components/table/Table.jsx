@@ -22,17 +22,17 @@ const Table = (props) => {
   };
 
   function updateData(e) {
-    if (props.Page !== +e.target.dataset.page) {
+    if (props.page.page !== +e.target.dataset.page) {
       const pages = document.querySelectorAll(".pagination h3");
       pages.forEach((e) => e.classList.remove("active"));
       e.target.classList.add("active");
-      props.setPage(+e.target.dataset.page);
+      props.page.setPage(+e.target.dataset.page);
     }
   }
 
   window.addEventListener("click", () => {
     const overlay = document.querySelector(".overlay");
-    overlay && props.setHasFltr(false);
+    overlay && props.hasFltr.setFltr(false);
     const fltrSelect = document.querySelector(".filters .select div.active");
 
     fltrSelect && fltrSelect.classList.remove("active");
@@ -42,9 +42,29 @@ const Table = (props) => {
     e.target.parentNode.parentNode.children[0].classList.remove("active");
   };
 
+  const checkAll = (e) => {
+    const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
+    const allSelectors = document.querySelectorAll("td .checkbox");
+
+    props.items.setSelectedItems([]);
+
+    if (
+      allActiveSelectors.length >= 0 &&
+      allActiveSelectors.length !== allSelectors.length
+    ) {
+      allSelectors.forEach((e) => e.classList.add("active"));
+      e.target.classList.add("active");
+      props.items.setSelectedItems(props.data.allData);
+    } else {
+      allSelectors.forEach((e) => e.classList.remove("active"));
+      e.target.classList.remove("active");
+      props.items.setSelectedItems([]);
+    }
+  };
+
   return (
     <>
-      {props.hasFltr && (
+      {props.hasFltr.fltr && (
         <div className="overlay">
           <div onClick={(e) => e.stopPropagation()} className="filters">
             <div className="select relative">
@@ -64,47 +84,31 @@ const Table = (props) => {
         </div>
       )}
       <div className="table">
-        <table>
+        <table className={props.loading || props.data?.data ? "loading" : ""}>
           <thead>
             <tr>
-              <th></th>
+              <th>
+                <div onClick={checkAll} className="checkbox select-all"></div>
+              </th>
               {header}
               <th></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-            </tr>
-            <tr>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-              <td>j</td>
-            </tr>
+          <tbody
+            className={props.loading || props.data?.data ? "relative" : ""}
+          >
+            {props.loading && <div className="table-loading"> loading ...</div>}
+            {props.data?.data ? (
+              props.data.data
+            ) : (
+              <div className="table-loading"> no data</div>
+            )}
           </tbody>
         </table>
       </div>
-      <div className="pagination flex">{createPags(10, props.dataLength)}</div>
+      <div className="pagination flex">
+        {createPags(10, props.page.dataLength)}
+      </div>
     </>
   );
 };
