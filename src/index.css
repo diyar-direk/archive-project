@@ -133,7 +133,9 @@ body.arabic h1.title::after {
 .container {
   width: 90%;
 }
-
+.pointer-none {
+  pointer-events: none;
+}
 .between {
   display: flex;
   align-items: center;

@@ -19,7 +19,7 @@
 .overlay .filters {
   width: 70%;
   background-color: var(--body-color);
-  padding: 15px 10px;
+  padding: 20px 10px;
   box-shadow: var(--box-shadow);
   border-radius: 4px;
   display: grid;
@@ -40,26 +40,29 @@
   font-size: 13px;
 }
 .overlay .filters .select div.active + article {
-  opacity: 1;
-  pointer-events: all;
-  top: calc(100% + 2px);
+  max-height: 200px;
+  overflow: auto;
 }
 .overlay .filters .select article {
-  position: absolute;
-  width: 100%;
-  top: calc(100% + 10px);
   background: var(--section-color);
-  opacity: 0;
-  pointer-events: none;
-  max-height: 190px;
-  overflow: auto;
+  max-height: 0px;
+  overflow: hidden;
+  margin-top: 2px;
 }
 .overlay .filters .select article h2 {
   cursor: pointer;
   padding: 5px;
   font-size: 16px;
   color: var(--font-color);
+  text-align: center;
   text-transform: capitalize;
+}
+.overlay .filters .select article p {
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-transform: capitalize;
+  text-align: center;
 }
 .overlay .filters .select article h2:not(:last-of-type) {
   border-bottom: solid 1px var(--body-color);
@@ -67,6 +70,16 @@
 .overlay .filters .select article h2:hover {
   background-color: var(--border-color);
 }
+
+input.fltr-search {
+  width: 100%;
+  font-size: 15px;
+  padding: 5px;
+  caret-color: var(--main-color);
+  background: var(--body-color);
+  border: solid 2px var(--border-color);
+}
+
 div.table {
   overflow-x: auto;
   max-width: 100%;

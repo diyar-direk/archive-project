@@ -13,6 +13,17 @@ const People = () => {
   const [slectedItems, setSelectedItems] = useState([]);
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  const [filters, setFilters] = useState({
+    gender: "",
+    country: "",
+    government: "",
+    city: "",
+    villag: "",
+  });
+
+  console.log(filters);
+
   const header = [
     "name",
     "gender",
@@ -78,7 +89,6 @@ const People = () => {
         ele.classList.remove("active-div");
       }
     });
-
     e.target.classList.toggle("active-div");
   };
 
@@ -167,6 +177,7 @@ const People = () => {
         data={{ data: tableData, allData: allPeople.current }}
         items={{ slectedItems: slectedItems, setSelectedItems }}
         hasFltr={{ fltr: fltr, setFltr }}
+        filters={{ filters, setFilters }}
       />
     </>
   );
