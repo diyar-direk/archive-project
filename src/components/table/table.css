@@ -18,14 +18,11 @@
 
 .overlay .filters {
   width: 70%;
-  background-color: var(--body-color);
-  padding: 20px 10px;
-  box-shadow: var(--box-shadow);
   border-radius: 4px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
-  min-height: 250px;
+  min-height: 200px;
   align-items: flex-start;
 }
 .overlay .filters .select div {
@@ -118,10 +115,11 @@ table .checkbox {
   cursor: pointer;
   overflow: hidden;
   border-radius: 4px;
-  border: solid 1px var(--font-color);
+  border: solid 1px var(--border-color);
 }
 table .checkbox.active {
   border: solid 1px transparent;
+  background-color: transparent;
 }
 table .checkbox::before {
   content: "";
@@ -149,7 +147,7 @@ table .checkbox::after {
   color: white;
   font-size: 12px;
   font-weight: bold;
-  rotate: 28deg;
+  rotate: 280deg;
   opacity: 0;
   transition: 0.4s;
 }
@@ -158,7 +156,22 @@ table .checkbox.active::after {
   transition: 0.4s;
   opacity: 1;
 }
-
+table .photo {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+table i.photo {
+  background-color: var(--body-color);
+  font-size: 13px;
+  background-color: var(--body-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--font-color);
+  box-shadow: var(--box-shadow);
+}
 table .table-loading {
   position: absolute;
   background: var(--body-color);
@@ -295,4 +308,18 @@ div.table tbody td div.options .update i {
 div.table tbody td div.options .visit i {
   color: #0e9e32;
   font-size: 16px;
+}
+.delete-all {
+  background-color: #ce0606;
+  width: fit-content;
+  padding: 10px;
+  color: white;
+  border-radius: 4px;
+  margin: 10px 0;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-size: 17px;
+}
+.delete-all i {
+  font-size: 14px;
 }

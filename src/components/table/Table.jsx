@@ -107,10 +107,16 @@ const Table = (props) => {
   }
 
   window.addEventListener("click", () => {
-    const overlay = document.querySelector(".overlay");
-    overlay && props.hasFltr.setFltr(false);
+    if (props.overlay.overlay) {
+      props.overlay.setOverlay(false);
+      props.items.slectedItems.length === 1 && props.items.setSelectedItems([]);
+    }
+    props.hasFltr.fltr && props.hasFltr.setFltr(false);
+    const optionDiv = document.querySelector(
+      "div.table tbody td i.options.active-div"
+    );
+    optionDiv && optionDiv.classList.remove("active-div");
     const fltrSelect = document.querySelector(".filters .select div.active");
-
     fltrSelect && fltrSelect.classList.remove("active");
   });
 
@@ -422,12 +428,45 @@ const Table = (props) => {
           </div>
         </div>
       )}
+
+      {props.overlay.overlay && (
+        <div className="overlay">
+          <div onClick={(e) => e.stopPropagation()}>
+            <h1>
+              are you sure yo want to delete ({props.items.slectedItems.length})
+              itms
+            </h1>
+            <div className="flex gap-10 wrap">
+              <div onClick={props.delete} className="delete-all overlay-btn">
+                <i className="fa-solid fa-trash"></i> delete
+              </div>
+              <div
+                onClick={() => {
+                  props.items.slectedItems.length === 1 &&
+                    props.items.setSelectedItems([]);
+                  props.overlay.setOverlay(false);
+                }}
+                className="delete-all cencel overlay-btn"
+              >
+                <i className="fa-solid fa-ban"></i> cencel
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="table">
         <table className={props.loading || props.data?.data ? "loading" : ""}>
           <thead>
             <tr>
               <th>
-                <div onClick={checkAll} className="checkbox select-all"></div>
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    checkAll(e);
+                  }}
+                  className="checkbox select-all"
+                ></div>
               </th>
               {header}
               <th></th>
@@ -445,6 +484,19 @@ const Table = (props) => {
           </tbody>
         </table>
       </div>
+
+      {props.items?.slectedItems?.length > 1 && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            props.overlay.setOverlay(true);
+          }}
+          className="gap-10 delete-all"
+        >
+          <i className="fa-solid fa-trash"></i> delete all (
+          {props.items.slectedItems.length})
+        </div>
+      )}
       <div className="pagination flex">
         {createPags(10, props.page.dataLength)}
       </div>

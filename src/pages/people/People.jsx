@@ -23,6 +23,7 @@ const People = () => {
   });
 
   const header = [
+    "",
     "name",
     "gender",
     "mother Name",
@@ -99,9 +100,21 @@ const People = () => {
       <tr key={e._id}>
         <td>
           <div
-            onClick={(target) => checkOne(target, e._id)}
+            onClick={(target) => {
+              target.stopPropagation();
+              checkOne(target, e._id);
+            }}
             className="checkbox"
           ></div>
+        </td>
+        <td>
+          <Link>
+            {e.photo ? (
+              <img src={e.photo} className="photo" alt="" />
+            ) : (
+              <i className="photo fa-solid fa-user"></i>
+            )}
+          </Link>
         </td>
         <td>
           {e.firstName} {e.fatherName} {e.surName}
@@ -151,6 +164,10 @@ const People = () => {
     );
   });
 
+  function deleteFunction(e) {
+    console.log(1);
+  }
+
   return (
     <>
       <h1 className="title"> people </h1>
@@ -176,6 +193,8 @@ const People = () => {
         items={{ slectedItems: slectedItems, setSelectedItems }}
         hasFltr={{ fltr: fltr, setFltr }}
         filters={{ filters, setFilters }}
+        overlay={{ overlay: overlay, setOverlay }}
+        delete={deleteFunction}
       />
     </>
   );

@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./navbar.css";
-import { useNavigate } from "react-router-dom"; // استيراد useNavigate للتوجيه
+import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { Context } from "../../context/context";
 const Navbar = () => {
