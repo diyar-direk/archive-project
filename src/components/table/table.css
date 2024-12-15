@@ -75,6 +75,8 @@ input.fltr-search {
   caret-color: var(--main-color);
   background: var(--body-color);
   border: solid 2px var(--border-color);
+  position: sticky;
+  top: 0;
 }
 
 div.table {

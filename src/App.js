@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import AddPerson from "./pages/people/AddPerson";
 import Login from "./pages/Login/Login";
 import People from "./pages/people/People";
+import Profile from "./pages/people/Profile";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
 
         <Route path="*" element={<Dashboard />}>
           <Route path="people" element={<People />} />
+          <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
         </Route>
       </Routes>

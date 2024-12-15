@@ -108,7 +108,7 @@ const People = () => {
           ></div>
         </td>
         <td>
-          <Link>
+          <Link to={`${e._id}`}>
             {e.photo ? (
               <img src={e.photo} className="photo" alt="" />
             ) : (
@@ -117,7 +117,9 @@ const People = () => {
           </Link>
         </td>
         <td>
-          {e.firstName} {e.fatherName} {e.surName}
+          <Link to={`${e._id}`} className="name">
+            {e.firstName} {e.fatherName} {e.surName}
+          </Link>
         </td>
         <td> {e.gender} </td>
         <td> {e.motherName} </td>
@@ -145,10 +147,7 @@ const People = () => {
             >
               <i className="fa-solid fa-trash"></i> delete
             </div>
-            <Link
-              to={`/dashboard/update_student/${e._id}`}
-              className="flex update"
-            >
+            <Link to={`${e._id}`} className="flex update">
               <i className="fa-regular fa-pen-to-square"></i>
               update
             </Link>
