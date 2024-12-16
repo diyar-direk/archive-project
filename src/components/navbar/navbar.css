@@ -317,6 +317,11 @@ nav .log-out {
   white-space: nowrap;
   text-wrap: nowrap;
   text-overflow: ellipsis;
+  justify-content: flex-start;
+  width: 100%;
+}
+aside.closed .log-out.aside {
+  justify-content: center;
 }
 .log-out.aside:hover {
   color: var(--main-color);
@@ -329,6 +334,7 @@ div.short-cut {
   position: fixed;
   right: 60px;
   bottom: 50px;
+  z-index: 1;
 }
 div.short-cut i.plus {
   cursor: pointer;

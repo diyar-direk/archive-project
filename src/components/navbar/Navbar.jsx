@@ -77,10 +77,10 @@ const Navbar = () => {
   const selectLang = (e) => {
     context.setLanguage(e.target.dataset.lang);
   };
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    navigate('/login'); 
+    navigate("/login");
   };
   return (
     <>
@@ -132,8 +132,8 @@ const Navbar = () => {
               </div>
             </article>
             <h4 className="c-pointer log-out center" onClick={handleLogout}>
-        <i className="fa-solid fa-right-from-bracket"></i> log out
-      </h4>
+              <i className="fa-solid fa-right-from-bracket"></i> log out
+            </h4>
           </div>
         </div>
       </nav>
@@ -168,7 +168,7 @@ const Navbar = () => {
                 <i className="arrow fa-solid fa-chevron-right"></i>
               </div>
               <article>
-                <NavLink to={"all_admins"}>pepole</NavLink>
+                <NavLink to={"/people"}>people</NavLink>
                 <NavLink to={"/add_person"}>add person</NavLink>
               </article>
             </div>
@@ -180,7 +180,7 @@ const Navbar = () => {
           </div>
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>
-            <span onClick={handleLogout}>fs  </span>
+            <span onClick={handleLogout}>fs </span>
           </h3>
         </div>
       </aside>

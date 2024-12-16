@@ -37,6 +37,36 @@ textarea {
   z-index: 40;
   position: fixed;
   padding: 20px;
+  backdrop-filter: blur(2px);
+}
+.overlay > div {
+  padding: 20px;
+  background-color: #ffffff9e;
+  border-radius: 6px;
+  box-shadow: var(--box-shadow);
+}
+body.dark .overlay > div {
+  background: #222223b5;
+}
+.overlay > div h1 {
+  font-size: 25px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: var(--font-color);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.overlay > div .overlay-btn {
+  flex: calc(50% - 10px);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.overlay > div .overlay-btn.cencel {
+  background-color: #606060;
 }
 
 a {
@@ -59,7 +89,6 @@ main.div-open {
 main > div.dashboard-container {
   width: calc(100% - 290px);
   display: flex;
-  align-items: center;
   justify-content: center;
 }
 main > div.dashboard-container.closed {
@@ -134,7 +163,9 @@ body.arabic h1.title::after {
 .container {
   width: 90%;
 }
-
+.pointer-none {
+  pointer-events: none;
+}
 .between {
   display: flex;
   align-items: center;
@@ -167,7 +198,7 @@ h1 > span.inside-span {
 body {
   --body-color: #fff;
   --main-color: #334b7c;
-  --border-color: #83838340;
+  --border-color: #e6e3e3;
   --aside-color: #f4f6f8;
   --section-color: #f0f1f3;
   --font-color: #000;
@@ -176,10 +207,10 @@ body {
   overflow-x: hidden;
 }
 body.dark {
-  --border-color: #83838340;
+  --border-color: #1c1c1c;
   --body-color: #141419;
   --section-color: #181a1e;
-  --aside-color: #16161b;
+  --aside-color: #222223;
   --font-color: #ccc;
   --box-shadow: 0 0 16px #171717;
 }
