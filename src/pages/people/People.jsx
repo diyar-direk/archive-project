@@ -168,9 +168,8 @@ const People = () => {
       <h1 className="title"> people </h1>
 
       <form className="flex center gap-10 table-search">
-        <input type="text" placeholder="search by name" />
-        <input type="text" placeholder="search by name" />
-        <input type="text" placeholder="search by name" />
+        <input type="text" placeholder="search by name" required />
+        <button className="btn"> search</button>
         <i
           onClick={(e) => {
             setFltr(true);
