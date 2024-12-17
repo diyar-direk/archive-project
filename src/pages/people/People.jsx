@@ -147,10 +147,7 @@ const People = () => {
               <i className="fa-regular fa-pen-to-square"></i>
               update
             </Link>
-            <Link
-              to={`/dashboard/student_profile/${e._id}`}
-              className="flex visit"
-            >
+            <Link to={`${e._id}`} className="flex visit">
               <i className="fa-solid fa-circle-user"></i> visit
             </Link>
           </div>
