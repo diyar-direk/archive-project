@@ -41,13 +41,10 @@ textarea {
 }
 .overlay > div {
   padding: 20px;
-  background-color: #ffffff9e;
+  background-color: var(--border-color);
   border-radius: 6px;
-  box-shadow: var(--box-shadow);
 }
-body.dark .overlay > div {
-  background: #222223b5;
-}
+
 .overlay > div h1 {
   font-size: 25px;
   margin-bottom: 10px;

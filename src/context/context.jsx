@@ -70,3 +70,11 @@ const Provider = ({ children }) => {
   );
 };
 export default Provider;
+
+export const date = (dat) => {
+  const time = new Date(dat);
+  const birthDate = `${time.getFullYear()}-${
+    time.getMonth() + 1
+  }-${time.getDate()}`;
+  return birthDate;
+};
