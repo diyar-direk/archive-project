@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
@@ -12,7 +12,7 @@ const Profile = () => {
       .get(`${baseURL}/people/${id}`)
       .then((res) => setData(res.data.data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [id]);
   const [image, setImage] = useState(false);
   const date = new Date(data?.birthDate);
   const birthDate = `${date.getFullYear()}-${

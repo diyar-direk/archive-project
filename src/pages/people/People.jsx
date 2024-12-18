@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { baseURL, limit } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
-
+import "./profile.css"
 const People = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
