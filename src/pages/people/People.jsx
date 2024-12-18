@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-import { baseURL, limit } from "../../context/context";
+import { baseURL, date, limit } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css"
@@ -29,11 +29,9 @@ const People = () => {
     "mother Name",
     "marital status",
     "occupation",
-    "place of birth",
-    "birth date",
-    "country",
+    "place & date of birth",
+    "Place of residence",
     "government",
-    "city",
     "phone",
     "email",
   ];
@@ -92,10 +90,6 @@ const People = () => {
   };
 
   const tableData = data?.map((e) => {
-    const date = new Date(e.birthDate);
-    const birthDate = `${date.getFullYear()} / ${
-      date.getMonth() + 1
-    } / ${date.getDate()}`;
     return (
       <tr key={e._id}>
         <td>
@@ -125,11 +119,13 @@ const People = () => {
         <td> {e.motherName} </td>
         <td> {e.maritalStatus} </td>
         <td> {e.occupation} </td>
-        <td> {e.placeOfBirth} </td>
-        <td> {birthDate} </td>
-        <td> {e.countryId.name} </td>
+        <td>
+          {e.placeOfBirth} {date(e.birthDate)}
+        </td>
+        <td>
+          {e.countryId.name} / {e.cityId.name}
+        </td>
         <td> {e.governmentId.name} </td>
-        <td> {e.cityId.name} </td>
         <td> {e.phone} </td>
         <td> {e.email} </td>
         <td>
@@ -151,10 +147,7 @@ const People = () => {
               <i className="fa-regular fa-pen-to-square"></i>
               update
             </Link>
-            <Link
-              to={`/dashboard/student_profile/${e._id}`}
-              className="flex visit"
-            >
+            <Link to={`${e._id}`} className="flex visit">
               <i className="fa-solid fa-circle-user"></i> visit
             </Link>
           </div>
@@ -172,9 +165,8 @@ const People = () => {
       <h1 className="title"> people </h1>
 
       <form className="flex center gap-10 table-search">
-        <input type="text" placeholder="search by name" />
-        <input type="text" placeholder="search by name" />
-        <input type="text" placeholder="search by name" />
+        <input type="text" placeholder="search by name" required />
+        <button className="btn"> search</button>
         <i
           onClick={(e) => {
             setFltr(true);

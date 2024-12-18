@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import {  useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
-import { baseURL } from "../../context/context";
+import { baseURL, date } from "../../context/context";
 const Profile = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -14,10 +14,6 @@ const Profile = () => {
       .catch((err) => console.log(err));
   }, [id]);
   const [image, setImage] = useState(false);
-  const date = new Date(data?.birthDate);
-  const birthDate = `${date.getFullYear()}-${
-    date.getMonth() + 1
-  }-${date.getDate()}`;
 
   return (
     <>
@@ -32,7 +28,11 @@ const Profile = () => {
             )}
             {(data?.image || image) && (
               <img
-                src={image ? URL.createObjectURL(image) : data?.image}
+                src={
+                  image
+                    ? URL.createObjectURL(image)
+                    : `https://localhost:8000${data?.image}`
+                }
                 alt="profile"
                 className="photo w-100"
               />
@@ -63,7 +63,7 @@ const Profile = () => {
           <div className="flex">
             <h2>place and date of birth</h2>
             <p>
-              {data?.placeOfBirth} {data && birthDate}
+              {data?.placeOfBirth} {data?.birthDate && date(data?.birthDate)}
             </p>
           </div>
           <div className="flex">
