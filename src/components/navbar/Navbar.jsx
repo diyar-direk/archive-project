@@ -179,7 +179,7 @@ const Navbar = () => {
           </div>
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>
-            <span onClick={handleLogout}>fs </span>
+            <span onClick={handleLogout}>log out </span>
           </h3>
         </div>
       </aside>

@@ -38,17 +38,26 @@ const People = () => {
 
   useEffect(() => {
     getPeople();
-  }, [page]);
+  }, [page, filters]);
 
   const getPeople = async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);
+
     document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
+    const keys = Object.keys(filters);
+    keys.forEach(
+      (key) =>
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
+
     try {
-      const data = await axios.get(
-        `${baseURL}/people?active=true&limit=${limit}&page=${page}`
-      );
+      const data = await axios.get(url);
       dataLength.current = data.data.numberOfActivePeople;
 
       allPeople.current = data.data.people.map((e) => e._id);

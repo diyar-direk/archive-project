@@ -130,7 +130,7 @@ aside {
   top: 0;
   height: 100vh;
   max-height: 100vh;
-  background-color: var(--body-color);
+  background-color: var(--aside-color);
   width: 290px;
   overflow-y: auto;
   z-index: 10;
@@ -149,6 +149,7 @@ aside > article {
   position: sticky;
   top: 0;
   z-index: 1;
+  background-color: var(--body-color);
 }
 aside > article a {
   color: var(--font-color);
@@ -330,11 +331,44 @@ aside.closed .log-out span {
   display: none;
 }
 
+div.open-aside {
+  position: fixed;
+  top: 50%;
+  width: 40px;
+  height: 40px;
+  transform: translateY(-50%);
+  border-radius: 0 50% 50% 0;
+  left: 290px;
+  background-color: var(--aside-color);
+  cursor: pointer;
+  box-shadow: var(--box-shadow);
+  color: var(--font-color);
+  font-size: 12px;
+}
+body.arabic div.open-aside {
+  border-radius: 50% 0% 0% 50%;
+  right: 290px;
+}
+
+div.dashboard-container.closed div.open-aside {
+  left: 80px;
+}
+div.dashboard-container.closed div.open-aside i {
+  rotate: 180deg;
+}
+body.arabic div.dashboard-container.closed div.open-aside {
+  right: 80px;
+}
+
 div.short-cut {
   position: fixed;
   right: 60px;
   bottom: 50px;
   z-index: 1;
+}
+body.arabic div.short-cut {
+  left: 60px;
+  right: auto;
 }
 div.short-cut i.plus {
   cursor: pointer;
@@ -399,6 +433,18 @@ div.short-cut div.short-links a:hover {
   aside {
     width: 240px;
   }
+  div.open-aside {
+    left: 240px;
+  }
+  body.arabic div.open-aside {
+    right: 240px;
+  }
+  div.dashboard-container.closed div.open-aside {
+    left: 65px;
+  }
+  body.arabic div.dashboard-container.closed div.open-aside {
+    right: 65px;
+  }
   aside > article,
   nav {
     height: 60px;
@@ -413,7 +459,8 @@ div.short-cut div.short-links a:hover {
   nav .setting {
     gap: 10px;
   }
-  nav .setting .mode {
+  nav .setting .mode,
+  nav .setting .lang i {
     width: 30px;
     height: 30px;
     font-size: 13px;
@@ -427,9 +474,7 @@ div.short-cut div.short-links a:hover {
   nav .setting .lang span {
     font-size: 13px;
   }
-  nav .setting .lang i {
-    font-size: 11px;
-  }
+
   nav .setting .info h4,
   nav .setting .info p {
     font-size: 14px;
@@ -512,6 +557,13 @@ div.short-cut div.short-links a:hover {
   aside {
     width: 210px;
   }
+  div.open-aside {
+    left: 210px;
+  }
+  body.arabic div.open-aside {
+    right: 210px;
+  }
+
   nav {
     width: calc(100% - 210px);
     left: 210px;
@@ -556,6 +608,18 @@ div.short-cut div.short-links a:hover {
 @media (max-width: 600px) {
   aside {
     width: 180px;
+  }
+  div.open-aside {
+    left: 180px;
+  }
+  body.arabic div.open-aside {
+    right: 180px;
+  }
+  div.dashboard-container.closed div.open-aside {
+    left: 55px;
+  }
+  body.arabic div.dashboard-container.closed div.open-aside {
+    right: 55px;
   }
   nav {
     width: calc(100% - 180px);
