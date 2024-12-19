@@ -144,7 +144,7 @@ const People = () => {
               onClick={(event) => {
                 event.stopPropagation();
                 setOverlay(true);
-                const allSelectors = document.querySelectorAll("td .checkbox");
+                const allSelectors = document.querySelectorAll(".checkbox");
                 allSelectors.forEach((e) => e.classList.remove("active"));
                 setSelectedItems([e._id]);
               }}

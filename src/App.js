@@ -4,6 +4,7 @@ import AddPerson from "./pages/people/AddPerson";
 import Login from "./pages/Login/Login";
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
+import Countries from "./pages/addresses/Countries";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="people" element={<People />} />
           <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
+          <Route path="countries" element={<Countries />} />
         </Route>
       </Routes>
     </div>

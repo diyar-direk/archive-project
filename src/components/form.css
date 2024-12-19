@@ -210,3 +210,45 @@ form .files .flex h4 {
 iframe {
   border: none;
 }
+
+form.addresses {
+  background-color: var(--body-color);
+  padding: 30px 20px;
+  border-radius: 4px;
+  flex: 1;
+  max-width: 350px;
+  box-shadow: var(--box-shadow);
+  min-height: 200px;
+}
+form.addresses h1 {
+  color: var(--font-color);
+  font-weight: 500;
+  text-transform: capitalize;
+  font-size: 25px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+form.addresses label {
+  cursor: text;
+  text-transform: capitalize;
+  font-size: 17px;
+  width: fit-content;
+  display: block;
+}
+form.addresses label::after {
+  content: ":";
+}
+form.addresses .inp {
+  background-color: var(--section-color);
+  border: solid 1px var(--border-color);
+  padding: 8px;
+  font-size: 14px;
+  margin: 20px 0;
+  width: 100%;
+  border-radius: 4px;
+  caret-color: var(--main-color);
+}
+form.addresses button.btn {
+  width: 100%;
+  font-size: 18px;
+}
