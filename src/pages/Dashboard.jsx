@@ -5,17 +5,25 @@ import Navbar from "../components/navbar/Navbar";
 import { Context } from "../context/context";
 const Dashboard = () => {
   const context = useContext(Context);
-
+  const closeAside = () => {
+    const nav = document.querySelector("nav");
+    nav && nav.classList.toggle("closed");
+    localStorage.setItem("isClosed", nav.classList.contains("closed"));
+    context?.setIsClosed(nav.classList.contains("closed"));
+  };
   return (
     <>
       <Navbar />
 
       <main>
         <div
-          className={`${
+          className={`relative ${
             context?.isClosed ? "closed" : ""
-          }  dashboard-container`}
+          } dashboard-container`}
         >
+          <div onClick={closeAside} className="center open-aside">
+            <i className="fa-solid fa-chevron-left"></i>
+          </div>
           <div className="container">
             <Outlet />
           </div>

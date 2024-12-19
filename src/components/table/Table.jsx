@@ -4,6 +4,7 @@ import axios from "axios";
 import { baseURL } from "../../context/context";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
+
   const [data, setData] = useState({
     country: [],
     city: [],
@@ -17,13 +18,13 @@ const Table = (props) => {
     government: [],
   });
 
-  const keys = Object.keys(props.filters.filters);
+  const keys = Object.keys(props.filters?.filters || "");
 
   useEffect(() => {
     if (
-      keys.includes("country") &&
+      keys?.includes("country") &&
       data.country.length === 0 &&
-      props.hasFltr.fltr
+      props.hasFltr?.fltr
     ) {
       axios
         .get(`${baseURL}/Countries?active=true`)
@@ -33,15 +34,15 @@ const Table = (props) => {
         })
         .catch((err) => console.log(err));
     }
-  }, [props.hasFltr.fltr]);
+  }, [props.hasFltr?.fltr]);
 
   useEffect(() => {
-    if (keys.includes("government")) {
-      props.filters.setFilters({ ...props.filters.filters, government: "" });
-      if (props.hasFltr.fltr && props.filters.filters.country)
+    if (keys?.includes("government")) {
+      props.filters?.setFilters({ ...props.filters?.filters, government: "" });
+      if (props.hasFltr?.fltr && props.filters?.filters?.country)
         axios
           .get(
-            `${baseURL}/Governments?active=true&country=${props.filters.filters.country._id}`
+            `${baseURL}/Governments?active=true&country=${props.filters?.filters?.country._id}`
           )
           .then((res) => {
             setData({ ...data, government: res.data.data });
@@ -49,15 +50,15 @@ const Table = (props) => {
           })
           .catch((err) => console.log(err));
     }
-  }, [props.filters.filters.country]);
+  }, [props.filters?.filters?.country]);
 
   useEffect(() => {
-    if (keys.includes("city")) {
-      props.filters.setFilters({ ...props.filters.filters, city: "" });
-      if (props.hasFltr.fltr && props.filters.filters.government) {
+    if (keys?.includes("city")) {
+      props.filters?.setFilters({ ...props.filters?.filters, city: "" });
+      if (props.hasFltr?.fltr && props.filters?.filters?.government) {
         axios
           .get(
-            `${baseURL}/Cities?active=true&government=${props.filters.filters.government._id}`
+            `${baseURL}/Cities?active=true&government=${props.filters?.filters?.government._id}`
           )
           .then((res) => {
             setData({ ...data, city: res.data.data });
@@ -66,23 +67,23 @@ const Table = (props) => {
           .catch((err) => console.log(err));
       }
     }
-  }, [props.filters.filters.government]);
+  }, [props.filters?.filters?.government]);
 
   useEffect(() => {
-    if (keys.includes("villag"))
-      props.filters.setFilters({ ...props.filters.filters, villag: "" });
-    if (props.hasFltr.fltr) {
+    if (keys?.includes("villag"))
+      props.filters?.setFilters({ ...props.filters?.filters, villag: "" });
+    if (props.hasFltr?.fltr) {
       let dataObj = { ...data };
       const promises = [];
       if (
-        keys.includes("villag") &&
+        keys?.includes("villag") &&
         data.villag.length === 0 &&
-        props.filters.filters.city
+        props.filters?.filters?.city
       ) {
         promises.push(
           axios
             .get(
-              `${baseURL}/Villages?active=true&city=${props.filters.filters.city._id}`
+              `${baseURL}/Villages?active=true&city=${props.filters?.filters?.city._id}`
             )
             .then((res) => {
               dataObj = { ...dataObj, villag: res.data.data };
@@ -97,10 +98,11 @@ const Table = (props) => {
         })
         .catch((err) => console.log("Error in one or more requests:", err));
     }
-  }, [props.filters.filters.city]);
+  }, [props.filters?.filters?.city]);
 
   const createPags = (limit, dataLength) => {
     const pages = Math.ceil(dataLength / limit);
+    if (pages <= 1) return;
     let h3Pages = [];
     for (let i = 0; i < pages; i++) {
       h3Pages.push(
@@ -119,26 +121,41 @@ const Table = (props) => {
 
   function updateData(e) {
     if (props.page.page !== +e.target.dataset.page) {
-      const pages = document.querySelectorAll(".pagination h3");
-      pages.forEach((e) => e.classList.remove("active"));
-      e.target.classList.add("active");
       props.page.setPage(+e.target.dataset.page);
     }
   }
 
-  window.addEventListener("click", () => {
-    if (props.overlay.overlay) {
-      props.overlay.setOverlay(false);
-      props.items.slectedItems.length === 1 && props.items.setSelectedItems([]);
+  useEffect(() => {
+    const pages = document.querySelectorAll(".pagination h3");
+    if (pages) {
+      pages.forEach((e) => e.classList.remove("active"));
+
+      pages[props.page.page - 1]?.classList.add("active");
     }
-    props.hasFltr.fltr && props.hasFltr.setFltr(false);
-    const optionDiv = document.querySelector(
-      "div.table tbody td i.options.active-div"
-    );
-    optionDiv && optionDiv.classList.remove("active-div");
-    const fltrSelect = document.querySelector(".filters .select div.active");
-    fltrSelect && fltrSelect.classList.remove("active");
-  });
+  }, [props.page.page]);
+
+  useEffect(() => {
+    const handleClick = () => {
+      if (props.overlay.overlay) {
+        props.overlay.setOverlay(false);
+
+        if (props.items.slectedItems.length < 2)
+          props.items.setSelectedItems([]);
+      }
+      props.hasFltr?.fltr && props.hasFltr?.setFltr(false);
+      const optionDiv = document.querySelector(
+        "div.table tbody td i.options.active-div"
+      );
+      optionDiv && optionDiv.classList.remove("active-div");
+      const fltrSelect = document.querySelector(".filters .select div.active");
+      fltrSelect && fltrSelect.classList.remove("active");
+    };
+
+    window.addEventListener("click", handleClick);
+    return () => {
+      window.removeEventListener("click", handleClick);
+    };
+  }, [props.overlay, props.hasFltr, props.items]);
 
   const removeClass = (e) => {
     e.target.parentNode.parentNode.children[0].classList.remove("active");
@@ -175,24 +192,57 @@ const Table = (props) => {
   };
 
   function selectFilters(e, itm) {
-    props.filters.setFilters({
-      ...props.filters.filters,
+    const obj = {
+      ...props.filters?.filters,
       [e.target.dataset.name]: itm ? itm : e.target.dataset.data,
-    });
+    };
+    if (
+      props.filters?.filters[e.target.dataset.name] !==
+      obj[e.target.dataset.name]
+    ) {
+      props.filters?.setFilters(obj);
+      props.page.setPage(1);
+    }
   }
+
+  const deleteData = async () => {
+    if (props.items.slectedItems.length > 1) {
+      const data = await axios.patch(
+        `${baseURL}/${props.delete.url}/deActivate/${props.items.slectedItems[0]}`,
+        []
+      );
+      if (data.status === 200) {
+        props.overlay.setOverlay(false);
+        props.items.setSelectedItems([]);
+        const fltr = props.delete.data.filter(
+          (data) => data._id !== props.items.slectedItems[0]
+        );
+        props.delete.setData(fltr);
+      }
+    } else {
+      const data = await axios.patch(
+        `${baseURL}/${props.delete.url}/deActivate/${props.items.slectedItems[0]}`,
+        []
+      );
+      if (data.status === 200) {
+        props.overlay.setOverlay(false);
+        props.items.setSelectedItems([]);
+      }
+    }
+  };
 
   return (
     <>
-      {props.hasFltr.fltr && (
+      {props.hasFltr?.fltr && (
         <div className="overlay">
           <div onClick={(e) => e.stopPropagation()} className="filters">
-            {(props.filters.filters.gender ||
-              props.filters.filters.gender === "") && (
+            {(props.filters?.filters?.gender ||
+              props.filters?.filters?.gender === "") && (
               <div className="select relative">
                 <div onClick={openDiv} className="center gap-10 w-100">
                   <span className="pointer-none">
-                    {props.filters.filters.gender
-                      ? props.filters.filters.gender
+                    {props.filters?.filters?.gender
+                      ? props.filters?.filters?.gender
                       : "all gender"}
                   </span>
                   <i className="fa-solid fa-sort-down pointer-none"></i>
@@ -232,13 +282,12 @@ const Table = (props) => {
               </div>
             )}
 
-            {(props.filters.filters.country ||
-              props.filters.filters.country === "") && (
+            {keys?.includes("country") && (
               <div className="select relative">
                 <div onClick={openDiv} className="center gap-10 w-100">
                   <span className="pointer-none">
-                    {props.filters.filters.country
-                      ? props.filters.filters.country.name
+                    {props.filters?.filters?.country
+                      ? props.filters?.filters?.country.name
                       : "all Countries"}
                   </span>
                   <i className="fa-solid fa-sort-down pointer-none"></i>
@@ -289,14 +338,13 @@ const Table = (props) => {
               </div>
             )}
 
-            {(props.filters.filters.government ||
-              props.filters.filters.government === "") &&
-              props.filters.filters.country && (
+            {keys?.includes("government") &&
+              props.filters?.filters?.country && (
                 <div className="select relative">
                   <div onClick={openDiv} className="center gap-10 w-100">
                     <span className="pointer-none">
-                      {props.filters.filters.government
-                        ? props.filters.filters.government.name
+                      {props.filters?.filters?.government
+                        ? props.filters?.filters?.government.name
                         : "all Governments"}
                     </span>
                     <i className="fa-solid fa-sort-down pointer-none"></i>
@@ -347,126 +395,122 @@ const Table = (props) => {
                 </div>
               )}
 
-            {(props.filters.filters.city ||
-              props.filters.filters.city === "") &&
-              props.filters.filters.government && (
-                <div className="select relative">
-                  <div onClick={openDiv} className="center gap-10 w-100">
-                    <span className="pointer-none">
-                      {props.filters.filters.city
-                        ? props.filters.filters.city.name
-                        : "all Cities"}
-                    </span>
-                    <i className="fa-solid fa-sort-down pointer-none"></i>
-                  </div>
-                  <article>
-                    <input
-                      type="text"
-                      className="fltr-search"
-                      placeholder="search for city ..."
-                      onInput={(inp) => {
-                        const filteredCountries = data.city.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                        setSeacrhData({
-                          ...searchData,
-                          city: filteredCountries,
-                        });
-                      }}
-                    />
-                    {searchData.city.length > 0 && (
-                      <h2
-                        data-name="city"
-                        data-data=""
-                        onClick={(e) => {
-                          selectFilters(e);
-                          removeClass(e);
-                        }}
-                      >
-                        all city
-                      </h2>
-                    )}
-                    {searchData.city.map((itm, i) => (
-                      <h2
-                        key={i}
-                        data-name="city"
-                        onClick={(e) => {
-                          selectFilters(e, itm);
-                          removeClass(e);
-                        }}
-                      >
-                        {itm.name}
-                      </h2>
-                    ))}
-                    {searchData.city.length <= 0 && <p>no data</p>}
-                  </article>
+            {keys?.includes("city") && props.filters?.filters?.government && (
+              <div className="select relative">
+                <div onClick={openDiv} className="center gap-10 w-100">
+                  <span className="pointer-none">
+                    {props.filters?.filters?.city
+                      ? props.filters?.filters?.city.name
+                      : "all Cities"}
+                  </span>
+                  <i className="fa-solid fa-sort-down pointer-none"></i>
                 </div>
-              )}
+                <article>
+                  <input
+                    type="text"
+                    className="fltr-search"
+                    placeholder="search for city ..."
+                    onInput={(inp) => {
+                      const filteredCountries = data.city.filter((e) =>
+                        e.name
+                          .toLowerCase()
+                          .includes(inp.target.value.toLowerCase())
+                      );
+                      setSeacrhData({
+                        ...searchData,
+                        city: filteredCountries,
+                      });
+                    }}
+                  />
+                  {searchData.city.length > 0 && (
+                    <h2
+                      data-name="city"
+                      data-data=""
+                      onClick={(e) => {
+                        selectFilters(e);
+                        removeClass(e);
+                      }}
+                    >
+                      all city
+                    </h2>
+                  )}
+                  {searchData.city.map((itm, i) => (
+                    <h2
+                      key={i}
+                      data-name="city"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                        removeClass(e);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {searchData.city.length <= 0 && <p>no data</p>}
+                </article>
+              </div>
+            )}
 
-            {(props.filters.filters.villag ||
-              props.filters.filters.villag === "") &&
-              props.filters.filters.city && (
-                <div className="select relative">
-                  <div onClick={openDiv} className="center gap-10 w-100">
-                    <span className="pointer-none">
-                      {props.filters.filters.villag
-                        ? props.filters.filters.villag.name
-                        : "all Villages"}
-                    </span>
-                    <i className="fa-solid fa-sort-down pointer-none"></i>
-                  </div>
-                  <article>
-                    <input
-                      type="text"
-                      className="fltr-search"
-                      placeholder="search for villag ..."
-                      onInput={(inp) => {
-                        const filteredCountries = data.villag.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                        setSeacrhData({
-                          ...searchData,
-                          villag: filteredCountries,
-                        });
-                      }}
-                    />
-                    {searchData.villag.length > 0 && (
-                      <h2
-                        data-name="villag"
-                        data-data=""
-                        onClick={(e) => {
-                          selectFilters(e);
-                          removeClass(e);
-                        }}
-                      >
-                        all villages
-                      </h2>
-                    )}
-                    {searchData.villag.map((itm, i) => (
-                      <h2
-                        key={i}
-                        data-name="villag"
-                        onClick={(e) => {
-                          selectFilters(e, itm);
-                          removeClass(e);
-                        }}
-                      >
-                        {itm.name}
-                      </h2>
-                    ))}
-                    {searchData.villag.length <= 0 && <p>no data</p>}
-                  </article>
+            {keys?.includes("villag") && props.filters?.filters?.city && (
+              <div className="select relative">
+                <div onClick={openDiv} className="center gap-10 w-100">
+                  <span className="pointer-none">
+                    {props.filters?.filters?.villag
+                      ? props.filters?.filters?.villag.name
+                      : "all Villages"}
+                  </span>
+                  <i className="fa-solid fa-sort-down pointer-none"></i>
                 </div>
-              )}
+                <article>
+                  <input
+                    type="text"
+                    className="fltr-search"
+                    placeholder="search for villag ..."
+                    onInput={(inp) => {
+                      const filteredCountries = data.villag.filter((e) =>
+                        e.name
+                          .toLowerCase()
+                          .includes(inp.target.value.toLowerCase())
+                      );
+                      setSeacrhData({
+                        ...searchData,
+                        villag: filteredCountries,
+                      });
+                    }}
+                  />
+                  {searchData.villag.length > 0 && (
+                    <h2
+                      data-name="villag"
+                      data-data=""
+                      onClick={(e) => {
+                        selectFilters(e);
+                        removeClass(e);
+                      }}
+                    >
+                      all villages
+                    </h2>
+                  )}
+                  {searchData.villag.map((itm, i) => (
+                    <h2
+                      key={i}
+                      data-name="villag"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                        removeClass(e);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {searchData.villag.length <= 0 && <p>no data</p>}
+                </article>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {props.overlay.overlay && (
+      {props.overlay?.overlay && (
         <div className="overlay">
           <div onClick={(e) => e.stopPropagation()}>
             <h1>
@@ -474,7 +518,7 @@ const Table = (props) => {
               itms
             </h1>
             <div className="flex gap-10 wrap">
-              <div onClick={props.delete} className="delete-all overlay-btn">
+              <div onClick={deleteData} className="delete-all overlay-btn">
                 <i className="fa-solid fa-trash"></i> delete
               </div>
               <div

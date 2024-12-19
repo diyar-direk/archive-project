@@ -173,14 +173,26 @@ const Navbar = () => {
               </article>
             </div>
 
-            <NavLink to={"classes"} className="w-100 justify-start center">
-              <i className="fa-solid fa-school-flag"></i>
-              <h1>te</h1>
+            <div className="links">
+              <div onClick={openDiv} className="center">
+                <i className="fa-solid fa-map-location-dot"></i>
+                <h1 className="flex-1">Addresses</h1>
+                <i className="arrow fa-solid fa-chevron-right"></i>
+              </div>
+              <article>
+                <NavLink to={"/countries"}>countries</NavLink>
+                <NavLink to={"/governments"}>governments</NavLink>
+              </article>
+            </div>
+
+            <NavLink to={"/dsa"} className="w-100 justify-start center">
+              <i className="fa-solid fa-map-location-dot"></i>
+              <h1> dsa </h1>
             </NavLink>
           </div>
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>
-            <span onClick={handleLogout}>fs </span>
+            <span onClick={handleLogout}>log out </span>
           </h3>
         </div>
       </aside>

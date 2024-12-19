@@ -65,7 +65,7 @@
   border-bottom: solid 1px var(--body-color);
 }
 .overlay .filters .select article h2:hover {
-  background-color: var(--border-color);
+  background-color: var(--body-color);
 }
 
 input.fltr-search {
@@ -86,14 +86,18 @@ div.table {
   overflow-y: hidden;
   white-space: nowrap;
 }
+
 div.table table {
   border-spacing: 0px;
   margin: 15px 0 5px;
   width: 100%;
 }
+div.addresses div.table table {
+  margin: 0;
+}
 
 div.table table.loading {
-  min-height: 300px;
+  min-height: 150px;
 }
 
 div.table thead {
@@ -324,4 +328,15 @@ div.table tbody td div.options .visit i {
 }
 .delete-all i {
   font-size: 14px;
+}
+
+div.table div.actions i {
+  cursor: pointer;
+  font-size: 18px;
+}
+div.table div.actions i.delete {
+  color: #ce0606;
+}
+div.table div.actions i.update {
+  color: #4400ff;
 }
