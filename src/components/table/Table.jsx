@@ -214,10 +214,7 @@ const Table = (props) => {
       if (data.status === 200) {
         props.overlay.setOverlay(false);
         props.items.setSelectedItems([]);
-        const fltr = props.delete.data.filter(
-          (data) => data._id !== props.items.slectedItems[0]
-        );
-        props.delete.setData(fltr);
+        props.delete.getData();
       }
     } else {
       const data = await axios.patch(
@@ -227,6 +224,7 @@ const Table = (props) => {
       if (data.status === 200) {
         props.overlay.setOverlay(false);
         props.items.setSelectedItems([]);
+        props.delete.getData();
       }
     }
   };

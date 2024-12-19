@@ -40,6 +40,8 @@ const Countries = () => {
     if (update) {
       ref.current.focus();
       setName(update.name);
+    } else {
+      setName("");
     }
   }, [update]);
 
@@ -168,7 +170,19 @@ const Countries = () => {
             onInput={(e) => setName(e.target.value)}
             id="name"
           />
-          <button className="btn">{update ? "save" : "add"}</button>
+          <div className="flex wrap gap-10">
+            <button className={`${update ? "save" : ""} btn flex-1`}>
+              {update ? "save" : "add"}
+            </button>
+            {update && (
+              <button
+                onClick={() => setUpdate(false)}
+                className="btn flex-1 cencel "
+              >
+                cencel
+              </button>
+            )}
+          </div>
         </form>
         <div className="flex-1">
           <Table
@@ -178,7 +192,7 @@ const Countries = () => {
             data={{ data: countryData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Countries", data: data }}
+            delete={{ setData, url: "Countries", getData }}
           />
         </div>
       </div>

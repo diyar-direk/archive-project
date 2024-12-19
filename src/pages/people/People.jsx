@@ -37,10 +37,10 @@ const People = () => {
   ];
 
   useEffect(() => {
-    getPeople();
+    getData();
   }, [page, filters]);
 
-  const getPeople = async () => {
+  const getData = async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);

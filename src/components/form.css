@@ -234,6 +234,7 @@ form.addresses label {
   font-size: 17px;
   width: fit-content;
   display: block;
+  color: var(--font-color);
 }
 form.addresses label::after {
   content: ":";
@@ -247,8 +248,8 @@ form.addresses .inp {
   width: 100%;
   border-radius: 4px;
   caret-color: var(--main-color);
+  color: var(--font-color);
 }
 form.addresses button.btn {
-  width: 100%;
   font-size: 18px;
 }
