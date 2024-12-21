@@ -181,6 +181,10 @@ const Navbar = () => {
               <article>
                 <NavLink to={"/countries"}>countries</NavLink>
                 <NavLink to={"/governments"}>governments</NavLink>
+                <NavLink to={"/cities"}>cities</NavLink>
+                <NavLink to={"/villages"}>villages</NavLink>
+                <NavLink to={"/streets"}>streets</NavLink>
+                <NavLink to={"/regions"}>regions</NavLink>
               </article>
             </div>
 

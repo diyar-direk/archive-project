@@ -155,8 +155,8 @@ const Countries = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-      <h1 className="title">cities</h1>
-      <div className="flex addresses gap-20 wrap">
+      <h1 className="title">Countries</h1>
+      <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
           <h1>{update ? "update this country" : "add new countery"}</h1>
           <label htmlFor="name">country name</label>

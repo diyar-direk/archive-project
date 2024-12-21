@@ -219,13 +219,15 @@ form.addresses {
   max-width: 350px;
   box-shadow: var(--box-shadow);
   min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 form.addresses h1 {
   color: var(--font-color);
   font-weight: 500;
   text-transform: capitalize;
   font-size: 25px;
-  margin-bottom: 20px;
   text-align: center;
 }
 form.addresses label {
@@ -244,11 +246,92 @@ form.addresses .inp {
   border: solid 1px var(--border-color);
   padding: 8px;
   font-size: 14px;
-  margin: 20px 0;
   width: 100%;
   border-radius: 4px;
   caret-color: var(--main-color);
   color: var(--font-color);
+}
+form.addresses .select .inp {
+  cursor: pointer;
+  text-transform: capitalize;
+}
+form.addresses .select > article {
+  position: absolute;
+  width: 100%;
+  background: var(--body-color);
+  z-index: 2;
+  top: calc(100% + 6px);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: var(--box-shadow);
+  max-height: 150px;
+  overflow-y: auto;
+}
+form.addresses .select .inp.active + article {
+  top: calc(100% + 2px);
+  opacity: 1;
+  pointer-events: all;
+}
+
+form.addresses .select > article h2 {
+  border-bottom: 1px solid var(--body-color);
+  background-color: var(--aside-color);
+  cursor: pointer;
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-align: center;
+  text-transform: capitalize;
+}
+form.addresses .select > article p {
+  border-bottom: 1px solid var(--body-color);
+  background-color: var(--aside-color);
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-align: center;
+  text-transform: capitalize;
+}
+form.addresses .select > article h2:hover {
+  background-color: var(--body-color);
+}
+form.addresses div.capital span {
+  border: dashed 2px;
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  gap: 4px;
+  text-transform: capitalize;
+}
+form.addresses div.capital span.true,
+form.addresses div.capital span.true i {
+  color: #0e9e32;
+  border-color: #0e9e32;
+}
+form.addresses div.capital span.true:hover,
+form.addresses div.capital span.true.active {
+  color: white;
+  background-color: #0e9e32;
+}
+form.addresses div.capital span.true:hover i,
+form.addresses div.capital span.true.active i {
+  color: white;
+}
+form.addresses div.capital span.false,
+form.addresses div.capital span.false i {
+  color: #c70000;
+  border-color: #c70000;
+}
+form.addresses div.capital span.false:hover,
+form.addresses div.capital span.false.active {
+  color: white;
+  background-color: #c70000;
+}
+form.addresses div.capital span.false:hover i,
+form.addresses div.capital span.false.active i {
+  color: white;
 }
 form.addresses button.btn {
   font-size: 18px;

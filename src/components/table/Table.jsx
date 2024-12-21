@@ -18,6 +18,7 @@ const Table = (props) => {
     government: [],
   });
 
+
   const keys = Object.keys(props.filters?.filters || "");
 
   useEffect(() => {
