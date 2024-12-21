@@ -123,7 +123,7 @@ const Village = () => {
         ></div>
       </td>
       <td>{e.name}</td>
-      <td>{e.city.name}</td>
+      <td>{e.city?.name}</td>
       <td>{date(e.createdAt)}</td>
       <td>
         <div className="center gap-10 actions">

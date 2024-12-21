@@ -128,8 +128,8 @@ const City = () => {
         ></div>
       </td>
       <td>{e.name}</td>
-      <td>{e.government.country.name}</td>
-      <td>{e.government.name}</td>
+      <td>{e.government?.country?.name}</td>
+      <td>{e.government?.name}</td>
       <td>{date(e.createdAt)}</td>
       <td>
         <div className="center gap-10 actions">
