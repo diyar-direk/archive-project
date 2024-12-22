@@ -37,10 +37,10 @@ const People = () => {
   ];
 
   useEffect(() => {
-    getPeople();
+    getData();
   }, [page, filters]);
 
-  const getPeople = async () => {
+  const getData = async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);
@@ -165,10 +165,6 @@ const People = () => {
     );
   });
 
-  function deleteFunction(e) {
-    console.log(1);
-  }
-
   return (
     <>
       <h1 className="title"> people </h1>
@@ -194,7 +190,6 @@ const People = () => {
         hasFltr={{ fltr: fltr, setFltr }}
         filters={{ filters, setFilters }}
         overlay={{ overlay: overlay, setOverlay }}
-        delete={deleteFunction}
       />
     </>
   );

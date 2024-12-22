@@ -182,6 +182,10 @@ const Navbar = () => {
               <article>
                 <NavLink to={"/countries"}>countries</NavLink>
                 <NavLink to={"/governments"}>governments</NavLink>
+                <NavLink to={"/cities"}>cities</NavLink>
+                <NavLink to={"/villages"}>villages</NavLink>
+                <NavLink to={"/streets"}>streets</NavLink>
+                <NavLink to={"/regions"}>regions</NavLink>
               </article>
             </div>
 
@@ -189,6 +193,12 @@ const Navbar = () => {
               <i className="fa-solid fa-map-location-dot"></i>
               <h1> dsa </h1>
             </NavLink>
+
+            <NavLink to={"/dsa"} className="w-100 justify-start center">
+              <i className="fa-solid fa-map-location-dot"></i>
+              <h1> dsa </h1>
+            </NavLink>
+            
           </div>
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>

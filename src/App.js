@@ -5,6 +5,11 @@ import LoginForm from "./pages/login/LoginForm";
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
 import Countries from "./pages/addresses/Countries";
+import Government from "./pages/addresses/Government";
+import City from "./pages/addresses/City";
+import Village from "./pages/addresses/Village";
+import Region from "./pages/addresses/Region";
+import Street from "./pages/addresses/Street";
 
 function App() {
   return (
@@ -17,6 +22,11 @@ function App() {
           <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
           <Route path="countries" element={<Countries />} />
+          <Route path="governments" element={<Government />} />
+          <Route path="cities" element={<City />} />
+          <Route path="villages" element={<Village />} />
+          <Route path="regions" element={<Region />} />
+          <Route path="streets" element={<Street />} />
         </Route>
       </Routes>
     </div>

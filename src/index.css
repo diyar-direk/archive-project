@@ -70,8 +70,11 @@ textarea:focus::placeholder {
   justify-content: center;
   gap: 5px;
 }
-.overlay > div .overlay-btn.cencel {
-  background-color: #606060;
+.cencel {
+  background-color: #606060 !important;
+}
+.save {
+  background-color: #0e9e32 !important;
 }
 
 a {
@@ -337,12 +340,12 @@ body::-webkit-scrollbar {
 }
 
 .error {
-  padding: 15px;
+  padding: 10px;
   text-align: center;
-  width: 400px;
+  width: 100%;
   background-color: #ce06061c;
   color: #ce0606;
-  margin-top: 20px;
+  margin: 10px 0;
   font-weight: 500;
   border-radius: 10px;
   text-transform: capitalize;
