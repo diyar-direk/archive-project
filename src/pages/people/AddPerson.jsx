@@ -1,11 +1,52 @@
 import React, { useState } from "react";
 import "../../components/form.css";
 import Mammoth from "mammoth";
+import { placeholder, searchPlaceholder } from "../../context/context";
 const AddPerson = () => {
   const handleClick = (e) => {
     e.stopPropagation();
+    const divs = document.querySelectorAll("div.form .selecte .inp.active");
+    divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
     e.target.classList.toggle("active");
   };
+
+  window.addEventListener("click", () => {
+    const selectDiv = document.querySelector("div.form .selecte .inp.active");
+    selectDiv && selectDiv.classList.remove("active");
+  });
+
+  const [error, setError] = useState(false);
+
+  const [form, setForm] = useState({
+    firstName: "",
+    fatherName: "",
+    surName: "",
+    gender: "",
+    maritalStatus: "",
+    motherName: "",
+    birthDate: "",
+    placeOfBirth: "",
+    occupation: "",
+    countryId: "",
+    governmentId: "",
+    cityId: "",
+    villageId: "",
+    regionId: "",
+    streetId: "",
+    addressDetails: "",
+    email: "",
+    phone: "",
+  });
+
+  const handleForm = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+    error && setError(false);
+  };
+  const handleFormSelect = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.title });
+    error && setError(false);
+  };
+
   const [documents, setDocuments] = useState({
     image: [],
     video: [],
@@ -79,14 +120,12 @@ const AddPerson = () => {
     }
   };
 
-  const placeholder = `pleace write`;
-
   return (
     <>
       <h1 className="title">add person</h1>
       <form className="dashboard-form">
         <div className="form">
-          <h1>test title</h1>
+          <h1>personal information</h1>
           <div className="flex wrap">
             <div className="flex flex-direction">
               <label htmlFor="firstName">first name</label>
@@ -95,6 +134,8 @@ const AddPerson = () => {
                 type="text"
                 id="firstName"
                 className="inp"
+                value={form.firstName}
+                onChange={handleForm}
                 placeholder={`${placeholder} first name`}
               />
             </div>
@@ -103,6 +144,8 @@ const AddPerson = () => {
               <label htmlFor="fotherName">fother name</label>
               <input
                 required
+                value={form.fotherName}
+                onChange={handleForm}
                 type="text"
                 id="fotherName"
                 className="inp"
@@ -113,6 +156,8 @@ const AddPerson = () => {
             <div className="flex flex-direction">
               <label htmlFor="surName">last name</label>
               <input
+                value={form.surName}
+                onChange={handleForm}
                 required
                 type="text"
                 id="surName"
@@ -122,73 +167,222 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
+              <label>gender</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  {form.gender ? form.gender : "select gender"}
+                </div>
+                <article>
+                  <h2 onClick={handleFormSelect} id="gender" title="male">
+                    male
+                  </h2>
+                  <h2 onClick={handleFormSelect} id="gender" title="female">
+                    Female
+                  </h2>
+                </article>
+              </div>
+            </div>
+
+            <div className="flex flex-direction">
+              <label>maritalStatus</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  {form.maritalStatus
+                    ? form.maritalStatus
+                    : "select maritalStatus"}
+                </div>
+                <article>
+                  <h2
+                    onClick={handleFormSelect}
+                    id="maritalStatus"
+                    title="Married"
+                  >
+                    Married
+                  </h2>
+                  <h2
+                    onClick={handleFormSelect}
+                    id="maritalStatus"
+                    title="Single"
+                  >
+                    single
+                  </h2>
+                  <h2
+                    onClick={handleFormSelect}
+                    id="maritalStatus"
+                    title="Other"
+                  >
+                    Other
+                  </h2>
+                </article>
+              </div>
+            </div>
+
+            <div className="flex flex-direction">
               <label htmlFor="motherName">mother name</label>
               <input
+                value={form.motherName}
+                onChange={handleForm}
                 required
                 type="text"
                 id="motherName"
                 className="inp"
-                placeholder="test"
+                placeholder={`${placeholder} mother name`}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="dateOfBirth">date of birth</label>
+              <label htmlFor="birthDate">date of birth</label>
               <input
+                value={form.birthDate}
+                onChange={handleForm}
                 required
                 type="date"
-                id="dateOfBirth"
+                id="birthDate"
                 className="inp"
-                placeholder="test"
               />
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="dateOfBirth">date of birth</label>
+              <label htmlFor="placeOfBirth">place of birth</label>
               <input
                 required
+                value={form.placeOfBirth}
+                onChange={handleForm}
                 type="text"
-                id="dateOfBirth"
+                id="placeOfBirth"
                 className="inp"
-                placeholder="test"
+                placeholder={`${placeholder} place of birth`}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label>select</label>
+              <label htmlFor="occupation">occupation</label>
+              <input
+                value={form.occupation}
+                onChange={handleForm}
+                required
+                type="text"
+                id="occupation"
+                className="inp"
+                placeholder={`${placeholder} occupation`}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="form">
+          <h1>stay informations</h1>
+          <div className="flex wrap">
+            <div className="flex flex-direction">
+              <label>country</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  test
+                  country
                 </div>
                 <article>
-                  <h2>h</h2>
-                  <h2>t</h2>
-                  <h2>d</h2>
+                  <input
+                    placeholder={`${searchPlaceholder} country`}
+                    type="text"
+                  />
+                  <h2>single</h2>
+                  <h2>Female</h2>
                 </article>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="form">
-          <h1>test title</h1>
-          <div className="flex warp">
+
             <div className="flex flex-direction">
-              <label htmlFor="details">details</label>
-              <textarea
-                className="inp"
-                required
-                placeholder="test"
-                id="details"
-                rows={4}
-              ></textarea>
+              <label>government</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  government
+                </div>
+                <article>
+                  <input
+                    placeholder={`${searchPlaceholder} government`}
+                    type="text"
+                  />
+                  <h2>single</h2>
+                  <h2>Female</h2>
+                </article>
+              </div>
             </div>
+
             <div className="flex flex-direction">
-              <label htmlFor="note">note</label>
+              <label>city</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  city
+                </div>
+                <article>
+                  <input
+                    placeholder={`${searchPlaceholder} city`}
+                    type="text"
+                  />
+                  <h2>single</h2>
+                  <h2>Female</h2>
+                </article>
+              </div>
+            </div>
+
+            <div className="flex flex-direction">
+              <label>village</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  village
+                </div>
+                <article>
+                  <input
+                    placeholder={`${searchPlaceholder} village`}
+                    type="text"
+                  />
+                  <h2>single</h2>
+                  <h2>Female</h2>
+                </article>
+              </div>
+            </div>
+
+            <div className="flex flex-direction">
+              <label>region</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  region
+                </div>
+                <article>
+                  <input
+                    placeholder={`${searchPlaceholder} region`}
+                    type="text"
+                  />
+                  <h2>single</h2>
+                  <h2>Female</h2>
+                </article>
+              </div>
+            </div>
+
+            <div className="flex flex-direction">
+              <label>street</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  street
+                </div>
+                <article>
+                  <input
+                    placeholder={`${searchPlaceholder} street`}
+                    type="text"
+                  />
+                  <h2>single</h2>
+                  <h2>Female</h2>
+                </article>
+              </div>
+            </div>
+
+            <div className="flex flex-direction">
+              <label htmlFor="addressDetails">addressDetails</label>
               <textarea
+                value={form.addressDetails}
+                onChange={handleForm}
                 className="inp"
-                required
                 placeholder="test"
-                id="note"
+                id="addressDetails"
                 rows={4}
               ></textarea>
             </div>
@@ -196,7 +390,37 @@ const AddPerson = () => {
         </div>
 
         <div className="form">
-          <h1>test title</h1>
+          <h1>contact informations</h1>
+          <div className="flex warp">
+            <div className="flex flex-direction">
+              <label htmlFor="phone">phone</label>
+              <input
+                value={form.phone}
+                onChange={handleForm}
+                required
+                type="text"
+                id="phone"
+                className="inp"
+                placeholder={`${placeholder} phone`}
+              />
+            </div>
+            <div className="flex flex-direction">
+              <label htmlFor="email">email</label>
+              <input
+                value={form.email}
+                onChange={handleForm}
+                required
+                type="email"
+                id="email"
+                className="inp"
+                placeholder={`${placeholder} email`}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="form">
+          <h1>test title2</h1>
           <div className="grid-2">
             <div className="flex flex-direction">
               <label className="inp document gap-10 center">

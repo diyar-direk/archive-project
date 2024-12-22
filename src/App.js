@@ -10,7 +10,6 @@ import City from "./pages/addresses/City";
 import Village from "./pages/addresses/Village";
 import Region from "./pages/addresses/Region";
 import Street from "./pages/addresses/Street";
-import Sources from "./pages/Categories/Sources";
 import { useEffect } from "react";
 import axios from "axios";
 import { baseURL } from "./context/context";
@@ -36,7 +35,6 @@ function App() {
           <Route path="villages" element={<Village />} />
           <Route path="regions" element={<Region />} />
           <Route path="streets" element={<Street />} />
-          <Route path="sources" element={<Sources />} />
         </Route>
       </Routes>
     </div>

@@ -71,6 +71,9 @@ const Provider = ({ children }) => {
 };
 export default Provider;
 
+export const placeholder = `pleace write`;
+export const searchPlaceholder = `search for`;
+
 export const date = (dat) => {
   const time = new Date(dat);
   const birthDate = `${time.getFullYear()}-${
