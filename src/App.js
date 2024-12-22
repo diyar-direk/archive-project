@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import AddPerson from "./pages/people/AddPerson";
-import LoginForm from "./pages/login/LoginForm";
+
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
 import Countries from "./pages/addresses/Countries";
@@ -10,13 +10,14 @@ import City from "./pages/addresses/City";
 import Village from "./pages/addresses/Village";
 import Region from "./pages/addresses/Region";
 import Street from "./pages/addresses/Street";
+import Sources from "./pages/Categories/Sources";
+import LoginForm from "./pages/login/LoginForm";
 
 function App() {
   return (
     <div className="App">
       <Routes>
         <Route path="login" element={<LoginForm />} />
-
         <Route path="*" element={<Dashboard />}>
           <Route path="people" element={<People />} />
           <Route path="people/:id" element={<Profile />} />
@@ -27,6 +28,7 @@ function App() {
           <Route path="villages" element={<Village />} />
           <Route path="regions" element={<Region />} />
           <Route path="streets" element={<Street />} />
+          <Route path="sources" element={<Sources />} />
         </Route>
       </Routes>
     </div>
