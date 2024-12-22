@@ -5,8 +5,7 @@ import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form.css";
-
-const Sources = () => {
+const Event = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -15,6 +14,9 @@ const Sources = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
+  
+ 
+
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
 
@@ -32,14 +34,13 @@ const Sources = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-
   window.addEventListener("click", () => {
     const div = document.querySelector("form.addresses .select .inp.active");
     div && div.classList.remove("active");
   });
 
-  const header = ["source_name", "created_at", "source_credibility"];
-  const [form, setForm] = useState({ source_name: "", source_credibility: "High" });
+  const header = ["name", "creat at"];
+  const [form, setForm] = useState({ name: ""});
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const Sources = () => {
       ref.current.focus();
       setForm(update);
     } else {
-      setForm({ source_name: "", source_credibility: "High" });
+      setForm({ name: "" });
     }
   }, [update]);
 
@@ -55,17 +56,18 @@ const Sources = () => {
     getData();
   }, [page]);
 
+
+
   const getData = async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Sources?active=true&limit=${limit}&page=${page}`;
+    let url = `${baseURL}/Events?active=true&limit=${limit}&page=${page}`;
 
     try {
       const data = await axios.get(url);
-
-      dataLength.current = data.data.numberOfActiveSources;
+      dataLength.current = data.data.numberOfActiveEvents;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
     } catch (error) {
@@ -104,9 +106,8 @@ const Sources = () => {
           className="checkbox"
         ></div>
       </td>
-      <td>{e.source_name}</td>
+      <td>{e.name}</td>
       <td>{date(e.createdAt)}</td>
-      <td>{e.source_credibility}</td>
       <td>
         <div className="center gap-10 actions">
           <i
@@ -132,89 +133,78 @@ const Sources = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+      try {
+        const formData = { ...form };
 
-    try {
-      const formData = { ...form };
+        if (update) {
+          const data = await axios.patch(
+            `${baseURL}/Events/${update._id}`,
+            formData
+          );
 
-      if (update) {
-        const data = await axios.patch(
-          `${baseURL}/Sources/${update._id}`,
-          formData
-        );
-
-        if (data.status === 200) {
-          responseFun(true);
+          if (data.status === 200) {
+            responseFun(true);
+          }
+          setUpdate(false);
+        } else {
+          const data = await axios.post(`${baseURL}/Events`, formData);
+          if (data.status === 201) {
+            responseFun(true);
+          }
         }
-        setUpdate(false);
-      } else {
-        const data = await axios.post(`${baseURL}/Sources`, formData);
-        if (data.status === 201) {
-          responseFun(true);
-        }
+
+        setForm({ name: "" });
+        getData();
+      } catch (error) {
+        console.log(error);
+        if (error.status === 400) responseFun("reapeted data");
+        else responseFun(false);
       }
-
-      setForm({ source_name: "", source_credibility: "High" });
-      getData();
-    } catch (error) {
-      console.log(error);
-      if (error.response?.status === 400) responseFun("reapeted data");
-      else responseFun(false);
-    }
   };
+
+
 
   return (
     <>
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-      <h1 className="title">Sources</h1>
+      <h1 className="title">Events</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
-          <h1>{update ? "Update this source" : "Add new source"}</h1>
-          <label htmlFor="source_name">Source Name</label>
+          <h1>{update ? "update this country" : "add new Events"}</h1>
+          <label htmlFor="name">Events name</label>
           <input
             ref={ref}
             className="inp"
             required
-            placeholder="Please write a source name"
-            value={form.source_name}
+            placeholder="please write a Events name"
+            value={form.name}
             type="text"
-            onInput={(e) => setForm({ ...form, source_name: e.target.value })}
-            id="source_name"
+            onInput={(e) => setForm({ ...form, name: e.target.value })}
+            id="name"
           />
 
-          <label htmlFor="source_credibility">Source Credibility</label>
-          <select
-          className="inp center gap-10 w-100 active"
-            id="source_credibility"
-            value={form.source_credibility}
-            onChange={(e) =>
-              setForm({ ...form, source_credibility: e.target.value })
-            }
-          >
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
-
+          
           <div className="flex wrap gap-10">
             <button className={`${update ? "save" : ""} btn flex-1`}>
-              {update ? "Save" : "Add"}
+              {update ? "save" : "add"}
             </button>
             {update && (
               <button
                 onClick={() => setUpdate(false)}
                 className="btn flex-1 cencel "
               >
-                Cancel
+                cencel
               </button>
             )}
           </div>
         </form>
         <div className="flex-1">
           <form className="flex center gap-10 table-search">
-            <input type="text" placeholder="Search by name" required />
-            <button className="btn"> Search</button>
+            <input type="text" placeholder="search by name" required />
+            <button className="btn"> search</button>
           </form>
           <Table
             header={header}
@@ -223,7 +213,7 @@ const Sources = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Sources", getData }}
+            delete={{ setData, url: "Events", getData }}
           />
         </div>
       </div>
@@ -231,4 +221,4 @@ const Sources = () => {
   );
 };
 
-export default Sources;
+export default Event;

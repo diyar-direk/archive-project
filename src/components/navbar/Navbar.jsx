@@ -188,22 +188,27 @@ const Navbar = () => {
                 <NavLink to={"/regions"}>regions</NavLink>
               </article>
             </div>
-
-            <NavLink to={"/sources"} className="w-100 justify-start center">
-              <i className="fa-solid fa-map-location-dot"></i>
-              <h1> sources </h1>
-            </NavLink>
+            <div className="links">
+              <div onClick={openDiv} className="center">
+              <i class="fa-solid fa-layer-group"></i>
+                <h1 className="flex-1">Catagories</h1>
+                <i className="arrow fa-solid fa-chevron-right"></i>
+              </div>
+              <article>
+                <NavLink to={"/sources"}>sources</NavLink>
+                <NavLink to={"/event"}>event</NavLink>
+                <NavLink to={"/party"}>party</NavLink>
+         
+              </article>
+            </div>
 
             <NavLink to={"/dsa"} className="w-100 justify-start center">
               <i className="fa-solid fa-map-location-dot"></i>
-              <h1> dsa </h1>
+              <h1> test </h1>
             </NavLink>
 
-            <NavLink to={"/dsa"} className="w-100 justify-start center">
-              <i className="fa-solid fa-map-location-dot"></i>
-              <h1> dsa </h1>
-            </NavLink>
-            
+           
+
           </div>
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>
