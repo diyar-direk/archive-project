@@ -10,13 +10,22 @@ import City from "./pages/addresses/City";
 import Village from "./pages/addresses/Village";
 import Region from "./pages/addresses/Region";
 import Street from "./pages/addresses/Street";
+import Sources from "./pages/Categories/Sources";
+import { useEffect } from "react";
+import axios from "axios";
+import { baseURL } from "./context/context";
 
 function App() {
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/people`)
+      .then((res) => console.log(res.data.people[0]));
+  }, []);
+
   return (
     <div className="App">
       <Routes>
         <Route path="login" element={<Login />} />
-
         <Route path="*" element={<Dashboard />}>
           <Route path="people" element={<People />} />
           <Route path="people/:id" element={<Profile />} />
@@ -27,6 +36,7 @@ function App() {
           <Route path="villages" element={<Village />} />
           <Route path="regions" element={<Region />} />
           <Route path="streets" element={<Street />} />
+          <Route path="sources" element={<Sources />} />
         </Route>
       </Routes>
     </div>

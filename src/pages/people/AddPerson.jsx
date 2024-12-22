@@ -79,6 +79,8 @@ const AddPerson = () => {
     }
   };
 
+  const placeholder = `pleace write`;
+
   return (
     <>
       <h1 className="title">add person</h1>
@@ -87,36 +89,16 @@ const AddPerson = () => {
           <h1>test title</h1>
           <div className="flex wrap">
             <div className="flex flex-direction">
-              <label htmlFor="aliasName">alias name</label>
-              <input
-                required
-                type="text"
-                id="aliasName"
-                className="inp"
-                placeholder="test"
-              />
-            </div>
-
-            <div className="flex flex-direction">
               <label htmlFor="firstName">first name</label>
               <input
                 required
                 type="text"
                 id="firstName"
                 className="inp"
-                placeholder="test"
+                placeholder={`${placeholder} first name`}
               />
             </div>
-            <div className="flex flex-direction">
-              <label htmlFor="lastName">last name</label>
-              <input
-                required
-                type="text"
-                id="lastName"
-                className="inp"
-                placeholder="test"
-              />
-            </div>
+
             <div className="flex flex-direction">
               <label htmlFor="fotherName">fother name</label>
               <input
@@ -124,9 +106,21 @@ const AddPerson = () => {
                 type="text"
                 id="fotherName"
                 className="inp"
-                placeholder="test"
+                placeholder={`${placeholder} fother name`}
               />
             </div>
+
+            <div className="flex flex-direction">
+              <label htmlFor="surName">last name</label>
+              <input
+                required
+                type="text"
+                id="surName"
+                className="inp"
+                placeholder={`${placeholder} last name`}
+              />
+            </div>
+
             <div className="flex flex-direction">
               <label htmlFor="motherName">mother name</label>
               <input

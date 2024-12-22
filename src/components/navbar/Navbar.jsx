@@ -188,6 +188,11 @@ const Navbar = () => {
               </article>
             </div>
 
+            <NavLink to={"/sources"} className="w-100 justify-start center">
+              <i className="fa-solid fa-map-location-dot"></i>
+              <h1> sources </h1>
+            </NavLink>
+
             <NavLink to={"/dsa"} className="w-100 justify-start center">
               <i className="fa-solid fa-map-location-dot"></i>
               <h1> dsa </h1>
