@@ -209,8 +209,8 @@ const AddPerson = () => {
     setForm({ ...form, [e.target.id]: e.target.value });
     error && setError(false);
   };
-  const handleFormSelect = (e) => {
-    setForm({ ...form, [e.target.id]: e.target.title });
+  const handleFormSelect = (e, itm) => {
+    setForm({ ...form, [e.target.id]: itm });
     error && setError(false);
   };
 
@@ -287,11 +287,6 @@ const AddPerson = () => {
     }
   };
 
-  function selectFilters(e, itm) {
-    setForm({ ...form, [e.target.title]: itm });
-    error && setError(false);
-  }
-
   return (
     <>
       <h1 className="title">add person</h1>
@@ -345,10 +340,18 @@ const AddPerson = () => {
                   {form.gender ? form.gender : "select gender"}
                 </div>
                 <article>
-                  <h2 onClick={handleFormSelect} id="gender" title="male">
+                  <h2
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    id="gender"
+                    title="male"
+                  >
                     male
                   </h2>
-                  <h2 onClick={handleFormSelect} id="gender" title="female">
+                  <h2
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    id="gender"
+                    title="female"
+                  >
                     Female
                   </h2>
                 </article>
@@ -365,21 +368,21 @@ const AddPerson = () => {
                 </div>
                 <article>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Married"
                   >
                     Married
                   </h2>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Single"
                   >
                     single
                   </h2>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Other"
                   >
@@ -475,10 +478,8 @@ const AddPerson = () => {
                   {allDataSelect.searchData.country.map((itm, i) => (
                     <h2
                       key={i}
-                      title="countryId"
-                      onClick={(e) => {
-                        selectFilters(e, itm);
-                      }}
+                      id="countryId"
+                      onClick={(e) => handleFormSelect(e, itm)}
                     >
                       {itm.name}
                     </h2>
@@ -522,10 +523,8 @@ const AddPerson = () => {
                   {allDataSelect.searchData.government.map((itm, i) => (
                     <h2
                       key={i}
-                      title="governmentId"
-                      onClick={(e) => {
-                        selectFilters(e, itm);
-                      }}
+                      id="governmentId"
+                      onClick={(e) => handleFormSelect(e, itm)}
                     >
                       {itm.name}
                     </h2>
@@ -569,10 +568,8 @@ const AddPerson = () => {
                   {allDataSelect.searchData.city.map((itm, i) => (
                     <h2
                       key={i}
-                      title="cityId"
-                      onClick={(e) => {
-                        selectFilters(e, itm);
-                      }}
+                      id="cityId"
+                      onClick={(e) => handleFormSelect(e, itm)}
                     >
                       {itm.name}
                     </h2>
@@ -614,10 +611,8 @@ const AddPerson = () => {
                   {allDataSelect.searchData.village.map((itm, i) => (
                     <h2
                       key={i}
-                      title="villageId"
-                      onClick={(e) => {
-                        selectFilters(e, itm);
-                      }}
+                      id="villageId"
+                      onClick={(e) => handleFormSelect(e, itm)}
                     >
                       {itm.name}
                     </h2>
@@ -661,10 +656,8 @@ const AddPerson = () => {
                   {allDataSelect.searchData.region.map((itm, i) => (
                     <h2
                       key={i}
-                      title="regionId"
-                      onClick={(e) => {
-                        selectFilters(e, itm);
-                      }}
+                      id="regionId"
+                      onClick={(e) => handleFormSelect(e, itm)}
                     >
                       {itm.name}
                     </h2>
@@ -708,10 +701,8 @@ const AddPerson = () => {
                   {allDataSelect.searchData.street.map((itm, i) => (
                     <h2
                       key={i}
-                      title="streetId"
-                      onClick={(e) => {
-                        selectFilters(e, itm);
-                      }}
+                      id="streetId"
+                      onClick={(e) => handleFormSelect(e, itm)}
                     >
                       {itm.name}
                     </h2>
