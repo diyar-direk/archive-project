@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./navbar.css";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { Context } from "../../context/context";
 
@@ -190,7 +190,7 @@ const Navbar = () => {
             </div>
             <div className="links">
               <div onClick={openDiv} className="center">
-              <i class="fa-solid fa-layer-group"></i>
+                <i className="fa-solid fa-layer-group"></i>
                 <h1 className="flex-1">Catagories</h1>
                 <i className="arrow fa-solid fa-chevron-right"></i>
               </div>
@@ -198,7 +198,6 @@ const Navbar = () => {
                 <NavLink to={"/sources"}>sources</NavLink>
                 <NavLink to={"/event"}>event</NavLink>
                 <NavLink to={"/party"}>party</NavLink>
-         
               </article>
             </div>
 
@@ -206,9 +205,6 @@ const Navbar = () => {
               <i className="fa-solid fa-map-location-dot"></i>
               <h1> test </h1>
             </NavLink>
-
-           
-
           </div>
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>

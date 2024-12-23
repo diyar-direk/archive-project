@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../../components/form.css";
 import Mammoth from "mammoth";
-import { placeholder, searchPlaceholder } from "../../context/context";
+import { baseURL, placeholder, searchPlaceholder } from "../../context/context";
+import axios from "axios";
 const AddPerson = () => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -18,6 +19,7 @@ const AddPerson = () => {
   const [error, setError] = useState(false);
 
   const [form, setForm] = useState({
+    //personal data
     firstName: "",
     fatherName: "",
     surName: "",
@@ -27,6 +29,7 @@ const AddPerson = () => {
     birthDate: "",
     placeOfBirth: "",
     occupation: "",
+    //stay data
     countryId: "",
     governmentId: "",
     cityId: "",
@@ -34,9 +37,173 @@ const AddPerson = () => {
     regionId: "",
     streetId: "",
     addressDetails: "",
+    //contact data
     email: "",
     phone: "",
   });
+  const [allDataSelect, setAllDataSelect] = useState({
+    data: {
+      country: [],
+      government: [],
+      city: [],
+      region: [],
+      street: [],
+      village: [],
+    },
+    searchData: {
+      country: [],
+      government: [],
+      city: [],
+      region: [],
+      street: [],
+      village: [],
+    },
+  });
+
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/Countries?active=true`)
+      .then((res) => {
+        setAllDataSelect({
+          ...allDataSelect,
+          data: { ...allDataSelect.data, country: res.data.data },
+          searchData: { ...allDataSelect.searchData, country: res.data.data },
+        });
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    if (!form.countryId) return;
+    setForm({ ...form, governmentId: "" });
+    setAllDataSelect({
+      ...allDataSelect,
+      data: { ...allDataSelect.data, government: [] },
+      searchData: {
+        ...allDataSelect.searchData,
+        government: [],
+      },
+    });
+    axios
+      .get(`${baseURL}/Governments?active=true&country=${form.countryId._id}`)
+      .then((res) => {
+        setAllDataSelect({
+          ...allDataSelect,
+          data: { ...allDataSelect.data, government: res.data.data },
+          searchData: {
+            ...allDataSelect.searchData,
+            government: res.data.data,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  }, [form.countryId]);
+
+  useEffect(() => {
+    if (form.cityId) {
+      setForm({ ...form, cityId: "" });
+      setAllDataSelect({
+        ...allDataSelect,
+        data: { ...allDataSelect.data, city: [] },
+        searchData: {
+          ...allDataSelect.searchData,
+          city: [],
+        },
+      });
+    }
+    if (!form.governmentId) return;
+    axios
+      .get(`${baseURL}/Cities?active=true&government=${form.governmentId._id}`)
+      .then((res) => {
+        setAllDataSelect({
+          ...allDataSelect,
+          data: { ...allDataSelect.data, city: res.data.data },
+          searchData: {
+            ...allDataSelect.searchData,
+            city: res.data.data,
+          },
+        });
+      })
+      .catch((err) => console.log(err));
+  }, [form.governmentId]);
+
+  useEffect(() => {
+    let formObj = { ...form };
+
+    if (formObj.villageId) formObj = { ...formObj, villageId: "" };
+    if (formObj.regionId) formObj = { ...formObj, regionId: "" };
+    if (formObj.streetId) formObj = { ...formObj, streetId: "" };
+    if (form.streetId || form.regionId || form.villageId) {
+      setForm(formObj);
+      setAllDataSelect({
+        ...allDataSelect,
+        data: { ...allDataSelect.data, street: [], region: [], villageId: [] },
+        searchData: {
+          ...allDataSelect.searchData,
+          street: [],
+          region: [],
+          villageId: [],
+        },
+      });
+    }
+
+    if (!form.cityId) return;
+    let dataObj = { ...allDataSelect };
+    const promises = [];
+    promises.push(
+      axios
+        .get(`${baseURL}/Villages?active=true&city=${form.cityId._id}`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, village: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              village: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    promises.push(
+      axios
+        .get(`${baseURL}/Streets?active=true&city=${form.cityId._id}`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, street: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              street: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    promises.push(
+      axios
+        .get(`${baseURL}/Regions?active=true&city=${form.cityId._id}`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, region: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              region: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    Promise.all(promises)
+      .then(() => {
+        setAllDataSelect(dataObj);
+      })
+      .catch((err) => console.log("Error in one or more requests:", err));
+  }, [form.cityId]);
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
@@ -119,6 +286,11 @@ const AddPerson = () => {
       );
     }
   };
+
+  function selectFilters(e, itm) {
+    setForm({ ...form, [e.target.title]: itm });
+    error && setError(false);
+  }
 
   return (
     <>
@@ -277,15 +449,43 @@ const AddPerson = () => {
               <label>country</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  country
+                  {form.countryId ? form.countryId.name : "select country"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} country`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.country.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          country: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.country.map((itm, i) => (
+                    <h2
+                      key={i}
+                      title="countryId"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {allDataSelect.searchData.country.length <= 0 && (
+                    <p>no data</p>
+                  )}
                 </article>
               </div>
             </div>
@@ -294,15 +494,47 @@ const AddPerson = () => {
               <label>government</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  government
+                  {form.governmentId
+                    ? form.governmentId.name
+                    : "select government"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} government`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.government.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          government: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.government.map((itm, i) => (
+                    <h2
+                      key={i}
+                      title="governmentId"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {form.countryId &&
+                    allDataSelect.searchData.government.length <= 0 && (
+                      <p>no data</p>
+                    )}
+                  {!form.countryId && <p>please select country first</p>}
                 </article>
               </div>
             </div>
@@ -311,15 +543,43 @@ const AddPerson = () => {
               <label>city</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  city
+                  {form.cityId ? form.cityId.name : "select city"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} city`}
+                    onInput={(inp) => {
+                      const filteredCountries = allDataSelect.data.city.filter(
+                        (e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                      );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          city: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.city.map((itm, i) => (
+                    <h2
+                      key={i}
+                      title="cityId"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {form.governmentId &&
+                    allDataSelect.searchData.city.length <= 0 && <p>no data</p>}
+                  {!form.governmentId && <p>please select government first</p>}
                 </article>
               </div>
             </div>
@@ -328,15 +588,45 @@ const AddPerson = () => {
               <label>village</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  village
+                  {form.villageId ? form.villageId.name : "select village"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} village`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.village.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          village: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.village.map((itm, i) => (
+                    <h2
+                      key={i}
+                      title="villageId"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {form.cityId &&
+                    allDataSelect.searchData.village.length <= 0 && (
+                      <p>no data</p>
+                    )}
+                  {!form.cityId && <p>please select city first</p>}
                 </article>
               </div>
             </div>
@@ -345,15 +635,45 @@ const AddPerson = () => {
               <label>region</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  region
+                  {form.regionId ? form.regionId.name : "select region"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} region`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.region.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          region: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.region.map((itm, i) => (
+                    <h2
+                      key={i}
+                      title="regionId"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {form.cityId &&
+                    allDataSelect.searchData.region.length <= 0 && (
+                      <p>no data</p>
+                    )}
+                  {!form.cityId && <p>please select city first</p>}
                 </article>
               </div>
             </div>
@@ -362,15 +682,45 @@ const AddPerson = () => {
               <label>street</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  street
+                  {form.streetId ? form.streetId.name : "select street"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} street`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.street.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          street: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.street.map((itm, i) => (
+                    <h2
+                      key={i}
+                      title="streetId"
+                      onClick={(e) => {
+                        selectFilters(e, itm);
+                      }}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {form.cityId &&
+                    allDataSelect.searchData.street.length <= 0 && (
+                      <p>no data</p>
+                    )}
+                  {!form.cityId && <p>please select city first</p>}
                 </article>
               </div>
             </div>

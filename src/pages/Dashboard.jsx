@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/navbar/Navbar";
 import { Context } from "../context/context";
+import Navbar from "./../components/navbar/Navbar";
 const Dashboard = () => {
   const context = useContext(Context);
   const closeAside = () => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import ReCAPTCHA from "react-google-recaptcha";
-import "./login.css";
+import "./Login.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -68,7 +68,7 @@ const LoginForm = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-        
+
           <div className="captcha">
             <ReCAPTCHA
               sitekey="6Lfwf5cqAAAAADOoNDVACW1IGhwg16vYHCATSmKL" // ضع مفتاح الموقع هنا
