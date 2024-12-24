@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../../components/form.css";
 import Mammoth from "mammoth";
-import { baseURL, placeholder, searchPlaceholder } from "../../context/context";
+import {
+  baseURL,
+  nextJoin,
+  placeholder,
+  searchPlaceholder,
+} from "../../context/context";
 import axios from "axios";
 const AddPerson = () => {
   const handleClick = (e) => {
@@ -40,6 +45,10 @@ const AddPerson = () => {
     //contact data
     email: "",
     phone: "",
+    //categories data
+    sources: [],
+    events: [],
+    parties: [],
   });
   const [allDataSelect, setAllDataSelect] = useState({
     data: {
@@ -49,6 +58,9 @@ const AddPerson = () => {
       region: [],
       street: [],
       village: [],
+      sources: [],
+      events: [],
+      parties: [],
     },
     searchData: {
       country: [],
@@ -57,20 +69,81 @@ const AddPerson = () => {
       region: [],
       street: [],
       village: [],
+      sources: [],
+      events: [],
+      parties: [],
     },
   });
 
   useEffect(() => {
-    axios
-      .get(`${baseURL}/Countries?active=true`)
-      .then((res) => {
-        setAllDataSelect({
-          ...allDataSelect,
-          data: { ...allDataSelect.data, country: res.data.data },
-          searchData: { ...allDataSelect.searchData, country: res.data.data },
-        });
+    let dataObj = { ...allDataSelect };
+    const promises = [];
+    promises.push(
+      axios
+        .get(`${baseURL}/Countries?active=true`)
+        .then((res) => {
+          setAllDataSelect({
+            ...allDataSelect,
+            data: { ...allDataSelect.data, country: res.data.data },
+            searchData: { ...allDataSelect.searchData, country: res.data.data },
+          });
+        })
+        .catch((err) => console.log(err))
+    );
+
+    promises.push(
+      axios
+        .get(`${baseURL}/Sources?active=true`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, sources: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              sources: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    promises.push(
+      axios
+        .get(`${baseURL}/Events?active=true`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, events: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              events: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    promises.push(
+      axios
+        .get(`${baseURL}/Parties?active=true`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, parties: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              parties: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    Promise.all(promises)
+      .then(() => {
+        setAllDataSelect(dataObj);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("Error in one or more requests:", err));
   }, []);
 
   useEffect(() => {
@@ -285,6 +358,27 @@ const AddPerson = () => {
         "Unsupported file type. Only text, PDF, and DOCX files are allowed."
       );
     }
+  };
+
+  const selectCategories = (e, itm) => {
+    if (!form[e.target.id].includes(itm)) {
+      setForm({
+        ...form,
+        [e.target.id]: [...new Set([...form[e.target.id], itm])],
+      });
+
+      error && setError(false);
+    }
+  };
+
+  const removeSelectCategories = (e, itm) => {
+    const data = form[e.target.id].filter((ele) => ele !== itm);
+    console.log(data);
+
+    setForm({
+      ...form,
+      [e.target.id]: data,
+    });
   };
 
   return (
@@ -738,7 +832,7 @@ const AddPerson = () => {
               ></textarea>
             </div>
           </div>
-        </div> 
+        </div>
 
         <div className="form">
           <h1>contact informations</h1>
@@ -766,6 +860,177 @@ const AddPerson = () => {
                 className="inp"
                 placeholder={`${placeholder} email`}
               />
+            </div>
+          </div>
+        </div>
+
+        <div className="form">
+          <h1>more informations</h1>
+          <div className="flex warp">
+            <div className="flex flex-direction">
+              <label>sources</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  {form.sources.length > 0
+                    ? nextJoin(form.sources, "source_name")
+                    : "select sources"}
+                </div>
+                <article>
+                  <input
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder={`${searchPlaceholder} sources`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.sources.filter((e) =>
+                          e.source_name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          sources: filteredCountries,
+                        },
+                      });
+                    }}
+                    type="text"
+                  />
+                  {allDataSelect.searchData.sources.map((itm, i) => (
+                    <h2
+                      key={i}
+                      id="sources"
+                      onClick={(e) => selectCategories(e, itm)}
+                    >
+                      {itm.source_name}
+                    </h2>
+                  ))}
+                  {allDataSelect.searchData.sources.length <= 0 && (
+                    <p>no data</p>
+                  )}
+                </article>
+              </div>
+              <div className="flex selceted-itms">
+                {form.sources.map((span) => (
+                  <span
+                    onClick={(e) => removeSelectCategories(e, span)}
+                    id="sources"
+                    key={span._id}
+                  >
+                    {span.source_name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-direction">
+              <label>events</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  {form.events.length > 0
+                    ? nextJoin(form.events, "name")
+                    : "select events"}
+                </div>
+                <article>
+                  <input
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder={`${searchPlaceholder} events`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.events.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          events: filteredCountries,
+                        },
+                      });
+                    }}
+                    type="text"
+                  />
+                  {allDataSelect.searchData.events.map((itm, i) => (
+                    <h2
+                      key={i}
+                      id="events"
+                      onClick={(e) => selectCategories(e, itm)}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {allDataSelect.searchData.events.length <= 0 && (
+                    <p>no data</p>
+                  )}
+                </article>
+              </div>
+              <div className="flex selceted-itms">
+                {form.events.map((span) => (
+                  <span
+                    onClick={(e) => removeSelectCategories(e, span)}
+                    id="events"
+                    key={span._id}
+                  >
+                    {span.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-direction">
+              <label>parties</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  {form.parties.length > 0
+                    ? nextJoin(form.parties, "name")
+                    : "select parties"}
+                </div>
+                <article>
+                  <input
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder={`${searchPlaceholder} parties`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.parties.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          parties: filteredCountries,
+                        },
+                      });
+                    }}
+                    type="text"
+                  />
+                  {allDataSelect.searchData.parties.map((itm, i) => (
+                    <h2
+                      key={i}
+                      id="parties"
+                      onClick={(e) => selectCategories(e, itm)}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {allDataSelect.searchData.parties.length <= 0 && (
+                    <p>no data</p>
+                  )}
+                </article>
+              </div>
+              <div className="flex selceted-itms">
+                {form.parties.map((span) => (
+                  <span
+                    onClick={(e) => removeSelectCategories(e, span)}
+                    id="parties"
+                    key={span._id}
+                  >
+                    {span.name}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </div>
