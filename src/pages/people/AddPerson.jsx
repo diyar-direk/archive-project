@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../components/form.css";
 import Mammoth from "mammoth";
 import {
@@ -8,6 +8,7 @@ import {
   searchPlaceholder,
 } from "../../context/context";
 import axios from "axios";
+import SendData from "../../components/response/SendData";
 const AddPerson = () => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -25,6 +26,7 @@ const AddPerson = () => {
 
   const [form, setForm] = useState({
     //personal data
+    imgae: "",
     firstName: "",
     fatherName: "",
     surName: "",
@@ -50,6 +52,7 @@ const AddPerson = () => {
     events: [],
     parties: [],
   });
+
   const [allDataSelect, setAllDataSelect] = useState({
     data: {
       country: [],
@@ -78,15 +81,19 @@ const AddPerson = () => {
   useEffect(() => {
     let dataObj = { ...allDataSelect };
     const promises = [];
+
     promises.push(
       axios
         .get(`${baseURL}/Countries?active=true`)
         .then((res) => {
-          setAllDataSelect({
-            ...allDataSelect,
-            data: { ...allDataSelect.data, country: res.data.data },
-            searchData: { ...allDataSelect.searchData, country: res.data.data },
-          });
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, country: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              country: res.data.data,
+            },
+          };
         })
         .catch((err) => console.log(err))
     );
@@ -380,11 +387,82 @@ const AddPerson = () => {
       [e.target.id]: data,
     });
   };
+  const response = useRef(true);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+
+  const responseFun = (complete = false) => {
+    complete === true
+      ? (response.current = true)
+      : complete === "reapeted data"
+      ? (response.current = 400)
+      : (response.current = false);
+    setResponseOverlay(true);
+    window.onclick = () => {
+      setResponseOverlay(false);
+    };
+    setTimeout(() => {
+      setResponseOverlay(false);
+    }, 3000);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.maritalStatus) setError("please select maritalStatus");
+    else if (!form.gender) setError("please select gender");
+    else if (!form.countryId) setError("please select country");
+    else if (!form.governmentId) setError("please select government");
+    else if (!form.cityId) setError("please select city");
+    else {
+      const keys = Object.keys(form);
+      const formData = new FormData();
+      keys.forEach((key) => {
+        form[key] &&
+          form[key]?.length > 0 &&
+          formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
+      });
+
+      try {
+        const data = await axios.post(`${baseURL}/people`, formData);
+        console.log(data);
+        if (data.status === 201) {
+          responseFun(true);
+        }
+      } catch (error) {
+        console.log(error);
+        if (error.status === 400) responseFun("reapeted data");
+        else responseFun(false);
+      }
+    }
+  };
 
   return (
     <>
+      {responseOverlay && (
+        <SendData data={`person`} response={response.current} />
+      )}
       <h1 className="title">add person</h1>
-      <form className="dashboard-form">
+      <form onSubmit={handleSubmit} className="dashboard-form">
+        <div className="form form-profile">
+          <label className="gap-10 center">
+            <input
+              accept="image/*"
+              type="file"
+              id="image"
+              onInput={(e) => {
+                setForm({ ...form, image: e.target.files[0] });
+              }}
+            />
+
+            {!form.image && <i className="fa-solid fa-user"></i>}
+            {form.image && (
+              <img
+                alt="profile"
+                loading="lazy"
+                src={URL.createObjectURL(form.image)}
+              />
+            )}
+          </label>
+        </div>
         <div className="form">
           <h1>personal information</h1>
           <div className="flex wrap">
@@ -402,13 +480,13 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="fotherName">fother name</label>
+              <label htmlFor="fatherName">fother name</label>
               <input
                 required
-                value={form.fotherName}
+                value={form.fatherName}
                 onChange={handleForm}
                 type="text"
-                id="fotherName"
+                id="fatherName"
                 className="inp"
                 placeholder={`${placeholder} fother name`}
               />
@@ -437,14 +515,14 @@ const AddPerson = () => {
                   <h2
                     onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="gender"
-                    title="male"
+                    title="Male"
                   >
                     male
                   </h2>
                   <h2
                     onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="gender"
-                    title="female"
+                    title="Female"
                   >
                     Female
                   </h2>
@@ -836,13 +914,12 @@ const AddPerson = () => {
 
         <div className="form">
           <h1>contact informations</h1>
-          <div className="flex warp">
+          <div className="flex wrap">
             <div className="flex flex-direction">
               <label htmlFor="phone">phone</label>
               <input
                 value={form.phone}
                 onChange={handleForm}
-                required
                 type="text"
                 id="phone"
                 className="inp"
@@ -854,7 +931,6 @@ const AddPerson = () => {
               <input
                 value={form.email}
                 onChange={handleForm}
-                required
                 type="email"
                 id="email"
                 className="inp"
@@ -866,7 +942,7 @@ const AddPerson = () => {
 
         <div className="form">
           <h1>more informations</h1>
-          <div className="flex warp">
+          <div className="flex wrap">
             <div className="flex flex-direction">
               <label>sources</label>
               <div className="selecte relative">
@@ -1272,7 +1348,7 @@ const AddPerson = () => {
             </div>
           </div>
         )}
-
+        {error && <p className="error"> {error} </p>}
         <button className="btn">save</button>
       </form>
     </>
