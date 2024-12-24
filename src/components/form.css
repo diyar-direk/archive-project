@@ -226,6 +226,25 @@ iframe {
   border: none;
 }
 
+div.form div.selceted-itms {
+  margin-top: 10px;
+  gap: 10px;
+}
+
+div.form div.selceted-itms > span {
+  padding: 6px;
+  border-radius: 4px;
+  text-transform: capitalize;
+  background-color: var(--section-color);
+  color: var(--font-color);
+  cursor: pointer;
+  font-weight: bold;
+}
+div.form div.selceted-itms > span:hover {
+  background-color: var(--main-color);
+  color: white;
+}
+
 form.addresses {
   background-color: var(--body-color);
   padding: 30px 20px;
