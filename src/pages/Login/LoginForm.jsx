@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import ReCAPTCHA from "react-google-recaptcha";
-import "./Login.css";
+import "./login.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");

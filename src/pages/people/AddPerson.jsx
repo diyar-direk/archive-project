@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> c7dea0d1c2d2d2f1eb2fadeb5cb4a4305c86ef7b
 import "../../components/form.css";
 import Mammoth from "mammoth";
 import {
@@ -25,8 +29,11 @@ const AddPerson = () => {
   const [error, setError] = useState(false);
 
   const [form, setForm] = useState({
+<<<<<<< HEAD
     //personal data
     imgae: "",
+=======
+>>>>>>> c7dea0d1c2d2d2f1eb2fadeb5cb4a4305c86ef7b
     firstName: "",
     fatherName: "",
     surName: "",
@@ -36,7 +43,6 @@ const AddPerson = () => {
     birthDate: "",
     placeOfBirth: "",
     occupation: "",
-    //stay data
     countryId: "",
     governmentId: "",
     cityId: "",
@@ -44,7 +50,6 @@ const AddPerson = () => {
     regionId: "",
     streetId: "",
     addressDetails: "",
-    //contact data
     email: "",
     phone: "",
     //categories data
@@ -289,8 +294,8 @@ const AddPerson = () => {
     setForm({ ...form, [e.target.id]: e.target.value });
     error && setError(false);
   };
-  const handleFormSelect = (e, itm) => {
-    setForm({ ...form, [e.target.id]: itm });
+  const handleFormSelect = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.title });
     error && setError(false);
   };
 
@@ -540,21 +545,21 @@ const AddPerson = () => {
                 </div>
                 <article>
                   <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    onClick={handleFormSelect}
                     id="maritalStatus"
                     title="Married"
                   >
                     Married
                   </h2>
                   <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    onClick={handleFormSelect}
                     id="maritalStatus"
                     title="Single"
                   >
                     single
                   </h2>
                   <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    onClick={handleFormSelect}
                     id="maritalStatus"
                     title="Other"
                   >
@@ -624,41 +629,15 @@ const AddPerson = () => {
               <label>country</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.countryId ? form.countryId.name : "select country"}
+                  country
                 </div>
                 <article>
                   <input
-                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} country`}
-                    onInput={(inp) => {
-                      const filteredCountries =
-                        allDataSelect.data.country.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                      setAllDataSelect({
-                        ...allDataSelect,
-                        searchData: {
-                          ...allDataSelect.searchData,
-                          country: filteredCountries,
-                        },
-                      });
-                    }}
                     type="text"
                   />
-                  {allDataSelect.searchData.country.map((itm, i) => (
-                    <h2
-                      key={i}
-                      id="countryId"
-                      onClick={(e) => handleFormSelect(e, itm)}
-                    >
-                      {itm.name}
-                    </h2>
-                  ))}
-                  {allDataSelect.searchData.country.length <= 0 && (
-                    <p>no data</p>
-                  )}
+                  <h2>single</h2>
+                  <h2>Female</h2>
                 </article>
               </div>
             </div>
@@ -667,9 +646,7 @@ const AddPerson = () => {
               <label>government</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.governmentId
-                    ? form.governmentId.name
-                    : "select government"}
+                  government
                 </div>
                 <article>
                   {form.countryId && (
@@ -716,7 +693,7 @@ const AddPerson = () => {
               <label>city</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.cityId ? form.cityId.name : "select city"}
+                  city
                 </div>
                 <article>
                   {form.governmentId && (
@@ -761,7 +738,7 @@ const AddPerson = () => {
               <label>village</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.villageId ? form.villageId.name : "select village"}
+                  village
                 </div>
                 <article>
                   {form.cityId && (
@@ -808,7 +785,7 @@ const AddPerson = () => {
               <label>region</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.regionId ? form.regionId.name : "select region"}
+                  region
                 </div>
                 <article>
                   {form.cityId && (
@@ -855,7 +832,7 @@ const AddPerson = () => {
               <label>street</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.streetId ? form.streetId.name : "select street"}
+                  street
                 </div>
                 <article>
                   {form.cityId && (
