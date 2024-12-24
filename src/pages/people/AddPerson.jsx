@@ -47,79 +47,6 @@ const AddPerson = () => {
     error && setError(false);
   };
 
-  const [documents, setDocuments] = useState({
-    image: [],
-    video: [],
-    file: [],
-    audio: [],
-  });
-
-  const [uploadedFiles, setUploadedFiles] = useState({ list: [] });
-  const [activeFile, setActiveFile] = useState(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
-
-  const addperson = (file) => {
-    const fileReader = new FileReader();
-
-    fileReader.onload = (event) => {
-      const fileType = file.type;
-
-      if (fileType === "application/pdf") {
-        setActiveFile({
-          content: event.target.result,
-          type: "application/pdf",
-          name: file.name,
-        });
-      } else if (fileType === "text/plain") {
-        setActiveFile({
-          content: event.target.result,
-          type: "text/plain",
-          name: file.name,
-        });
-      } else if (
-        fileType ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      ) {
-        const arrayBuffer = event.target.result;
-        Mammoth.extractRawText({ arrayBuffer })
-          .then((result) => {
-            setActiveFile({
-              content: result.value,
-              type: "docx",
-              name: file.name,
-            });
-            setIsPopupOpen(true);
-          })
-          .catch((err) => {
-            console.error("Error reading .docx file:", err);
-            alert("Failed to open .docx file.");
-          });
-        return;
-      } else {
-        alert("Unsupported file type for preview.");
-      }
-
-      setIsPopupOpen(true);
-    };
-
-    if (file.type === "application/pdf") {
-      fileReader.readAsDataURL(file);
-    } else if (file.type === "text/plain") {
-      fileReader.readAsText(file);
-    } else if (
-      file.type ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
-      fileReader.readAsArrayBuffer(file);
-    } else {
-      alert(
-        "Unsupported file type. Only text, PDF, and DOCX files are allowed."
-      );
-    }
-  };
-
   return (
     <>
       <h1 className="title">add person</h1>
@@ -418,9 +345,6 @@ const AddPerson = () => {
             </div>
           </div>
         </div>
-
-      
-
         <button className="btn">save</button>
       </form>
     </>

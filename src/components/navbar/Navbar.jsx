@@ -195,7 +195,7 @@ const Navbar = () => {
             </div>
             <div className="links">
               <div onClick={openDiv} className="center">
-              <i class="fa-solid fa-layer-group"></i>
+                <i className="fa-solid fa-layer-group"></i>
                 <h1 className="flex-1">Catagories</h1>
                 <i className="arrow fa-solid fa-chevron-right"></i>
               </div>

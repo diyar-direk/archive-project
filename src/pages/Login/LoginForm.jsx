@@ -68,7 +68,7 @@ const LoginForm = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-        
+
           <div className="captcha">
             <ReCAPTCHA
               sitekey="6Lfwf5cqAAAAADOoNDVACW1IGhwg16vYHCATSmKL" // ضع مفتاح الموقع هنا

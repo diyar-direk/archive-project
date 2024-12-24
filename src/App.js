@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
+import LoginForm from "./pages/login/LoginForm";
 import Dashboard from "./pages/Dashboard";
-import AddPerson from "./pages/people/AddPerson";
-
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
+import AddPerson from "./pages/people/AddPerson";
 import Countries from "./pages/addresses/Countries";
 import Government from "./pages/addresses/Government";
 import City from "./pages/addresses/City";
@@ -11,7 +11,6 @@ import Village from "./pages/addresses/Village";
 import Region from "./pages/addresses/Region";
 import Street from "./pages/addresses/Street";
 import Sources from "./pages/Categories/Sources";
-import LoginForm from "./pages/login/LoginForm";
 import Event from "./pages/Categories/Event";
 import Party from "./pages/Categories/Party";
 
