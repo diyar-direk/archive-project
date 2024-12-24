@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from "react";
-=======
-import React, { useState } from "react";
->>>>>>> c7dea0d1c2d2d2f1eb2fadeb5cb4a4305c86ef7b
 import "../../components/form.css";
 import Mammoth from "mammoth";
 import {
@@ -29,11 +25,8 @@ const AddPerson = () => {
   const [error, setError] = useState(false);
 
   const [form, setForm] = useState({
-<<<<<<< HEAD
     //personal data
     imgae: "",
-=======
->>>>>>> c7dea0d1c2d2d2f1eb2fadeb5cb4a4305c86ef7b
     firstName: "",
     fatherName: "",
     surName: "",

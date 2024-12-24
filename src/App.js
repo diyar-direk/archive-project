@@ -1,5 +1,4 @@
 import { Route, Routes } from "react-router-dom";
-import LoginForm from "./pages/login/LoginForm";
 import Dashboard from "./pages/Dashboard";
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
@@ -13,6 +12,7 @@ import Street from "./pages/addresses/Street";
 import Sources from "./pages/Categories/Sources";
 import Event from "./pages/Categories/Event";
 import Party from "./pages/Categories/Party";
+import LoginForm from "./pages/Login/LoginForm";
 
 function App() {
   return (
