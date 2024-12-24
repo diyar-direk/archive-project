@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./navbar.css";
 import { useNavigate } from 'react-router-dom'; 
-import { useContext, useEffect } from "react";
+import { useContext, useEffect ,useState } from "react";
 import { Context } from "../../context/context";
 
 const Navbar = () => {
@@ -82,6 +82,11 @@ const Navbar = () => {
   const handleLogout = () => {
     navigate("/login");
   };
+
+    const [showButton, setShowButton] = useState(true); 
+    const toggleButtonVisibility = () => {
+      setShowButton((prev) => !prev); 
+    };
   return (
     <>
       <nav className={`${context?.isClosed ? "closed" : ""} center`}>
@@ -198,7 +203,7 @@ const Navbar = () => {
                 <NavLink to={"/sources"}>sources</NavLink>
                 <NavLink to={"/event"}>event</NavLink>
                 <NavLink to={"/party"}>party</NavLink>
-         
+
               </article>
             </div>
 
@@ -206,18 +211,22 @@ const Navbar = () => {
               <i className="fa-solid fa-map-location-dot"></i>
               <h1> test </h1>
             </NavLink>
-
-           
-
           </div>
+        
           <h3 className="log-out center c-pointer aside">
             <i className="fa-solid fa-right-from-bracket"></i>
             <span onClick={handleLogout}>log out </span>
           </h3>
-        </div>
+    
+        <span onClick={toggleButtonVisibility}>
+        {showButton ? <i class="fa-solid fa-eye">hidden short-cut</i>:<i class="fa-solid fa-eye-slash"> show short-cut </i>}
+      </span> 
+      
+      </div>
       </aside>
-
+      
       <div className="short-cut">
+      {showButton && (
         <i
           onClick={(e) => {
             e.stopPropagation();
@@ -225,12 +234,14 @@ const Navbar = () => {
           }}
           className="plus fa-solid fa-chevron-down"
         ></i>
-        <div className="short-links flex-direction center gap-10 flex">
-          <Link className="fa-solid fa-house"></Link>
-          <Link className="fa-solid fa-house"></Link>
-          <Link className="fa-solid fa-house"></Link>
-        </div>
+      )}
+      <div className="short-links flex-direction center gap-10 flex">
+        <a className="fa-solid fa-house" href="#"></a>
+        <a className="fa-solid fa-house" href="#"></a>
+        <a className="fa-solid fa-house" href="#"></a>
       </div>
+    </div>
+
     </>
   );
 };

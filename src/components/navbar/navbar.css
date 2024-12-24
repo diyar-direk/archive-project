@@ -408,6 +408,7 @@ div.short-cut div.short-links {
   pointer-events: none;
   width: 50px;
   border-radius: 10px 10px 0px 0px;
+
 }
 div.short-cut i.active + div.short-links {
   top: -150px;
@@ -429,6 +430,13 @@ div.short-cut div.short-links a {
 }
 div.short-cut div.short-links a:hover {
   transform: scale(1.1);
+}
+
+.log-show{
+ 
+  display: flex; /* أو display: grid */
+  gap: 20px; /* مسافة بين العناصر */
+
 }
 @media (max-width: 1000px) {
   aside {
