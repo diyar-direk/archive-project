@@ -500,26 +500,28 @@ const AddPerson = () => {
                     : "select government"}
                 </div>
                 <article>
-                  <input
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder={`${searchPlaceholder} government`}
-                    onInput={(inp) => {
-                      const filteredCountries =
-                        allDataSelect.data.government.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                      setAllDataSelect({
-                        ...allDataSelect,
-                        searchData: {
-                          ...allDataSelect.searchData,
-                          government: filteredCountries,
-                        },
-                      });
-                    }}
-                    type="text"
-                  />
+                  {form.countryId && (
+                    <input
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder={`${searchPlaceholder} government`}
+                      onInput={(inp) => {
+                        const filteredCountries =
+                          allDataSelect.data.government.filter((e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                          );
+                        setAllDataSelect({
+                          ...allDataSelect,
+                          searchData: {
+                            ...allDataSelect.searchData,
+                            government: filteredCountries,
+                          },
+                        });
+                      }}
+                      type="text"
+                    />
+                  )}
                   {allDataSelect.searchData.government.map((itm, i) => (
                     <h2
                       key={i}
@@ -545,26 +547,28 @@ const AddPerson = () => {
                   {form.cityId ? form.cityId.name : "select city"}
                 </div>
                 <article>
-                  <input
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder={`${searchPlaceholder} city`}
-                    onInput={(inp) => {
-                      const filteredCountries = allDataSelect.data.city.filter(
-                        (e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                      );
-                      setAllDataSelect({
-                        ...allDataSelect,
-                        searchData: {
-                          ...allDataSelect.searchData,
-                          city: filteredCountries,
-                        },
-                      });
-                    }}
-                    type="text"
-                  />
+                  {form.governmentId && (
+                    <input
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder={`${searchPlaceholder} city`}
+                      onInput={(inp) => {
+                        const filteredCountries =
+                          allDataSelect.data.city.filter((e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                          );
+                        setAllDataSelect({
+                          ...allDataSelect,
+                          searchData: {
+                            ...allDataSelect.searchData,
+                            city: filteredCountries,
+                          },
+                        });
+                      }}
+                      type="text"
+                    />
+                  )}
                   {allDataSelect.searchData.city.map((itm, i) => (
                     <h2
                       key={i}
@@ -588,26 +592,28 @@ const AddPerson = () => {
                   {form.villageId ? form.villageId.name : "select village"}
                 </div>
                 <article>
-                  <input
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder={`${searchPlaceholder} village`}
-                    onInput={(inp) => {
-                      const filteredCountries =
-                        allDataSelect.data.village.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                      setAllDataSelect({
-                        ...allDataSelect,
-                        searchData: {
-                          ...allDataSelect.searchData,
-                          village: filteredCountries,
-                        },
-                      });
-                    }}
-                    type="text"
-                  />
+                  {form.cityId && (
+                    <input
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder={`${searchPlaceholder} village`}
+                      onInput={(inp) => {
+                        const filteredCountries =
+                          allDataSelect.data.village.filter((e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                          );
+                        setAllDataSelect({
+                          ...allDataSelect,
+                          searchData: {
+                            ...allDataSelect.searchData,
+                            village: filteredCountries,
+                          },
+                        });
+                      }}
+                      type="text"
+                    />
+                  )}
                   {allDataSelect.searchData.village.map((itm, i) => (
                     <h2
                       key={i}
@@ -633,26 +639,28 @@ const AddPerson = () => {
                   {form.regionId ? form.regionId.name : "select region"}
                 </div>
                 <article>
-                  <input
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder={`${searchPlaceholder} region`}
-                    onInput={(inp) => {
-                      const filteredCountries =
-                        allDataSelect.data.region.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                      setAllDataSelect({
-                        ...allDataSelect,
-                        searchData: {
-                          ...allDataSelect.searchData,
-                          region: filteredCountries,
-                        },
-                      });
-                    }}
-                    type="text"
-                  />
+                  {form.cityId && (
+                    <input
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder={`${searchPlaceholder} region`}
+                      onInput={(inp) => {
+                        const filteredCountries =
+                          allDataSelect.data.region.filter((e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                          );
+                        setAllDataSelect({
+                          ...allDataSelect,
+                          searchData: {
+                            ...allDataSelect.searchData,
+                            region: filteredCountries,
+                          },
+                        });
+                      }}
+                      type="text"
+                    />
+                  )}
                   {allDataSelect.searchData.region.map((itm, i) => (
                     <h2
                       key={i}
@@ -678,26 +686,28 @@ const AddPerson = () => {
                   {form.streetId ? form.streetId.name : "select street"}
                 </div>
                 <article>
-                  <input
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder={`${searchPlaceholder} street`}
-                    onInput={(inp) => {
-                      const filteredCountries =
-                        allDataSelect.data.street.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                      setAllDataSelect({
-                        ...allDataSelect,
-                        searchData: {
-                          ...allDataSelect.searchData,
-                          street: filteredCountries,
-                        },
-                      });
-                    }}
-                    type="text"
-                  />
+                  {form.cityId && (
+                    <input
+                      onClick={(e) => e.stopPropagation()}
+                      placeholder={`${searchPlaceholder} street`}
+                      onInput={(inp) => {
+                        const filteredCountries =
+                          allDataSelect.data.street.filter((e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                          );
+                        setAllDataSelect({
+                          ...allDataSelect,
+                          searchData: {
+                            ...allDataSelect.searchData,
+                            street: filteredCountries,
+                          },
+                        });
+                      }}
+                      type="text"
+                    />
+                  )}
                   {allDataSelect.searchData.street.map((itm, i) => (
                     <h2
                       key={i}
@@ -728,7 +738,7 @@ const AddPerson = () => {
               ></textarea>
             </div>
           </div>
-        </div>
+        </div> 
 
         <div className="form">
           <h1>contact informations</h1>
