@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { baseURL, date, limit } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
-import "./profile.css"
+import "./profile.css";
 const People = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -190,6 +190,7 @@ const People = () => {
         hasFltr={{ fltr: fltr, setFltr }}
         filters={{ filters, setFilters }}
         overlay={{ overlay: overlay, setOverlay }}
+        delete={{ getData, setData, url: "people" }}
       />
     </>
   );

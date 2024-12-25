@@ -287,8 +287,8 @@ const AddPerson = () => {
     setForm({ ...form, [e.target.id]: e.target.value });
     error && setError(false);
   };
-  const handleFormSelect = (e) => {
-    setForm({ ...form, [e.target.id]: e.target.title });
+  const handleFormSelect = (e, itm) => {
+    setForm({ ...form, [e.target.id]: itm });
     error && setError(false);
   };
 
@@ -414,9 +414,13 @@ const AddPerson = () => {
       const keys = Object.keys(form);
       const formData = new FormData();
       keys.forEach((key) => {
-        form[key] &&
-          form[key]?.length > 0 &&
+        if (
+          (form[key] && !Array.isArray(form[key])) ||
+          (Array.isArray(formData[key]) && formData[key]?.length !== 0)
+        ) {
           formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
+          console.log(key);
+        }
       });
 
       try {
@@ -538,21 +542,21 @@ const AddPerson = () => {
                 </div>
                 <article>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Married"
                   >
                     Married
                   </h2>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Single"
                   >
                     single
                   </h2>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Other"
                   >
@@ -614,7 +618,6 @@ const AddPerson = () => {
             </div>
           </div>
         </div>
-
         <div className="form">
           <h1>stay informations</h1>
           <div className="flex wrap">
@@ -622,15 +625,41 @@ const AddPerson = () => {
               <label>country</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  country
+                  {form.countryId ? form.countryId.name : "select country"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} country`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.country.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          country: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.country.map((itm, i) => (
+                    <h2
+                      key={i}
+                      id="countryId"
+                      onClick={(e) => handleFormSelect(e, itm)}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {allDataSelect.searchData.country.length <= 0 && (
+                    <p>no data</p>
+                  )}
                 </article>
               </div>
             </div>
@@ -639,7 +668,9 @@ const AddPerson = () => {
               <label>government</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  government
+                  {form.governmentId
+                    ? form.governmentId.name
+                    : "select government"}
                 </div>
                 <article>
                   {form.countryId && (
@@ -686,7 +717,7 @@ const AddPerson = () => {
               <label>city</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  city
+                  {form.cityId ? form.cityId.name : "select city"}
                 </div>
                 <article>
                   {form.governmentId && (
@@ -731,7 +762,7 @@ const AddPerson = () => {
               <label>village</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  village
+                  {form.villageId ? form.villageId.name : "select village"}
                 </div>
                 <article>
                   {form.cityId && (
@@ -778,7 +809,7 @@ const AddPerson = () => {
               <label>region</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  region
+                  {form.regionId ? form.regionId.name : "select region"}
                 </div>
                 <article>
                   {form.cityId && (
@@ -825,7 +856,7 @@ const AddPerson = () => {
               <label>street</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  street
+                  {form.streetId ? form.streetId.name : "select street"}
                 </div>
                 <article>
                   {form.cityId && (
@@ -888,6 +919,7 @@ const AddPerson = () => {
             <div className="flex flex-direction">
               <label htmlFor="phone">phone</label>
               <input
+                required
                 value={form.phone}
                 onChange={handleForm}
                 type="text"
