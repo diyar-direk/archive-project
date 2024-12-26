@@ -291,7 +291,7 @@ const Village = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Villages", getData }}
+            delete={{ url: "Villages", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
             filters={{ filters, setFilters }}
           />

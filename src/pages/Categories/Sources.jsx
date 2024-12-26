@@ -39,7 +39,10 @@ const Sources = () => {
   });
 
   const header = ["source_name", "created_at", "source_credibility"];
-  const [form, setForm] = useState({ source_name: "", source_credibility: "High" });
+  const [form, setForm] = useState({
+    source_name: "",
+    source_credibility: "High",
+  });
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -185,7 +188,7 @@ const Sources = () => {
 
           <label htmlFor="source_credibility">Source Credibility</label>
           <select
-          className="inp center gap-10 w-100 active"
+            className="inp center gap-10 w-100 active"
             id="source_credibility"
             value={form.source_credibility}
             onChange={(e) =>
@@ -223,7 +226,7 @@ const Sources = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Sources", getData }}
+            delete={{ url: "Sources", getData }}
           />
         </div>
       </div>

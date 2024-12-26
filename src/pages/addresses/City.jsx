@@ -300,7 +300,7 @@ const City = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "cities", getData }}
+            delete={{ url: "cities", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
             filters={{ filters, setFilters }}
           />

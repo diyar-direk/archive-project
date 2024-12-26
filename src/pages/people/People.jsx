@@ -190,7 +190,7 @@ const People = () => {
         hasFltr={{ fltr: fltr, setFltr }}
         filters={{ filters, setFilters }}
         overlay={{ overlay: overlay, setOverlay }}
-        delete={{ getData, setData, url: "people" }}
+        delete={{ getData, url: "people" }}
       />
     </>
   );

@@ -378,7 +378,6 @@ const AddPerson = () => {
 
   const removeSelectCategories = (e, itm) => {
     const data = form[e.target.id].filter((ele) => ele !== itm);
-    console.log(data);
 
     setForm({
       ...form,
@@ -418,16 +417,42 @@ const AddPerson = () => {
           (form[key] && !Array.isArray(form[key])) ||
           (Array.isArray(formData[key]) && formData[key]?.length !== 0)
         ) {
-          formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
-          console.log(key);
+          if (!Array.isArray(form[key]))
+            formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
+          else formData.append(key, form[key]);
         }
       });
 
       try {
         const data = await axios.post(`${baseURL}/people`, formData);
-        console.log(data);
         if (data.status === 201) {
           responseFun(true);
+          setForm({
+            //personal data
+            imgae: "",
+            firstName: "",
+            fatherName: "",
+            surName: "",
+            gender: "",
+            maritalStatus: "",
+            motherName: "",
+            birthDate: "",
+            placeOfBirth: "",
+            occupation: "",
+            countryId: "",
+            governmentId: "",
+            cityId: "",
+            villageId: "",
+            regionId: "",
+            streetId: "",
+            addressDetails: "",
+            email: "",
+            phone: "",
+            //categories data
+            sources: [],
+            events: [],
+            parties: [],
+          });
         }
       } catch (error) {
         console.log(error);

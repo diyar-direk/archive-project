@@ -287,7 +287,7 @@ const Government = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Governments", getData }}
+            delete={{ url: "Governments", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
             filters={{ filters, setFilters }}
           />

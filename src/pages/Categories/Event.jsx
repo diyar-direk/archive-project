@@ -14,8 +14,6 @@ const Event = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
-  
- 
 
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -40,7 +38,7 @@ const Event = () => {
   });
 
   const header = ["name", "creat at"];
-  const [form, setForm] = useState({ name: ""});
+  const [form, setForm] = useState({ name: "" });
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -55,8 +53,6 @@ const Event = () => {
   useEffect(() => {
     getData();
   }, [page]);
-
-
 
   const getData = async () => {
     setLoading(true);
@@ -133,37 +129,35 @@ const Event = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-      try {
-        const formData = { ...form };
 
-        if (update) {
-          const data = await axios.patch(
-            `${baseURL}/Events/${update._id}`,
-            formData
-          );
+    try {
+      const formData = { ...form };
 
-          if (data.status === 200) {
-            responseFun(true);
-          }
-          setUpdate(false);
-        } else {
-          const data = await axios.post(`${baseURL}/Events`, formData);
-          if (data.status === 201) {
-            responseFun(true);
-          }
+      if (update) {
+        const data = await axios.patch(
+          `${baseURL}/Events/${update._id}`,
+          formData
+        );
+
+        if (data.status === 200) {
+          responseFun(true);
         }
-
-        setForm({ name: "" });
-        getData();
-      } catch (error) {
-        console.log(error);
-        if (error.status === 400) responseFun("reapeted data");
-        else responseFun(false);
+        setUpdate(false);
+      } else {
+        const data = await axios.post(`${baseURL}/Events`, formData);
+        if (data.status === 201) {
+          responseFun(true);
+        }
       }
+
+      setForm({ name: "" });
+      getData();
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) responseFun("reapeted data");
+      else responseFun(false);
+    }
   };
-
-
 
   return (
     <>
@@ -186,7 +180,6 @@ const Event = () => {
             id="name"
           />
 
-          
           <div className="flex wrap gap-10">
             <button className={`${update ? "save" : ""} btn flex-1`}>
               {update ? "save" : "add"}
@@ -213,7 +206,7 @@ const Event = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Events", getData }}
+            delete={{ url: "Events", getData }}
           />
         </div>
       </div>

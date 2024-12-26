@@ -14,8 +14,6 @@ const Party = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
-  
- 
 
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -40,7 +38,7 @@ const Party = () => {
   });
 
   const header = ["name", "creat at"];
-  const [form, setForm] = useState({ name: ""});
+  const [form, setForm] = useState({ name: "" });
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -56,8 +54,6 @@ const Party = () => {
     getData();
   }, [page]);
 
-
-
   const getData = async () => {
     setLoading(true);
     setData([]);
@@ -67,7 +63,7 @@ const Party = () => {
 
     try {
       const data = await axios.get(url);
-  
+
       dataLength.current = data.data.numberOfActiveParties;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -134,38 +130,36 @@ const Party = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-      try {
-        const formData = { ...form };
-        console.log(formData)
 
-        if (update) {
-          const data = await axios.patch(
-            `${baseURL}/Parties/${update._id}`,
-            formData
-          );
+    try {
+      const formData = { ...form };
+      console.log(formData);
 
-          if (data.status === 200) {
-            responseFun(true);
-          }
-          setUpdate(false);
-        } else {
-          const data = await axios.post(`${baseURL}/Parties`, formData);
-          if (data.status === 201) {
-            responseFun(true);
-          }
+      if (update) {
+        const data = await axios.patch(
+          `${baseURL}/Parties/${update._id}`,
+          formData
+        );
+
+        if (data.status === 200) {
+          responseFun(true);
         }
-
-        setForm({ name: "" });
-        getData();
-      } catch (error) {
-        console.log(error);
-        if (error.status === 400) responseFun("reapeted data");
-        else responseFun(false);
+        setUpdate(false);
+      } else {
+        const data = await axios.post(`${baseURL}/Parties`, formData);
+        if (data.status === 201) {
+          responseFun(true);
+        }
       }
+
+      setForm({ name: "" });
+      getData();
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) responseFun("reapeted data");
+      else responseFun(false);
+    }
   };
-
-
 
   return (
     <>
@@ -188,7 +182,6 @@ const Party = () => {
             id="name"
           />
 
-          
           <div className="flex wrap gap-10">
             <button className={`${update ? "save" : ""} btn flex-1`}>
               {update ? "save" : "add"}
@@ -215,7 +208,7 @@ const Party = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Parties", getData }}
+            delete={{ url: "Parties", getData }}
           />
         </div>
       </div>
