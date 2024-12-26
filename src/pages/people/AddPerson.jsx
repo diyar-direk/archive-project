@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+
+import React, { useEffect, useRef, useState } from "react";
 import "../../components/form.css";
 import Mammoth from "mammoth";
 import {
@@ -8,6 +9,7 @@ import {
   searchPlaceholder,
 } from "../../context/context";
 import axios from "axios";
+import SendData from "../../components/response/SendData";
 const AddPerson = () => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -24,6 +26,8 @@ const AddPerson = () => {
   const [error, setError] = useState(false);
 
   const [form, setForm] = useState({
+    //personal data
+    imgae: "",
     firstName: "",
     fatherName: "",
     surName: "",
@@ -47,6 +51,7 @@ const AddPerson = () => {
     events: [],
     parties: [],
   });
+
   const [allDataSelect, setAllDataSelect] = useState({
     data: {
       country: [],
@@ -75,15 +80,19 @@ const AddPerson = () => {
   useEffect(() => {
     let dataObj = { ...allDataSelect };
     const promises = [];
+
     promises.push(
       axios
         .get(`${baseURL}/Countries?active=true`)
         .then((res) => {
-          setAllDataSelect({
-            ...allDataSelect,
-            data: { ...allDataSelect.data, country: res.data.data },
-            searchData: { ...allDataSelect.searchData, country: res.data.data },
-          });
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, country: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              country: res.data.data,
+            },
+          };
         })
         .catch((err) => console.log(err))
     );
@@ -279,8 +288,8 @@ const AddPerson = () => {
     setForm({ ...form, [e.target.id]: e.target.value });
     error && setError(false);
   };
-  const handleFormSelect = (e) => {
-    setForm({ ...form, [e.target.id]: e.target.title });
+  const handleFormSelect = (e, itm) => {
+    setForm({ ...form, [e.target.id]: itm });
     error && setError(false);
   };
 
@@ -370,18 +379,123 @@ const AddPerson = () => {
 
   const removeSelectCategories = (e, itm) => {
     const data = form[e.target.id].filter((ele) => ele !== itm);
-    console.log(data);
 
     setForm({
       ...form,
       [e.target.id]: data,
     });
   };
+  const response = useRef(true);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+
+  const responseFun = (complete = false) => {
+    complete === true
+      ? (response.current = true)
+      : complete === "reapeted data"
+      ? (response.current = 400)
+      : (response.current = false);
+    setResponseOverlay(true);
+    window.onclick = () => {
+      setResponseOverlay(false);
+    };
+    setTimeout(() => {
+      setResponseOverlay(false);
+    }, 3000);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.maritalStatus) setError("please select maritalStatus");
+    else if (!form.gender) setError("please select gender");
+    else if (!form.countryId) setError("please select country");
+    else if (!form.governmentId) setError("please select government");
+    else if (!form.cityId) setError("please select city");
+    else {
+      const keys = Object.keys(form);
+      const formData = new FormData();
+
+      keys.forEach((key) => {
+        if (
+          (form[key] && !Array.isArray(form[key])) ||
+          (Array.isArray(form[key]) && form[key]?.length !== 0)
+        ) {
+          if (!Array.isArray(form[key]))
+            formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
+          else {
+            form[key].forEach((item) => {
+              formData.append(`${key}[]`, item._id || item);
+            });
+          }
+        }
+      });
+
+      try {
+        const data = await axios.post(`${baseURL}/people`, formData);
+        if (data.status === 201) {
+          responseFun(true);
+          setForm({
+            //personal data
+            imgae: "",
+            firstName: "",
+            fatherName: "",
+            surName: "",
+            gender: "",
+            maritalStatus: "",
+            motherName: "",
+            birthDate: "",
+            placeOfBirth: "",
+            occupation: "",
+            countryId: "",
+            governmentId: "",
+            cityId: "",
+            villageId: "",
+            regionId: "",
+            streetId: "",
+            addressDetails: "",
+            email: "",
+            phone: "",
+            //categories data
+            sources: [],
+            events: [],
+            parties: [],
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        if (error.status === 400) responseFun("reapeted data");
+        else responseFun(false);
+      }
+    }
+  };
 
   return (
     <>
+      {responseOverlay && (
+        <SendData data={`person`} response={response.current} />
+      )}
       <h1 className="title">add person</h1>
-      <form className="dashboard-form">
+      <form onSubmit={handleSubmit} className="dashboard-form">
+        <div className="form form-profile">
+          <label className="gap-10 center">
+            <input
+              accept="image/*"
+              type="file"
+              id="image"
+              onInput={(e) => {
+                setForm({ ...form, image: e.target.files[0] });
+              }}
+            />
+
+            {!form.image && <i className="fa-solid fa-user"></i>}
+            {form.image && (
+              <img
+                alt="profile"
+                loading="lazy"
+                src={URL.createObjectURL(form.image)}
+              />
+            )}
+          </label>
+        </div>
         <div className="form">
           <h1>personal information</h1>
           <div className="flex wrap">
@@ -399,13 +513,13 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="fotherName">fother name</label>
+              <label htmlFor="fatherName">fother name</label>
               <input
                 required
-                value={form.fotherName}
+                value={form.fatherName}
                 onChange={handleForm}
                 type="text"
-                id="fotherName"
+                id="fatherName"
                 className="inp"
                 placeholder={`${placeholder} fother name`}
               />
@@ -431,10 +545,18 @@ const AddPerson = () => {
                   {form.gender ? form.gender : "select gender"}
                 </div>
                 <article>
-                  <h2 onClick={handleFormSelect} id="gender" title="male">
+                  <h2
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    id="gender"
+                    title="Male"
+                  >
                     male
                   </h2>
-                  <h2 onClick={handleFormSelect} id="gender" title="female">
+                  <h2
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    id="gender"
+                    title="Female"
+                  >
                     Female
                   </h2>
                 </article>
@@ -451,21 +573,21 @@ const AddPerson = () => {
                 </div>
                 <article>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Married"
                   >
                     Married
                   </h2>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Single"
                   >
                     single
                   </h2>
                   <h2
-                    onClick={handleFormSelect}
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Other"
                   >
@@ -527,7 +649,6 @@ const AddPerson = () => {
             </div>
           </div>
         </div>
-
         <div className="form">
           <h1>stay informations</h1>
           <div className="flex wrap">
@@ -535,15 +656,41 @@ const AddPerson = () => {
               <label>country</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  country
+                  {form.countryId ? form.countryId.name : "select country"}
                 </div>
                 <article>
                   <input
+                    onClick={(e) => e.stopPropagation()}
                     placeholder={`${searchPlaceholder} country`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.country.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          country: filteredCountries,
+                        },
+                      });
+                    }}
                     type="text"
                   />
-                  <h2>single</h2>
-                  <h2>Female</h2>
+                  {allDataSelect.searchData.country.map((itm, i) => (
+                    <h2
+                      key={i}
+                      id="countryId"
+                      onClick={(e) => handleFormSelect(e, itm)}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {allDataSelect.searchData.country.length <= 0 && (
+                    <p>no data</p>
+                  )}
                 </article>
               </div>
             </div>
@@ -552,7 +699,9 @@ const AddPerson = () => {
               <label>government</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  government
+                  {form.governmentId
+                    ? form.governmentId.name
+                    : "select government"}
                 </div>
                 <article>
                   {form.countryId && (
@@ -599,7 +748,7 @@ const AddPerson = () => {
               <label>city</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  city
+                  {form.cityId ? form.cityId.name : "select city"}
                 </div>
                 <article>
                   {form.governmentId && (
@@ -644,7 +793,7 @@ const AddPerson = () => {
               <label>village</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  village
+                  {form.villageId ? form.villageId.name : "select village"}
                 </div>
                 <article>
                   {form.cityId && (
@@ -691,7 +840,7 @@ const AddPerson = () => {
               <label>region</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  region
+                  {form.regionId ? form.regionId.name : "select region"}
                 </div>
                 <article>
                   {form.cityId && (
@@ -738,7 +887,7 @@ const AddPerson = () => {
               <label>street</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  street
+                  {form.streetId ? form.streetId.name : "select street"}
                 </div>
                 <article>
                   {form.cityId && (
@@ -797,13 +946,13 @@ const AddPerson = () => {
 
         <div className="form">
           <h1>contact informations</h1>
-          <div className="flex warp">
+          <div className="flex wrap">
             <div className="flex flex-direction">
               <label htmlFor="phone">phone</label>
               <input
+                required
                 value={form.phone}
                 onChange={handleForm}
-                required
                 type="text"
                 id="phone"
                 className="inp"
@@ -815,7 +964,6 @@ const AddPerson = () => {
               <input
                 value={form.email}
                 onChange={handleForm}
-                required
                 type="email"
                 id="email"
                 className="inp"
@@ -827,7 +975,7 @@ const AddPerson = () => {
 
         <div className="form">
           <h1>more informations</h1>
-          <div className="flex warp">
+          <div className="flex wrap">
             <div className="flex flex-direction">
               <label>sources</label>
               <div className="selecte relative">
@@ -1233,7 +1381,7 @@ const AddPerson = () => {
             </div>
           </div>
         )}
-
+        {error && <p className="error"> {error} </p>}
         <button className="btn">save</button>
       </form>
     </>

@@ -291,7 +291,7 @@ const Region = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Regions", getData }}
+            delete={{ url: "Regions", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
             filters={{ filters, setFilters }}
           />

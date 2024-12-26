@@ -229,6 +229,9 @@ iframe {
 div.form div.selceted-itms {
   margin-top: 10px;
   gap: 10px;
+  overflow: auto;
+  white-space: nowrap;
+  padding-bottom: 10px;
 }
 
 div.form div.selceted-itms > span {
@@ -243,6 +246,39 @@ div.form div.selceted-itms > span {
 div.form div.selceted-itms > span:hover {
   background-color: var(--main-color);
   color: white;
+}
+
+form div.form-profile.form {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+form div.form-profile.form input {
+  display: none;
+}
+form div.form-profile.form label {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--section-color);
+  box-shadow: var(--box-shadow);
+}
+form div.form-profile.form label i {
+  width: 100%;
+  height: 100%;
+  color: var(--font-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+}
+form div.form-profile.form label img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 form.addresses {

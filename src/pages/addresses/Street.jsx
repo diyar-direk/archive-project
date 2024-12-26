@@ -291,7 +291,7 @@ const Street = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Streets", getData }}
+            delete={{ url: "Streets", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
             filters={{ filters, setFilters }}
           />

@@ -18,7 +18,6 @@ const Table = (props) => {
     government: [],
   });
 
-
   const keys = Object.keys(props.filters?.filters || "");
 
   useEffect(() => {
@@ -207,26 +206,41 @@ const Table = (props) => {
   }
 
   const deleteData = async () => {
-    if (props.items.slectedItems.length > 1) {
-      const data = await axios.patch(
-        `${baseURL}/${props.delete.url}/deActivate/${props.items.slectedItems[0]}`,
-        []
-      );
-      if (data.status === 200) {
-        props.overlay.setOverlay(false);
-        props.items.setSelectedItems([]);
-        props.delete.getData();
+    try {
+      if (props.items.slectedItems.length > 1) {
+        const data = await axios.patch(
+          `${baseURL}/${props.delete.url}/deActivate-many`,
+          { ids: props.items.slectedItems }
+        );
+        if (data.status === 200) {
+          props.overlay.setOverlay(false);
+          if (
+            props.data.allData.length - props.items.slectedItems.length === 0 &&
+            props.page.page !== 1
+          ) {
+            props.page.setPage(1);
+          } else props.delete.getData();
+          props.items.setSelectedItems([]);
+        }
+      } else {
+        const data = await axios.patch(
+          `${baseURL}/${props.delete.url}/deActivate/${props.items.slectedItems[0]}`,
+          []
+        );
+        if (data.status === 200) {
+          props.overlay.setOverlay(false);
+          if (
+            props.data.allData.length - props.items.slectedItems.length === 0 &&
+            props.page.page !== 1
+          ) {
+            props.page.setPage(1);
+          } else props.delete.getData();
+
+          props.items.setSelectedItems([]);
+        }
       }
-    } else {
-      const data = await axios.patch(
-        `${baseURL}/${props.delete.url}/deActivate/${props.items.slectedItems[0]}`,
-        []
-      );
-      if (data.status === 200) {
-        props.overlay.setOverlay(false);
-        props.items.setSelectedItems([]);
-        props.delete.getData();
-      }
+    } catch (error) {
+      console.log(error);
     }
   };
 

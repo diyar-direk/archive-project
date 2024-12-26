@@ -192,7 +192,7 @@ const Countries = () => {
             data={{ data: countryData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ setData, url: "Countries", getData }}
+            delete={{ url: "Countries", getData }}
           />
         </div>
       </div>
