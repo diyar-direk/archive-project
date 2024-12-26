@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./navbar.css";
-import { useNavigate } from 'react-router-dom'; 
-import { useContext, useEffect ,useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context";
 
 const Navbar = () => {
@@ -82,7 +82,6 @@ const Navbar = () => {
   const handleLogout = () => {
     navigate("/login");
   };
-
 
   return (
     <>
@@ -200,7 +199,6 @@ const Navbar = () => {
                 <NavLink to={"/sources"}>sources</NavLink>
                 <NavLink to={"/event"}>event</NavLink>
                 <NavLink to={"/party"}>party</NavLink>
-
               </article>
             </div>
 
@@ -209,41 +207,51 @@ const Navbar = () => {
               <h1> test </h1>
             </NavLink>
           </div>
-        
-      <div>
-          <span onClick={context?.toggleButtonVisibility}>
-            <div className="center c-pointer  ">
-              {context?.showButton ? <> <h3 className="log-out center aside"> <i class="fa-solid fa-eye"></i> <span>hidden short-cut</span></h3>
-              </>: <> <h3 className="log-out center aside"><i class="fa-solid fa-eye-slash">  </i> <span>show short-cut</span></h3>
-              </>}
-            </div>
-        </span> 
-        <h3 className="log-out center c-pointer aside">
+
+          <div>
+            <span onClick={context?.toggleButtonVisibility}>
+              <div className="center c-pointer  ">
+                {!context?.showButton ? (
+                  <>
+                    <h3 className="log-out center aside">
+                      <i className="fa-solid fa-eye"></i>
+                      <span>hidden short-cut</span>
+                    </h3>
+                  </>
+                ) : (
+                  <>
+                    <h3 className="log-out center aside">
+                      <i className="fa-solid fa-eye-slash"> </i>
+                      <span>show short-cut</span>
+                    </h3>
+                  </>
+                )}
+              </div>
+            </span>
+            <h3 className="log-out center c-pointer aside">
               <i className="fa-solid fa-right-from-bracket"></i>
               <span onClick={handleLogout}>log out </span>
             </h3>
-      </div >
-      
-      </div>
+          </div>
+        </div>
       </aside>
-      
-      <div className="short-cut">
-      {context?.showButton && (
-        <i
-          onClick={(e) => {
-            e.stopPropagation();
-            e.target.classList.toggle("active");
-          }}
-          className="plus fa-solid fa-chevron-down"
-        ></i>
-      )}
-      <div className="short-links flex-direction center gap-10 flex">
-        <Link className="fa-solid fa-house" href="#"></Link>
-        <Link className="fa-solid fa-house" href="#"></Link>
-        <Link className="fa-solid fa-house" href="#"></Link>
-      </div>
-    </div>
 
+      <div className="short-cut">
+        {!context?.showButton && (
+          <i
+            onClick={(e) => {
+              e.stopPropagation();
+              e.target.classList.toggle("active");
+            }}
+            className="plus fa-solid fa-chevron-down"
+          ></i>
+        )}
+        <div className="short-links flex-direction center gap-10 flex">
+          <Link className="fa-solid fa-house" href="#"></Link>
+          <Link className="fa-solid fa-house" href="#"></Link>
+          <Link className="fa-solid fa-house" href="#"></Link>
+        </div>
+      </div>
     </>
   );
 };

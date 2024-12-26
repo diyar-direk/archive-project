@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import "../../components/form.css";
 import Mammoth from "mammoth";
@@ -10,7 +9,9 @@ import {
 } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
+import Loading from "../../components/loading/Loading";
 const AddPerson = () => {
+  const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
     e.stopPropagation();
     const divs = document.querySelectorAll("div.form .selecte .inp.active");
@@ -411,6 +412,7 @@ const AddPerson = () => {
     else if (!form.governmentId) setError("please select government");
     else if (!form.cityId) setError("please select city");
     else {
+      setLoading(true);
       const keys = Object.keys(form);
       const formData = new FormData();
 
@@ -464,6 +466,8 @@ const AddPerson = () => {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");
         else responseFun(false);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -473,6 +477,7 @@ const AddPerson = () => {
       {responseOverlay && (
         <SendData data={`person`} response={response.current} />
       )}
+      {loading && <Loading />}
       <h1 className="title">add person</h1>
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form form-profile">

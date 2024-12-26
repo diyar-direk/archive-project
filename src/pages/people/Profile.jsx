@@ -1,21 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
 import { baseURL, date } from "../../context/context";
+import Loading from "../../components/loading/Loading";
 const Profile = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
+  const [loading, setLoading] = useState(true);
+  const nav = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`${baseURL}/people/${id}`)
-      .then((res) => setData(res.data.data))
-      .catch((err) => console.log(err));
+    getData();
   }, [id]);
+
+  async function getData() {
+    !loading && setLoading(true);
+    try {
+      const data = await axios.get(`${baseURL}/people/${id}`);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+      error.status === 500 && nav(`/error-404`);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const [image, setImage] = useState(false);
 
-  return (
+  const updateProfile = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", image);
+    console.log(image);
+
+    try {
+      const data = await axios.patch(`${baseURL}/people/${id}`, formData);
+      if (data.status === 200) console.log(data);
+    } catch (error) {
+      console.log(error);
+      alert("some error please try agin");
+    } finally {
+      setImage(false);
+    }
+  };
+
+  return loading ? (
+    <Loading />
+  ) : (
     <>
       <div className="profile wrap flex">
         <div className="image center flex-direction">
@@ -39,17 +72,31 @@ const Profile = () => {
             )}
           </div>
           <div className="flex center gap-10 w-100 wrap">
-            <label htmlFor="file" className="center gap-10">
-              <input
-                onInput={(e) => setImage(e.target.files[0])}
-                type="file"
-                id="file"
-                accept="image/*"
-              />
-              update
-              <i className="fa-regular fa-pen-to-square"></i>
-            </label>
-            {image && <button className="btn">save</button>}
+            {!image && (
+              <label htmlFor="file" className="center gap-10">
+                <input
+                  onInput={(e) => setImage(e.target.files[0])}
+                  type="file"
+                  id="file"
+                  accept="image/*"
+                />
+                update
+                <i className="fa-regular fa-pen-to-square"></i>
+              </label>
+            )}
+            {image && (
+              <>
+                <button
+                  onClick={() => setImage(false)}
+                  className="btn flex-1 cencel"
+                >
+                  cencel
+                </button>
+                <button onClick={updateProfile} className="btn flex-1 save">
+                  save
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -118,6 +165,44 @@ const Profile = () => {
             <h2>email</h2>
             <p className="email"> {data?.email} </p>
           </div>
+        </div>
+      </div>
+      <div className="categories grid-3">
+        <div>
+          <h2>events</h2>
+          {data?.events?.length > 0 ? (
+            data?.events?.map((e) => (
+              <p key={e._id}>
+                <span>event name:</span> {e.name}
+              </p>
+            ))
+          ) : (
+            <h3>no events found</h3>
+          )}
+        </div>
+        <div className="section-color">
+          <h2>parties</h2>
+          {data?.parties?.length > 0 ? (
+            data?.parties?.map((e) => (
+              <p key={e._id}>
+                <span>Party name:</span> {e.name}
+              </p>
+            ))
+          ) : (
+            <h3>no events found</h3>
+          )}
+        </div>
+        <div>
+          <h2>sources</h2>
+          {data?.sources?.length > 10 ? (
+            data?.sources?.map((e) => (
+              <p key={e._id}>
+                <span>source name:</span> {e.source_name}
+              </p>
+            ))
+          ) : (
+            <h3>no events found</h3>
+          )}
         </div>
       </div>
     </>

@@ -4,6 +4,7 @@ import { baseURL, limit } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
+import Loading from "../../components/loading/Loading";
 
 const Countries = () => {
   const [data, setData] = useState([]);
@@ -16,6 +17,7 @@ const Countries = () => {
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
 
   const responseFun = (complete = false) => {
     complete === true
@@ -124,6 +126,7 @@ const Countries = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormLoading(true);
     try {
       if (update) {
         const data = await axios.patch(`${baseURL}/Countries/${update._id}`, {
@@ -147,6 +150,8 @@ const Countries = () => {
       console.log(error);
       if (error.status === 400) responseFun("reapeted data");
       else responseFun(false);
+    } finally {
+      setFormLoading(false);
     }
   };
 
@@ -155,6 +160,8 @@ const Countries = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
+      {formLoading && <Loading />}
+
       <h1 className="title">Countries</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
