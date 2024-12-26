@@ -14,6 +14,13 @@ const Provider = ({ children }) => {
   const [isClosed, setIsClosed] = useState(
     JSON.parse(localStorage.getItem("isClosed")) || false
   );
+  const [showButton, setShowButton] = useState(JSON.parse(localStorage.getItem("short-cut")) || false ); 
+  
+  const toggleButtonVisibility = () => {
+    localStorage.setItem("short-cut",!showButton)
+    setShowButton((prev) => !prev); 
+  };
+
   const [selectedLang, setSelectedLang] = useState("");
   const [userDetails, setUserDetails] = useState({
     isAdmin: false,
@@ -63,6 +70,7 @@ const Provider = ({ children }) => {
         selectedLang,
         userDetails,
         setUserDetails,
+        toggleButtonVisibility,showButton
       }}
     >
       {children}
