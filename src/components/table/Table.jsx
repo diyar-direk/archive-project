@@ -273,7 +273,7 @@ const Table = (props) => {
                   </h2>
                   <h2
                     data-name="gender"
-                    data-data="female"
+                    data-data="Female"
                     onClick={(e) => {
                       selectFilters(e);
                       removeClass(e);
@@ -283,7 +283,7 @@ const Table = (props) => {
                   </h2>
                   <h2
                     data-name="gender"
-                    data-data="male"
+                    data-data="Male"
                     onClick={(e) => {
                       selectFilters(e);
                       removeClass(e);

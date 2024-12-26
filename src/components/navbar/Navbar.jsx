@@ -210,7 +210,7 @@ const Navbar = () => {
 
           <div>
             <span onClick={context?.toggleButtonVisibility}>
-              <div className="center c-pointer  ">
+              <div className="center c-pointer">
                 {!context?.showButton ? (
                   <>
                     <h3 className="log-out center aside">
