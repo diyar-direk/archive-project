@@ -83,10 +83,7 @@ const Navbar = () => {
     navigate("/login");
   };
 
-    const [showButton, setShowButton] = useState(true); 
-    const toggleButtonVisibility = () => {
-      setShowButton((prev) => !prev); 
-    };
+
   return (
     <>
       <nav className={`${context?.isClosed ? "closed" : ""} center`}>
@@ -213,20 +210,25 @@ const Navbar = () => {
             </NavLink>
           </div>
         
-          <h3 className="log-out center c-pointer aside">
-            <i className="fa-solid fa-right-from-bracket"></i>
-            <span onClick={handleLogout}>log out </span>
-          </h3>
-    
-        <span onClick={toggleButtonVisibility}>
-        {showButton ? <i class="fa-solid fa-eye">hidden short-cut</i>:<i class="fa-solid fa-eye-slash"> show short-cut </i>}
-      </span> 
+      <div>
+          <span onClick={context?.toggleButtonVisibility}>
+            <div className="center c-pointer  ">
+              {context?.showButton ? <> <h3 className="log-out center aside"> <i class="fa-solid fa-eye"></i> <span>hidden short-cut</span></h3>
+              </>: <> <h3 className="log-out center aside"><i class="fa-solid fa-eye-slash">  </i> <span>show short-cut</span></h3>
+              </>}
+            </div>
+        </span> 
+        <h3 className="log-out center c-pointer aside">
+              <i className="fa-solid fa-right-from-bracket"></i>
+              <span onClick={handleLogout}>log out </span>
+            </h3>
+      </div >
       
       </div>
       </aside>
       
       <div className="short-cut">
-      {showButton && (
+      {context?.showButton && (
         <i
           onClick={(e) => {
             e.stopPropagation();
@@ -236,9 +238,9 @@ const Navbar = () => {
         ></i>
       )}
       <div className="short-links flex-direction center gap-10 flex">
-        <a className="fa-solid fa-house" href="#"></a>
-        <a className="fa-solid fa-house" href="#"></a>
-        <a className="fa-solid fa-house" href="#"></a>
+        <Link className="fa-solid fa-house" href="#"></Link>
+        <Link className="fa-solid fa-house" href="#"></Link>
+        <Link className="fa-solid fa-house" href="#"></Link>
       </div>
     </div>
 
