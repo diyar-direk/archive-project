@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
-import { baseURL, limit } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
@@ -17,7 +17,8 @@ const Sources = () => {
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
-
+const context = useContext(Context);
+  const limit = context?.limit;
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -215,10 +216,6 @@ const Sources = () => {
           </div>
         </form>
         <div className="flex-1">
-          <form className="flex center gap-10 table-search">
-            <input type="text" placeholder="Search by name" required />
-            <button className="btn"> Search</button>
-          </form>
           <Table
             header={header}
             loading={loading}

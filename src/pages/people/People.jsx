@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { baseURL, date, limit } from "../../context/context";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css";
@@ -13,13 +13,15 @@ const People = () => {
   const [slectedItems, setSelectedItems] = useState([]);
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const context = useContext(Context);
+  const limit = context?.limit;
   const [filters, setFilters] = useState({
     gender: "",
     country: "",
     government: "",
     city: "",
     villag: "",
+    maritalStatus: "",
   });
 
   const header = [
@@ -38,7 +40,7 @@ const People = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters]);
+  }, [page, filters, limit]);
 
   const getData = async () => {
     setLoading(true);
@@ -168,19 +170,6 @@ const People = () => {
   return (
     <>
       <h1 className="title"> people </h1>
-
-      <form className="flex center gap-10 table-search">
-        <input type="text" placeholder="search by name" required />
-        <button className="btn"> search</button>
-        <i
-          onClick={(e) => {
-            setFltr(true);
-            e.stopPropagation();
-          }}
-          className="fa-solid fa-sliders filter"
-        ></i>
-      </form>
-
       <Table
         header={header}
         loading={loading}

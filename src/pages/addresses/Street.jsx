@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
-import { baseURL, limit } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
@@ -21,6 +21,8 @@ const Street = () => {
     government: "",
     city: "",
   });
+  const context = useContext(Context);
+  const limit = context?.limit;
 
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -273,17 +275,6 @@ const Street = () => {
           </div>
         </form>
         <div className="flex-1">
-          <form className="flex center gap-10 table-search">
-            <input type="text" placeholder="search by name" required />
-            <button className="btn"> search</button>
-            <i
-              onClick={(e) => {
-                setFltr(true);
-                e.stopPropagation();
-              }}
-              className="fa-solid fa-sliders filter"
-            ></i>
-          </form>
           <Table
             header={header}
             loading={loading}

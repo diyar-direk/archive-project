@@ -5,8 +5,9 @@ const userLang = userLanguage.startsWith("ar") ? "AR" : "EN";
 export const Context = createContext({});
 
 export const baseURL = `http://localhost:8000/api`;
-export const limit = 10;
+
 const Provider = ({ children }) => {
+  const [limit, setLimit] = useState(10);
   const [mode, setMode] = useState(+localStorage.getItem("isDark") || false);
   const [language, setLanguage] = useState(
     localStorage.getItem("language") || userLang || "EN"
@@ -14,11 +15,13 @@ const Provider = ({ children }) => {
   const [isClosed, setIsClosed] = useState(
     JSON.parse(localStorage.getItem("isClosed")) || false
   );
-  const [showButton, setShowButton] = useState(JSON.parse(localStorage.getItem("short-cut")) || false ); 
-  
+  const [showButton, setShowButton] = useState(
+    JSON.parse(localStorage.getItem("short-cut")) || false
+  );
+
   const toggleButtonVisibility = () => {
-    localStorage.setItem("short-cut",!showButton)
-    setShowButton((prev) => !prev); 
+    localStorage.setItem("short-cut", !showButton);
+    setShowButton((prev) => !prev);
   };
 
   const [selectedLang, setSelectedLang] = useState("");
@@ -70,7 +73,10 @@ const Provider = ({ children }) => {
         selectedLang,
         userDetails,
         setUserDetails,
-        toggleButtonVisibility,showButton
+        toggleButtonVisibility,
+        showButton,
+        limit,
+        setLimit,
       }}
     >
       {children}

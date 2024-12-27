@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
+import { Context } from "./../../context/context";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
+  const context = useContext(Context);
+  const limit = context?.limit;
 
   const [data, setData] = useState({
     country: [],
@@ -243,6 +246,10 @@ const Table = (props) => {
       console.log(error);
     }
   };
+  const updateLimit = (e) => {
+    parseInt(e.target.value) !== limit &&
+      context?.setLimit(parseInt(e.target.value));
+  };
 
   return (
     <>
@@ -290,6 +297,62 @@ const Table = (props) => {
                     }}
                   >
                     male
+                  </h2>
+                </article>
+              </div>
+            )}
+
+            {(props.filters?.filters?.maritalStatus ||
+              props.filters?.filters?.maritalStatus === "") && (
+              <div className="select relative">
+                <div onClick={openDiv} className="center gap-10 w-100">
+                  <span className="pointer-none">
+                    {props.filters?.filters?.maritalStatus
+                      ? props.filters?.filters?.maritalStatus
+                      : "all marital"}
+                  </span>
+                  <i className="fa-solid fa-sort-down pointer-none"></i>
+                </div>
+                <article>
+                  <h2
+                    data-name="maritalStatus"
+                    data-data=""
+                    onClick={(e) => {
+                      selectFilters(e);
+                      removeClass(e);
+                    }}
+                  >
+                    all marital
+                  </h2>
+                  <h2
+                    data-name="maritalStatus"
+                    data-data="Married"
+                    onClick={(e) => {
+                      selectFilters(e);
+                      removeClass(e);
+                    }}
+                  >
+                    Married
+                  </h2>
+                  <h2
+                    data-name="maritalStatus"
+                    data-data="Single"
+                    onClick={(e) => {
+                      selectFilters(e);
+                      removeClass(e);
+                    }}
+                  >
+                    Single
+                  </h2>
+                  <h2
+                    data-name="maritalStatus"
+                    data-data="Other"
+                    onClick={(e) => {
+                      selectFilters(e);
+                      removeClass(e);
+                    }}
+                  >
+                    Other
                   </h2>
                 </article>
               </div>
@@ -549,6 +612,18 @@ const Table = (props) => {
         </div>
       )}
 
+      <form className="flex center gap-10 table-search">
+        <input type="text" placeholder="search by name" required />
+        {(props.hasFltr?.fltr || props.hasFltr?.fltr === false) && (
+          <i
+            onClick={(e) => {
+              props.hasFltr?.setFltr(true);
+              e.stopPropagation();
+            }}
+            className="fa-solid fa-sliders filter"
+          ></i>
+        )}
+      </form>
       <div className="table">
         <table className={props.loading || props.data?.data ? "loading" : ""}>
           <thead>
@@ -563,7 +638,13 @@ const Table = (props) => {
                 ></div>
               </th>
               {header}
-              <th></th>
+              <th>
+                <select onChange={updateLimit} value={limit}>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                </select>
+              </th>
             </tr>
           </thead>
           <tbody
@@ -593,7 +674,7 @@ const Table = (props) => {
         </div>
       )}
       <div className="pagination flex">
-        {createPags(10, props.page.dataLength)}
+        {createPags(limit, props.page.dataLength)}
       </div>
     </>
   );
