@@ -170,7 +170,6 @@ const People = () => {
   return (
     <>
       <h1 className="title"> people </h1>
-      
       <Table
         header={header}
         loading={loading}

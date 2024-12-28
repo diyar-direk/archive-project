@@ -614,6 +614,7 @@ const Table = (props) => {
 
       <form className="flex center gap-10 table-search">
         <input type="text" placeholder="search by name" required />
+        <input type="month" />
         {(props.hasFltr?.fltr || props.hasFltr?.fltr === false) && (
           <i
             onClick={(e) => {

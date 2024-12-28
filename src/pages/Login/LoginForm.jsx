@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import ReCAPTCHA from "react-google-recaptcha";
-import "./login.css"
+import "./Login.css";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -10,10 +10,8 @@ const LoginForm = () => {
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const navigate = useNavigate();
 
-
   const correctEmail = "a";
-  const correctPasswordHash = bcrypt.hashSync("a", 10); 
-
+  const correctPasswordHash = bcrypt.hashSync("a", 10);
 
   const handleCaptcha = (value) => {
     if (value) setCaptchaVerified(true);
