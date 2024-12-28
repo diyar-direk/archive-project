@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import bcrypt from "bcryptjs";
 import ReCAPTCHA from "react-google-recaptcha";
-import "./Login.css";
+import "./login.css"
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -10,11 +10,11 @@ const LoginForm = () => {
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const navigate = useNavigate();
 
-  // بيانات المستخدمين للتجربة
-  const correctEmail = "a";
-  const correctPasswordHash = bcrypt.hashSync("a", 10); // كلمة المرور المشفرة
 
-  // التحقق من reCAPTCHA
+  const correctEmail = "a";
+  const correctPasswordHash = bcrypt.hashSync("a", 10); 
+
+
   const handleCaptcha = (value) => {
     if (value) setCaptchaVerified(true);
   };

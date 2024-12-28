@@ -5,6 +5,7 @@ import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form.css";
+import Loading from "../../components/loading/Loading";
 
 const Sources = () => {
   const [data, setData] = useState([]);
@@ -17,6 +18,7 @@ const Sources = () => {
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
 const context = useContext(Context);
   const limit = context?.limit;
   const responseFun = (complete = false) => {
@@ -57,7 +59,7 @@ const context = useContext(Context);
 
   useEffect(() => {
     getData();
-  }, [page]);
+  }, [page , limit]);
 
   const getData = async () => {
     setLoading(true);
@@ -136,7 +138,7 @@ const context = useContext(Context);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setFormLoading(true);
     try {
       const formData = { ...form };
 
@@ -164,6 +166,9 @@ const context = useContext(Context);
       if (error.response?.status === 400) responseFun("reapeted data");
       else responseFun(false);
     }
+    finally {
+      setFormLoading(false);
+    }
   };
 
   return (
@@ -171,6 +176,7 @@ const context = useContext(Context);
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
+           {formLoading && <Loading/>}
       <h1 className="title">Sources</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -189,7 +195,7 @@ const context = useContext(Context);
 
           <label htmlFor="source_credibility">Source Credibility</label>
           <select
-            className="inp center gap-10 w-100 active"
+            className="inp center gap-10 w-100 active form.addresses .select > article"
             id="source_credibility"
             value={form.source_credibility}
             onChange={(e) =>

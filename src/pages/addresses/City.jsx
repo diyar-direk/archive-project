@@ -6,6 +6,7 @@ import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form.css";
 import { Context } from "./../../context/context";
+import Loading from "../../components/loading/Loading";
 const City = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -17,6 +18,7 @@ const City = () => {
   const response = useRef(true);
   const [fltr, setFltr] = useState(false);
   const [error, setError] = useState(false);
+   const [formLoading, setFormLoading] = useState(false);
   const [filters, setFilters] = useState({
     country: "",
     government: "",
@@ -69,7 +71,7 @@ const City = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters.government]);
+  }, [page, filters.government ,limit] );
 
   useEffect(() => {
     axios
@@ -159,6 +161,7 @@ const City = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormLoading(true);
     if (!form.government) {
       setError("Please select a government");
     } else
@@ -192,6 +195,9 @@ const City = () => {
         if (error.status === 400) responseFun("reapeted data");
         else responseFun(false);
       }
+     finally {
+      setFormLoading(false);
+    }
   };
 
   const openDiv = (e) => {
@@ -210,6 +216,7 @@ const City = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
+      {formLoading && <Loading/>}
       <h1 className="title">cities</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
