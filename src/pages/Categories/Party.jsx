@@ -5,6 +5,7 @@ import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form.css";
+import Loading from "../../components/loading/Loading";
 const Party = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -18,7 +19,7 @@ const Party = () => {
   const limit = context?.limit;
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
-
+  const [formLoading, setFormLoading] = useState(false);
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -53,7 +54,7 @@ const Party = () => {
 
   useEffect(() => {
     getData();
-  }, [page]);
+  }, [page , limit]);
 
   const getData = async () => {
     setLoading(true);
@@ -131,7 +132,7 @@ const Party = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setFormLoading(true);
     try {
       const formData = { ...form };
       console.log(formData);
@@ -160,6 +161,9 @@ const Party = () => {
       if (error.status === 400) responseFun("reapeted data");
       else responseFun(false);
     }
+    finally {
+      setFormLoading(false);
+    }
   };
 
   return (
@@ -167,6 +171,7 @@ const Party = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
+           {formLoading && <Loading />}
       <h1 className="title">Party</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">

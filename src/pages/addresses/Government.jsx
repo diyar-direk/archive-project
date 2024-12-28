@@ -5,6 +5,7 @@ import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form.css";
+import Loading from "../../components/loading/Loading";
 const Government = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -16,6 +17,7 @@ const Government = () => {
   const response = useRef(true);
   const [fltr, setFltr] = useState(false);
   const [error, setError] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   const [filters, setFilters] = useState({
     country: "",
   });
@@ -61,7 +63,7 @@ const Government = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters]);
+  }, [page, filters ,limit]);
 
   useEffect(() => {
     axios
@@ -152,6 +154,7 @@ const Government = () => {
   ));
 
   const handleSubmit = async (e) => {
+    setFormLoading(true);
     e.preventDefault();
     if (!form.country) {
       setError("Please select a country");
@@ -182,6 +185,9 @@ const Government = () => {
         if (error.status === 400) responseFun("reapeted data");
         else responseFun(false);
       }
+     finally {
+      setFormLoading(false);
+    }
   };
   const openDiv = (e) => {
     e.stopPropagation();
@@ -199,6 +205,7 @@ const Government = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
+           {formLoading && <Loading />}
       <h1 className="title">Governments</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">

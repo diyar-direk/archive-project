@@ -40,7 +40,7 @@ const People = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters, limit]);
+  }, [page, filters]);
 
   const getData = async () => {
     setLoading(true);
@@ -170,6 +170,7 @@ const People = () => {
   return (
     <>
       <h1 className="title"> people </h1>
+      
       <Table
         header={header}
         loading={loading}

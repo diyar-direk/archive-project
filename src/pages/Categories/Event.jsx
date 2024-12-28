@@ -5,6 +5,7 @@ import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form.css";
+import Loading from "../../components/loading/Loading";
 const Event = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -18,7 +19,7 @@ const Event = () => {
   const limit = context?.limit;
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
-
+  const [formLoading, setFormLoading] = useState(false);
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -53,7 +54,7 @@ const Event = () => {
 
   useEffect(() => {
     getData();
-  }, [page]);
+  }, [page ,limit]);
 
   const getData = async () => {
     setLoading(true);
@@ -130,7 +131,7 @@ const Event = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setFormLoading(true);
     try {
       const formData = { ...form };
 
@@ -158,6 +159,9 @@ const Event = () => {
       if (error.status === 400) responseFun("reapeted data");
       else responseFun(false);
     }
+  finally {
+    setFormLoading(false);
+  }
   };
 
   return (
@@ -165,6 +169,7 @@ const Event = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
+           {formLoading && <Loading />}
       <h1 className="title">Events</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
