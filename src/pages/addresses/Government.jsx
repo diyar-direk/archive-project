@@ -23,7 +23,10 @@ const Government = () => {
   });
   const context = useContext(Context);
   const limit = context?.limit;
-
+  const [inputsFltr, setInputsFltr] = useState({
+    search: "",
+    date: "",
+  });
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
   const [country, setCountries] = useState({ data: [], searchData: [] });
@@ -63,7 +66,7 @@ const Government = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters ,limit]);
+  }, [page, filters ,limit ,inputsFltr.date]);
 
   useEffect(() => {
     axios
@@ -80,6 +83,7 @@ const Government = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
     const keys = Object.keys(filters);
     keys.forEach(
       (key) => filters[key] && (url += `&${key}=${filters[key]._id}`)
@@ -287,7 +291,7 @@ const Government = () => {
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Governments", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
-            filters={{ filters, setFilters }}
+            filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
           />
         </div>
       </div>

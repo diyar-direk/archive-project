@@ -320,6 +320,7 @@ form.addresses .inp {
   border-radius: 4px;
   caret-color: var(--main-color);
   color: var(--font-color);
+  outline: none;
 }
 form.addresses .select .inp {
   cursor: pointer;
