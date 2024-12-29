@@ -8,6 +8,7 @@ import "../../components/form.css";
 import Loading from "../../components/loading/Loading";
 
 const Sources = () => {
+
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -20,6 +21,10 @@ const Sources = () => {
   const ref = useRef(null);
   const [formLoading, setFormLoading] = useState(false);
 const context = useContext(Context);
+const [inputsFltr, setInputsFltr] = useState({
+  search: "",
+  date: "",
+});
   const limit = context?.limit;
   const responseFun = (complete = false) => {
     complete === true
@@ -59,7 +64,7 @@ const context = useContext(Context);
 
   useEffect(() => {
     getData();
-  }, [page , limit]);
+  }, [page , limit ,inputsFltr.date] );
 
   const getData = async () => {
     setLoading(true);
@@ -67,6 +72,7 @@ const context = useContext(Context);
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Sources?active=true&limit=${limit}&page=${page}`;
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
 
     try {
       const data = await axios.get(url);
@@ -176,7 +182,7 @@ const context = useContext(Context);
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-           {formLoading && <Loading/>}
+      {formLoading && <Loading/>}
       <h1 className="title">Sources</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -195,7 +201,7 @@ const context = useContext(Context);
 
           <label htmlFor="source_credibility">Source Credibility</label>
           <select
-            className="inp center gap-10 w-100 active form.addresses .select > article"
+            className="inp center gap-10 w-100"
             id="source_credibility"
             value={form.source_credibility}
             onChange={(e) =>
@@ -230,6 +236,7 @@ const context = useContext(Context);
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Sources", getData }}
+            filters={{ inputsFltr, setInputsFltr }}
           />
         </div>
       </div>

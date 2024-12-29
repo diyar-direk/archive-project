@@ -45,7 +45,7 @@ const People = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters, inputsFltr.date]);
+  }, [page, filters, inputsFltr.date ,limit]);
 
   const getData = async () => {
     setLoading(true);

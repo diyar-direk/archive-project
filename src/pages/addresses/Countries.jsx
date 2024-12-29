@@ -20,6 +20,10 @@ const Countries = () => {
   const [formLoading, setFormLoading] = useState(false);
   const context = useContext(Context);
   const limit = context?.limit;
+  const [inputsFltr, setInputsFltr] = useState({
+    search: "",
+    date: "",
+  });
 
   const responseFun = (complete = false) => {
     complete === true
@@ -51,7 +55,7 @@ const Countries = () => {
 
   useEffect(() => {
     getData();
-  }, [page]);
+  }, [page ,limit, inputsFltr.date]);
 
   const getData = async () => {
     setLoading(true);
@@ -59,6 +63,7 @@ const Countries = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Countries?active=true&limit=${limit}&page=${page}`;
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
     try {
       const data = await axios.get(url);
 
@@ -202,6 +207,7 @@ const Countries = () => {
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Countries", getData }}
+            filters={{  inputsFltr, setInputsFltr }}
           />
         </div>
       </div>
