@@ -19,6 +19,10 @@ const City = () => {
   const [fltr, setFltr] = useState(false);
   const [error, setError] = useState(false);
    const [formLoading, setFormLoading] = useState(false);
+   const [inputsFltr, setInputsFltr] = useState({
+    search: "",
+    date: "",
+  });
   const [filters, setFilters] = useState({
     country: "",
     government: "",
@@ -71,7 +75,7 @@ const City = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters.government ,limit] );
+  }, [page, filters.government ,limit ,inputsFltr.date] );
 
   useEffect(() => {
     axios
@@ -89,6 +93,7 @@ const City = () => {
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Cities?active=true&limit=${limit}&page=${page}`;
     filters.government && (url += `&government=${filters.government._id}`);
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
 
     try {
       const data = await axios.get(url);
@@ -301,7 +306,7 @@ const City = () => {
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "cities", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
-            filters={{ filters, setFilters }}
+            filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
           />
         </div>
       </div>

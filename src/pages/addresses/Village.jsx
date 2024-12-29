@@ -25,7 +25,10 @@ const Village = () => {
   });
   const context = useContext(Context);
   const limit = context?.limit;
-
+  const [inputsFltr, setInputsFltr] = useState({
+    search: "",
+    date: "",
+  });
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
   const [fltrSelect, setFltrSelect] = useState({ data: [], searchData: [] });
@@ -65,7 +68,7 @@ const Village = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters.city ,limit]);
+  }, [page, filters.city ,limit ,inputsFltr.date]);
 
   useEffect(() => {
     axios
@@ -82,6 +85,7 @@ const Village = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Villages?active=true&limit=${limit}&page=${page}`;
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
     filters.city && (url += `&city=${filters.city._id}`);
 
     try {
@@ -291,7 +295,7 @@ const Village = () => {
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Villages", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
-            filters={{ filters, setFilters }}
+            filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
           />
         </div>
       </div>

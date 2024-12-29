@@ -17,6 +17,10 @@ const Event = () => {
   const response = useRef(true);
   const context = useContext(Context);
   const limit = context?.limit;
+  const [inputsFltr, setInputsFltr] = useState({
+    search: "",
+    date: "",
+  });
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
   const [formLoading, setFormLoading] = useState(false);
@@ -54,7 +58,7 @@ const Event = () => {
 
   useEffect(() => {
     getData();
-  }, [page ,limit]);
+  }, [page ,limit ,inputsFltr.date]);
 
   const getData = async () => {
     setLoading(true);
@@ -62,6 +66,7 @@ const Event = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Events?active=true&limit=${limit}&page=${page}`;
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
 
     try {
       const data = await axios.get(url);
@@ -209,6 +214,7 @@ const Event = () => {
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Events", getData }}
+            filters={{  inputsFltr, setInputsFltr }}
           />
         </div>
       </div>
