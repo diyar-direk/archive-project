@@ -23,6 +23,10 @@ const People = () => {
     villag: "",
     maritalStatus: "",
   });
+  const [inputsFltr, setInputsFltr] = useState({
+    search: "",
+    date: "",
+  });
 
   const header = [
     "",
@@ -36,17 +40,18 @@ const People = () => {
     "government",
     "phone",
     "email",
+    "create at",
   ];
 
   useEffect(() => {
     getData();
-  }, [page, filters]);
+  }, [page, filters, inputsFltr.date]);
 
   const getData = async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);
-
+    //gt gte lt lte
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
@@ -57,6 +62,7 @@ const People = () => {
           filters[key]._id ? filters[key]._id : filters[key]
         }`)
     );
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
 
     try {
       const data = await axios.get(url);
@@ -139,6 +145,7 @@ const People = () => {
         <td> {e.governmentId.name} </td>
         <td> {e.phone} </td>
         <td> {e.email} </td>
+        <td> {date(e.createdAt)} </td>
         <td>
           <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>
           <div className="options has-visit">
@@ -177,7 +184,7 @@ const People = () => {
         data={{ data: tableData, allData: allPeople.current }}
         items={{ slectedItems: slectedItems, setSelectedItems }}
         hasFltr={{ fltr: fltr, setFltr }}
-        filters={{ filters, setFilters }}
+        filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
         overlay={{ overlay: overlay, setOverlay }}
         delete={{ getData, url: "people" }}
       />

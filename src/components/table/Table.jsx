@@ -613,8 +613,27 @@ const Table = (props) => {
       )}
 
       <form className="flex center gap-10 table-search">
-        <input type="text" placeholder="search by name" required />
-        <input type="month" />
+        <input
+          type="text"
+          placeholder="search by name"
+          value={props.filters.inputsFltr.search}
+          onInput={(e) =>
+            props.filters.setInputsFltr({
+              ...props.filters.inputsFltr,
+              search: e.target.value,
+            })
+          }
+        />
+        <input
+          type="month"
+          value={props.filters.inputsFltr.date}
+          onInput={(e) =>
+            props.filters.setInputsFltr({
+              ...props.filters.inputsFltr,
+              date: e.target.value,
+            })
+          }
+        />
         {(props.hasFltr?.fltr || props.hasFltr?.fltr === false) && (
           <i
             onClick={(e) => {
