@@ -21,14 +21,19 @@
   font-size: 17px;
   cursor: pointer;
 }
-
-.overlay .filters {
+.overlay > .table-fltr {
   width: 70%;
-  border-radius: 4px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+.overlay .filters {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
-  min-height: 200px;
   align-items: flex-start;
 }
 .overlay .filters .select div {
@@ -46,6 +51,7 @@
   max-height: 200px;
   overflow: auto;
 }
+
 .overlay .filters .select article {
   background: var(--section-color);
   max-height: 0px;
@@ -72,6 +78,16 @@
 }
 .overlay .filters .select article h2:hover {
   background-color: var(--body-color);
+}
+.overlay div.filters-setting > span {
+  font-size: 18px;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: var(--font-color);
+  cursor: pointer;
+}
+.overlay div.filters-setting > span:last-of-type {
+  opacity: 0.8;
 }
 
 input.fltr-search {
