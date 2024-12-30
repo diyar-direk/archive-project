@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./navbar.css";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Context } from "../../context/context";
 
 const Navbar = () => {
@@ -22,6 +22,14 @@ const Navbar = () => {
     }
     const shortCut = document.querySelector(".short-cut i.plus");
     shortCut && shortCut.classList.remove("active");
+    if (window.innerWidth <= 500) {
+      const nav = document.querySelector("nav");
+      if (!nav.classList.contains("closed")) {
+        nav && nav.classList.add("closed");
+        localStorage.setItem("isClosed", true);
+        context?.setIsClosed(true);
+      }
+    }
   });
 
   const modeFun = () => {
@@ -145,7 +153,13 @@ const Navbar = () => {
             <i className="fa-solid fa-box-archive"></i>
             <h1>archive</h1>
           </Link>
-          <i onClick={closeAside} className="fa-solid fa-bars-staggered"></i>
+          <i
+            onClick={(e) => {
+              e.stopPropagation();
+              closeAside();
+            }}
+            className="fa-solid fa-bars-staggered"
+          ></i>
         </article>
 
         <div className="flex-direction flex between gap-20">

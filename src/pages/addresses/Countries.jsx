@@ -54,8 +54,8 @@ const Countries = () => {
   }, [update]);
 
   useEffect(() => {
-    getData();
-  }, [page ,limit, inputsFltr.date]);
+    if (!inputsFltr.search) getData();
+  }, [page, inputsFltr, limit]);
 
   const getData = async () => {
     setLoading(true);
@@ -68,6 +68,34 @@ const Countries = () => {
       const data = await axios.get(url);
 
       dataLength.current = data.data.numberOfActiveCountries;
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!inputsFltr.search) return;
+    const timeOut = setTimeout(() => getSearchData(), 500);
+    return () => clearTimeout(timeOut);
+  }, [page, inputsFltr, limit]);
+
+  const getSearchData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/Countries/search?active=true&limit=${limit}&page=${page}`;
+
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    try {
+      const data = await axios.post(url, {
+        search: inputsFltr.search,
+      });
+      dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
     } catch (error) {
@@ -207,7 +235,7 @@ const Countries = () => {
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Countries", getData }}
-            filters={{  inputsFltr, setInputsFltr }}
+            filters={{ inputsFltr, setInputsFltr }}
           />
         </div>
       </div>

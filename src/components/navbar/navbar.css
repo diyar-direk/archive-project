@@ -139,7 +139,8 @@ aside {
 body.arabic aside {
   right: 0;
 }
-aside.closed {
+aside.closed,
+aside.closed > div {
   width: 80px;
   overflow: visible;
 }
@@ -177,10 +178,11 @@ aside > div {
   height: calc(100% - 75px);
   padding: 20px 15px;
   align-items: flex-start !important;
-}
-aside > div {
+  width: 290px;
+  position: fixed;
   align-items: center !important;
   background: var(--aside-color);
+  height: calc(100svh - 75px);
 }
 
 aside > div > div {
@@ -334,6 +336,7 @@ aside.closed .log-out span {
 
 div.open-aside {
   position: fixed;
+  z-index: 1;
   top: 50%;
   width: 40px;
   height: 40px;
@@ -408,7 +411,6 @@ div.short-cut div.short-links {
   pointer-events: none;
   width: 50px;
   border-radius: 10px 10px 0px 0px;
-
 }
 div.short-cut i.active + div.short-links {
   top: -150px;
@@ -432,14 +434,13 @@ div.short-cut div.short-links a:hover {
   transform: scale(1.1);
 }
 
-.log-show{
- 
+.log-show {
   display: flex; /* أو display: grid */
   gap: 20px; /* مسافة بين العناصر */
-
 }
 @media (max-width: 1000px) {
-  aside {
+  aside,
+  aside > div {
     width: 240px;
   }
   div.open-aside {
@@ -457,6 +458,9 @@ div.short-cut div.short-links a:hover {
   aside > article,
   nav {
     height: 60px;
+  }
+  aside > div {
+    height: calc(100svh - 60px);
   }
   nav {
     width: calc(100% - 240px);
@@ -518,7 +522,8 @@ div.short-cut div.short-links a:hover {
   .log-out.aside {
     font-size: 15px;
   }
-  aside.closed {
+  aside.closed,
+  aside.closed > div {
     width: 65px;
   }
   nav.closed {
@@ -536,6 +541,22 @@ div.short-cut div.short-links a:hover {
   }
   body.arabic nav .setting .lang + div.languages {
     right: -100%;
+  }
+  div.short-cut {
+    right: 40px;
+    bottom: 40px;
+  }
+  div.short-cut i.plus {
+    width: 45px;
+    height: 45px;
+  }
+  div.short-cut div.short-links {
+    width: 45px;
+  }
+  div.open-aside {
+    width: 35px;
+    font-size: 11px;
+    height: 35px;
   }
 }
 @media (max-width: 800px) {
@@ -563,7 +584,8 @@ div.short-cut div.short-links a:hover {
     font-size: 13px;
   }
 
-  aside {
+  aside,
+  aside > div {
     width: 210px;
   }
   div.open-aside {
@@ -587,6 +609,9 @@ div.short-cut div.short-links a:hover {
   aside > article,
   nav {
     height: 55px;
+  }
+  aside > div {
+    height: calc(100svh - 55px);
   }
   aside > div > div > .links > .center,
   aside > div > div > a {
@@ -613,9 +638,15 @@ div.short-cut div.short-links a:hover {
   aside > div > div > .links > .center i {
     font-size: 9px;
   }
+  div.open-aside {
+    width: 30px;
+    font-size: 10px;
+    height: 30px;
+  }
 }
 @media (max-width: 600px) {
-  aside {
+  aside,
+  aside > div {
     width: 180px;
   }
   div.open-aside {
@@ -663,7 +694,8 @@ div.short-cut div.short-links a:hover {
   aside > div > div > .links > article a {
     font-size: 13px;
   }
-  aside.closed {
+  aside.closed,
+  aside.closed > div {
     width: 55px;
   }
   nav.closed {
@@ -700,10 +732,41 @@ div.short-cut div.short-links a:hover {
     width: 70px;
     bottom: -100px;
   }
+  div.short-cut {
+    right: 30px;
+  }
+  div.short-cut i.plus {
+    width: 40px;
+    height: 40px;
+  }
+  div.short-cut div.short-links {
+    width: 40px;
+    gap: 5px;
+  }
+  div.short-cut div.short-links a {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  div.short-cut i.active + div.short-links {
+    top: -130px;
+  }
 }
 @media (max-width: 500px) {
+  div.open-aside {
+    display: none;
+  }
   aside {
-    width: 100%;
+    width: 55px;
+  }
+  aside > article a {
+    display: none !important;
+  }
+  aside > article {
+    justify-content: center !important;
+  }
+  aside > div {
+    width: 70%;
   }
   nav {
     width: calc(100% - 55px);

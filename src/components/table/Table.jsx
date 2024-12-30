@@ -222,8 +222,10 @@ const Table = (props) => {
             props.page.page !== 1
           ) {
             props.page.setPage(1);
-          } else props.delete.getData();
-          props.items.setSelectedItems([]);
+          } else
+            props.filters.inputsFltr.search
+              ? props.delete.getSearchData()
+              : props.delete.getData();
         }
       } else {
         const data = await axios.patch(
@@ -237,9 +239,10 @@ const Table = (props) => {
             props.page.page !== 1
           ) {
             props.page.setPage(1);
-          } else props.delete.getData();
-
-          props.items.setSelectedItems([]);
+          } else
+            props.filters.inputsFltr.search
+              ? props.delete.getSearchData()
+              : props.delete.getData();
         }
       }
     } catch (error) {

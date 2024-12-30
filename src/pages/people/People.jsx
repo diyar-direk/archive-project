@@ -44,14 +44,14 @@ const People = () => {
   ];
 
   useEffect(() => {
-    getData();
-  }, [page, filters, inputsFltr.date ,limit]);
+    if (!inputsFltr.search) getData();
+  }, [page, filters, inputsFltr, limit]);
 
   const getData = async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);
-    //gt gte lt lte
+
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
@@ -70,6 +70,41 @@ const People = () => {
 
       allPeople.current = data.data.people.map((e) => e._id);
       setData(data.data.people);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!inputsFltr.search) return;
+    const timeOut = setTimeout(() => getSearchData(), 500);
+    return () => clearTimeout(timeOut);
+  }, [page, filters, inputsFltr, limit]);
+
+  const getSearchData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/people/search?active=true&limit=${limit}&page=${page}`;
+    const keys = Object.keys(filters);
+    keys.forEach(
+      (key) =>
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    try {
+      const data = await axios.post(url, {
+        search: inputsFltr.search,
+      });
+      dataLength.current = data.data.numberOfActiveResults;
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -186,7 +221,7 @@ const People = () => {
         hasFltr={{ fltr: fltr, setFltr }}
         filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
         overlay={{ overlay: overlay, setOverlay }}
-        delete={{ getData, url: "people" }}
+        delete={{ getData, url: "people", getSearchData }}
       />
     </>
   );
