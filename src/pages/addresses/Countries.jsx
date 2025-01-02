@@ -57,6 +57,9 @@ const Countries = () => {
     if (!inputsFltr.search) getData();
   }, [page, inputsFltr, limit]);
 
+
+  
+
   const getData = async () => {
     setLoading(true);
     setData([]);
