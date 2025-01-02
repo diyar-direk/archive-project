@@ -47,8 +47,9 @@ const AddPerson = () => {
     addressDetails: "",
     email: "",
     phone: "",
+    sectionId: "",
     //categories data
-    sources: [],
+    sources: "",
     events: [],
     parties: [],
   });
@@ -64,6 +65,7 @@ const AddPerson = () => {
       sources: [],
       events: [],
       parties: [],
+      sections: [],
     },
     searchData: {
       country: [],
@@ -75,6 +77,7 @@ const AddPerson = () => {
       sources: [],
       events: [],
       parties: [],
+      sections: [],
     },
   });
 
@@ -124,6 +127,22 @@ const AddPerson = () => {
             searchData: {
               ...dataObj.searchData,
               events: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    promises.push(
+      axios
+        .get(`${baseURL}/Sections?active=true`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, sections: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              sections: res.data.data,
             },
           };
         })
@@ -411,6 +430,8 @@ const AddPerson = () => {
     else if (!form.countryId) setError("please select country");
     else if (!form.governmentId) setError("please select government");
     else if (!form.cityId) setError("please select city");
+    else if (!form.sectionId) setError("please select section");
+    else if (!form.sources) setError("please select source");
     else {
       setLoading(true);
       const keys = Object.keys(form);
@@ -456,8 +477,9 @@ const AddPerson = () => {
             addressDetails: "",
             email: "",
             phone: "",
+            sectionId: "",
             //categories data
-            sources: [],
+            sources: "",
             events: [],
             parties: [],
           });
@@ -501,6 +523,7 @@ const AddPerson = () => {
             )}
           </label>
         </div>
+
         <div className="form">
           <h1>personal information</h1>
           <div className="flex wrap">
@@ -982,12 +1005,53 @@ const AddPerson = () => {
           <h1>more informations</h1>
           <div className="flex wrap">
             <div className="flex flex-direction">
+              <label>section</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  {form.sectionId ? form.sectionId.name : "select section"}
+                </div>
+                <article>
+                  <input
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder={`${searchPlaceholder} section`}
+                    onInput={(inp) => {
+                      const filteredCountries =
+                        allDataSelect.data.sections.filter((e) =>
+                          e.source_name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                      setAllDataSelect({
+                        ...allDataSelect,
+                        searchData: {
+                          ...allDataSelect.searchData,
+                          sections: filteredCountries,
+                        },
+                      });
+                    }}
+                    type="text"
+                  />
+                  {allDataSelect.searchData.sections.map((itm, i) => (
+                    <h2
+                      key={i}
+                      id="sectionId"
+                      onClick={(e) => handleFormSelect(e, itm)}
+                    >
+                      {itm.name}
+                    </h2>
+                  ))}
+                  {allDataSelect.searchData.sections.length <= 0 && (
+                    <p>no data</p>
+                  )}
+                </article>
+              </div>
+            </div>
+
+            <div className="flex flex-direction">
               <label>sources</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.sources.length > 0
-                    ? nextJoin(form.sources, "source_name")
-                    : "select sources"}
+                  {form.sources ? form.sources.source_name : "select sources"}
                 </div>
                 <article>
                   <input
@@ -1014,7 +1078,7 @@ const AddPerson = () => {
                     <h2
                       key={i}
                       id="sources"
-                      onClick={(e) => selectCategories(e, itm)}
+                      onClick={(e) => handleFormSelect(e, itm)}
                     >
                       {itm.source_name}
                     </h2>
@@ -1024,18 +1088,13 @@ const AddPerson = () => {
                   )}
                 </article>
               </div>
-              <div className="flex selceted-itms">
-                {form.sources.map((span) => (
-                  <span
-                    onClick={(e) => removeSelectCategories(e, span)}
-                    id="sources"
-                    key={span._id}
-                  >
-                    {span.source_name}
-                  </span>
-                ))}
-              </div>
             </div>
+          </div>
+        </div>
+
+        <div className="form">
+          <h1>more informations</h1>
+          <div className="flex wrap">
             <div className="flex flex-direction">
               <label>events</label>
               <div className="selecte relative">

@@ -4,9 +4,9 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
-import "../../components/form.css";
 import Loading from "../../components/loading/Loading";
-const Government = () => {
+
+const Sections = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -15,18 +15,18 @@ const Government = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
-  const [error, setError] = useState(false);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+  const ref = useRef(null);
   const [formLoading, setFormLoading] = useState(false);
-  const [filters, setFilters] = useState({
-    country: "",
-    date: { from: "", to: "" },
-  });
   const context = useContext(Context);
   const limit = context?.limit;
   const [search, setSearch] = useState("");
-  const [responseOverlay, setResponseOverlay] = useState(false);
-  const ref = useRef(null);
-  const [country, setCountries] = useState({ data: [], searchData: [] });
+  const [filters, setFilters] = useState({
+    date: {
+      from: "",
+      to: "",
+    },
+  });
 
   const responseFun = (complete = false) => {
     complete === true
@@ -42,61 +42,67 @@ const Government = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-  window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .select .inp.active");
-    div && div.classList.remove("active");
-  });
 
-  const header = ["name", "country", "creat at"];
-  const [form, setForm] = useState({ name: "", country: "" });
+  const header = ["name", "creat at"];
+  const [name, setName] = useState("");
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     if (update) {
       ref.current.focus();
-      setForm(update);
+      setName(update.name);
     } else {
-      setForm({ name: "", country: "" });
+      setName("");
     }
-    error && setError(false);
   }, [update]);
 
   useEffect(() => {
-    getData();
-  }, [page, filters, limit, search]);
-
-  useEffect(() => {
-    axios
-      .get(`${baseURL}/Countries?active=true`)
-      .then((res) => {
-        setCountries({ data: res.data.data, searchData: res.data.data });
-      })
-      .catch((err) => console.log(err));
-  }, []);
+    if (!search) getData();
+  }, [page, search, limit, filters]);
 
   const getData = async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
+    let url = `${baseURL}/Sections?active=true&limit=${limit}&page=${page}`;
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+    try {
+      const data = await axios.get(url);
+      dataLength.current = data.data.numberOfActiveSections;
+
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!search) return;
+    const timeOut = setTimeout(() => getSearchData(), 500);
+    return () => clearTimeout(timeOut);
+  }, [page, search, limit, filters]);
+
+  const getSearchData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/Sections/search?active=true&limit=${limit}&page=${page}`;
     filters.date.from &&
       filters.date.to &&
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
-
-      dataLength.current = data.data.numberOfActiveGovernments;
+      const data = await axios.post(url, {
+        search: search,
+      });
+      dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
     } catch (error) {
@@ -124,7 +130,7 @@ const Government = () => {
     }
   };
 
-  const tableData = data?.map((e) => (
+  const countryData = data?.map((e) => (
     <tr key={e._id}>
       <td>
         <div
@@ -136,7 +142,6 @@ const Government = () => {
         ></div>
       </td>
       <td>{e.name}</td>
-      <td>{e.country?.name}</td>
       <td>{date(e.createdAt)}</td>
       <td>
         <div className="center gap-10 actions">
@@ -162,114 +167,58 @@ const Government = () => {
   ));
 
   const handleSubmit = async (e) => {
-    setFormLoading(true);
     e.preventDefault();
-    if (!form.country) {
-      setError("Please select a country");
-    } else
-      try {
-        const formData = { ...form, country: form.country._id };
-        if (update) {
-          const data = await axios.patch(
-            `${baseURL}/Governments/${update._id}`,
-            formData
-          );
+    setFormLoading(true);
+    try {
+      if (update) {
+        const data = await axios.patch(`${baseURL}/Sections/${update._id}`, {
+          name,
+        });
 
-          if (data.status === 200) {
-            responseFun(true);
-          }
-          setUpdate(false);
-        } else {
-          const data = await axios.post(`${baseURL}/Governments`, formData);
-          if (data.status === 201) {
-            responseFun(true);
-          }
+        if (data.status === 200) {
+          responseFun(true);
         }
-
-        setForm({ name: "", country: "" });
-        getData();
-      } catch (error) {
-        console.log(error);
-        if (error.status === 400) responseFun("reapeted data");
-        else responseFun(false);
-      } finally {
-        setFormLoading(false);
+        setUpdate(false);
+      } else {
+        const data = await axios.post(`${baseURL}/Sections`, { name: name });
+        if (data.status === 201) {
+          responseFun(true);
+        }
       }
-  };
-  const openDiv = (e) => {
-    e.stopPropagation();
-    const allDivs = document.querySelectorAll(
-      ".overlay .filters .select div.active"
-    );
-    allDivs.forEach(
-      (ele) => ele !== e.target && ele.classList.remove("active")
-    );
-    e.target.classList.toggle("active");
+
+      setName("");
+      getData();
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) responseFun("reapeted data");
+      else responseFun(false);
+    } finally {
+      setFormLoading(false);
+    }
   };
 
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={`section`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Governments</h1>
+
+      <h1 className="title">Sections</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
-          <h1>{update ? "update this country" : "add new government"}</h1>
-          <label htmlFor="name">government name</label>
+          <h1>{update ? "update this section" : "add new section"}</h1>
+          <label htmlFor="name">section name</label>
           <input
             ref={ref}
             className="inp"
             required
-            placeholder="please write a government name"
-            value={form.name}
+            placeholder="please write a section name"
+            value={name}
             type="text"
-            onInput={(e) => setForm({ ...form, name: e.target.value })}
+            onInput={(e) => setName(e.target.value)}
             id="name"
           />
-          <label> country</label>
-
-          <div className="select relative">
-            <div onClick={openDiv} className="inp center gap-10 w-100">
-              <span className="pointer-none">
-                {form.country ? form.country.name : "select country"}
-              </span>
-              <i className="fa-solid fa-sort-down pointer-none"></i>
-            </div>
-            <article>
-              <input
-                onClick={(e) => e.stopPropagation()}
-                type="text"
-                className="fltr-search"
-                placeholder="search for country ..."
-                onInput={(inp) => {
-                  const filteredCountries = country.data.filter((e) =>
-                    e.name
-                      .toLowerCase()
-                      .includes(inp.target.value.toLowerCase())
-                  );
-
-                  setCountries({ ...country, searchData: filteredCountries });
-                }}
-              />
-
-              {country.searchData.map((itm, i) => (
-                <h2
-                  key={i}
-                  onClick={() => {
-                    setForm({ ...form, country: itm });
-                    error && setError(false);
-                  }}
-                >
-                  {itm.name}
-                </h2>
-              ))}
-
-              {country.searchData.length <= 0 && <p>no data</p>}
-            </article>
-          </div>
-          {error && <p className="error"> {error} </p>}
           <div className="flex wrap gap-10">
             <button className={`${update ? "save" : ""} btn flex-1`}>
               {update ? "save" : "add"}
@@ -289,11 +238,11 @@ const Government = () => {
             header={header}
             loading={loading}
             page={{ page: page, setPage, dataLength: dataLength.current }}
-            data={{ data: tableData, allData: allPeople.current }}
+            data={{ data: countryData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Governments", getData }}
-            filters={{ filters, setFilters, search, setSearch }}
+            delete={{ url: "Sections", getData }}
+            filters={{ search, setSearch, filters, setFilters }}
           />
         </div>
       </div>
@@ -301,4 +250,4 @@ const Government = () => {
   );
 };
 
-export default Government;
+export default Sections;

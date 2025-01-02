@@ -13,6 +13,7 @@ import Sources from "./pages/Categories/Sources";
 import Event from "./pages/Categories/Event";
 import Party from "./pages/Categories/Party";
 import LoginForm from "./pages/Login/LoginForm";
+import Sections from "./pages/Categories/Sections";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
           <Route path="countries" element={<Countries />} />
+          <Route path="sections" element={<Sections />} />
           <Route path="governments" element={<Government />} />
           <Route path="cities" element={<City />} />
           <Route path="villages" element={<Village />} />
