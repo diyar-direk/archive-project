@@ -8,7 +8,6 @@ const People = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
-  const [fltr, setFltr] = useState(false);
   const allPeople = useRef([]);
   const [slectedItems, setSelectedItems] = useState([]);
   const [overlay, setOverlay] = useState(false);
@@ -22,11 +21,12 @@ const People = () => {
     city: "",
     villag: "",
     maritalStatus: "",
+    date: {
+      from: "",
+      to: "",
+    },
   });
-  const [inputsFltr, setInputsFltr] = useState({
-    search: "",
-    date: "",
-  });
+  const [search, setSearch] = useState("");
 
   const header = [
     "",
@@ -44,8 +44,8 @@ const People = () => {
   ];
 
   useEffect(() => {
-    if (!inputsFltr.search) getData();
-  }, [page, filters, inputsFltr, limit]);
+    if (!search) getData();
+  }, [page, filters, search, limit]);
 
   const getData = async () => {
     setLoading(true);
@@ -57,12 +57,15 @@ const People = () => {
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
+        key !== "date" &&
         filters[key] &&
         (url += `&${filters[key]._id ? key + "Id" : key}=${
           filters[key]._id ? filters[key]._id : filters[key]
         }`)
     );
-    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
       const data = await axios.get(url);
@@ -78,10 +81,10 @@ const People = () => {
   };
 
   useEffect(() => {
-    if (!inputsFltr.search) return;
+    if (!search) return;
     const timeOut = setTimeout(() => getSearchData(), 500);
     return () => clearTimeout(timeOut);
-  }, [page, filters, inputsFltr, limit]);
+  }, [page, filters, search, limit]);
 
   const getSearchData = async () => {
     setLoading(true);
@@ -92,15 +95,18 @@ const People = () => {
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
+        key !== "date" &&
         filters[key] &&
         (url += `&${filters[key]._id ? key + "Id" : key}=${
           filters[key]._id ? filters[key]._id : filters[key]
         }`)
     );
-    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
     try {
       const data = await axios.post(url, {
-        search: inputsFltr.search,
+        search: search,
       });
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
@@ -218,8 +224,7 @@ const People = () => {
         page={{ page: page, setPage, dataLength: dataLength.current }}
         data={{ data: tableData, allData: allPeople.current }}
         items={{ slectedItems: slectedItems, setSelectedItems }}
-        hasFltr={{ fltr: fltr, setFltr }}
-        filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
+        filters={{ filters, setFilters, search, setSearch }}
         overlay={{ overlay: overlay, setOverlay }}
         delete={{ getData, url: "people", getSearchData }}
       />

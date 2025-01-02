@@ -20,9 +20,12 @@ const Countries = () => {
   const [formLoading, setFormLoading] = useState(false);
   const context = useContext(Context);
   const limit = context?.limit;
-  const [inputsFltr, setInputsFltr] = useState({
-    search: "",
-    date: "",
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({
+    date: {
+      from: "",
+      to: "",
+    },
   });
 
   const responseFun = (complete = false) => {
@@ -54,11 +57,8 @@ const Countries = () => {
   }, [update]);
 
   useEffect(() => {
-    if (!inputsFltr.search) getData();
-  }, [page, inputsFltr, limit]);
-
-
-  
+    if (!search) getData();
+  }, [page, search, limit, filters]);
 
   const getData = async () => {
     setLoading(true);
@@ -66,10 +66,11 @@ const Countries = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Countries?active=true&limit=${limit}&page=${page}`;
-    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
     try {
       const data = await axios.get(url);
-
       dataLength.current = data.data.numberOfActiveCountries;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -81,10 +82,10 @@ const Countries = () => {
   };
 
   useEffect(() => {
-    if (!inputsFltr.search) return;
+    if (!search) return;
     const timeOut = setTimeout(() => getSearchData(), 500);
     return () => clearTimeout(timeOut);
-  }, [page, inputsFltr, limit]);
+  }, [page, search, limit, filters]);
 
   const getSearchData = async () => {
     setLoading(true);
@@ -92,11 +93,13 @@ const Countries = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Countries/search?active=true&limit=${limit}&page=${page}`;
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
-    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
     try {
       const data = await axios.post(url, {
-        search: inputsFltr.search,
+        search: search,
       });
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
@@ -238,7 +241,7 @@ const Countries = () => {
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Countries", getData }}
-            filters={{ inputsFltr, setInputsFltr }}
+            filters={{ search, setSearch, filters, setFilters }}
           />
         </div>
       </div>

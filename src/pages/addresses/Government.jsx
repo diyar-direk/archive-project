@@ -20,13 +20,11 @@ const Government = () => {
   const [formLoading, setFormLoading] = useState(false);
   const [filters, setFilters] = useState({
     country: "",
+    date: { from: "", to: "" },
   });
   const context = useContext(Context);
   const limit = context?.limit;
-  const [inputsFltr, setInputsFltr] = useState({
-    search: "",
-    date: "",
-  });
+  const [search, setSearch] = useState("");
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
   const [country, setCountries] = useState({ data: [], searchData: [] });
@@ -66,7 +64,7 @@ const Government = () => {
 
   useEffect(() => {
     getData();
-  }, [page, filters ,limit ,inputsFltr.date]);
+  }, [page, filters, limit, search]);
 
   useEffect(() => {
     axios
@@ -83,11 +81,18 @@ const Government = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
-    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
     const keys = Object.keys(filters);
     keys.forEach(
-      (key) => filters[key] && (url += `&${key}=${filters[key]._id}`)
+      (key) =>
+        key !== "date" &&
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
     );
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
       const data = await axios.get(url);
@@ -188,10 +193,9 @@ const Government = () => {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");
         else responseFun(false);
+      } finally {
+        setFormLoading(false);
       }
-     finally {
-      setFormLoading(false);
-    }
   };
   const openDiv = (e) => {
     e.stopPropagation();
@@ -209,7 +213,7 @@ const Government = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-           {formLoading && <Loading />}
+      {formLoading && <Loading />}
       <h1 className="title">Governments</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -291,7 +295,7 @@ const Government = () => {
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Governments", getData }}
             hasFltr={{ fltr: fltr, setFltr }}
-            filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
+            filters={{ filters, setFilters, search, setSearch }}
           />
         </div>
       </div>

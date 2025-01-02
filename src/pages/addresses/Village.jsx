@@ -287,7 +287,7 @@ const Village = () => {
         </form>
         <div className="flex-1">
           <Table
-            header={header}
+            header={header}  
             loading={loading}
             page={{ page: page, setPage, dataLength: dataLength.current }}
             data={{ data: tableData, allData: allPeople.current }}

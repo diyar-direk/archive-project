@@ -365,6 +365,10 @@ body::-webkit-scrollbar {
 .c-green {
   color: #0e9e32;
 }
+.react-datepicker-wrapper {
+  position: relative;
+}
+
 @keyframes en-arrow {
   100% {
     transform: translateX(5px);

@@ -3,10 +3,13 @@ import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
+import DatePicker from "react-datepicker";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
   const context = useContext(Context);
   const limit = context?.limit;
+
+  const [hasFltr, setHasFltr] = useState(false);
 
   const [data, setData] = useState({
     country: [],
@@ -25,11 +28,7 @@ const Table = (props) => {
   const [fltr, setFltr] = useState(props.filters?.filters || {});
 
   useEffect(() => {
-    if (
-      keys?.includes("country") &&
-      data.country.length === 0 &&
-      props.hasFltr?.fltr
-    ) {
+    if (keys?.includes("country") && data.country.length === 0 && hasFltr) {
       axios
         .get(`${baseURL}/Countries?active=true`)
         .then((res) => {
@@ -38,12 +37,12 @@ const Table = (props) => {
         })
         .catch((err) => console.log(err));
     }
-  }, [props.hasFltr?.fltr]);
+  }, [hasFltr]);
 
   useEffect(() => {
     if (keys?.includes("government")) {
       setFltr({ ...fltr, government: "" });
-      if (props.hasFltr?.fltr && fltr?.country)
+      if (hasFltr && fltr?.country)
         axios
           .get(
             `${baseURL}/Governments?active=true&country=${fltr?.country._id}`
@@ -59,7 +58,7 @@ const Table = (props) => {
   useEffect(() => {
     if (keys?.includes("city")) {
       setFltr({ ...fltr, city: "" });
-      if (props.hasFltr?.fltr && fltr?.government) {
+      if (hasFltr && fltr?.government) {
         axios
           .get(
             `${baseURL}/Cities?active=true&government=${fltr?.government?._id}`
@@ -75,7 +74,7 @@ const Table = (props) => {
 
   useEffect(() => {
     if (keys?.includes("villag")) setFltr({ ...fltr, villag: "" });
-    if (props.hasFltr?.fltr) {
+    if (hasFltr) {
       let dataObj = { ...data };
       const promises = [];
       if (keys?.includes("villag") && data.villag.length === 0 && fltr?.city) {
@@ -138,7 +137,7 @@ const Table = (props) => {
         if (props.items.slectedItems.length < 2)
           props.items.setSelectedItems([]);
       }
-      props.hasFltr?.fltr && props.hasFltr?.setFltr(false);
+      hasFltr && setHasFltr(false);
       const optionDiv = document.querySelector(
         "div.table tbody td i.options.active-div"
       );
@@ -153,7 +152,7 @@ const Table = (props) => {
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  }, [props.overlay, props.hasFltr, props.items]);
+  }, [props.overlay, hasFltr, props.items]);
 
   const removeClass = (e) => {
     e.target.parentNode.parentNode.children[0].classList.remove("active");
@@ -215,7 +214,7 @@ const Table = (props) => {
           ) {
             props.page.setPage(1);
           } else
-            props.filters.inputsFltr.search
+            props.filters.search
               ? props.delete.getSearchData()
               : props.delete.getData();
         }
@@ -232,7 +231,7 @@ const Table = (props) => {
           ) {
             props.page.setPage(1);
           } else
-            props.filters.inputsFltr.search
+            props.filters.search
               ? props.delete.getSearchData()
               : props.delete.getData();
         }
@@ -249,10 +248,54 @@ const Table = (props) => {
 
   return (
     <>
-      {props.hasFltr?.fltr && (
+      {hasFltr && (
         <div className="overlay">
-          <div className="table-fltr">
-            <div onClick={(e) => e.stopPropagation()} className="filters">
+          <div onClick={(e) => e.stopPropagation()} className="table-fltr">
+            <div className="center wrap date-fltr gap-20">
+              <div className="relative flex-1 center gap-10">
+                <span>from:</span>
+                <DatePicker
+                  placeholderText="date from"
+                  selected={fltr.date.from}
+                  showIcon
+                  showMonthDropdown
+                  showYearDropdown
+                  scrollableYearDropdown
+                  yearDropdownItemNumber={90}
+                  onChange={(e) =>
+                    setFltr({ ...fltr, date: { ...fltr.date, from: e } })
+                  }
+                  maxDate={new Date()}
+                />
+              </div>
+              <div className="center flex-1 gap-10 relative">
+                <span>to:</span>
+                <DatePicker
+                  placeholderText="date to"
+                  selected={fltr.date.to}
+                  showIcon
+                  showMonthDropdown
+                  showYearDropdown
+                  scrollableYearDropdown
+                  yearDropdownItemNumber={90}
+                  maxDate={new Date()}
+                  minDate={fltr.date.from}
+                  onChange={(e) =>
+                    setFltr({ ...fltr, date: { ...fltr.date, to: e } })
+                  }
+                />
+              </div>
+              <span
+                className="flex-1"
+                onClick={(e) =>
+                  setFltr({ ...fltr, date: { from: "", to: "" } })
+                }
+              >
+                clear
+              </span>
+            </div>
+
+            <div className="filters">
               {keys.includes("gender") && (
                 <div className="select relative">
                   <div onClick={openDiv} className="center gap-10 w-100">
@@ -586,18 +629,23 @@ const Table = (props) => {
                 </div>
               )}
             </div>
+
             <div className="gap-10 center filters-setting">
               <span
                 onClick={() => {
                   props.page.setPage(1);
                   props.filters?.setFilters(fltr);
+                  setHasFltr(false);
                 }}
               >
                 okay
               </span>
               <span
                 className="cencel-fltr"
-                onClick={() => setFltr(props.filters?.fltr)}
+                onClick={() => {
+                  setHasFltr(false);
+                  setFltr(props.filters?.filters);
+                }}
               >
                 cencel
               </span>
@@ -635,10 +683,7 @@ const Table = (props) => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          props.filters.setInputsFltr({
-            ...props.filters.inputsFltr,
-            search: beforSubmit,
-          });
+          props.filters.setSearch(beforSubmit);
         }}
         className="flex center gap-10 table-search"
       >
@@ -647,37 +692,22 @@ const Table = (props) => {
           placeholder="search by name"
           value={beforSubmit}
           onInput={(e) => {
-            e.target.value === "" &&
-              props.filters.setInputsFltr({
-                ...props.filters.inputsFltr,
-                search: "",
-              });
+            e.target.value === "" && props.filters.setSearch("");
             setBeforeSubmit(e.target.value);
           }}
           required
         />
-        <input
-          type="month"
-          value={props.filters.inputsFltr.date}
-          onInput={(e) =>
-            props.filters.setInputsFltr({
-              ...props.filters.inputsFltr,
-              date: e.target.value,
-            })
-          }
-        />
+
         <button className="btn center gap-10">
           search <i className="fa-solid fa-magnifying-glass"></i>
         </button>
-        {(props.hasFltr?.fltr || props.hasFltr?.fltr === false) && (
-          <i
-            onClick={(e) => {
-              props.hasFltr?.setFltr(true);
-              e.stopPropagation();
-            }}
-            className="fa-solid fa-sliders filter"
-          ></i>
-        )}
+        <i
+          onClick={(e) => {
+            setHasFltr(true);
+            e.stopPropagation();
+          }}
+          className="fa-solid fa-sliders filter"
+        ></i>
       </form>
       <div className="table">
         <table className={props.loading || props.data?.data ? "loading" : ""}>

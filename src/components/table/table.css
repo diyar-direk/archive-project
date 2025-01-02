@@ -21,6 +21,7 @@
   font-size: 17px;
   cursor: pointer;
 }
+
 .overlay > .table-fltr {
   width: 70%;
   min-height: 200px;
@@ -29,6 +30,31 @@
   justify-content: space-between;
   gap: 10px;
 }
+
+.overlay .date-fltr {
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.overlay .date-fltr .react-datepicker-wrapper {
+  flex: 1;
+}
+.overlay .date-fltr .react-datepicker-wrapper input {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--aside-color);
+  color: var(--font-color);
+  padding: 6px 10px 5px 30px;
+}
+.overlay .date-fltr span {
+  color: var(--font-color);
+  text-transform: capitalize;
+}
+.overlay .date-fltr > span {
+  cursor: pointer;
+  font-weight: bold;
+}
+
 .overlay .filters {
   width: 100%;
   display: grid;
