@@ -316,6 +316,13 @@ div.table tbody td i.options.active-div + div {
   pointer-events: all;
 }
 
+div.table tbody tr:last-child td i.options.active-div + div {
+  display: flex;
+  top: 0;
+  width: auto;
+  left: calc(-100% - 200px);
+}
+
 div.table tbody td div.options div.delete {
   gap: 10px;
   color: var(--font-color);
