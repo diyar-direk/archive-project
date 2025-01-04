@@ -63,8 +63,8 @@ const [inputsFltr, setInputsFltr] = useState({
   }, [update]);
 
   useEffect(() => {
-    getData();
-  }, [page , limit ,inputsFltr.date] );
+    if (!inputsFltr.search) getData();
+}, [page ,limit ,inputsFltr]);
 
   const getData = async () => {
     setLoading(true);
@@ -102,6 +102,34 @@ const [inputsFltr, setInputsFltr] = useState({
         prevSelected.filter((item) => item !== element)
       );
       document.querySelector("th .checkbox").classList.remove("active");
+    }
+  };
+  useEffect(() => {
+    if (!inputsFltr.search) return;
+    const timeOut = setTimeout(() => getSearchData(), 500);
+    return () => clearTimeout(timeOut);
+  }, [page, inputsFltr, limit]);
+
+  const getSearchData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/Sources/search?active=true&limit=${limit}&page=${page}`;
+    
+ 
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    try {
+      const data = await axios.post(url, {
+        search: inputsFltr.search,
+      });
+      dataLength.current = data.data.numberOfActiveResults;
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -235,7 +263,7 @@ const [inputsFltr, setInputsFltr] = useState({
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Sources", getData }}
+            delete={{ url: "Sources", getData,getSearchData }}
             filters={{ inputsFltr, setInputsFltr }}
           />
         </div>

@@ -67,8 +67,9 @@ const Village = () => {
   }, [update]);
 
   useEffect(() => {
-    getData();
-  }, [page, filters.city ,limit ,inputsFltr.date]);
+
+    if (!inputsFltr.search) getData();
+}, [page,limit ,inputsFltr ,filters.city]);
 
   useEffect(() => {
     axios
@@ -92,6 +93,40 @@ const Village = () => {
       const data = await axios.get(url);
 
       dataLength.current = data.data.numberOfActiveVillages;
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    if (!inputsFltr.search) return;
+    const timeOut = setTimeout(() => getSearchData(), 500);
+    return () => clearTimeout(timeOut);
+  }, [page ,limit ,inputsFltr ,filters.city]);
+
+  const getSearchData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/Villages/search?active=true&limit=${limit}&page=${page}`;
+    const keys = Object.keys(filters);
+    keys.forEach(
+      (key) =>
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    try {
+      const data = await axios.post(url, {
+        search: inputsFltr.search,
+      });
+      dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
     } catch (error) {
@@ -293,7 +328,7 @@ const Village = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Villages", getData }}
+            delete={{ url: "Villages", getData,getSearchData }}
             hasFltr={{ fltr: fltr, setFltr }}
             filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
           />

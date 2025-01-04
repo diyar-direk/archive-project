@@ -57,8 +57,9 @@ const Party = () => {
   }, [update]);
 
   useEffect(() => {
-    getData();
-  }, [page , limit , inputsFltr.date]);
+
+    if (!inputsFltr.search) getData();
+}, [page,limit ,inputsFltr]);
 
   const getData = async () => {
     setLoading(true);
@@ -80,7 +81,32 @@ const Party = () => {
       setLoading(false);
     }
   };
+  useEffect(() => {
+    if (!inputsFltr.search) return;
+    const timeOut = setTimeout(() => getSearchData(), 500);
+    return () => clearTimeout(timeOut);
+  }, [page, inputsFltr, limit]);
 
+  const getSearchData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/Parties/search?active=true&limit=${limit}&page=${page}`;
+    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    try {
+      const data = await axios.post(url, {
+        search: inputsFltr.search,
+      });
+      dataLength.current = data.data.numberOfActiveResults;
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   const checkOne = (e, element) => {
     e.target.classList.toggle("active");
     if (e.target.classList.contains("active")) {
@@ -176,7 +202,7 @@ const Party = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-           {formLoading && <Loading />}
+      {formLoading && <Loading />}
       <h1 className="title">Party</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -215,7 +241,7 @@ const Party = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Parties", getData }}
+            delete={{ url: "Parties", getData,getSearchData }}
             filters={{ inputsFltr, setInputsFltr }}
           />
         </div>
