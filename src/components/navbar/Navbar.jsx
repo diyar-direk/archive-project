@@ -210,6 +210,7 @@ const Navbar = () => {
                 <i className="arrow fa-solid fa-chevron-right"></i>
               </div>
               <article>
+                <NavLink to={"/sections"}>sections</NavLink>
                 <NavLink to={"/sources"}>sources</NavLink>
                 <NavLink to={"/event"}>event</NavLink>
                 <NavLink to={"/party"}>party</NavLink>

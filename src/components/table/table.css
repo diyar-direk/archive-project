@@ -22,13 +22,44 @@
   cursor: pointer;
 }
 
-.overlay .filters {
+.overlay > .table-fltr {
   width: 70%;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.overlay .date-fltr {
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.overlay .date-fltr .react-datepicker-wrapper {
+  flex: 1;
+}
+.overlay .date-fltr .react-datepicker-wrapper input {
+  width: 100%;
+  border: none;
   border-radius: 4px;
+  background-color: var(--aside-color);
+  color: var(--font-color);
+  padding: 6px 10px 5px 30px;
+}
+.overlay .date-fltr span {
+  color: var(--font-color);
+  text-transform: capitalize;
+}
+.overlay .date-fltr > span {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.overlay .filters {
+  width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
-  min-height: 200px;
   align-items: flex-start;
 }
 .overlay .filters .select div {
@@ -46,6 +77,7 @@
   max-height: 200px;
   overflow: auto;
 }
+
 .overlay .filters .select article {
   background: var(--section-color);
   max-height: 0px;
@@ -72,6 +104,16 @@
 }
 .overlay .filters .select article h2:hover {
   background-color: var(--body-color);
+}
+.overlay div.filters-setting > span {
+  font-size: 18px;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: var(--font-color);
+  cursor: pointer;
+}
+.overlay div.filters-setting > span:last-of-type {
+  opacity: 0.8;
 }
 
 input.fltr-search {
@@ -272,6 +314,13 @@ div.table tbody td i.options.active-div + div {
   z-index: 1;
   opacity: 1;
   pointer-events: all;
+}
+
+div.table tbody tr:last-child td i.options.active-div + div {
+  display: flex;
+  top: 0;
+  width: auto;
+  left: calc(-100% - 200px);
 }
 
 div.table tbody td div.options div.delete {

@@ -19,14 +19,14 @@ const City = () => {
   const [fltr, setFltr] = useState(false);
   const [error, setError] = useState(false);
    const [formLoading, setFormLoading] = useState(false);
-   const [inputsFltr, setInputsFltr] = useState({
-    search: "",
-    date: "",
-  });
+ const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     country: "",
     government: "",
-  });
+    date: {
+      from: "",
+      to: "",
+  }});
   const context = useContext(Context);
   const limit = context?.limit;
 
@@ -75,8 +75,8 @@ const City = () => {
 
   useEffect(() => {
 
-        if (!inputsFltr.search) getData();
-      }, [page, filters.government, inputsFltr, limit ]);
+        if (!search) getData();
+      }, [page, filters.government, search, limit ]);
 
   useEffect(() => {
     axios
@@ -93,9 +93,18 @@ const City = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Cities?active=true&limit=${limit}&page=${page}`;
-    filters.government && (url += `&government=${filters.government._id}`);
-    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
-
+    const keys = Object.keys(filters);
+      keys.forEach(
+        (key) =>
+          key !== "date" &&
+          filters[key] &&
+          (url += `&${filters[key]._id ? key + "Id" : key}=${
+            filters[key]._id ? filters[key]._id : filters[key]
+          }`)
+      );
+      filters.date.from &&
+        filters.date.to &&
+        (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
     try {
       const data = await axios.get(url);
 
@@ -109,10 +118,10 @@ const City = () => {
     }
   };
   useEffect(() => {
-    if (!inputsFltr.search) return;
+    if (!search) return;
     const timeOut = setTimeout(() => getSearchData(), 500);
     return () => clearTimeout(timeOut);
-  }, [page, filters.government, inputsFltr, limit ]);
+  }, [page, filters.government,search, limit ]);
 
   const getSearchData = async () => {
     setLoading(true);
@@ -120,18 +129,22 @@ const City = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Cities/search?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
+  const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
+        key !== "date" &&
         filters[key] &&
         (url += `&${filters[key]._id ? key + "Id" : key}=${
           filters[key]._id ? filters[key]._id : filters[key]
         }`)
     );
-    inputsFltr.date && (url += `&createdAt[gte]=${inputsFltr.date}`);
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+
     try {
       const data = await axios.post(url, {
-        search: inputsFltr.search,
+        search: search,
       });
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
@@ -234,7 +247,7 @@ const City = () => {
         if (error.status === 400) responseFun("reapeted data");
         else responseFun(false);
       }
-     finally {
+      finally {
       setFormLoading(false);
     }
   };
@@ -340,7 +353,7 @@ const City = () => {
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "cities", getData  ,getSearchData}}
             hasFltr={{ fltr: fltr, setFltr }}
-            filters={{ filters, setFilters, inputsFltr, setInputsFltr }}
+            filters={{ search, setSearch, filters, setFilters}}
           />
         </div>
       </div>
