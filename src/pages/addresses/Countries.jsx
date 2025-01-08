@@ -66,6 +66,15 @@ const Countries = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Countries?active=true&limit=${limit}&page=${page}`;
+    const keys = Object.keys(filters);
+    keys.forEach(
+      (key) =>
+        key !== "date" &&
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
     filters.date.from &&
       filters.date.to &&
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
@@ -93,6 +102,15 @@ const Countries = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Countries/search?active=true&limit=${limit}&page=${page}`;
+    const keys = Object.keys(filters);
+    keys.forEach(
+      (key) =>
+        key !== "date" &&
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
     filters.date.from &&
       filters.date.to &&
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);

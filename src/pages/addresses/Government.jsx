@@ -61,51 +61,78 @@ const Government = () => {
     error && setError(false);
   }, [update]);
 
-  useEffect(() => {
-    getData();
-  }, [page, filters, limit, search]);
-
-  useEffect(() => {
-    axios
-      .get(`${baseURL}/Countries?active=true`)
-      .then((res) => {
-        setCountries({ data: res.data.data, searchData: res.data.data });
-      })
-      .catch((err) => console.log(err));
-  }, []);
-
-  const getData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from &&
-      filters.date.to &&
-      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.get(url);
-
-      dataLength.current = data.data.numberOfActiveGovernments;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+   useEffect(() => {
+      if (!search) getData();
+    }, [page, search, limit, filters]);
+  
+    const getData = async () => {
+      setLoading(true);
+      setData([]);
+      setSelectedItems([]);
+      document.querySelector("th .checkbox")?.classList.remove("active");
+      let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
+      const keys = Object.keys(filters);
+      keys.forEach(
+        (key) =>
+          key !== "date" &&
+          filters[key] &&
+          (url += `&${filters[key]._id ? key + "Id" : key}=${
+            filters[key]._id ? filters[key]._id : filters[key]
+          }`)
+      );
+      filters.date.from &&
+        filters.date.to &&
+        (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+      try {
+        const data = await axios.get(url);
+        dataLength.current = data.data.numberOfActiveCountries;
+        allPeople.current = data.data.data.map((e) => e._id);
+        setData(data.data.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    useEffect(() => {
+      if (!search) return;
+      const timeOut = setTimeout(() => getSearchData(), 500);
+      return () => clearTimeout(timeOut);
+    }, [page, search, limit, filters]);
+  
+    const getSearchData = async () => {
+      setLoading(true);
+      setData([]);
+      setSelectedItems([]);
+      document.querySelector("th .checkbox")?.classList.remove("active");
+      let url = `${baseURL}/Governments/search?active=true&limit=${limit}&page=${page}`;
+      const keys = Object.keys(filters);
+      keys.forEach(
+        (key) =>
+          key !== "date" &&
+          filters[key] &&
+          (url += `&${filters[key]._id ? key + "Id" : key}=${
+            filters[key]._id ? filters[key]._id : filters[key]
+          }`)
+      );
+      filters.date.from &&
+        filters.date.to &&
+        (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+  
+      try {
+        const data = await axios.post(url, {
+          search: search,
+        });
+        dataLength.current = data.data.numberOfActiveResults;
+        allPeople.current = data.data.data.map((e) => e._id);
+        setData(data.data.data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    };
   const checkOne = (e, element) => {
     e.target.classList.toggle("active");
     if (e.target.classList.contains("active")) {

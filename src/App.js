@@ -12,7 +12,7 @@ import Street from "./pages/addresses/Street";
 import Sources from "./pages/Categories/Sources";
 import Event from "./pages/Categories/Event";
 import Party from "./pages/Categories/Party";
-import LoginForm from "./pages/Login/LoginForm";
+import LoginForm from "./pages/login/LoginForm";
 import Sections from "./pages/Categories/Sections";
 
 function App() {
