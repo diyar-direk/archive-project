@@ -59,6 +59,7 @@ export const links = [
   {
     icon: "fa-solid fa-map-location-dot",
     title: "test",
+    path: "/test",
     type: "single",
     role: ["admin", "user"],
   },

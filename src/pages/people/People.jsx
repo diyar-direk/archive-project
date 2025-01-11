@@ -131,10 +131,10 @@ const People = (props) => {
     }
   };
 
-  const checkOne = (e, element) => {
+  const checkOne = (e, element, status = false) => {
     e.target.classList.toggle("active");
     if (e.target.classList.contains("active")) {
-      if (props?.workSpace) {
+      if (props?.workSpace && !status) {
         props.people.setForm({
           ...props.people.form,
           people: [...new Set([...props.people.form.people, element])],
@@ -150,7 +150,9 @@ const People = (props) => {
       if (props?.workSpace) {
         props?.people?.setForm({
           ...props.people.form,
-          people: props.people.form.people.filter((item) => item !== element),
+          people: props.people.form.people.filter(
+            (item) => item._id !== element._id
+          ),
         });
       } else
         setSelectedItems((prevSelected) =>
@@ -172,15 +174,19 @@ const People = (props) => {
   };
 
   const tableData = data?.map((e) => {
+    const status = props?.people?.form?.people?.some(
+      (person) => person._id === e._id
+    );
+
     return (
       <tr key={e._id}>
         <td>
           <div
             onClick={(target) => {
               target.stopPropagation();
-              checkOne(target, !props?.workSpace ? e._id : e);
+              checkOne(target, !props?.workSpace ? e._id : e, status);
             }}
-            className="checkbox"
+            className={`${status ? "active" : ""} checkbox`}
           ></div>
         </td>
         <td>

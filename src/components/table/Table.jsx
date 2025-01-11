@@ -230,13 +230,6 @@ const Table = (props) => {
     const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
     const allSelectors = document.querySelectorAll("td .checkbox");
 
-    !props?.workSpace?.workSpace
-      ? props.items.setSelectedItems([])
-      : props.workSpace.infoForm.setForm({
-          ...props.workSpace.infoForm.form,
-          people: [],
-        });
-
     if (
       allActiveSelectors.length >= 0 &&
       allActiveSelectors.length !== allSelectors.length
@@ -248,8 +241,13 @@ const Table = (props) => {
         : props.workSpace.infoForm.setForm({
             ...props.workSpace.infoForm.form,
             people: [
-              ...new Set(props.data.allData),
               ...props.workSpace.infoForm.form.people,
+              ...props.data.allData.filter(
+                (item) =>
+                  !props.workSpace.infoForm.form.people.some(
+                    (person) => person._id === item._id
+                  )
+              ),
             ],
           });
     } else {
@@ -260,7 +258,10 @@ const Table = (props) => {
         : props.workSpace.infoForm.setForm({
             ...props.workSpace.infoForm.form,
             people: props.workSpace.infoForm.form.people.filter(
-              (item) => props.workSpace.infoForm.form.people.forEach(e)
+              (item) =>
+                !props.data.allData.some(
+                  (dataItem) => dataItem._id === item._id
+                )
             ),
           });
     }

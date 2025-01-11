@@ -408,8 +408,6 @@ const AddInformation = () => {
     }, 3000);
   };
 
-  console.log(form.people);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.maritalStatus) setError("please select maritalStatus");
