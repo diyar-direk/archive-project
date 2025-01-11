@@ -122,7 +122,9 @@ const People = (props) => {
         search: search,
       });
       dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
+      allPeople.current = data.data.data.map((e) =>
+        !props?.workSpace ? e._id : e
+      );
       setData(data.data.data);
     } catch (error) {
       console.log(error);

@@ -1302,11 +1302,10 @@ const AddInformation = () => {
           </div>
         )}
 
-        <People workSpace="add_info" people={{ setForm, form }} />
-
         {error && <p className="error"> {error} </p>}
         <button className="btn">save</button>
       </form>
+      <People workSpace="add_info" people={{ setForm, form }} />
     </>
   );
 };
