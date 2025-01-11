@@ -316,7 +316,8 @@ div.table tbody td i.options.active-div + div {
   pointer-events: all;
 }
 
-div.table tbody tr:last-child td i.options.active-div + div {
+div.table tbody tr:last-child td i.options.active-div + div,
+div.table tbody tr:first-child td i.options.active-div + div {
   display: flex;
   top: 0;
   width: auto;

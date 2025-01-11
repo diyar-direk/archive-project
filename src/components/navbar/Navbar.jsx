@@ -3,6 +3,7 @@ import "./navbar.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import { Context } from "../../context/context";
+import { links } from "./links";
 
 const Navbar = () => {
   const context = useContext(Context);
@@ -90,6 +91,30 @@ const Navbar = () => {
   const handleLogout = () => {
     navigate("/login");
   };
+
+  const pagesLinks = links?.map((link, i) => {
+    return link.type === "multi" ? (
+      <div key={i} className="links">
+        <div onClick={openDiv} className="center">
+          <i className={link.icon}></i>
+          <h1 className="flex-1">{link.title}</h1>
+          <i className="arrow fa-solid fa-chevron-right"></i>
+        </div>
+        <article>
+          {link?.children?.map((e, i) => (
+            <NavLink key={i} to={e.path}>
+              {e.title}
+            </NavLink>
+          ))}
+        </article>
+      </div>
+    ) : (
+      <NavLink key={i} to={link.path} className="w-100 justify-start center">
+        <i className={link.icon}></i>
+        <h1> {link.title} </h1>
+      </NavLink>
+    );
+  });
 
   return (
     <>
@@ -217,10 +242,24 @@ const Navbar = () => {
               </article>
             </div>
 
+            <div className="links">
+              <div onClick={openDiv} className="center">
+                <i className="fa-solid fa-sitemap"></i>
+                <h1 className="flex-1">informations</h1>
+                <i className="arrow fa-solid fa-chevron-right"></i>
+              </div>
+              <article>
+                <NavLink to={"/infromations"}>infromations</NavLink>
+                <NavLink to={"/add_information"}>add information</NavLink>
+              </article>
+            </div>
+
             <NavLink to={"/dsa"} className="w-100 justify-start center">
               <i className="fa-solid fa-map-location-dot"></i>
               <h1> test </h1>
             </NavLink>
+
+            {/* {pagesLinks} */}
           </div>
 
           <div>

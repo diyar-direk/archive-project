@@ -80,7 +80,9 @@ const AddPerson = () => {
       sections: [],
     },
   });
-
+  const ignoreSelect = (e) => {
+    setForm({ ...form, [e.target.title]: "" });
+  };
   useEffect(() => {
     let dataObj = { ...allDataSelect };
     const promises = [];
@@ -173,16 +175,18 @@ const AddPerson = () => {
   }, []);
 
   useEffect(() => {
-    if (!form.countryId) return;
-    setForm({ ...form, governmentId: "" });
-    setAllDataSelect({
-      ...allDataSelect,
-      data: { ...allDataSelect.data, government: [] },
-      searchData: {
-        ...allDataSelect.searchData,
-        government: [],
-      },
-    });
+    if (!form.countryId) {
+      setForm({ ...form, governmentId: "" });
+      setAllDataSelect({
+        ...allDataSelect,
+        data: { ...allDataSelect.data, government: [] },
+        searchData: {
+          ...allDataSelect.searchData,
+          government: [],
+        },
+      });
+      return;
+    }
     axios
       .get(`${baseURL}/Governments?active=true&country=${form.countryId._id}`)
       .then((res) => {
@@ -199,17 +203,15 @@ const AddPerson = () => {
   }, [form.countryId]);
 
   useEffect(() => {
-    if (form.cityId) {
-      setForm({ ...form, cityId: "" });
-      setAllDataSelect({
-        ...allDataSelect,
-        data: { ...allDataSelect.data, city: [] },
-        searchData: {
-          ...allDataSelect.searchData,
-          city: [],
-        },
-      });
-    }
+    setForm({ ...form, cityId: "" });
+    setAllDataSelect({
+      ...allDataSelect,
+      data: { ...allDataSelect.data, city: [] },
+      searchData: {
+        ...allDataSelect.searchData,
+        city: [],
+      },
+    });
     if (!form.governmentId) return;
     axios
       .get(`${baseURL}/Cities?active=true&government=${form.governmentId._id}`)
@@ -227,26 +229,19 @@ const AddPerson = () => {
   }, [form.governmentId]);
 
   useEffect(() => {
-    let formObj = { ...form };
-
-    if (formObj.villageId) formObj = { ...formObj, villageId: "" };
-    if (formObj.regionId) formObj = { ...formObj, regionId: "" };
-    if (formObj.streetId) formObj = { ...formObj, streetId: "" };
-    if (form.streetId || form.regionId || form.villageId) {
-      setForm(formObj);
-      setAllDataSelect({
-        ...allDataSelect,
-        data: { ...allDataSelect.data, street: [], region: [], villageId: [] },
-        searchData: {
-          ...allDataSelect.searchData,
-          street: [],
-          region: [],
-          villageId: [],
-        },
-      });
-    }
-
+    setForm({ ...form, villageId: "", regionId: "", streetId: "" });
+    setAllDataSelect({
+      ...allDataSelect,
+      data: { ...allDataSelect.data, street: [], region: [], villageId: [] },
+      searchData: {
+        ...allDataSelect.searchData,
+        street: [],
+        region: [],
+        villageId: [],
+      },
+    });
     if (!form.cityId) return;
+
     let dataObj = { ...allDataSelect };
     const promises = [];
     promises.push(
@@ -570,7 +565,7 @@ const AddPerson = () => {
               <label>gender</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.gender ? form.gender : "select gender"}
+                  select gender
                 </div>
                 <article>
                   <h2
@@ -589,15 +584,18 @@ const AddPerson = () => {
                   </h2>
                 </article>
               </div>
+              {form.gender && (
+                <span title="gender" onClick={ignoreSelect}>
+                  {form.gender}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
               <label>maritalStatus</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.maritalStatus
-                    ? form.maritalStatus
-                    : "select maritalStatus"}
+                  select maritalStatus
                 </div>
                 <article>
                   <h2
@@ -623,6 +621,11 @@ const AddPerson = () => {
                   </h2>
                 </article>
               </div>
+              {form.maritalStatus && (
+                <span title="maritalStatus" onClick={ignoreSelect}>
+                  {form.maritalStatus}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
@@ -684,7 +687,7 @@ const AddPerson = () => {
               <label>country</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.countryId ? form.countryId.name : "select country"}
+                  select country
                 </div>
                 <article>
                   <input
@@ -720,6 +723,11 @@ const AddPerson = () => {
                     <p>no data</p>
                   )}
                 </article>
+                {form.countryId && (
+                  <span title="countryId" onClick={ignoreSelect}>
+                    {form.countryId.name}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -727,9 +735,7 @@ const AddPerson = () => {
               <label>government</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.governmentId
-                    ? form.governmentId.name
-                    : "select government"}
+                  select government
                 </div>
                 <article>
                   {form.countryId && (
@@ -770,13 +776,18 @@ const AddPerson = () => {
                   {!form.countryId && <p>please select country first</p>}
                 </article>
               </div>
+              {form.governmentId && (
+                <span title="governmentId" onClick={ignoreSelect}>
+                  {form.governmentId.name}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
               <label>city</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.cityId ? form.cityId.name : "select city"}
+                  select city
                 </div>
                 <article>
                   {form.governmentId && (
@@ -815,13 +826,18 @@ const AddPerson = () => {
                   {!form.governmentId && <p>please select government first</p>}
                 </article>
               </div>
+              {form.cityId && (
+                <span title="cityId" onClick={ignoreSelect}>
+                  {form.cityId.name}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
               <label>village</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.villageId ? form.villageId.name : "select village"}
+                  select village
                 </div>
                 <article>
                   {form.cityId && (
@@ -862,13 +878,18 @@ const AddPerson = () => {
                   {!form.cityId && <p>please select city first</p>}
                 </article>
               </div>
+              {form.villageId && (
+                <span title="villageId" onClick={ignoreSelect}>
+                  {form.villageId.name}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
               <label>region</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.regionId ? form.regionId.name : "select region"}
+                  select region
                 </div>
                 <article>
                   {form.cityId && (
@@ -909,13 +930,18 @@ const AddPerson = () => {
                   {!form.cityId && <p>please select city first</p>}
                 </article>
               </div>
+              {form.regionId && (
+                <span title="regionId" onClick={ignoreSelect}>
+                  {form.regionId.name}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
               <label>street</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.streetId ? form.streetId.name : "select street"}
+                  select street
                 </div>
                 <article>
                   {form.cityId && (
@@ -956,6 +982,11 @@ const AddPerson = () => {
                   {!form.cityId && <p>please select city first</p>}
                 </article>
               </div>
+              {form.streetId && (
+                <span title="streetId" onClick={ignoreSelect}>
+                  {form.streetId.name}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
@@ -1008,7 +1039,7 @@ const AddPerson = () => {
               <label>section</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.sectionId ? form.sectionId.name : "select section"}
+                  select section
                 </div>
                 <article>
                   <input
@@ -1045,13 +1076,18 @@ const AddPerson = () => {
                   )}
                 </article>
               </div>
+              {form.sectionId && (
+                <span title="sectionId" onClick={ignoreSelect}>
+                  {form.sectionId.name}
+                </span>
+              )}
             </div>
 
             <div className="flex flex-direction">
               <label>sources</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  {form.sources ? form.sources.source_name : "select sources"}
+                  select sources
                 </div>
                 <article>
                   <input
@@ -1088,6 +1124,11 @@ const AddPerson = () => {
                   )}
                 </article>
               </div>
+              {form.sources && (
+                <span title="sources" onClick={ignoreSelect}>
+                  {form.sources.source_name}
+                </span>
+              )}
             </div>
           </div>
         </div>

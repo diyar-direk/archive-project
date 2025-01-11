@@ -1,10 +1,9 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, date } from "../../context/context";
+import { baseURL, Context, date, nextJoin } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
-import "./profile.css";
-const People = () => {
+const Informations = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -15,12 +14,12 @@ const People = () => {
   const context = useContext(Context);
   const limit = context?.limit;
   const [filters, setFilters] = useState({
-    gender: "",
     country: "",
     government: "",
     city: "",
     villag: "",
-    maritalStatus: "",
+    region: "",
+    street: "",
     date: {
       from: "",
       to: "",
@@ -29,17 +28,14 @@ const People = () => {
   const [search, setSearch] = useState("");
 
   const header = [
-    "",
-    "name",
-    "gender",
-    "mother Name",
-    "marital status",
-    "occupation",
-    "place & date of birth",
-    "Place of residence",
+    "subject",
+    "detiles",
+    "place",
     "government",
-    "phone",
-    "email",
+    "people",
+    "sourses",
+    "parties",
+    "events",
     "create at",
   ];
 
@@ -53,7 +49,7 @@ const People = () => {
     setSelectedItems([]);
 
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
+    let url = `${baseURL}/Information?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -73,10 +69,10 @@ const People = () => {
 
     try {
       const data = await axios.get(url);
-      dataLength.current = data.data.numberOfActivePeople;
+      dataLength.current = data.data.numberOfActiveInformations;
 
-      allPeople.current = data.data.people.map((e) => e._id);
-      setData(data.data.people);
+      allPeople.current = data.data.informations.map((e) => e._id);
+      setData(data.data.informations);
     } catch (error) {
       console.log(error);
     } finally {
@@ -95,7 +91,7 @@ const People = () => {
     setData([]);
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/people/search?active=true&limit=${limit}&page=${page}`;
+    let url = `${baseURL}/Information/search?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -118,6 +114,8 @@ const People = () => {
       });
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
+      console.log(data.data);
+
       setData(data.data.data);
     } catch (error) {
       console.log(error);
@@ -167,33 +165,31 @@ const People = () => {
             className="checkbox"
           ></div>
         </td>
-        <td>
-          <Link to={`${e._id}`}>
-            {e.photo ? (
-              <img src={e.photo} className="photo" alt="" />
-            ) : (
-              <i className="photo fa-solid fa-user"></i>
-            )}
-          </Link>
-        </td>
+        <td>{e.subject}</td>
         <td>
           <Link to={`${e._id}`} className="name">
-            {e.firstName} {e.fatherName} {e.surName}
+            {e.details?.length <= 40
+              ? e.details
+              : e.details?.slice(0, 40) + "..."}
           </Link>
         </td>
-        <td> {e.gender} </td>
-        <td> {e.motherName} </td>
-        <td> {e.maritalStatus} </td>
-        <td> {e.occupation} </td>
         <td>
-          {e.placeOfBirth} {date(e.birthDate)}
+          {e.countryId?.name} / {e.cityId?.name} / {e.regionId?.name} /
+          {e.streetId?.name}
         </td>
+        <td> {e.governmentId?.name} </td>
         <td>
-          {e.countryId.name} / {e.cityId.name}
+          {e.people?.map((person, i) => (
+            <Link className="name" key={i} to={`/people/${person._id}`}>
+              {e.people[i + 1]
+                ? `${person.firstName} ${person.surName} , `
+                : `${person.firstName} ${person.surName}`}
+            </Link>
+          ))}
         </td>
-        <td> {e.governmentId.name} </td>
-        <td> {e.phone} </td>
-        <td> {e.email} </td>
+        <td>{nextJoin(e.sources, "source_name")}</td>
+        <td>{nextJoin(e.parties, "name")}</td>
+        <td>{nextJoin(e.events, "name")}</td>
         <td> {date(e.createdAt)} </td>
         <td>
           <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>
@@ -215,7 +211,7 @@ const People = () => {
               update
             </Link>
             <Link to={`${e._id}`} className="flex visit">
-              <i className="fa-solid fa-circle-user"></i> visit
+              <i className="fa-solid fa-eye-slash"> </i> details
             </Link>
           </div>
         </td>
@@ -225,19 +221,20 @@ const People = () => {
 
   return (
     <>
-      <h1 className="title"> people </h1>
+      <h1 className="title"> info </h1>
       <Table
         header={header}
+        searchInpPlacecholder={`search by subject`}
         loading={loading}
         page={{ page: page, setPage, dataLength: dataLength.current }}
         data={{ data: tableData, allData: allPeople.current }}
         items={{ slectedItems: slectedItems, setSelectedItems }}
         filters={{ filters, setFilters, search, setSearch }}
         overlay={{ overlay: overlay, setOverlay }}
-        delete={{ getData, url: "people", getSearchData }}
+        delete={{ getData, url: "Information", getSearchData }}
       />
     </>
   );
 };
 
-export default People;
+export default Informations;

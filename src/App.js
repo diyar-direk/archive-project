@@ -12,8 +12,9 @@ import Street from "./pages/addresses/Street";
 import Sources from "./pages/Categories/Sources";
 import Event from "./pages/Categories/Event";
 import Party from "./pages/Categories/Party";
-import LoginForm from "./pages/login/LoginForm";
+import LoginForm from "./pages/Login/LoginForm";
 import Sections from "./pages/Categories/Sections";
+import Informations from "./pages/info/Informations";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
           <Route path="sources" element={<Sources />} />
           <Route path="event" element={<Event />} />
           <Route path="party" element={<Party />} />
+          <Route path="infromations" element={<Informations />} />
         </Route>
       </Routes>
     </div>

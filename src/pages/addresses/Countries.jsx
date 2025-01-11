@@ -102,18 +102,14 @@ const Countries = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Countries/search?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from &&
-      filters.date.to &&
-      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+
+    filters.date.from && filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
+      : filters.date.from && !filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}`)
+      : !filters.date.from &&
+        filters.date.to &&
+        (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
       const data = await axios.post(url, {
@@ -243,7 +239,7 @@ const Countries = () => {
             {update && (
               <button
                 onClick={() => setUpdate(false)}
-                className="btn flex-1 cencel "
+                className="btn flex-1 cencel"
               >
                 cencel
               </button>
