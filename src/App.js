@@ -15,6 +15,7 @@ import Party from "./pages/Categories/Party";
 import LoginForm from "./pages/Login/LoginForm";
 import Sections from "./pages/Categories/Sections";
 import Informations from "./pages/info/Informations";
+import AddInformation from "./pages/info/AddInformation";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="event" element={<Event />} />
           <Route path="party" element={<Party />} />
           <Route path="infromations" element={<Informations />} />
+          <Route path="add_information" element={<AddInformation />} />
         </Route>
       </Routes>
     </div>

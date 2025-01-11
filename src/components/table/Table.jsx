@@ -17,12 +17,16 @@ const Table = (props) => {
       city: [],
       government: [],
       villag: [],
+      region: [],
+      street: [],
     },
     searchData: {
       country: [],
       city: [],
       government: [],
       villag: [],
+      region: [],
+      street: [],
     },
   });
 
@@ -91,8 +95,8 @@ const Table = (props) => {
     let refreshData = { ...fltr };
 
     if (keys?.includes("villag")) refreshData = { ...refreshData, villag: "" };
-    if (keys?.includes("region")) refreshData = { ...refreshData, villag: "" };
-    if (keys?.includes("street")) refreshData = { ...refreshData, villag: "" };
+    if (keys?.includes("region")) refreshData = { ...refreshData, region: "" };
+    if (keys?.includes("street")) refreshData = { ...refreshData, street: "" };
 
     setFltr(refreshData);
     if (hasFltr) {
@@ -111,6 +115,42 @@ const Table = (props) => {
                 ...dataObj,
                 data: { ...dataObj.data, villag: res.data.data },
                 searchData: { ...dataObj.searchData, villag: res.data.data },
+              };
+            })
+            .catch((err) => console.log(err))
+        );
+      }
+      if (
+        keys?.includes("street") &&
+        data.data.street.length === 0 &&
+        fltr?.city
+      ) {
+        promises.push(
+          axios
+            .get(`${baseURL}/Streets?active=true&city=${fltr?.city._id}`)
+            .then((res) => {
+              dataObj = {
+                ...dataObj,
+                data: { ...dataObj.data, street: res.data.data },
+                searchData: { ...dataObj.searchData, street: res.data.data },
+              };
+            })
+            .catch((err) => console.log(err))
+        );
+      }
+      if (
+        keys?.includes("region") &&
+        data.data.region.length === 0 &&
+        fltr?.city
+      ) {
+        promises.push(
+          axios
+            .get(`${baseURL}/Regions?active=true&city=${fltr?.city._id}`)
+            .then((res) => {
+              dataObj = {
+                ...dataObj,
+                data: { ...dataObj.data, region: res.data.data },
+                searchData: { ...dataObj.searchData, region: res.data.data },
               };
             })
             .catch((err) => console.log(err))
@@ -190,7 +230,12 @@ const Table = (props) => {
     const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
     const allSelectors = document.querySelectorAll("td .checkbox");
 
-    props.items.setSelectedItems([]);
+    !props?.workSpace?.workSpace
+      ? props.items.setSelectedItems([])
+      : props.workSpace.infoForm.setForm({
+          ...props.workSpace.infoForm.form,
+          people: [],
+        });
 
     if (
       allActiveSelectors.length >= 0 &&
@@ -198,11 +243,26 @@ const Table = (props) => {
     ) {
       allSelectors.forEach((e) => e.classList.add("active"));
       e.target.classList.add("active");
-      props.items.setSelectedItems(props.data.allData);
+      !props?.workSpace?.workSpace
+        ? props.items.setSelectedItems(props.data.allData)
+        : props.workSpace.infoForm.setForm({
+            ...props.workSpace.infoForm.form,
+            people: [
+              ...new Set(props.data.allData),
+              ...props.workSpace.infoForm.form.people,
+            ],
+          });
     } else {
       allSelectors.forEach((e) => e.classList.remove("active"));
       e.target.classList.remove("active");
-      props.items.setSelectedItems([]);
+      !props?.workSpace?.workSpace
+        ? props.items.setSelectedItems([])
+        : props.workSpace.infoForm.setForm({
+            ...props.workSpace.infoForm.form,
+            people: props.workSpace.infoForm.form.people.filter(
+              (item) => props.workSpace.infoForm.form.people.forEach(e)
+            ),
+          });
     }
   };
 
@@ -623,6 +683,131 @@ const Table = (props) => {
                 </div>
               )}
 
+              {keys?.includes("region") && (
+                <div className="select relative">
+                  <div onClick={openDiv} className="center gap-10 w-100">
+                    <span className="pointer-none">
+                      {fltr?.region ? fltr?.region.name : "all regiones"}
+                    </span>
+                    <i className="fa-solid fa-sort-down pointer-none"></i>
+                  </div>
+                  <article>
+                    {fltr?.city && (
+                      <>
+                        <input
+                          type="text"
+                          className="fltr-search"
+                          placeholder="search for region ..."
+                          onInput={(inp) => {
+                            const filteredCountries = data.data.region.filter(
+                              (e) =>
+                                e.name
+                                  .toLowerCase()
+                                  .includes(inp.target.value.toLowerCase())
+                            );
+                            setData({
+                              ...data,
+                              searchData: {
+                                ...data.searchData,
+                                region: filteredCountries,
+                              },
+                            });
+                          }}
+                        />
+                        {data.searchData.region.length > 0 && (
+                          <h2
+                            data-name="region"
+                            data-data=""
+                            onClick={(e) => {
+                              selectFilters(e);
+                              removeClass(e);
+                            }}
+                          >
+                            all regiones
+                          </h2>
+                        )}
+                        {data.searchData.region.map((itm, i) => (
+                          <h2
+                            key={i}
+                            data-name="region"
+                            onClick={(e) => {
+                              selectFilters(e, itm);
+                              removeClass(e);
+                            }}
+                          >
+                            {itm.name}
+                          </h2>
+                        ))}
+                        {data.searchData.region.length <= 0 && <p>no data</p>}
+                      </>
+                    )}
+                    {!fltr?.city && <p>please select city</p>}
+                  </article>
+                </div>
+              )}
+              {keys?.includes("street") && (
+                <div className="select relative">
+                  <div onClick={openDiv} className="center gap-10 w-100">
+                    <span className="pointer-none">
+                      {fltr?.street ? fltr?.street.name : "all streetes"}
+                    </span>
+                    <i className="fa-solid fa-sort-down pointer-none"></i>
+                  </div>
+                  <article>
+                    {fltr?.city && (
+                      <>
+                        <input
+                          type="text"
+                          className="fltr-search"
+                          placeholder="search for street ..."
+                          onInput={(inp) => {
+                            const filteredCountries = data.data.street.filter(
+                              (e) =>
+                                e.name
+                                  .toLowerCase()
+                                  .includes(inp.target.value.toLowerCase())
+                            );
+                            setData({
+                              ...data,
+                              searchData: {
+                                ...data.searchData,
+                                street: filteredCountries,
+                              },
+                            });
+                          }}
+                        />
+                        {data.searchData.street.length > 0 && (
+                          <h2
+                            data-name="street"
+                            data-data=""
+                            onClick={(e) => {
+                              selectFilters(e);
+                              removeClass(e);
+                            }}
+                          >
+                            all streetes
+                          </h2>
+                        )}
+                        {data.searchData.street.map((itm, i) => (
+                          <h2
+                            key={i}
+                            data-name="street"
+                            onClick={(e) => {
+                              selectFilters(e, itm);
+                              removeClass(e);
+                            }}
+                          >
+                            {itm.name}
+                          </h2>
+                        ))}
+                        {data.searchData.street.length <= 0 && <p>no data</p>}
+                      </>
+                    )}
+                    {!fltr?.city && <p>please select city</p>}
+                  </article>
+                </div>
+              )}
+
               {keys?.includes("villag") && (
                 <div className="select relative">
                   <div onClick={openDiv} className="center gap-10 w-100">
@@ -762,14 +947,16 @@ const Table = (props) => {
         <button className="btn center gap-10">
           search <i className="fa-solid fa-magnifying-glass"></i>
         </button>
-        <i
-          title="filters"
-          onClick={(e) => {
-            setHasFltr(true);
-            e.stopPropagation();
-          }}
-          className="fa-solid fa-sliders filter"
-        ></i>
+        {!props?.workSpace?.workSpace && (
+          <i
+            title="filters"
+            onClick={(e) => {
+              setHasFltr(true);
+              e.stopPropagation();
+            }}
+            className="fa-solid fa-sliders filter"
+          ></i>
+        )}
       </form>
       <div className="table">
         <table className={props.loading || props.data?.data ? "loading" : ""}>
@@ -810,18 +997,19 @@ const Table = (props) => {
         </table>
       </div>
 
-      {props.items?.slectedItems?.length > 1 && (
-        <div
-          onClick={(e) => {
-            e.stopPropagation();
-            props.overlay.setOverlay(true);
-          }}
-          className="gap-10 delete-all"
-        >
-          <i className="fa-solid fa-trash"></i> delete all (
-          {props.items.slectedItems.length})
-        </div>
-      )}
+      {!props?.workSpace?.workSpace &&
+        props.items?.slectedItems?.length > 1 && (
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              props.overlay.setOverlay(true);
+            }}
+            className="gap-10 delete-all"
+          >
+            <i className="fa-solid fa-trash"></i> delete all (
+            {props.items.slectedItems.length})
+          </div>
+        )}
       <div className="pagination flex">
         {createPags(limit, props.page.dataLength)}
       </div>

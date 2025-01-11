@@ -4,7 +4,7 @@ import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css";
-const People = () => {
+const People = (props) => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -50,19 +50,20 @@ const People = () => {
   const getData = async () => {
     setLoading(true);
     setData([]);
-    setSelectedItems([]);
+    !props?.workSpace && setSelectedItems([]);
 
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
+    !props?.workSpace &&
+      keys.forEach(
+        (key) =>
+          key !== "date" &&
+          filters[key] &&
+          (url += `&${filters[key]._id ? key + "Id" : key}=${
+            filters[key]._id ? filters[key]._id : filters[key]
+          }`)
+      );
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -75,7 +76,9 @@ const People = () => {
       const data = await axios.get(url);
       dataLength.current = data.data.numberOfActivePeople;
 
-      allPeople.current = data.data.people.map((e) => e._id);
+      allPeople.current = !props?.workSpace
+        ? data.data.people.map((e) => e._id)
+        : data.data.people.map((e) => e);
       setData(data.data.people);
     } catch (error) {
       console.log(error);
@@ -93,18 +96,19 @@ const People = () => {
   const getSearchData = async () => {
     setLoading(true);
     setData([]);
-    setSelectedItems([]);
+    !props?.workSpace && setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people/search?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
+    !props?.workSpace &&
+      keys.forEach(
+        (key) =>
+          key !== "date" &&
+          filters[key] &&
+          (url += `&${filters[key]._id ? key + "Id" : key}=${
+            filters[key]._id ? filters[key]._id : filters[key]
+          }`)
+      );
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -112,6 +116,7 @@ const People = () => {
       : !filters.date.from &&
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
+
     try {
       const data = await axios.post(url, {
         search: search,
@@ -129,7 +134,12 @@ const People = () => {
   const checkOne = (e, element) => {
     e.target.classList.toggle("active");
     if (e.target.classList.contains("active")) {
-      setSelectedItems((prevSelected) => [...prevSelected, element]);
+      if (props?.workSpace) {
+        props.people.setForm({
+          ...props.people.form,
+          people: [...new Set([...props.people.form.people, element])],
+        });
+      } else setSelectedItems((prevSelected) => [...prevSelected, element]);
       const allActiveSelectors = document.querySelectorAll(
         "td .checkbox.active"
       );
@@ -137,9 +147,15 @@ const People = () => {
       if (allSelectors.length === allActiveSelectors.length)
         document.querySelector("th .checkbox").classList.add("active");
     } else {
-      setSelectedItems((prevSelected) =>
-        prevSelected.filter((item) => item !== element)
-      );
+      if (props?.workSpace) {
+        props?.people?.setForm({
+          ...props.people.form,
+          people: props.people.form.people.filter((item) => item !== element),
+        });
+      } else
+        setSelectedItems((prevSelected) =>
+          prevSelected.filter((item) => item !== element)
+        );
       document.querySelector("th .checkbox").classList.remove("active");
     }
   };
@@ -162,13 +178,13 @@ const People = () => {
           <div
             onClick={(target) => {
               target.stopPropagation();
-              checkOne(target, e._id);
+              checkOne(target, !props?.workSpace ? e._id : e);
             }}
             className="checkbox"
           ></div>
         </td>
         <td>
-          <Link to={`${e._id}`}>
+          <Link to={`/people/${e._id}`}>
             {e.photo ? (
               <img src={e.photo} className="photo" alt="" />
             ) : (
@@ -177,7 +193,7 @@ const People = () => {
           </Link>
         </td>
         <td>
-          <Link to={`${e._id}`} className="name">
+          <Link to={`/people/${e._id}`} className="name">
             {e.firstName} {e.fatherName} {e.surName}
           </Link>
         </td>
@@ -196,28 +212,35 @@ const People = () => {
         <td> {e.email} </td>
         <td> {date(e.createdAt)} </td>
         <td>
-          <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>
-          <div className="options has-visit">
-            <div
-              onClick={(event) => {
-                event.stopPropagation();
-                setOverlay(true);
-                const allSelectors = document.querySelectorAll(".checkbox");
-                allSelectors.forEach((e) => e.classList.remove("active"));
-                setSelectedItems([e._id]);
-              }}
-              className="flex delete"
-            >
-              <i className="fa-solid fa-trash"></i> delete
-            </div>
-            <Link to={`${e._id}`} className="flex update">
-              <i className="fa-regular fa-pen-to-square"></i>
-              update
-            </Link>
-            <Link to={`${e._id}`} className="flex visit">
-              <i className="fa-solid fa-circle-user"></i> visit
-            </Link>
-          </div>
+          {!props?.workSpace && (
+            <>
+              <i
+                onClick={openOptions}
+                className="options fa-solid fa-ellipsis"
+              ></i>
+              <div className="options has-visit">
+                <div
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setOverlay(true);
+                    const allSelectors = document.querySelectorAll(".checkbox");
+                    allSelectors.forEach((e) => e.classList.remove("active"));
+                    setSelectedItems([e._id]);
+                  }}
+                  className="flex delete"
+                >
+                  <i className="fa-solid fa-trash"></i> delete
+                </div>
+                <Link to={`${e._id}`} className="flex update">
+                  <i className="fa-regular fa-pen-to-square"></i>
+                  update
+                </Link>
+                <Link to={`${e._id}`} className="flex visit">
+                  <i className="fa-solid fa-circle-user"></i> visit
+                </Link>
+              </div>
+            </>
+          )}
         </td>
       </tr>
     );
@@ -225,9 +248,10 @@ const People = () => {
 
   return (
     <>
-      <h1 className="title"> people </h1>
+      {!props?.workSpace && <h1 className="title"> people </h1>}
       <Table
         header={header}
+        workSpace={{ workSpace: props?.workSpace, infoForm: props?.people }}
         loading={loading}
         page={{ page: page, setPage, dataLength: dataLength.current }}
         data={{ data: tableData, allData: allPeople.current }}

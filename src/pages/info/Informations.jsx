@@ -174,8 +174,7 @@ const Informations = () => {
           </Link>
         </td>
         <td>
-          {e.countryId?.name} / {e.cityId?.name} / {e.regionId?.name} /
-          {e.streetId?.name}
+          {e.countryId?.name} / {e.cityId?.name} / {e.regionId?.name}
         </td>
         <td> {e.governmentId?.name} </td>
         <td>
