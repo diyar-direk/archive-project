@@ -86,9 +86,13 @@ const [search, setSearch] = useState("");
           filters[key]._id ? filters[key]._id : filters[key]
         }`)
     );
-    filters.date.from &&
-      filters.date.to &&
-      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+    filters.date.from && filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
+      : filters.date.from && !filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}`)
+      : !filters.date.from &&
+        filters.date.to &&
+        (url += `&createdAt[lte]=${filters.date.to}`);
     try {
       const data = await axios.get(url);
 

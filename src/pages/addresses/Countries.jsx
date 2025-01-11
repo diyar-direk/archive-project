@@ -67,9 +67,13 @@ const Countries = () => {
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Countries?active=true&limit=${limit}&page=${page}`;
 
-    filters.date.from &&
-      filters.date.to &&
-      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+    filters.date.from && filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
+      : filters.date.from && !filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}`)
+      : !filters.date.from &&
+        filters.date.to &&
+        (url += `&createdAt[lte]=${filters.date.to}`);
     try {
       const data = await axios.get(url);
       dataLength.current = data.data.numberOfActiveCountries;
