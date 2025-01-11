@@ -189,7 +189,7 @@ const Navbar = () => {
 
         <div className="flex-direction flex between gap-20">
           <div className="flex-direction flex gap-10">
-            <div className="links">
+            {/* <div className="links">
               <div onClick={openDiv} className="center">
                 <i className="fa-solid fa-user-group"></i>
                 <h1 className="flex-1">users</h1>
@@ -257,9 +257,9 @@ const Navbar = () => {
             <NavLink to={"/dsa"} className="w-100 justify-start center">
               <i className="fa-solid fa-map-location-dot"></i>
               <h1> test </h1>
-            </NavLink>
+            </NavLink> */}
 
-            {/* {pagesLinks} */}
+            {pagesLinks}
           </div>
 
           <div>
