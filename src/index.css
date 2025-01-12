@@ -358,6 +358,9 @@ body::-webkit-scrollbar {
 .mb-40 {
   margin-bottom: 40px !important;
 }
+.mb-10 {
+  margin-bottom: 10px !important;
+}
 
 .c-pointer {
   cursor: pointer;

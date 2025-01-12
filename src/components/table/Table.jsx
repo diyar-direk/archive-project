@@ -4,6 +4,7 @@ import axios from "axios";
 import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
 import DatePicker from "react-datepicker";
+import Filters from "./Filters";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
   const context = useContext(Context);
@@ -13,156 +14,203 @@ const Table = (props) => {
 
   const [data, setData] = useState({
     data: {
-      country: [],
-      city: [],
-      government: [],
-      villag: [],
-      region: [],
-      street: [],
+      Countries: [],
+      Cities: [],
+      Governments: [],
+      Villages: [],
+      Regions: [],
+      Streets: [],
     },
     searchData: {
-      country: [],
-      city: [],
-      government: [],
-      villag: [],
-      region: [],
-      street: [],
+      Countries: [],
+      Cities: [],
+      Governments: [],
+      Villages: [],
+      Regions: [],
+      Streets: [],
     },
+  });
+  const [dataLoading, setDataLoading] = useState({
+    Countries: true,
+    Cities: true,
+    Governments: true,
+    Villages: true,
+    Regions: true,
+    Streets: true,
   });
 
   const keys = Object.keys(props.filters?.filters || "");
   const [fltr, setFltr] = useState(props.filters?.filters || {});
 
-  useEffect(() => {
-    if (
-      keys?.includes("country") &&
-      data.data.country.length === 0 &&
-      hasFltr
-    ) {
+  const getFltrData = (e) => {
+    if (data.data[e.target.title].length <= 0)
       axios
-        .get(`${baseURL}/Countries?active=true`)
+        .get(`${baseURL}/${[e.target.title]}?active=true`)
         .then((res) => {
           setData({
             ...data,
-            data: { ...data.data, country: res.data.data },
-            searchData: { ...data.searchData, country: res.data.data },
+            data: { ...data.data, [e.target.title]: res.data.data },
+            searchData: { ...data.searchData, [e.target.title]: res.data.data },
           });
         })
-        .catch((err) => console.log(err));
-    }
-  }, [hasFltr]);
+        .catch((err) => console.log(err))
+        .finally(setDataLoading({ ...dataLoading, [e.target.title]: false }));
+  };
 
-  useEffect(() => {
-    if (keys?.includes("government")) {
-      setFltr({ ...fltr, government: "" });
-      if (hasFltr && fltr?.country)
-        axios
-          .get(
-            `${baseURL}/Governments?active=true&country=${fltr?.country._id}`
-          )
-          .then((res) => {
-            setData({
-              ...data,
-              data: { ...data.data, government: res.data.data },
-              searchData: { ...data.searchData, government: res.data.data },
-            });
-          })
-          .catch((err) => console.log(err));
-    }
-  }, [fltr?.country]);
+  // useEffect(() => {
+  //   if (
+  //     keys?.includes("Countries") &&
+  //     data.data.Countries.length === 0 &&
+  //     hasFltr
+  //   ) {
+  //     axios
+  //       .get(`${baseURL}/Countries?active=true`)
+  //       .then((res) => {
+  //         setData({
+  //           ...data,
+  //           data: { ...data.data, Countries: res.data.data },
+  //           searchData: { ...data.searchData, Countries: res.data.data },
+  //         });
+  //       })
+  //       .catch((err) => console.log(err));
+  //   }
+  // }, [hasFltr]);
 
-  useEffect(() => {
-    if (keys?.includes("city")) {
-      setFltr({ ...fltr, city: "" });
-      if (hasFltr && fltr?.government) {
-        axios
-          .get(
-            `${baseURL}/Cities?active=true&government=${fltr?.government?._id}`
-          )
-          .then((res) => {
-            setData({
-              ...data,
-              data: { ...data.data, city: res.data.data },
-              searchData: { ...data.searchData, city: res.data.data },
-            });
-          })
-          .catch((err) => console.log(err));
-      }
-    }
-  }, [fltr?.government]);
+  // useEffect(() => {
+  //   let refreshData = { ...fltr };
 
-  useEffect(() => {
-    let refreshData = { ...fltr };
+  //   if (keys?.includes("government"))
+  //     refreshData = { ...refreshData, government: "" };
+  //   if (keys?.includes("city")) refreshData = { ...refreshData, city: "" };
 
-    if (keys?.includes("villag")) refreshData = { ...refreshData, villag: "" };
-    if (keys?.includes("region")) refreshData = { ...refreshData, region: "" };
-    if (keys?.includes("street")) refreshData = { ...refreshData, street: "" };
+  //   setFltr(refreshData);
+  //   if (hasFltr) {
+  //     let dataObj = { ...data };
+  //     const promises = [];
 
-    setFltr(refreshData);
-    if (hasFltr) {
-      let dataObj = { ...data };
-      const promises = [];
-      if (
-        keys?.includes("villag") &&
-        data.data.villag.length === 0 &&
-        fltr?.city
-      ) {
-        promises.push(
-          axios
-            .get(`${baseURL}/Villages?active=true&city=${fltr?.city._id}`)
-            .then((res) => {
-              dataObj = {
-                ...dataObj,
-                data: { ...dataObj.data, villag: res.data.data },
-                searchData: { ...dataObj.searchData, villag: res.data.data },
-              };
-            })
-            .catch((err) => console.log(err))
-        );
-      }
-      if (
-        keys?.includes("street") &&
-        data.data.street.length === 0 &&
-        fltr?.city
-      ) {
-        promises.push(
-          axios
-            .get(`${baseURL}/Streets?active=true&city=${fltr?.city._id}`)
-            .then((res) => {
-              dataObj = {
-                ...dataObj,
-                data: { ...dataObj.data, street: res.data.data },
-                searchData: { ...dataObj.searchData, street: res.data.data },
-              };
-            })
-            .catch((err) => console.log(err))
-        );
-      }
-      if (
-        keys?.includes("region") &&
-        data.data.region.length === 0 &&
-        fltr?.city
-      ) {
-        promises.push(
-          axios
-            .get(`${baseURL}/Regions?active=true&city=${fltr?.city._id}`)
-            .then((res) => {
-              dataObj = {
-                ...dataObj,
-                data: { ...dataObj.data, region: res.data.data },
-                searchData: { ...dataObj.searchData, region: res.data.data },
-              };
-            })
-            .catch((err) => console.log(err))
-        );
-      }
-      Promise.all(promises)
-        .then(() => {
-          setData(dataObj);
-        })
-        .catch((err) => console.log("Error in one or more requests:", err));
-    }
-  }, [fltr?.city]);
+  //     if (keys?.includes("government") && data.data.government.length === 0) {
+  //       promises.push(
+  //         axios
+  //           .get(
+  //             `${baseURL}/Governments?active=true${
+  //               fltr.Countries ? `&Countries=${fltr?.Countries._id}` : ` `
+  //             }`
+  //           )
+  //           .then((res) => {
+  //             dataObj = {
+  //               ...dataObj,
+  //               data: { ...dataObj.data, government: res.data.data },
+  //               searchData: {
+  //                 ...dataObj.searchData,
+  //                 government: res.data.data,
+  //               },
+  //             };
+  //           })
+  //           .catch((err) => console.log(err))
+  //       );
+  //     }
+
+  //     if (keys?.includes("city") && data.data.city.length === 0) {
+  //       promises.push(
+  //         axios
+  //           .get(
+  //             `${baseURL}/Cities?active=true${
+  //               fltr.Countries ? `&Countries=${fltr?.Countries._id}` : ` `
+  //             }`
+  //           )
+  //           .then((res) => {
+  //             console.log(res.data);
+
+  //             dataObj = {
+  //               ...dataObj,
+  //               data: { ...dataObj.data, city: res.data.data },
+  //               searchData: { ...dataObj.searchData, city: res.data.data },
+  //             };
+  //           })
+  //           .catch((err) => console.log(err))
+  //       );
+  //     }
+
+  //     Promise.all(promises)
+  //       .then(() => {
+  //         setData(dataObj);
+  //       })
+  //       .catch((err) => console.log("Error in one or more requests:", err));
+  //   }
+  // }, [fltr?.Countries, hasFltr]);
+
+  // useEffect(() => {
+  //   let refreshData = { ...fltr };
+
+  //   if (keys?.includes("villag")) refreshData = { ...refreshData, villag: "" };
+  //   if (keys?.includes("region")) refreshData = { ...refreshData, region: "" };
+  //   if (keys?.includes("street")) refreshData = { ...refreshData, street: "" };
+
+  //   setFltr(refreshData);
+  //   if (hasFltr) {
+  //     let dataObj = { ...data };
+  //     const promises = [];
+  //     if (
+  //       keys?.includes("villag") &&
+  //       data.data.villag.length === 0 &&
+  //       fltr?.city
+  //     ) {
+  //       promises.push(
+  //         axios
+  //           .get(`${baseURL}/Villages?active=true&city=${fltr?.city._id}`)
+  //           .then((res) => {
+  //             dataObj = {
+  //               ...dataObj,
+  //               data: { ...dataObj.data, villag: res.data.data },
+  //               searchData: { ...dataObj.searchData, villag: res.data.data },
+  //             };
+  //           })
+  //           .catch((err) => console.log(err))
+  //       );
+  //     }
+  //     if (
+  //       keys?.includes("street") &&
+  //       data.data.street.length === 0 &&
+  //       fltr?.city
+  //     ) {
+  //       promises.push(
+  //         axios
+  //           .get(`${baseURL}/Streets?active=true&city=${fltr?.city._id}`)
+  //           .then((res) => {
+  //             dataObj = {
+  //               ...dataObj,
+  //               data: { ...dataObj.data, street: res.data.data },
+  //               searchData: { ...dataObj.searchData, street: res.data.data },
+  //             };
+  //           })
+  //           .catch((err) => console.log(err))
+  //       );
+  //     }
+  //     if (
+  //       keys?.includes("region") &&
+  //       data.data.region.length === 0 &&
+  //       fltr?.city
+  //     ) {
+  //       promises.push(
+  //         axios
+  //           .get(`${baseURL}/Regions?active=true&city=${fltr?.city._id}`)
+  //           .then((res) => {
+  //             dataObj = {
+  //               ...dataObj,
+  //               data: { ...dataObj.data, region: res.data.data },
+  //               searchData: { ...dataObj.searchData, region: res.data.data },
+  //             };
+  //           })
+  //           .catch((err) => console.log(err))
+  //       );
+  //     }
+  //     Promise.all(promises)
+  //       .then(() => {
+  //         setData(dataObj);
+  //       })
+  //       .catch((err) => console.log("Error in one or more requests:", err));
+  //   }
+  // }, [fltr?.city]);
 
   const createPags = (limit, dataLength) => {
     const pages = Math.ceil(dataLength / limit);
@@ -495,60 +543,80 @@ const Table = (props) => {
                 </div>
               )}
 
+              {/* <Filters
+                fltr={{ fltrKey: "Countries", fltr: "country", selectFilters }}
+                data={{ data, setData }}
+              /> */}
+
               {keys?.includes("country") && (
                 <div className="select relative">
-                  <div onClick={openDiv} className="center gap-10 w-100">
+                  <div
+                    title="Countries"
+                    onClick={(e) => {
+                      getFltrData(e);
+                      openDiv(e);
+                    }}
+                    className="center gap-10 w-100"
+                  >
                     <span className="pointer-none">
                       {fltr?.country ? fltr?.country.name : "all Countries"}
                     </span>
                     <i className="fa-solid fa-sort-down pointer-none"></i>
                   </div>
                   <article>
-                    <input
-                      type="text"
-                      className="fltr-search"
-                      placeholder="search for country ..."
-                      onInput={(inp) => {
-                        const filteredCountries = data.data.country.filter(
-                          (e) =>
-                            e.name
-                              .toLowerCase()
-                              .includes(inp.target.value.toLowerCase())
-                        );
-                        setData({
-                          ...data,
-                          searchData: {
-                            ...data.searchData,
-                            country: filteredCountries,
-                          },
-                        });
-                      }}
-                    />
-                    {data.searchData.country.length > 0 && (
-                      <h2
-                        data-name="country"
-                        data-data=""
-                        onClick={(e) => {
-                          selectFilters(e);
-                          removeClass(e);
-                        }}
-                      >
-                        all country
-                      </h2>
+                    {dataLoading.Countries ? (
+                      <p>loading ...</p>
+                    ) : (
+                      <>
+                        <input
+                          type="text"
+                          className="fltr-search"
+                          placeholder="search for Countries ..."
+                          onInput={(inp) => {
+                            const filteredCountries =
+                              data.data.Countries.filter((e) =>
+                                e.name
+                                  .toLowerCase()
+                                  .includes(inp.target.value.toLowerCase())
+                              );
+                            setData({
+                              ...data,
+                              searchData: {
+                                ...data.searchData,
+                                Countries: filteredCountries,
+                              },
+                            });
+                          }}
+                        />
+                        {data.searchData.Countries.length > 0 && (
+                          <h2
+                            data-name="country"
+                            data-data=""
+                            onClick={(e) => {
+                              selectFilters(e);
+                              removeClass(e);
+                            }}
+                          >
+                            all country
+                          </h2>
+                        )}
+                        {data.searchData.Countries.map((itm, i) => (
+                          <h2
+                            key={i}
+                            data-name="country"
+                            onClick={(e) => {
+                              selectFilters(e, itm);
+                              removeClass(e);
+                            }}
+                          >
+                            {itm.name}
+                          </h2>
+                        ))}
+                        {data.searchData.Countries.length <= 0 && (
+                          <p>no data</p>
+                        )}
+                      </>
                     )}
-                    {data.searchData.country.map((itm, i) => (
-                      <h2
-                        key={i}
-                        data-name="country"
-                        onClick={(e) => {
-                          selectFilters(e, itm);
-                          removeClass(e);
-                        }}
-                      >
-                        {itm.name}
-                      </h2>
-                    ))}
-                    {data.searchData.country.length <= 0 && <p>no data</p>}
                   </article>
                 </div>
               )}
@@ -564,59 +632,51 @@ const Table = (props) => {
                     <i className="fa-solid fa-sort-down pointer-none"></i>
                   </div>
                   <article>
-                    {fltr?.country && (
-                      <>
-                        <input
-                          type="text"
-                          className="fltr-search"
-                          placeholder="search for government ..."
-                          onInput={(inp) => {
-                            const filteredCountries =
-                              data.data.government.filter((e) =>
-                                e.name
-                                  .toLowerCase()
-                                  .includes(inp.target.value.toLowerCase())
-                              );
-                            setData({
-                              ...data,
-                              searchData: {
-                                ...data.searchData,
-                                government: filteredCountries,
-                              },
-                            });
-                          }}
-                        />
-                        {data.searchData.government.length > 0 && (
-                          <h2
-                            data-name="government"
-                            data-data=""
-                            onClick={(e) => {
-                              selectFilters(e);
-                              removeClass(e);
-                            }}
-                          >
-                            all government
-                          </h2>
-                        )}
-                        {data.searchData.government.map((itm, i) => (
-                          <h2
-                            key={i}
-                            data-name="government"
-                            onClick={(e) => {
-                              selectFilters(e, itm);
-                              removeClass(e);
-                            }}
-                          >
-                            {itm.name}
-                          </h2>
-                        ))}
-                        {data.searchData.government.length <= 0 && (
-                          <p>no data</p>
-                        )}
-                      </>
+                    <input
+                      type="text"
+                      className="fltr-search"
+                      placeholder="search for Governments ..."
+                      onInput={(inp) => {
+                        const filteredCountries = data.data.Governments.filter(
+                          (e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                        );
+                        setData({
+                          ...data,
+                          searchData: {
+                            ...data.searchData,
+                            Governments: filteredCountries,
+                          },
+                        });
+                      }}
+                    />
+                    {data.searchData.Governments.length > 0 && (
+                      <h2
+                        data-name="government"
+                        data-data=""
+                        onClick={(e) => {
+                          selectFilters(e);
+                          removeClass(e);
+                        }}
+                      >
+                        all government
+                      </h2>
                     )}
-
-                    {!fltr?.country && <p>please select country first</p>}
+                    {data.searchData.Governments.map((itm, i) => (
+                      <h2
+                        key={i}
+                        data-name="government"
+                        onClick={(e) => {
+                          selectFilters(e, itm);
+                          removeClass(e);
+                        }}
+                      >
+                        {itm.name}
+                      </h2>
+                    ))}
+                    {data.searchData.Governments.length <= 0 && <p>no data</p>}
                   </article>
                 </div>
               )}
@@ -630,56 +690,50 @@ const Table = (props) => {
                     <i className="fa-solid fa-sort-down pointer-none"></i>
                   </div>
                   <article>
-                    {fltr?.government && (
-                      <>
-                        <input
-                          type="text"
-                          className="fltr-search"
-                          placeholder="search for city ..."
-                          onInput={(inp) => {
-                            const filteredCountries = data.data.city.filter(
-                              (e) =>
-                                e.name
-                                  .toLowerCase()
-                                  .includes(inp.target.value.toLowerCase())
-                            );
-                            setData({
-                              ...data,
-                              searchData: {
-                                ...data.searchData,
-                                city: filteredCountries,
-                              },
-                            });
-                          }}
-                        />
-                        {data.searchData.city.length > 0 && (
-                          <h2
-                            data-name="city"
-                            data-data=""
-                            onClick={(e) => {
-                              selectFilters(e);
-                              removeClass(e);
-                            }}
-                          >
-                            all city
-                          </h2>
-                        )}
-                        {data.searchData.city.map((itm, i) => (
-                          <h2
-                            key={i}
-                            data-name="city"
-                            onClick={(e) => {
-                              selectFilters(e, itm);
-                              removeClass(e);
-                            }}
-                          >
-                            {itm.name}
-                          </h2>
-                        ))}
-                        {data.searchData.city.length <= 0 && <p>no data</p>}
-                      </>
+                    <input
+                      type="text"
+                      className="fltr-search"
+                      placeholder="search for city ..."
+                      onInput={(inp) => {
+                        const filteredCountries = data.data.Cities.filter((e) =>
+                          e.name
+                            .toLowerCase()
+                            .includes(inp.target.value.toLowerCase())
+                        );
+                        setData({
+                          ...data,
+                          searchData: {
+                            ...data.searchData,
+                            Cities: filteredCountries,
+                          },
+                        });
+                      }}
+                    />
+                    {data.searchData.Cities.length > 0 && (
+                      <h2
+                        data-name="city"
+                        data-data=""
+                        onClick={(e) => {
+                          selectFilters(e);
+                          removeClass(e);
+                        }}
+                      >
+                        all city
+                      </h2>
                     )}
-                    {!fltr?.government && <p>please select governemnt</p>}
+                    {data.searchData.Cities.map((itm, i) => (
+                      <h2
+                        key={i}
+                        data-name="city"
+                        onClick={(e) => {
+                          selectFilters(e, itm);
+                          removeClass(e);
+                        }}
+                      >
+                        {itm.name}
+                      </h2>
+                    ))}
+                    {data.searchData.Cities.length <= 0 && <p>no data</p>}
                   </article>
                 </div>
               )}
@@ -693,59 +747,55 @@ const Table = (props) => {
                     <i className="fa-solid fa-sort-down pointer-none"></i>
                   </div>
                   <article>
-                    {fltr?.city && (
-                      <>
-                        <input
-                          type="text"
-                          className="fltr-search"
-                          placeholder="search for region ..."
-                          onInput={(inp) => {
-                            const filteredCountries = data.data.region.filter(
-                              (e) =>
-                                e.name
-                                  .toLowerCase()
-                                  .includes(inp.target.value.toLowerCase())
-                            );
-                            setData({
-                              ...data,
-                              searchData: {
-                                ...data.searchData,
-                                region: filteredCountries,
-                              },
-                            });
-                          }}
-                        />
-                        {data.searchData.region.length > 0 && (
-                          <h2
-                            data-name="region"
-                            data-data=""
-                            onClick={(e) => {
-                              selectFilters(e);
-                              removeClass(e);
-                            }}
-                          >
-                            all regiones
-                          </h2>
-                        )}
-                        {data.searchData.region.map((itm, i) => (
-                          <h2
-                            key={i}
-                            data-name="region"
-                            onClick={(e) => {
-                              selectFilters(e, itm);
-                              removeClass(e);
-                            }}
-                          >
-                            {itm.name}
-                          </h2>
-                        ))}
-                        {data.searchData.region.length <= 0 && <p>no data</p>}
-                      </>
+                    <input
+                      type="text"
+                      className="fltr-search"
+                      placeholder="search for region ..."
+                      onInput={(inp) => {
+                        const filteredCountries = data.data.Regions.filter(
+                          (e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                        );
+                        setData({
+                          ...data,
+                          searchData: {
+                            ...data.searchData,
+                            Regions: filteredCountries,
+                          },
+                        });
+                      }}
+                    />
+                    {data.searchData.Regions.length > 0 && (
+                      <h2
+                        data-name="region"
+                        data-data=""
+                        onClick={(e) => {
+                          selectFilters(e);
+                          removeClass(e);
+                        }}
+                      >
+                        all regiones
+                      </h2>
                     )}
-                    {!fltr?.city && <p>please select city</p>}
+                    {data.searchData.Regions.map((itm, i) => (
+                      <h2
+                        key={i}
+                        data-name="region"
+                        onClick={(e) => {
+                          selectFilters(e, itm);
+                          removeClass(e);
+                        }}
+                      >
+                        {itm.name}
+                      </h2>
+                    ))}
+                    {data.searchData.Regions.length <= 0 && <p>no data</p>}
                   </article>
                 </div>
               )}
+
               {keys?.includes("street") && (
                 <div className="select relative">
                   <div onClick={openDiv} className="center gap-10 w-100">
@@ -755,56 +805,51 @@ const Table = (props) => {
                     <i className="fa-solid fa-sort-down pointer-none"></i>
                   </div>
                   <article>
-                    {fltr?.city && (
-                      <>
-                        <input
-                          type="text"
-                          className="fltr-search"
-                          placeholder="search for street ..."
-                          onInput={(inp) => {
-                            const filteredCountries = data.data.street.filter(
-                              (e) =>
-                                e.name
-                                  .toLowerCase()
-                                  .includes(inp.target.value.toLowerCase())
-                            );
-                            setData({
-                              ...data,
-                              searchData: {
-                                ...data.searchData,
-                                street: filteredCountries,
-                              },
-                            });
-                          }}
-                        />
-                        {data.searchData.street.length > 0 && (
-                          <h2
-                            data-name="street"
-                            data-data=""
-                            onClick={(e) => {
-                              selectFilters(e);
-                              removeClass(e);
-                            }}
-                          >
-                            all streetes
-                          </h2>
-                        )}
-                        {data.searchData.street.map((itm, i) => (
-                          <h2
-                            key={i}
-                            data-name="street"
-                            onClick={(e) => {
-                              selectFilters(e, itm);
-                              removeClass(e);
-                            }}
-                          >
-                            {itm.name}
-                          </h2>
-                        ))}
-                        {data.searchData.street.length <= 0 && <p>no data</p>}
-                      </>
+                    <input
+                      type="text"
+                      className="fltr-search"
+                      placeholder="search for street ..."
+                      onInput={(inp) => {
+                        const filteredCountries = data.data.Streets.filter(
+                          (e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                        );
+                        setData({
+                          ...data,
+                          searchData: {
+                            ...data.searchData,
+                            Streets: filteredCountries,
+                          },
+                        });
+                      }}
+                    />
+                    {data.searchData.Streets.length > 0 && (
+                      <h2
+                        data-name="street"
+                        data-data=""
+                        onClick={(e) => {
+                          selectFilters(e);
+                          removeClass(e);
+                        }}
+                      >
+                        all streetes
+                      </h2>
                     )}
-                    {!fltr?.city && <p>please select city</p>}
+                    {data.searchData.Streets.map((itm, i) => (
+                      <h2
+                        key={i}
+                        data-name="street"
+                        onClick={(e) => {
+                          selectFilters(e, itm);
+                          removeClass(e);
+                        }}
+                      >
+                        {itm.name}
+                      </h2>
+                    ))}
+                    {data.searchData.Streets.length <= 0 && <p>no data</p>}
                   </article>
                 </div>
               )}
@@ -818,56 +863,51 @@ const Table = (props) => {
                     <i className="fa-solid fa-sort-down pointer-none"></i>
                   </div>
                   <article>
-                    {fltr?.city && (
-                      <>
-                        <input
-                          type="text"
-                          className="fltr-search"
-                          placeholder="search for villag ..."
-                          onInput={(inp) => {
-                            const filteredCountries = data.data.villag.filter(
-                              (e) =>
-                                e.name
-                                  .toLowerCase()
-                                  .includes(inp.target.value.toLowerCase())
-                            );
-                            setData({
-                              ...data,
-                              searchData: {
-                                ...data.searchData,
-                                villag: filteredCountries,
-                              },
-                            });
-                          }}
-                        />
-                        {data.searchData.villag.length > 0 && (
-                          <h2
-                            data-name="villag"
-                            data-data=""
-                            onClick={(e) => {
-                              selectFilters(e);
-                              removeClass(e);
-                            }}
-                          >
-                            all villages
-                          </h2>
-                        )}
-                        {data.searchData.villag.map((itm, i) => (
-                          <h2
-                            key={i}
-                            data-name="villag"
-                            onClick={(e) => {
-                              selectFilters(e, itm);
-                              removeClass(e);
-                            }}
-                          >
-                            {itm.name}
-                          </h2>
-                        ))}
-                        {data.searchData.villag.length <= 0 && <p>no data</p>}
-                      </>
+                    <input
+                      type="text"
+                      className="fltr-search"
+                      placeholder="search for villag ..."
+                      onInput={(inp) => {
+                        const filteredCountries = data.data.Villages.filter(
+                          (e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                        );
+                        setData({
+                          ...data,
+                          searchData: {
+                            ...data.searchData,
+                            Villages: filteredCountries,
+                          },
+                        });
+                      }}
+                    />
+                    {data.searchData.Villages.length > 0 && (
+                      <h2
+                        data-name="villag"
+                        data-data=""
+                        onClick={(e) => {
+                          selectFilters(e);
+                          removeClass(e);
+                        }}
+                      >
+                        all villages
+                      </h2>
                     )}
-                    {!fltr?.city && <p>please select city</p>}
+                    {data.searchData.Villages.map((itm, i) => (
+                      <h2
+                        key={i}
+                        data-name="villag"
+                        onClick={(e) => {
+                          selectFilters(e, itm);
+                          removeClass(e);
+                        }}
+                      >
+                        {itm.name}
+                      </h2>
+                    ))}
+                    {data.searchData.Villages.length <= 0 && <p>no data</p>}
                   </article>
                 </div>
               )}

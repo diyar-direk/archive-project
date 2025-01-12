@@ -261,6 +261,7 @@ tbody td {
 .pagination {
   margin-top: 10px;
   gap: 10px;
+  margin-bottom: 20px;
 }
 .pagination h3 {
   width: 35px;

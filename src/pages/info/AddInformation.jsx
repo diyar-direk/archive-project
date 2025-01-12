@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../components/form.css";
+import "./information.css";
 import Mammoth from "mammoth";
 import { baseURL, searchPlaceholder } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import People from "./../people/People";
+import { Link } from "react-router-dom";
 const AddInformation = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -478,7 +480,9 @@ const AddInformation = () => {
       }
     }
   };
-
+  const deSelect = (id) => {
+    setForm({ ...form, people: form.people.filter((e) => e._id !== id._id) });
+  };
   return (
     <>
       {responseOverlay && (
@@ -486,6 +490,26 @@ const AddInformation = () => {
       )}
       {loading && <Loading />}
       <h1 className="title">add info</h1>
+      <h2 className="text-capitalize font-color mb-10">select people</h2>
+      <People workSpace="add_info align-center" people={{ setForm, form }} />
+      <div className="selected-people flex wrap gap-10">
+        <h2 className="text-capitalize font-color">{`people selectd : ${
+          form.people.length <= 0 ? "no one" : ""
+        }`}</h2>
+        {form.people.length > 0 &&
+          form.people.map((e) => (
+            <div key={e._id} className="center gap-10">
+              <Link
+                to={`/people/${e._id}`}
+                className="center text-capitalize font-color"
+              >
+                {e.firstName} {e.surName}
+              </Link>
+              <i onClick={() => deSelect(e)} className="fa-solid fa-xmark"></i>
+            </div>
+          ))}
+      </div>
+
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form">
           <h1>subject info </h1>
@@ -1305,7 +1329,6 @@ const AddInformation = () => {
         {error && <p className="error"> {error} </p>}
         <button className="btn">save</button>
       </form>
-      <People workSpace="add_info" people={{ setForm, form }} />
     </>
   );
 };
