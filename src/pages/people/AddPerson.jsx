@@ -176,57 +176,58 @@ const AddPerson = () => {
 
   useEffect(() => {
     if (!form.countryId) {
-      setForm({ ...form, governmentId: "" });
+      setForm({ ...form, governmentId: "", cityId: "" });
       setAllDataSelect({
         ...allDataSelect,
-        data: { ...allDataSelect.data, government: [] },
+        data: { ...allDataSelect.data, government: [], city: [] },
         searchData: {
           ...allDataSelect.searchData,
           government: [],
+          city: [],
         },
       });
       return;
     }
-    axios
-      .get(`${baseURL}/Governments?active=true&country=${form.countryId._id}`)
-      .then((res) => {
-        setAllDataSelect({
-          ...allDataSelect,
-          data: { ...allDataSelect.data, government: res.data.data },
-          searchData: {
-            ...allDataSelect.searchData,
-            government: res.data.data,
-          },
-        });
-      })
-      .catch((err) => console.log(err));
-  }, [form.countryId]);
 
-  useEffect(() => {
-    setForm({ ...form, cityId: "" });
-    setAllDataSelect({
-      ...allDataSelect,
-      data: { ...allDataSelect.data, city: [] },
-      searchData: {
-        ...allDataSelect.searchData,
-        city: [],
-      },
-    });
-    if (!form.governmentId) return;
-    axios
-      .get(`${baseURL}/Cities?active=true&government=${form.governmentId._id}`)
-      .then((res) => {
-        setAllDataSelect({
-          ...allDataSelect,
-          data: { ...allDataSelect.data, city: res.data.data },
-          searchData: {
-            ...allDataSelect.searchData,
-            city: res.data.data,
-          },
-        });
+    let dataObj = { ...allDataSelect };
+    const promises = [];
+    promises.push(
+      axios
+        .get(`${baseURL}/Governments?active=true&country=${form.countryId._id}`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, government: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              government: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+    promises.push(
+      axios
+        .get(`${baseURL}/Cities?active=true&country=${form.countryId._id}`)
+        .then((res) => {
+          dataObj = {
+            ...dataObj,
+            data: { ...dataObj.data, city: res.data.data },
+            searchData: {
+              ...dataObj.searchData,
+              city: res.data.data,
+            },
+          };
+        })
+        .catch((err) => console.log(err))
+    );
+
+    Promise.all(promises)
+      .then(() => {
+        setAllDataSelect(dataObj);
       })
-      .catch((err) => console.log(err));
-  }, [form.governmentId]);
+      .catch((err) => console.log("Error in one or more requests:", err));
+  }, [form.countryId]);
 
   useEffect(() => {
     setForm({ ...form, villageId: "", regionId: "", streetId: "" });
@@ -680,6 +681,7 @@ const AddPerson = () => {
             </div>
           </div>
         </div>
+
         <div className="form">
           <h1>stay informations</h1>
           <div className="flex wrap">
@@ -790,7 +792,7 @@ const AddPerson = () => {
                   select city
                 </div>
                 <article>
-                  {form.governmentId && (
+                  {form.countryId && (
                     <input
                       onClick={(e) => e.stopPropagation()}
                       placeholder={`${searchPlaceholder} city`}
@@ -821,9 +823,9 @@ const AddPerson = () => {
                       {itm.name}
                     </h2>
                   ))}
-                  {form.governmentId &&
+                  {form.countryId &&
                     allDataSelect.searchData.city.length <= 0 && <p>no data</p>}
-                  {!form.governmentId && <p>please select government first</p>}
+                  {!form.countryId && <p>please select country first</p>}
                 </article>
               </div>
               {form.cityId && (
