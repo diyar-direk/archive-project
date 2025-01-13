@@ -16,11 +16,11 @@ const People = (props) => {
   const limit = context?.limit;
   const [filters, setFilters] = useState({
     gender: "",
+    maritalStatus: "",
     country: "",
     government: "",
     city: "",
     villag: "",
-    maritalStatus: "",
     date: {
       from: "",
       to: "",
