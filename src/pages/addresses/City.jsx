@@ -18,15 +18,16 @@ const City = () => {
   const response = useRef(true);
   const [fltr, setFltr] = useState(false);
   const [error, setError] = useState(false);
-   const [formLoading, setFormLoading] = useState(false);
- const [search, setSearch] = useState("");
+  const [formLoading, setFormLoading] = useState(false);
+  const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     country: "",
-    government: "",
     date: {
       from: "",
       to: "",
-  }});
+    },
+  });
+
   const context = useContext(Context);
   const limit = context?.limit;
 
@@ -53,10 +54,10 @@ const City = () => {
     div && div.classList.remove("active");
   });
 
-  const header = ["name", "country", "government", "creat at"];
+  const header = ["name", "country", "creat at"];
   const [form, setForm] = useState({
     name: "",
-    government: "",
+    country: "",
   });
   const [update, setUpdate] = useState(false);
 
@@ -67,20 +68,19 @@ const City = () => {
     } else {
       setForm({
         name: "",
-        government: "",
+        country: "",
       });
     }
     error && setError(false);
   }, [update]);
 
   useEffect(() => {
-
-        if (!search) getData();
-      }, [page, filters.government, search, limit ]);
+    if (!search) getData();
+  }, [page, filters.country, search, limit]);
 
   useEffect(() => {
     axios
-      .get(`${baseURL}/Governments?active=true`)
+      .get(`${baseURL}/Countries?active=true`)
       .then((res) => {
         setFltrSelect({ data: res.data.data, searchData: res.data.data });
       })
@@ -94,14 +94,14 @@ const City = () => {
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Cities?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
-      keys.forEach(
-        (key) =>
-          key !== "date" &&
-          filters[key] &&
-          (url += `&${filters[key]._id ? key + "Id" : key}=${
-            filters[key]._id ? filters[key]._id : filters[key]
-          }`)
-      );
+    keys.forEach(
+      (key) =>
+        key !== "date" &&
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -125,7 +125,7 @@ const City = () => {
     if (!search) return;
     const timeOut = setTimeout(() => getSearchData(), 500);
     return () => clearTimeout(timeOut);
-  }, [page, filters.government,search, limit ]);
+  }, [page, filters.country, search, limit]);
 
   const getSearchData = async () => {
     setLoading(true);
@@ -133,7 +133,7 @@ const City = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Cities/search?active=true&limit=${limit}&page=${page}`;
-  const keys = Object.keys(filters);
+    const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
         key !== "date" &&
@@ -189,8 +189,7 @@ const City = () => {
         ></div>
       </td>
       <td>{e.name}</td>
-      <td>{e.government?.country?.name}</td>
-      <td>{e.government?.name}</td>
+      <td>{e?.country?.name}</td>
       <td>{date(e.createdAt)}</td>
       <td>
         <div className="center gap-10 actions">
@@ -218,11 +217,11 @@ const City = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormLoading(true);
-    if (!form.government) {
-      setError("Please select a government");
+    if (!form.country) {
+      setError("Please select a country");
     } else
       try {
-        const formData = { ...form, government: form.government._id };
+        const formData = { ...form, country: form.country._id };
 
         if (update) {
           const data = await axios.patch(
@@ -243,17 +242,16 @@ const City = () => {
 
         setForm({
           name: "",
-          government: "",
+          country: "",
         });
         getData();
       } catch (error) {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");
         else responseFun(false);
+      } finally {
+        setFormLoading(false);
       }
-      finally {
-      setFormLoading(false);
-    }
   };
 
   const openDiv = (e) => {
@@ -272,7 +270,7 @@ const City = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-      {formLoading && <Loading/>}
+      {formLoading && <Loading />}
       <h1 className="title">cities</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -289,12 +287,12 @@ const City = () => {
             id="name"
           />
 
-          <label> Government</label>
+          <label> country</label>
 
           <div className="select relative">
             <div onClick={openDiv} className="inp center gap-10 w-100">
               <span className="pointer-none">
-                {form.government ? form.government.name : "select government"}
+                {form.country ? form.country.name : "select country"}
               </span>
               <i className="fa-solid fa-sort-down pointer-none"></i>
             </div>
@@ -303,7 +301,7 @@ const City = () => {
                 onClick={(e) => e.stopPropagation()}
                 type="text"
                 className="fltr-search"
-                placeholder="search for government ..."
+                placeholder="search for country ..."
                 onInput={(inp) => {
                   const filteredCountries = fltrSelect.data.filter((e) =>
                     e.name
@@ -321,7 +319,7 @@ const City = () => {
                 <h2
                   key={i}
                   onClick={() => {
-                    setForm({ ...form, government: itm });
+                    setForm({ ...form, country: itm });
                     error && setError(false);
                   }}
                 >
@@ -355,9 +353,9 @@ const City = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "cities", getData  ,getSearchData}}
+            delete={{ url: "cities", getData, getSearchData }}
             hasFltr={{ fltr: fltr, setFltr }}
-            filters={{ search, setSearch, filters, setFilters}}
+            filters={{ search, setSearch, filters, setFilters }}
           />
         </div>
       </div>

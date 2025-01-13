@@ -3,7 +3,6 @@ import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
-import DatePicker from "react-datepicker";
 import Filters from "./Filters";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
