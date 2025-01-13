@@ -148,8 +148,10 @@ const Table = (props) => {
     }
   };
   const updateLimit = (e) => {
-    parseInt(e.target.value) !== limit &&
+    if (parseInt(e.target.value) !== limit) {
       context?.setLimit(parseInt(e.target.value));
+      props.page.setPage(1);
+    }
   };
   const [beforSubmit, setBeforeSubmit] = useState("");
 
