@@ -99,9 +99,11 @@ const Filters = (props) => {
   };
 
   const getFltrData = (key) => {
-    if (data.data[key]?.length <= 0)
+    let url = `${baseURL}/${key}?active=true`;
+
+    if (data.data[key]?.length <= 0) {
       axios
-        .get(`${baseURL}/${key}?active=true`)
+        .get(url)
         .then((res) => {
           setData({
             data: {
@@ -116,6 +118,7 @@ const Filters = (props) => {
         })
         .catch((err) => console.log(err))
         .finally(() => setDataLoading({ ...dataLoading, [key]: false }));
+    }
   };
 
   useEffect(() => {

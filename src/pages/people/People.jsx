@@ -26,6 +26,7 @@ const People = (props) => {
       to: "",
     },
   });
+
   const [search, setSearch] = useState("");
 
   const header = [
