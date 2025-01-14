@@ -18,8 +18,6 @@ const Informations = () => {
     government: "",
     city: "",
     villag: "",
-    region: "",
-    street: "",
     date: {
       from: "",
       to: "",

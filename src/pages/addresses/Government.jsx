@@ -71,15 +71,7 @@ const Government = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
+    filters.country && (url += `&country=${filters.country._id}`);
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -87,10 +79,12 @@ const Government = () => {
       : !filters.date.from &&
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
+
     try {
       const data = await axios.get(url);
-      dataLength.current = data.data.numberOfActiveCountries;
+      dataLength.current = data.data.numberOfActiveGovernments;
       allPeople.current = data.data.data.map((e) => e._id);
+
       setData(data.data.data);
     } catch (error) {
       console.log(error);
