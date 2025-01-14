@@ -5,32 +5,16 @@ import DatePicker from "react-datepicker";
 
 const Filters = (props) => {
   const [dataLoading, setDataLoading] = useState({
-    Countries: true,
-    Cities: true,
-    Governments: true,
-    Villages: true,
-    Regions: true,
-    Streets: true,
+    Countries: false,
+    Cities: false,
+    Governments: false,
+    Villages: false,
+    Regions: false,
+    Streets: false,
   });
-  const [data, setData] = useState({
-    data: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-    searchData: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-  });
+
   const [fltr, setFltr] = useState(props.fltr.fltr || {});
+
   const keys = Object.keys(fltr);
 
   const arrayOfKeys = [
@@ -64,8 +48,8 @@ const Filters = (props) => {
     };
 
     if (fltr[e?.target?.dataset?.name] !== obj[e?.target?.dataset?.name]) {
-      setFltr(obj);
     }
+    setFltr(obj);
   }
 
   const refreshFilter = () => {
@@ -98,60 +82,171 @@ const Filters = (props) => {
     e.target.parentNode.parentNode.children[0].classList.remove("active");
   };
 
-  const getFltrData = (key) => {
+  const getFltrData = async (key) => {
     let url = `${baseURL}/${key}?active=true`;
 
-    if (data.data[key]?.length <= 0) {
-      axios
-        .get(url)
-        .then((res) => {
-          setData({
-            data: {
-              ...data?.data,
-              [key]: res.data.data,
-            },
-            searchData: {
-              ...data?.searchData,
-              [key]: res.data.data,
-            },
-          });
-        })
-        .catch((err) => console.log(err))
-        .finally(() => setDataLoading({ ...dataLoading, [key]: false }));
+    if (props.dataArray.data.data[key]?.length <= 0) {
+      setDataLoading({ ...dataLoading, [key]: true });
+      try {
+        const res = await axios.get(url);
+
+        const currentData = props.dataArray.data;
+
+        const updatedData = {
+          data: {
+            ...currentData?.data,
+            [key]: res.data.data,
+          },
+          dataWithProps: {
+            ...currentData?.data,
+            [key]: res.data.data,
+          },
+          searchData: {
+            ...currentData?.searchData,
+            [key]: res.data.data,
+          },
+        };
+
+        if ((key === "Cities" || key === "Governments") && fltr.country._id) {
+          updatedData.searchData[key] = updatedData.searchData[key].filter(
+            (item) => fltr.country._id === item.country._id
+          );
+          updatedData.dataWithProps[key] = updatedData.dataWithProps[
+            key
+          ].filter((item) => fltr.country._id === item.country._id);
+        } else if (
+          (key === "Villages" || key === "Regions" || key === "Streets") &&
+          fltr.city._id
+        ) {
+          updatedData.searchData[key] = updatedData.searchData[key].filter(
+            (item) => fltr.city._id === item.city._id
+          );
+          updatedData.dataWithProps[key] = updatedData.dataWithProps[
+            key
+          ].filter((item) => fltr.city._id === item.city._id);
+        }
+
+        props.dataArray.setData(updatedData);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setDataLoading({ ...dataLoading, [key]: false });
+      }
     }
   };
 
   useEffect(() => {
+    let obj = { ...fltr };
+    keys.includes("city") && (obj = { ...obj, city: "" });
+    keys.includes("government") && (obj = { ...obj, government: "" });
+    setFltr(obj);
     if (
       (fltr.country && keys.includes("city")) ||
-      keys.includes("government")
+      (fltr.country && keys.includes("government"))
     ) {
-      setData({
-        ...data,
+      props.dataArray.setData({
+        ...props.dataArray.data,
         searchData: {
-          ...data.searchData,
-          Cities: data.searchData.Cities.filter(
+          ...props.dataArray.data.searchData,
+          Cities: props.dataArray.data.searchData.Cities.filter(
             (city) => fltr.country._id === city.country._id
           ),
-          Governments: data.searchData.Governments.filter(
+          Governments: props.dataArray.data.searchData.Governments.filter(
+            (government) => fltr.country._id === government.country._id
+          ),
+        },
+        dataWithProps: {
+          ...props.dataArray.data.searchData,
+          Cities: props.dataArray.data.searchData.Cities.filter(
+            (city) => fltr.country._id === city.country._id
+          ),
+          Governments: props.dataArray.data.searchData.Governments.filter(
             (government) => fltr.country._id === government.country._id
           ),
         },
       });
     } else if (
       (!fltr.country && keys.includes("city")) ||
-      keys.includes("government")
+      (!fltr.country && keys.includes("government"))
     ) {
-      setData({
-        ...data,
+      props.dataArray.setData({
+        ...props.dataArray.data,
         searchData: {
-          ...data.searchData,
-          Cities: data.data.Cities,
-          Governments: data.data.Governments,
+          ...props.dataArray.data.searchData,
+          Cities: props.dataArray.data.data.Cities,
+          Governments: props.dataArray.data.data.Governments,
+        },
+        dataWithProps: {
+          ...props.dataArray.data.searchData,
+          Cities: props.dataArray.data.data.Cities,
+          Governments: props.dataArray.data.data.Governments,
         },
       });
     }
   }, [fltr.country]);
+
+  useEffect(() => {
+    let obj = { ...fltr };
+
+    keys.includes("region") && (obj = { ...obj, region: "" });
+    keys.includes("street") && (obj = { ...obj, street: "" });
+    keys.includes("villag") && (obj = { ...obj, villag: "" });
+
+    setFltr(obj);
+    if (
+      (fltr.city && keys.includes("region")) ||
+      (fltr.city && keys.includes("street")) ||
+      (fltr.city && keys.includes("villag"))
+    ) {
+      props.dataArray.setData({
+        ...props.dataArray.data,
+        searchData: {
+          ...props.dataArray.data.searchData,
+          Streets: props.dataArray.data.searchData.Streets.filter(
+            (city) => fltr.city._id === city.city._id
+          ),
+          Regions: props.dataArray.data.searchData.Regions.filter(
+            (government) => fltr.city._id === government.city._id
+          ),
+          Villages: props.dataArray.data.searchData.Villages.filter(
+            (government) => fltr.city._id === government.city._id
+          ),
+        },
+        dataWithProps: {
+          ...props.dataArray.data.searchData,
+          Streets: props.dataArray.data.searchData.Streets.filter(
+            (city) => fltr.city._id === city.city._id
+          ),
+          Regions: props.dataArray.data.searchData.Regions.filter(
+            (government) => fltr.city._id === government.city._id
+          ),
+          Villages: props.dataArray.data.searchData.Villages.filter(
+            (government) => fltr.city._id === government.city._id
+          ),
+        },
+      });
+    } else if (
+      (!fltr.city && keys.includes("region")) ||
+      (!fltr.city && keys.includes("street")) ||
+      (!fltr.city && keys.includes("villag"))
+    ) {
+      props.dataArray.setData({
+        ...props.dataArray.data,
+        searchData: {
+          ...props.dataArray.data.searchData,
+          Villages: props.dataArray.data.data.Villages,
+          Streets: props.dataArray.data.data.Streets,
+          Regions: props.dataArray.data.data.Regions,
+        },
+        dataWithProps: {
+          ...props.dataArray.data.searchData,
+          Villages: props.dataArray.data.data.Villages,
+          Streets: props.dataArray.data.data.Streets,
+          Regions: props.dataArray.data.data.Regions,
+        },
+      });
+    }
+  }, [fltr.city]);
 
   const fltrData = keys?.map((e) => {
     if (e !== "date") {
@@ -260,28 +355,33 @@ const Filters = (props) => {
                 <p>loading ...</p>
               ) : (
                 <>
-                  <input
-                    type="text"
-                    className="fltr-search"
-                    placeholder={`search for ${targetKey.backendKey} ...`}
-                    onInput={(inp) => {
-                      const filteredCountries = data.data[
-                        targetKey.backendKey
-                      ].filter((e) =>
-                        e.name
-                          .toLowerCase()
-                          .includes(inp.target.value.toLowerCase())
-                      );
-                      setData({
-                        ...data,
-                        searchData: {
-                          ...data.searchData,
-                          [targetKey.backendKey]: filteredCountries,
-                        },
-                      });
-                    }}
-                  />
-                  {data?.searchData[targetKey.backendKey]?.length > 0 && (
+                  {props.dataArray.data?.data[targetKey.backendKey].length !==
+                    0 && (
+                    <input
+                      type="text"
+                      className="fltr-search"
+                      placeholder={`search for ${targetKey.backendKey} ...`}
+                      onInput={(inp) => {
+                        const filteredCountries =
+                          props.dataArray.data.dataWithProps[
+                            targetKey.backendKey
+                          ].filter((e) =>
+                            e.name
+                              .toLowerCase()
+                              .includes(inp.target.value.toLowerCase())
+                          );
+                        props.dataArray.setData({
+                          ...props.dataArray.data,
+                          searchData: {
+                            ...props.dataArray.data.searchData,
+                            [targetKey.backendKey]: filteredCountries,
+                          },
+                        });
+                      }}
+                    />
+                  )}
+                  {props.dataArray.data?.searchData[targetKey.backendKey]
+                    ?.length > 0 && (
                     <h2
                       data-name={e}
                       data-data=""
@@ -293,21 +393,22 @@ const Filters = (props) => {
                       all {targetKey.backendKey}
                     </h2>
                   )}
-                  {data?.searchData[targetKey.backendKey]?.map((itm, i) => (
-                    <h2
-                      key={i}
-                      data-name={e}
-                      onClick={(e) => {
-                        selectFilters(e, itm);
-                        removeClass(e);
-                      }}
-                    >
-                      {itm.name}
-                    </h2>
-                  ))}
-                  {data?.searchData[targetKey.backendKey]?.length <= 0 && (
-                    <p>no data</p>
+                  {props.dataArray.data?.searchData[targetKey.backendKey]?.map(
+                    (itm, i) => (
+                      <h2
+                        key={i}
+                        data-name={e}
+                        onClick={(e) => {
+                          selectFilters(e, itm);
+                          removeClass(e);
+                        }}
+                      >
+                        {itm.name}
+                      </h2>
+                    )
                   )}
+                  {props.dataArray.data?.searchData[targetKey.backendKey]
+                    ?.length <= 0 && <p>no data</p>}
                 </>
               )}
             </article>

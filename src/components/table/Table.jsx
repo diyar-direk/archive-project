@@ -155,6 +155,33 @@ const Table = (props) => {
   };
   const [beforSubmit, setBeforeSubmit] = useState("");
 
+  const [data, setData] = useState({
+    data: {
+      Countries: [],
+      Cities: [],
+      Governments: [],
+      Villages: [],
+      Regions: [],
+      Streets: [],
+    },
+    searchData: {
+      Countries: [],
+      Cities: [],
+      Governments: [],
+      Villages: [],
+      Regions: [],
+      Streets: [],
+    },
+    dataWithProps: {
+      Countries: [],
+      Cities: [],
+      Governments: [],
+      Villages: [],
+      Regions: [],
+      Streets: [],
+    },
+  });
+
   return (
     <>
       {hasFltr && (
@@ -163,6 +190,7 @@ const Table = (props) => {
             fltr: props.filters?.filters,
             setFilters: props.filters?.setFilters,
           }}
+          dataArray={{ data, setData }}
           hasFltr={{ hasFltr, setHasFltr }}
           page={{ setPage: props.page.setPage }}
         />
