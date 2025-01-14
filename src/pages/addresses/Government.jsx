@@ -4,8 +4,9 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
-import "../../components/form.css";
+import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
+import FormSelect from "../../components/form/FormSelect";
 const Government = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -26,7 +27,6 @@ const Government = () => {
   const [search, setSearch] = useState("");
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
-  const [country, setCountries] = useState({ data: [], searchData: [] });
 
   const responseFun = (complete = false) => {
     complete === true
@@ -43,12 +43,12 @@ const Government = () => {
     }, 3000);
   };
   window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .select .inp.active");
+    const div = document.querySelector("form.addresses .selecte .inp.active");
     div && div.classList.remove("active");
   });
 
   const header = ["name", "country", "creat at"];
-  const [form, setForm] = useState({ name: "", country: "" });
+  const [form, setForm] = useState({ name: "", countryId: "" });
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -56,87 +56,88 @@ const Government = () => {
       ref.current.focus();
       setForm(update);
     } else {
-      setForm({ name: "", country: "" });
+      setForm({ name: "", countryId: "" });
     }
     error && setError(false);
   }, [update]);
 
-   useEffect(() => {
-      if (!search) getData();
-    }, [page, search, limit, filters]);
-  
-    const getData = async () => {
-      setLoading(true);
-      setData([]);
-      setSelectedItems([]);
-      document.querySelector("th .checkbox")?.classList.remove("active");
-      let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
-      const keys = Object.keys(filters);
-      keys.forEach(
-        (key) =>
-          key !== "date" &&
-          filters[key] &&
-          (url += `&${filters[key]._id ? key + "Id" : key}=${
-            filters[key]._id ? filters[key]._id : filters[key]
-          }`)
-      );
-        filters.date.from && filters.date.to
-          ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-          : filters.date.from && !filters.date.to
-          ? (url += `&createdAt[gte]=${filters.date.from}`)
-          : !filters.date.from &&
-            filters.date.to &&
-            (url += `&createdAt[lte]=${filters.date.to}`);
-      try {
-        const data = await axios.get(url);
-        dataLength.current = data.data.numberOfActiveCountries;
-        allPeople.current = data.data.data.map((e) => e._id);
-        setData(data.data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    useEffect(() => {
-      if (!search) return;
-      const timeOut = setTimeout(() => getSearchData(), 500);
-      return () => clearTimeout(timeOut);
-    }, [page, search, limit, filters]);
-  
-    const getSearchData = async () => {
-      setLoading(true);
-      setData([]);
-      setSelectedItems([]);
-      document.querySelector("th .checkbox")?.classList.remove("active");
-      let url = `${baseURL}/Governments/search?active=true&limit=${limit}&page=${page}`;
-      const keys = Object.keys(filters);
-      keys.forEach(
-        (key) =>
-          key !== "date" &&
-          filters[key] &&
-          (url += `&${filters[key]._id ? key + "Id" : key}=${
-            filters[key]._id ? filters[key]._id : filters[key]
-          }`)
-      );
-      filters.date.from &&
+  useEffect(() => {
+    if (!search) getData();
+  }, [page, search, limit, filters]);
+
+  const getData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/Governments?active=true&limit=${limit}&page=${page}`;
+    const keys = Object.keys(filters);
+    keys.forEach(
+      (key) =>
+        key !== "date" &&
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
+    filters.date.from && filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
+      : filters.date.from && !filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}`)
+      : !filters.date.from &&
         filters.date.to &&
-        (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
-  
-      try {
-        const data = await axios.post(url, {
-          search: search,
-        });
-        dataLength.current = data.data.numberOfActiveResults;
-        allPeople.current = data.data.data.map((e) => e._id);
-        setData(data.data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+        (url += `&createdAt[lte]=${filters.date.to}`);
+    try {
+      const data = await axios.get(url);
+      dataLength.current = data.data.numberOfActiveCountries;
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!search) return;
+    const timeOut = setTimeout(() => getSearchData(), 500);
+    return () => clearTimeout(timeOut);
+  }, [page, search, limit, filters]);
+
+  const getSearchData = async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    let url = `${baseURL}/Governments/search?active=true&limit=${limit}&page=${page}`;
+    const keys = Object.keys(filters);
+    keys.forEach(
+      (key) =>
+        key !== "date" &&
+        filters[key] &&
+        (url += `&${filters[key]._id ? key + "Id" : key}=${
+          filters[key]._id ? filters[key]._id : filters[key]
+        }`)
+    );
+    filters.date.from &&
+      filters.date.to &&
+      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+
+    try {
+      const data = await axios.post(url, {
+        search: search,
+      });
+      dataLength.current = data.data.numberOfActiveResults;
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const checkOne = (e, element) => {
     e.target.classList.toggle("active");
     if (e.target.classList.contains("active")) {
@@ -183,7 +184,7 @@ const Government = () => {
           ></i>
           <i
             onClick={() => {
-              setUpdate(e);
+              setUpdate({ name: e.name, countryId: e.country, _id: e._id });
             }}
             className="update fa-regular fa-pen-to-square"
           ></i>
@@ -193,13 +194,14 @@ const Government = () => {
   ));
 
   const handleSubmit = async (e) => {
-    setFormLoading(true);
     e.preventDefault();
-    if (!form.country) {
+    if (!form.countryId) {
       setError("Please select a country");
-    } else
+    } else {
+      setFormLoading(true);
       try {
-        const formData = { ...form, country: form.country._id };
+        const formData = { name: form.name, country: form.countryId._id };
+
         if (update) {
           const data = await axios.patch(
             `${baseURL}/Governments/${update._id}`,
@@ -217,7 +219,7 @@ const Government = () => {
           }
         }
 
-        setForm({ name: "", country: "" });
+        setForm({ name: "", countryId: "" });
         getData();
       } catch (error) {
         console.log(error);
@@ -226,16 +228,7 @@ const Government = () => {
       } finally {
         setFormLoading(false);
       }
-  };
-  const openDiv = (e) => {
-    e.stopPropagation();
-    const allDivs = document.querySelectorAll(
-      ".overlay .filters .select div.active"
-    );
-    allDivs.forEach(
-      (ele) => ele !== e.target && ele.classList.remove("active")
-    );
-    e.target.classList.toggle("active");
+    }
   };
 
   return (
@@ -259,47 +252,13 @@ const Government = () => {
             onInput={(e) => setForm({ ...form, name: e.target.value })}
             id="name"
           />
-          <label> country</label>
 
-          <div className="select relative">
-            <div onClick={openDiv} className="inp center gap-10 w-100">
-              <span className="pointer-none">
-                {form.country ? form.country.name : "select country"}
-              </span>
-              <i className="fa-solid fa-sort-down pointer-none"></i>
-            </div>
-            <article>
-              <input
-                onClick={(e) => e.stopPropagation()}
-                type="text"
-                className="fltr-search"
-                placeholder="search for country ..."
-                onInput={(inp) => {
-                  const filteredCountries = country.data.filter((e) =>
-                    e.name
-                      .toLowerCase()
-                      .includes(inp.target.value.toLowerCase())
-                  );
+          <FormSelect
+            formKey="country"
+            error={{ error, setError }}
+            form={{ form, setForm }}
+          />
 
-                  setCountries({ ...country, searchData: filteredCountries });
-                }}
-              />
-
-              {country.searchData.map((itm, i) => (
-                <h2
-                  key={i}
-                  onClick={() => {
-                    setForm({ ...form, country: itm });
-                    error && setError(false);
-                  }}
-                >
-                  {itm.name}
-                </h2>
-              ))}
-
-              {country.searchData.length <= 0 && <p>no data</p>}
-            </article>
-          </div>
           {error && <p className="error"> {error} </p>}
           <div className="flex wrap gap-10">
             <button className={`${update ? "save" : ""} btn flex-1`}>

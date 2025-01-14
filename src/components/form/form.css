@@ -278,44 +278,7 @@ form.addresses .select > article p {
 form.addresses .select > article h2:hover {
   background-color: var(--body-color);
 }
-form.addresses div.capital span {
-  border: dashed 2px;
-  flex: 1;
-  padding: 8px;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  gap: 4px;
-  text-transform: capitalize;
-}
-form.addresses div.capital span.true,
-form.addresses div.capital span.true i {
-  color: #0e9e32;
-  border-color: #0e9e32;
-}
-form.addresses div.capital span.true:hover,
-form.addresses div.capital span.true.active {
-  color: white;
-  background-color: #0e9e32;
-}
-form.addresses div.capital span.true:hover i,
-form.addresses div.capital span.true.active i {
-  color: white;
-}
-form.addresses div.capital span.false,
-form.addresses div.capital span.false i {
-  color: #c70000;
-  border-color: #c70000;
-}
-form.addresses div.capital span.false:hover,
-form.addresses div.capital span.false.active {
-  color: white;
-  background-color: #c70000;
-}
-form.addresses div.capital span.false:hover i,
-form.addresses div.capital span.false.active i {
-  color: white;
-}
+
 form.addresses button.btn {
   font-size: 18px;
 }

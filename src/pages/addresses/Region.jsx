@@ -4,8 +4,9 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
-import "../../components/form.css";
+import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
+import FormSelect from "../../components/form/FormSelect";
 const Region = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -15,7 +16,6 @@ const Region = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
-  const [fltr, setFltr] = useState(false);
   const [error, setError] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [search, setSearch] = useState("");
@@ -25,14 +25,14 @@ const Region = () => {
     city: "",
     date: {
       from: "",
-      to: "",}
+      to: "",
+    },
   });
   const context = useContext(Context);
   const limit = context?.limit;
 
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
-  const [fltrSelect, setFltrSelect] = useState({ data: [], searchData: [] });
 
   const responseFun = (complete = false) => {
     complete === true
@@ -49,7 +49,7 @@ const Region = () => {
     }, 3000);
   };
   window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .select .inp.active");
+    const div = document.querySelector("form.addresses .selecte .inp.active");
     div && div.classList.remove("active");
   });
 
@@ -68,18 +68,8 @@ const Region = () => {
   }, [update]);
 
   useEffect(() => {
-
     if (!search) getData();
-}, [page, filters.city ,limit ,search]);
-
-  useEffect(() => {
-    axios
-      .get(`${baseURL}/Cities?active=true`)
-      .then((res) => {
-        setFltrSelect({ data: res.data.data, searchData: res.data.data });
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  }, [page, filters.city, limit, search]);
 
   const getData = async () => {
     setLoading(true);
@@ -212,10 +202,10 @@ const Region = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormLoading(true);
     if (!form.city) {
       setError("Please select a city");
-    } else
+    } else {
+      setFormLoading(true);
       try {
         const formData = { ...form, city: form.city._id };
 
@@ -242,21 +232,10 @@ const Region = () => {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");
         else responseFun(false);
+      } finally {
+        setFormLoading(false);
       }
-     finally {
-      setFormLoading(false);
     }
-  };
-
-  const openDiv = (e) => {
-    e.stopPropagation();
-    const allDivs = document.querySelectorAll(
-      ".overlay .filters .select div.active"
-    );
-    allDivs.forEach(
-      (ele) => ele !== e.target && ele.classList.remove("active")
-    );
-    e.target.classList.toggle("active");
   };
 
   return (
@@ -264,7 +243,7 @@ const Region = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-           {formLoading && <Loading />}
+      {formLoading && <Loading />}
       <h1 className="title">regions</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -280,50 +259,12 @@ const Region = () => {
             onInput={(e) => setForm({ ...form, name: e.target.value })}
             id="name"
           />
-          <label> city</label>
 
-          <div className="select relative">
-            <div onClick={openDiv} className="inp center gap-10 w-100">
-              <span className="pointer-none">
-                {form.city ? form.city.name : "select city"}
-              </span>
-              <i className="fa-solid fa-sort-down pointer-none"></i>
-            </div>
-            <article>
-              <input
-                onClick={(e) => e.stopPropagation()}
-                type="text"
-                className="fltr-search"
-                placeholder="search for city ..."
-                onInput={(inp) => {
-                  const filteredCountries = fltrSelect.data.filter((e) =>
-                    e.name
-                      .toLowerCase()
-                      .includes(inp.target.value.toLowerCase())
-                  );
-
-                  setFltrSelect({
-                    ...fltrSelect,
-                    searchData: filteredCountries,
-                  });
-                }}
-              />
-
-              {fltrSelect.searchData.map((itm, i) => (
-                <h2
-                  key={i}
-                  onClick={() => {
-                    setForm({ ...form, city: itm });
-                    error && setError(false);
-                  }}
-                >
-                  {itm.name}
-                </h2>
-              ))}
-
-              {fltrSelect.searchData.length <= 0 && <p>no data</p>}
-            </article>
-          </div>
+          <FormSelect
+            formKey="allCity"
+            error={{ error, setError }}
+            form={{ form, setForm }}
+          />
           {error && <p className="error"> {error} </p>}
           <div className="flex wrap gap-10">
             <button className={`${update ? "save" : ""} btn flex-1`}>
@@ -347,8 +288,7 @@ const Region = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Regions", getData,getSearchData }}
-            hasFltr={{ fltr: fltr, setFltr }}
+            delete={{ url: "Regions", getData, getSearchData }}
             filters={{ search, setSearch, filters, setFilters }}
           />
         </div>

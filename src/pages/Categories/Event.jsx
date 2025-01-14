@@ -4,7 +4,7 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
-import "../../components/form.css";
+import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 const Event = () => {
   const [data, setData] = useState([]);
@@ -18,12 +18,10 @@ const Event = () => {
   const context = useContext(Context);
   const limit = context?.limit;
   const [filters, setFilters] = useState({
-    country: "",
-    government: "",
-    city: "",
     date: {
       from: "",
-      to: "",}
+      to: "",
+    },
   });
   const [search, setSearch] = useState("");
   const [responseOverlay, setResponseOverlay] = useState(false);
@@ -62,9 +60,8 @@ const Event = () => {
   }, [update]);
 
   useEffect(() => {
-
     if (!search) getData();
-}, [page,limit ,search,filters]);
+  }, [page, limit, search, filters]);
 
   const getData = async () => {
     setLoading(true);
@@ -104,7 +101,7 @@ const Event = () => {
     if (!search) return;
     const timeOut = setTimeout(() => getSearchData(), 500);
     return () => clearTimeout(timeOut);
-  }, [page, search,filters, limit]);
+  }, [page, search, filters, limit]);
 
   const getSearchData = async () => {
     setLoading(true);
@@ -221,10 +218,9 @@ const Event = () => {
       console.log(error);
       if (error.status === 400) responseFun("reapeted data");
       else responseFun(false);
+    } finally {
+      setFormLoading(false);
     }
-  finally {
-    setFormLoading(false);
-  }
   };
 
   return (
@@ -232,7 +228,7 @@ const Event = () => {
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-           {formLoading && <Loading />}
+      {formLoading && <Loading />}
       <h1 className="title">Events</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -271,8 +267,8 @@ const Event = () => {
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Events", getData,getSearchData }}
-            filters={{ search, setSearch, filters, setFilters}}
+            delete={{ url: "Events", getData, getSearchData }}
+            filters={{ search, setSearch, filters, setFilters }}
           />
         </div>
       </div>

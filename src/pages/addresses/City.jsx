@@ -4,9 +4,10 @@ import { baseURL } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
-import "../../components/form.css";
+import "../../components/form/form.css";
 import { Context } from "./../../context/context";
 import Loading from "../../components/loading/Loading";
+import FormSelect from "../../components/form/FormSelect";
 const City = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -16,7 +17,6 @@ const City = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
-  const [fltr, setFltr] = useState(false);
   const [error, setError] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [search, setSearch] = useState("");
@@ -33,7 +33,6 @@ const City = () => {
 
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
-  const [fltrSelect, setFltrSelect] = useState({ data: [], searchData: [] });
 
   const responseFun = (complete = false) => {
     complete === true
@@ -50,15 +49,16 @@ const City = () => {
     }, 3000);
   };
   window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .select .inp.active");
+    const div = document.querySelector("form.addresses .selecte .inp.active");
     div && div.classList.remove("active");
   });
 
   const header = ["name", "country", "creat at"];
   const [form, setForm] = useState({
     name: "",
-    country: "",
+    countryId: "",
   });
+
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ const City = () => {
     } else {
       setForm({
         name: "",
-        country: "",
+        countryId: "",
       });
     }
     error && setError(false);
@@ -77,15 +77,6 @@ const City = () => {
   useEffect(() => {
     if (!search) getData();
   }, [page, filters.country, search, limit]);
-
-  useEffect(() => {
-    axios
-      .get(`${baseURL}/Countries?active=true`)
-      .then((res) => {
-        setFltrSelect({ data: res.data.data, searchData: res.data.data });
-      })
-      .catch((err) => console.log(err));
-  }, []);
 
   const getData = async () => {
     setLoading(true);
@@ -205,7 +196,7 @@ const City = () => {
           ></i>
           <i
             onClick={() => {
-              setUpdate(e);
+              setUpdate({ name: e.name, countryId: e.country, _id: e._id });
             }}
             className="update fa-regular fa-pen-to-square"
           ></i>
@@ -216,12 +207,12 @@ const City = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setFormLoading(true);
-    if (!form.country) {
+    if (!form.countryId) {
       setError("Please select a country");
-    } else
+    } else {
+      setFormLoading(true);
       try {
-        const formData = { ...form, country: form.country._id };
+        const formData = { name: form.name, country: form.countryId._id };
 
         if (update) {
           const data = await axios.patch(
@@ -242,7 +233,7 @@ const City = () => {
 
         setForm({
           name: "",
-          country: "",
+          countryId: "",
         });
         getData();
       } catch (error) {
@@ -252,17 +243,7 @@ const City = () => {
       } finally {
         setFormLoading(false);
       }
-  };
-
-  const openDiv = (e) => {
-    e.stopPropagation();
-    const allDivs = document.querySelectorAll(
-      ".overlay .filters .select div.active"
-    );
-    allDivs.forEach(
-      (ele) => ele !== e.target && ele.classList.remove("active")
-    );
-    e.target.classList.toggle("active");
+    }
   };
 
   return (
@@ -287,49 +268,11 @@ const City = () => {
             id="name"
           />
 
-          <label> country</label>
-
-          <div className="select relative">
-            <div onClick={openDiv} className="inp center gap-10 w-100">
-              <span className="pointer-none">
-                {form.country ? form.country.name : "select country"}
-              </span>
-              <i className="fa-solid fa-sort-down pointer-none"></i>
-            </div>
-            <article>
-              <input
-                onClick={(e) => e.stopPropagation()}
-                type="text"
-                className="fltr-search"
-                placeholder="search for country ..."
-                onInput={(inp) => {
-                  const filteredCountries = fltrSelect.data.filter((e) =>
-                    e.name
-                      .toLowerCase()
-                      .includes(inp.target.value.toLowerCase())
-                  );
-
-                  setFltrSelect({
-                    ...fltrSelect,
-                    searchData: filteredCountries,
-                  });
-                }}
-              />
-              {fltrSelect.searchData.map((itm, i) => (
-                <h2
-                  key={i}
-                  onClick={() => {
-                    setForm({ ...form, country: itm });
-                    error && setError(false);
-                  }}
-                >
-                  {itm.name}
-                </h2>
-              ))}
-
-              {fltrSelect.searchData.length <= 0 && <p>no data</p>}
-            </article>
-          </div>
+          <FormSelect
+            formKey="country"
+            error={{ error, setError }}
+            form={{ form, setForm }}
+          />
           {error && <p className="error"> {error} </p>}
           <div className="flex wrap gap-10">
             <button className={`${update ? "save" : ""} btn flex-1`}>
@@ -354,7 +297,6 @@ const City = () => {
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "cities", getData, getSearchData }}
-            hasFltr={{ fltr: fltr, setFltr }}
             filters={{ search, setSearch, filters, setFilters }}
           />
         </div>

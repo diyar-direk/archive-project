@@ -1,11 +1,10 @@
 import React, { useRef, useState } from "react";
-import "../../components/form.css";
-import Mammoth from "mammoth";
+import "../../components/form/form.css";
 import { baseURL, placeholder } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
-import FormSelect from "../../components/FormSelect";
+import FormSelect from "../../components/form/FormSelect";
 const AddPerson = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {

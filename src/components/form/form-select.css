@@ -1,0 +1,70 @@
+form.addresses .flex-direction > label {
+  margin-bottom: 10px;
+}
+form.addresses .selecte > article {
+  position: absolute;
+  width: 100%;
+  background: var(--body-color);
+  z-index: 2;
+  top: calc(100% + 6px);
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: var(--box-shadow);
+  max-height: 150px;
+  overflow-y: auto;
+}
+form.addresses .selecte .inp.active + article {
+  top: calc(100% + 2px);
+  opacity: 1;
+  pointer-events: all;
+}
+
+form.addresses .selecte > article > input {
+  padding: 8px;
+  font-size: 15px;
+  width: 100%;
+  border: none;
+  background: var(--aside-color);
+  border-radius: 4px;
+  color: var(--font-color);
+  position: sticky;
+  top: 0;
+  margin-bottom: 10px;
+}
+
+form.addresses .selecte > article h2 {
+  border-bottom: 1px solid var(--body-color);
+  background-color: var(--section-color);
+  cursor: pointer;
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-align: center;
+  text-transform: capitalize;
+}
+form.addresses .selecte > article p {
+  border-bottom: 1px solid var(--body-color);
+  background-color: var(--section-color);
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-align: center;
+  text-transform: capitalize;
+}
+form.addresses .selecte > article h2:hover {
+  background-color: var(--aside-color);
+}
+
+form.addresses .flex-direction > span {
+  margin-top: 10px;
+  background-color: var(--section-color);
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-align: center;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+form.addresses .flex-direction > span:hover {
+  background-color: var(--main-color);
+}

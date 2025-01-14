@@ -27,12 +27,12 @@ function App() {
           <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
           <Route path="countries" element={<Countries />} />
-          <Route path="sections" element={<Sections />} />
           <Route path="governments" element={<Government />} />
           <Route path="cities" element={<City />} />
           <Route path="villages" element={<Village />} />
           <Route path="regions" element={<Region />} />
           <Route path="streets" element={<Street />} />
+          <Route path="sections" element={<Sections />} />
           <Route path="sources" element={<Sources />} />
           <Route path="event" element={<Event />} />
           <Route path="party" element={<Party />} />

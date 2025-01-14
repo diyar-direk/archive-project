@@ -4,11 +4,10 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
-import "../../components/form.css";
+import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 
 const Sources = () => {
-
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -20,16 +19,14 @@ const Sources = () => {
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
   const [formLoading, setFormLoading] = useState(false);
-const context = useContext(Context);
-const [filters, setFilters] = useState({
-  country: "",
-  government: "",
-  city: "",
-  date: {
-    from: "",
-    to: "",}
-});
-const [search, setSearch] = useState("");
+  const context = useContext(Context);
+  const [filters, setFilters] = useState({
+    date: {
+      from: "",
+      to: "",
+    },
+  });
+  const [search, setSearch] = useState("");
   const limit = context?.limit;
   const responseFun = (complete = false) => {
     complete === true
@@ -69,7 +66,7 @@ const [search, setSearch] = useState("");
 
   useEffect(() => {
     if (!search) getData();
-}, [page ,limit ,search,filters]);
+  }, [page, limit, search, filters]);
 
   const getData = async () => {
     setLoading(true);
@@ -127,7 +124,7 @@ const [search, setSearch] = useState("");
     if (!search) return;
     const timeOut = setTimeout(() => getSearchData(), 500);
     return () => clearTimeout(timeOut);
-  }, [page, search,filters, limit]);
+  }, [page, search, filters, limit]);
 
   const getSearchData = async () => {
     setLoading(true);
@@ -135,7 +132,7 @@ const [search, setSearch] = useState("");
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Sources/search?active=true&limit=${limit}&page=${page}`;
-    
+
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -229,8 +226,7 @@ const [search, setSearch] = useState("");
       console.log(error);
       if (error.response?.status === 400) responseFun("reapeted data");
       else responseFun(false);
-    }
-    finally {
+    } finally {
       setFormLoading(false);
     }
   };
@@ -240,7 +236,7 @@ const [search, setSearch] = useState("");
       {responseOverlay && (
         <SendData data={`country`} response={response.current} />
       )}
-      {formLoading && <Loading/>}
+      {formLoading && <Loading />}
       <h1 className="title">Sources</h1>
       <div className="flex align-start gap-20 wrap">
         <form onSubmit={handleSubmit} className="addresses">
@@ -293,8 +289,8 @@ const [search, setSearch] = useState("");
             data={{ data: tableData, allData: allPeople.current }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Sources", getData,getSearchData }}
-            filters={{ search, setSearch, filters, setFilters}}
+            delete={{ url: "Sources", getData, getSearchData }}
+            filters={{ search, setSearch, filters, setFilters }}
           />
         </div>
       </div>
