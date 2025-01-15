@@ -23,6 +23,7 @@ const Informations = () => {
       to: "",
     },
   });
+
   const [search, setSearch] = useState("");
 
   const header = [

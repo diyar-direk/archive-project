@@ -260,7 +260,7 @@ body.arabic {
 .grid-3 {
   display: grid;
   gap: 30px;
-  grid-template-columns: repeat(auto-fill, minmax(31%, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 }
 .gap-2 {
   gap: 2px;

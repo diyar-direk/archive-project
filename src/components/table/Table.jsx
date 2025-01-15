@@ -226,6 +226,7 @@ const Table = (props) => {
         onSubmit={(e) => {
           e.preventDefault();
           props.filters.setSearch(beforSubmit);
+          props.page.setPage(1);
         }}
         className="flex center gap-10 table-search"
       >

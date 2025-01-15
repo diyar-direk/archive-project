@@ -97,6 +97,7 @@ const People = (props) => {
   const getSearchData = async () => {
     setLoading(true);
     setData([]);
+
     !props?.workSpace && setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people/search?active=true&limit=${limit}&page=${page}`;

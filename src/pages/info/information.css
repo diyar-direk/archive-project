@@ -10,24 +10,40 @@ form.dashboard-form > div.form > div label.document input {
 form.dashboard-form > div.form > div label.document i {
   color: var(--main-color);
 }
+form .grid-3 > div.docments {
+  flex-direction: column;
+  background: var(--section-color);
+  padding: 10px;
+  border-radius: 4px;
+  max-height: 400px;
+  justify-content: space-between;
+  min-width: auto;
+}
+form .grid-3 > div.docments img,
+form .grid-3 > div.docments video {
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+}
 
 form .remove-doc {
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
+  border-radius: 4px;
+  width: 100%;
+  padding: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #c70000;
-  color: white;
-  font-size: 11px;
+  color: #c70000;
+  background-color: #c7000021;
+  font-size: 14px;
+  border: dashed 1px #c70000;
   cursor: pointer;
-  margin-bottom: 5px;
-  margin-left: auto;
-  box-shadow: 0 0 7px #890a0a;
+  text-transform: capitalize;
+  font-weight: 600;
 }
 form .remove-doc:hover {
-  transform: scale(1.2);
+  color: white;
+  background-color: #c70000;
 }
 form audio {
   width: 100%;
@@ -36,6 +52,7 @@ form .files {
   background-color: var(--aside-color);
   padding: 10px;
   border-radius: 4px;
+  margin-bottom: 10px;
 }
 form .files img {
   width: 60px;

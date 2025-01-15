@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
 import "../../components/form/form.css";
 import "./information.css";
-import Mammoth from "mammoth";
 import { baseURL } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
@@ -9,6 +8,7 @@ import Loading from "../../components/loading/Loading";
 import People from "./../people/People";
 import { Link } from "react-router-dom";
 import FormSelect from "../../components/form/FormSelect";
+import DocumentsShow from "./DocumentsShow";
 const AddInformation = () => {
   const [loading, setLoading] = useState(false);
 
@@ -48,75 +48,12 @@ const AddInformation = () => {
   const [documents, setDocuments] = useState({
     image: [],
     video: [],
-    file: [],
     audio: [],
   });
 
   const [uploadedFiles, setUploadedFiles] = useState({ list: [] });
   const [activeFile, setActiveFile] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
-
-  const addperson = (file) => {
-    const fileReader = new FileReader();
-
-    fileReader.onload = (event) => {
-      const fileType = file.type;
-
-      if (fileType === "application/pdf") {
-        setActiveFile({
-          content: event.target.result,
-          type: "application/pdf",
-          name: file.name,
-        });
-      } else if (fileType === "text/plain") {
-        setActiveFile({
-          content: event.target.result,
-          type: "text/plain",
-          name: file.name,
-        });
-      } else if (
-        fileType ===
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-      ) {
-        const arrayBuffer = event.target.result;
-        Mammoth.extractRawText({ arrayBuffer })
-          .then((result) => {
-            setActiveFile({
-              content: result.value,
-              type: "docx",
-              name: file.name,
-            });
-            setIsPopupOpen(true);
-          })
-          .catch((err) => {
-            console.error("Error reading .docx file:", err);
-            alert("Failed to open .docx file.");
-          });
-        return;
-      } else {
-        alert("Unsupported file type for preview.");
-      }
-
-      setIsPopupOpen(true);
-    };
-
-    if (file.type === "application/pdf") {
-      fileReader.readAsDataURL(file);
-    } else if (file.type === "text/plain") {
-      fileReader.readAsText(file);
-    } else if (
-      file.type ===
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    ) {
-      fileReader.readAsArrayBuffer(file);
-    } else {
-      alert(
-        "Unsupported file type. Only text, PDF, and DOCX files are allowed."
-      );
-    }
-  };
 
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
@@ -138,64 +75,114 @@ const AddInformation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.maritalStatus) setError("please select maritalStatus");
-    else if (!form.gender) setError("please select gender");
-    else if (!form.countryId) setError("please select country");
+    if (!form.countryId) setError("please select country");
     else if (!form.governmentId) setError("please select government");
     else if (!form.cityId) setError("please select city");
     else if (!form.sectionId) setError("please select section");
-    else if (!form.sources) setError("please select source");
     else {
       setLoading(true);
       const keys = Object.keys(form);
-      const formData = new FormData();
+      const formData = { ...form };
 
       keys.forEach((key) => {
         if (
           (form[key] && !Array.isArray(form[key])) ||
           (Array.isArray(form[key]) && form[key]?.length !== 0)
         ) {
-          if (!Array.isArray(form[key]))
-            formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
-          else {
-            form[key].forEach((item) => {
-              formData.append(`${key}[]`, item._id || item);
-            });
+          if (!Array.isArray(form[key])) {
+            formData[key] = form[key]?._id ? form[key]._id : form[key];
+          } else {
+            formData[key] = form[key].map((itm) => itm._id || itm);
           }
+        } else {
+          formData[key] = null;
         }
       });
 
       try {
-        const data = await axios.post(`${baseURL}/people`, formData);
+        const data = await axios.post(`${baseURL}/Information`, formData);
+        const id = data.data.data._id;
+
+        const imagesDoc = new FormData();
+        const videosDoc = new FormData();
+        const audioDoc = new FormData();
+        const documentDoc = new FormData();
+        if (documents.image.length > 0) {
+          imagesDoc.append("informationId", id);
+          documents.image.forEach((item) => {
+            imagesDoc.append(`images`, item);
+          });
+          try {
+            await axios.post(`${baseURL}/media/images`, imagesDoc);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        if (documents.video.length > 0) {
+          videosDoc.append("informationId", id);
+          documents.video.forEach((item) => {
+            videosDoc.append(`videos`, item);
+          });
+          try {
+            await axios.post(`${baseURL}/media/videos`, videosDoc);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        if (documents.audio.length > 0) {
+          audioDoc.append("informationId", id);
+          documents.audio.forEach((item) => {
+            audioDoc.append(`audios`, item);
+          });
+          try {
+            await axios.post(`${baseURL}/media/audios`, audioDoc);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
+        if (uploadedFiles.list.length > 0) {
+          documentDoc.append("informationId", id);
+          uploadedFiles.list.forEach((item) => {
+            documentDoc.append(`documents`, item);
+          });
+          try {
+            await axios.post(`${baseURL}/media/documents`, documentDoc);
+          } catch (error) {
+            console.log(error);
+          }
+        }
+
         if (data.status === 201) {
           responseFun(true);
           setForm({
             //personal data
-            imgae: "",
-            firstName: "",
-            fatherName: "",
-            surName: "",
-            gender: "",
-            maritalStatus: "",
-            motherName: "",
-            birthDate: "",
-            placeOfBirth: "",
-            occupation: "",
+            people: [],
+            Coordinates: [],
+            subject: "",
+            note: "",
+            details: "",
+            sectionId: "",
+            cityId: "",
             countryId: "",
             governmentId: "",
-            cityId: "",
-            villageId: "",
             regionId: "",
+            villageId: "",
             streetId: "",
             addressDetails: "",
-            email: "",
-            phone: "",
-            sectionId: "",
             //categories data
-            sources: "",
+            sources: [],
             events: [],
             parties: [],
           });
+          setDocuments({
+            image: [],
+            video: [],
+            audio: [],
+          });
+          setUploadedFiles({ list: [] });
         }
       } catch (error) {
         console.log(error);
@@ -244,6 +231,7 @@ const AddInformation = () => {
             <div className="flex flex-direction">
               <label htmlFor="subject">subject</label>
               <textarea
+                required
                 value={form.subject}
                 onChange={handleForm}
                 className="inp"
@@ -257,6 +245,7 @@ const AddInformation = () => {
               <textarea
                 value={form.note}
                 onChange={handleForm}
+                required
                 className="inp"
                 placeholder="test"
                 id="note"
@@ -267,6 +256,7 @@ const AddInformation = () => {
               <label htmlFor="details">details</label>
               <textarea
                 value={form.details}
+                required
                 onChange={handleForm}
                 className="inp"
                 placeholder="test"
@@ -429,142 +419,57 @@ const AddInformation = () => {
               </label>
             </div>
 
-            <div>
-              <div className="flex flex-direction">
-                <label className="inp document gap-10 center">
-                  <input
-                    type="file"
-                    id="document"
-                    multiple
-                    accept=".pdf, .docx, .txt"
-                    onInput={(e) => {
-                      setUploadedFiles((prevFiles) => ({
-                        ...prevFiles,
-                        list: [
-                          ...prevFiles.list,
-                          ...Array.from(e.target.files),
-                        ],
-                      }));
-                    }}
-                  />
-                  Upload Document
-                  <i className="fa-solid fa-file"></i>
-                </label>
-              </div>
+            <div className="flex flex-direction">
+              <label className="inp document gap-10 center">
+                <input
+                  type="file"
+                  id="list"
+                  multiple
+                  accept=".pdf, .docx, .txt"
+                  onInput={(e) => {
+                    const validFiles = Array.from(e.target.files).filter(
+                      (file) =>
+                        [
+                          "application/pdf",
+                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                          "text/plain",
+                        ].includes(file.type)
+                    );
+                    setUploadedFiles((prevFiles) => ({
+                      ...prevFiles,
+                      list: [...prevFiles.list, ...validFiles],
+                    }));
+                  }}
+                />
+                Upload Document
+                <i className="fa-solid fa-file"></i>
+              </label>
             </div>
           </div>
         </div>
 
         {documents.image.length > 0 && (
-          <div className="form">
-            <h1>images selected</h1>
-            <div className="grid-3">
-              {documents.image.map((e, i) => {
-                return (
-                  <div className="flex flex-direction relative" key={i}>
-                    <i
-                      onClick={() => {
-                        const image = documents.image.filter(
-                          (img) => img !== e
-                        );
-                        setDocuments({ ...documents, image });
-                      }}
-                      className="remove-doc fa-solid fa-trash-can"
-                    ></i>
-                    <img src={URL.createObjectURL(e)} alt="" />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <DocumentsShow documents={{ documents, setDocuments }} data="image" />
         )}
 
         {documents.video.length > 0 && (
-          <div className="form">
-            <h1>videos selected</h1>
-            <div className="grid-3">
-              {documents.video.map((e, i) => {
-                return (
-                  <div className="flex flex-direction relative" key={i}>
-                    <i
-                      onClick={() => {
-                        const updatedVideos = documents.video.filter(
-                          (video) => video !== e
-                        );
-                        setDocuments({ ...documents, video: updatedVideos });
-                      }}
-                      className="remove-doc fa-solid fa-trash-can"
-                    ></i>
-                    <video src={URL.createObjectURL(e)} controls></video>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <DocumentsShow documents={{ documents, setDocuments }} data="video" />
         )}
 
         {documents.audio.length > 0 && (
-          <div className="form">
-            <h1>audios selected</h1>
-            <div className="grid-3">
-              {documents.audio.map((e, i) => {
-                return (
-                  <div className="flex flex-direction relative" key={i}>
-                    <i
-                      onClick={() => {
-                        const updatedaudio = documents.audio.filter(
-                          (audio) => audio !== e
-                        );
-                        setDocuments({ ...documents, audio: updatedaudio });
-                      }}
-                      className="remove-doc fa-solid fa-trash-can"
-                    ></i>
-                    <audio src={URL.createObjectURL(e)} controls></audio>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
+          <DocumentsShow documents={{ documents, setDocuments }} data="audio" />
         )}
 
         {uploadedFiles.list.length > 0 && (
-          <div className="form">
-            <h1>Files Selected</h1>
-            <div className="grid-3">
-              {uploadedFiles.list.map((file, index) => (
-                <div
-                  className="c-pointer flex flex-direction relative"
-                  key={index}
-                >
-                  <i
-                    onClick={() => {
-                      const updatedFiles = uploadedFiles.list.filter(
-                        (f) => f !== file
-                      );
-                      setUploadedFiles({
-                        ...uploadedFiles,
-                        list: updatedFiles,
-                      });
-                    }}
-                    className="remove-doc fa-solid fa-trash-can"
-                  ></i>
-                  <div
-                    className="flex gap-10 files"
-                    onClick={() => addperson(file)}
-                  >
-                    <img
-                      src={require(`./${file.name.split(".").pop()}.png`)}
-                      alt=""
-                    />
-                    <div className="flex flex-direction">
-                      <h3>{file.name}</h3>
-                      <h4>{formatFileSize(file.size)}</h4>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <DocumentsShow
+            popup={{ setIsPopupOpen, isPopupOpen }}
+            activeFile={{ activeFile, setActiveFile }}
+            documents={{
+              documents: uploadedFiles,
+              setDocuments: setUploadedFiles,
+            }}
+            data="list"
+          />
         )}
 
         {isPopupOpen && activeFile && (
