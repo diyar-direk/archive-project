@@ -16,6 +16,9 @@ import LoginForm from "./pages/Login/LoginForm";
 import Sections from "./pages/Categories/Sections";
 import Informations from "./pages/info/Informations";
 import AddInformation from "./pages/info/AddInformation";
+import InfoPage from "./pages/info/InfoPage";
+import AddCoordinates from "./pages/coordinates/AddCoordinates";
+import Coordinates from "./pages/coordinates/Coordinates";
 
 function App() {
   return (
@@ -37,7 +40,10 @@ function App() {
           <Route path="event" element={<Event />} />
           <Route path="party" element={<Party />} />
           <Route path="infromations" element={<Informations />} />
+          <Route path="infromations/:id" element={<InfoPage />} />
           <Route path="add_information" element={<AddInformation />} />
+          <Route path="Coordinates" element={<Coordinates />} />
+          <Route path="add_coordinates" element={<AddCoordinates />} />
         </Route>
       </Routes>
     </div>

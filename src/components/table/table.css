@@ -395,9 +395,9 @@ div.table div.actions i {
   cursor: pointer;
   font-size: 18px;
 }
-div.table div.actions i.delete {
+div.table div.actions .delete {
   color: #ce0606;
 }
-div.table div.actions i.update {
+div.table div.actions .update {
   color: #4400ff;
 }

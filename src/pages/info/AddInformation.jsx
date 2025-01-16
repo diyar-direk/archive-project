@@ -22,7 +22,7 @@ const AddInformation = () => {
   const [form, setForm] = useState({
     //personal data
     people: [],
-    Coordinates: [],
+    coordinates: [],
     subject: "",
     note: "",
     details: "",
@@ -160,7 +160,7 @@ const AddInformation = () => {
           setForm({
             //personal data
             people: [],
-            Coordinates: [],
+            coordinates: [],
             subject: "",
             note: "",
             details: "",
@@ -302,6 +302,13 @@ const AddInformation = () => {
 
             <FormSelect
               formKey="street"
+              error={{ error, setError }}
+              form={{ form, setForm }}
+            />
+
+            <FormSelect
+              formKey="coordinates"
+              type="multi"
               error={{ error, setError }}
               form={{ form, setForm }}
             />

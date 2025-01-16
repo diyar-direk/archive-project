@@ -57,6 +57,16 @@ export const links = [
     role: ["admin", "user"],
   },
   {
+    icon: "fa-solid fa-thumbtack",
+    children: [
+      { title: "Coordinates", path: "/coordinates", role: ["admin", "user"] },
+      { title: "add coordinates", path: "/add_coordinates", role: ["admin"] },
+    ],
+    title: "Coordinates",
+    type: "multi",
+    role: ["admin", "user"],
+  },
+  {
     icon: "fa-solid fa-map-location-dot",
     title: "test",
     path: "/test",

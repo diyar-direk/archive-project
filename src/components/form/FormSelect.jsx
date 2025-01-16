@@ -3,41 +3,6 @@ import { baseURL, searchPlaceholder } from "../../context/context";
 import "./form-select.css";
 import axios from "axios";
 
-/* <article>
-                  <input
-                    onClick={(e) => e.stopPropagation()}
-                    placeholder={`${searchPlaceholder} events`}
-                    onInput={(inp) => {
-                      const filteredCountries =
-                        allDataSelect.data.events.filter((e) =>
-                          e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
-                        );
-                      setAllDataSelect({
-                        ...allDataSelect,
-                        searchData: {
-                          ...allDataSelect.searchData,
-                          events: filteredCountries,
-                        },
-                      });
-                    }}
-                    type="text"
-                  />
-                  {allDataSelect.searchData.events.map((itm, i) => (
-                    <h2
-                      key={i}
-                      id="events"
-                      onClick={(e) => selectCategories(e, itm)}
-                    >
-                      {itm.name}
-                    </h2>
-                  ))}
-                  {allDataSelect.searchData.events.length <= 0 && (
-                    <p>no data</p>
-                  )}
-                </article> */
-
 const FormSelect = (props) => {
   const handleClick = (e) => {
     e.stopPropagation();
@@ -63,6 +28,7 @@ const FormSelect = (props) => {
     Sections: true,
     Events: true,
     Parties: true,
+    Coordinates: true,
   });
 
   const [allDataSelect, setAllDataSelect] = useState({
@@ -77,6 +43,7 @@ const FormSelect = (props) => {
       Sections: [],
       Events: [],
       Parties: [],
+      Coordinates: [],
     },
     searchData: {
       Countries: [],
@@ -89,6 +56,7 @@ const FormSelect = (props) => {
       Sections: [],
       Events: [],
       Parties: [],
+      Coordinates: [],
     },
   });
 
@@ -185,6 +153,11 @@ const FormSelect = (props) => {
         return {
           key: "Countries",
           formKey: "countryId",
+        };
+      case "coordinates":
+        return {
+          key: "Coordinates",
+          formKey: "coordinates",
         };
       case "region":
         return {
@@ -316,7 +289,11 @@ const FormSelect = (props) => {
                           : selectCategories(e, itm)
                       }
                     >
-                      {itm?.name ? itm?.name : itm?.source_name}
+                      {itm?.name
+                        ? itm?.name
+                        : itm?.source_name
+                        ? itm?.source_name
+                        : itm?.coordinates}
                     </h2>
                   ))}
                   {allDataSelect?.searchData[keyValues.key].length === 0 && (
@@ -345,7 +322,11 @@ const FormSelect = (props) => {
               id={keyValues.formKey}
               key={span._id}
             >
-              {span?.name ? span?.name : span?.source_name}
+              {span?.name
+                ? span?.name
+                : span?.source_name
+                ? span?.source_name
+                : span?.coordinates}
             </span>
           ))}
         </div>

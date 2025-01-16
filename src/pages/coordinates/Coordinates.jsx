@@ -1,9 +1,9 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, date, nextJoin } from "../../context/context";
+import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
-const Informations = () => {
+const Coordinates = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -18,6 +18,7 @@ const Informations = () => {
     government: "",
     city: "",
     villag: "",
+    region: "",
     date: {
       from: "",
       to: "",
@@ -27,14 +28,13 @@ const Informations = () => {
   const [search, setSearch] = useState("");
 
   const header = [
-    "subject",
-    "detiles",
+    "coordinates",
     "place",
     "government",
-    "people",
-    "sourses",
-    "parties",
-    "events",
+    "street",
+    "region",
+    "source",
+    "note",
     "create at",
   ];
 
@@ -48,7 +48,7 @@ const Informations = () => {
     setSelectedItems([]);
 
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Information?active=true&limit=${limit}&page=${page}`;
+    let url = `${baseURL}/Coordinates?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -68,10 +68,10 @@ const Informations = () => {
 
     try {
       const data = await axios.get(url);
-      dataLength.current = data.data.numberOfActiveInformations;
+      dataLength.current = data.data.numberOfActiveCoordinates;
 
-      allPeople.current = data.data.informations.map((e) => e._id);
-      setData(data.data.informations);
+      allPeople.current = data.data.data.map((e) => e._id);
+      setData(data.data.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -90,7 +90,7 @@ const Informations = () => {
     setData([]);
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Information/search?active=true&limit=${limit}&page=${page}`;
+    let url = `${baseURL}/Coordinates/search?active=true&limit=${limit}&page=${page}`;
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -113,7 +113,6 @@ const Informations = () => {
       });
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
-      console.log(data.data);
 
       setData(data.data.data);
     } catch (error) {
@@ -141,17 +140,6 @@ const Informations = () => {
     }
   };
 
-  const openOptions = (e) => {
-    e.stopPropagation();
-    const div = document.querySelectorAll("div.table tbody td i.options");
-    div.forEach((ele) => {
-      if (ele !== e.target) {
-        ele.classList.remove("active-div");
-      }
-    });
-    e.target.classList.toggle("active-div");
-  };
-
   const tableData = data?.map((e) => {
     return (
       <tr key={e._id}>
@@ -164,35 +152,20 @@ const Informations = () => {
             className="checkbox"
           ></div>
         </td>
-        <td>{e.subject}</td>
+        <td>{e.coordinates}</td>
         <td>
-          <Link to={`${e._id}`} className="name">
-            {e.details?.length <= 40
-              ? e.details
-              : e.details?.slice(0, 40) + "..."}
-          </Link>
-        </td>
-        <td>
-          {e.countryId?.name} / {e.cityId?.name} / {e.regionId?.name}
+          {e.countryId.name} / {e.cityId.name}
         </td>
         <td> {e.governmentId?.name} </td>
+
+        <td>{e.streetId?.name}</td>
+        <td>{e.regionId?.name}</td>
+        <td>{e.sources?.name}</td>
+        <td>{e?.note}</td>
+        <td>{date(e.createdAt)}</td>
         <td>
-          {e.people?.map((person, i) => (
-            <Link className="name" key={i} to={`/people/${person._id}`}>
-              {e.people[i + 1]
-                ? `${person.firstName} ${person.surName} , `
-                : `${person.firstName} ${person.surName}`}
-            </Link>
-          ))}
-        </td>
-        <td>{nextJoin(e.sources, "source_name")}</td>
-        <td>{nextJoin(e.parties, "name")}</td>
-        <td>{nextJoin(e.events, "name")}</td>
-        <td> {date(e.createdAt)} </td>
-        <td>
-          <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>
-          <div className="options has-visit">
-            <div
+          <div className="center gap-10 actions">
+            <i
               onClick={(event) => {
                 event.stopPropagation();
                 setOverlay(true);
@@ -200,17 +173,9 @@ const Informations = () => {
                 allSelectors.forEach((e) => e.classList.remove("active"));
                 setSelectedItems([e._id]);
               }}
-              className="flex delete"
-            >
-              <i className="fa-solid fa-trash"></i> delete
-            </div>
-            <Link to={`${e._id}`} className="flex update">
-              <i className="fa-regular fa-pen-to-square"></i>
-              update
-            </Link>
-            <Link to={`${e._id}`} className="flex visit">
-              <i className="fa-solid fa-eye"> </i> details
-            </Link>
+              className="delete fa-solid fa-trash"
+            ></i>
+            <Link className="update fa-regular fa-pen-to-square"></Link>
           </div>
         </td>
       </tr>
@@ -219,20 +184,20 @@ const Informations = () => {
 
   return (
     <>
-      <h1 className="title"> info </h1>
+      <h1 className="title"> Coordinates </h1>
       <Table
         header={header}
-        searchInpPlacecholder={`search by subject`}
+        searchInpPlacecholder={`search by coordinates`}
         loading={loading}
         page={{ page: page, setPage, dataLength: dataLength.current }}
         data={{ data: tableData, allData: allPeople.current }}
         items={{ slectedItems: slectedItems, setSelectedItems }}
         filters={{ filters, setFilters, search, setSearch }}
         overlay={{ overlay: overlay, setOverlay }}
-        delete={{ getData, url: "Information", getSearchData }}
+        delete={{ getData, url: "Coordinates", getSearchData }}
       />
     </>
   );
 };
 
-export default Informations;
+export default Coordinates;
