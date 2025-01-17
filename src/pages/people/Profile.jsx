@@ -33,7 +33,6 @@ const Profile = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("image", image);
-    console.log(image);
 
     try {
       const data = await axios.patch(`${baseURL}/people/${id}`, formData);

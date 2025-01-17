@@ -193,6 +193,7 @@ const AddInformation = () => {
       }
     }
   };
+
   const deSelect = (id) => {
     setForm({ ...form, people: form.people.filter((e) => e._id !== id._id) });
   };

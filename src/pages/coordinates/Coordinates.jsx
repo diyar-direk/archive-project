@@ -160,7 +160,7 @@ const Coordinates = () => {
 
         <td>{e.streetId?.name}</td>
         <td>{e.regionId?.name}</td>
-        <td>{e.sources?.name}</td>
+        <td>{e.sources?.source_name}</td>
         <td>{e?.note}</td>
         <td>{date(e.createdAt)}</td>
         <td>

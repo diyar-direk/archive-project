@@ -145,3 +145,31 @@ iframe {
 .selected-people a:hover {
   text-decoration: underline;
 }
+
+.people-cat {
+  margin-bottom: 10px;
+}
+.people-cat .profile-image i,
+.people-cat .profile-image img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--section-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  color: var(--font-color);
+}
+.people-cat .name {
+  text-transform: capitalize;
+  font-size: 17px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--font-color);
+  font-weight: 500;
+}
+.people-cat .name:hover {
+  text-decoration: underline;
+}

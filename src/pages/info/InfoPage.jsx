@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
+import CategoriesShow from "../../components/CategoriesShow";
 
 const InfoPage = () => {
   const { id } = useParams();
@@ -40,19 +41,47 @@ const InfoPage = () => {
       <p>{data.note}</p>
       <div className="flex align-center gap-10">
         <h3> country:</h3>
-        <p>{data.countryId.name}</p>
+        <p>{data.countryId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
         <h3> city:</h3>
-        <p>{data.cityId.name}</p>
+        <p>{data.cityId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
         <h3> government:</h3>
-        <p>{data.governmentId.name}</p>
+        <p>{data.governmentId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h3> government:</h3>
-        <p>{data.governmentId.name}</p>
+        <h3>region:</h3>
+        <p>{data.regionId?.name}</p>
+      </div>
+      <div className="flex align-center gap-10">
+        <h3>street:</h3>
+        <p>{data.streetId?.name}</p>
+      </div>
+      <div className="flex align-center gap-10">
+        <h3>village:</h3>
+        <p>{data.villageId?.name}</p>
+      </div>
+      <div className="flex align-center gap-10">
+        <h3>addressDetails:</h3>
+        <p>{data.addressDetails}</p>
+      </div>
+      <CategoriesShow
+        title="coordinates"
+        data={data.coordinates}
+        name="coordinates"
+      />
+
+      <div className="categories grid-3">
+        <CategoriesShow title="people" name="people" data={data.people} />
+        <CategoriesShow title="events" data={data.events} name="name" />
+        <CategoriesShow title="parties" data={data.parties} name="name" />
+        <CategoriesShow
+          title="sources"
+          data={data.sources}
+          name="source_name"
+        />
       </div>
     </div>
   );

@@ -89,9 +89,6 @@
 }
 div.categories.grid-3 {
   margin-top: 30px;
-  background-color: var(--body-color);
-  box-shadow: var(--box-shadow);
-  padding: 30px 20px;
   border-radius: 6px;
 }
 div.categories.grid-3 > div {
@@ -99,20 +96,28 @@ div.categories.grid-3 > div {
   box-shadow: var(--box-shadow);
   border-radius: 6px;
   color: var(--font-color);
+  background-color: var(--body-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 150px;
+}
+div.categories.grid-3 > div:nth-child(even) {
+  background-color: var(--aside-color);
 }
 div.categories.grid-3 > div h2 {
   text-align: center;
   text-transform: capitalize;
   margin-bottom: 10px;
 }
-div.categories.grid-3 > div p span {
-  font-weight: 500;
-  font-size: 19px;
-}
+
 div.categories.grid-3 > div p {
   text-transform: capitalize;
   font-size: 18px;
   margin-bottom: 10px;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 div.categories.grid-3 > div h3 {
   text-transform: capitalize;
