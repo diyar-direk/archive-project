@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
-import CategoriesShow from "../../components/CategoriesShow";
+import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
+import MediaShow from "../../components/categoriesComp/MediaShow";
 
 const InfoPage = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const InfoPage = () => {
       })
       .finally(() => setLoading(false));
   }, []);
+  console.log(data);
 
   return loading ? (
     <div className="flex flex-direction gap-20">
@@ -53,27 +55,27 @@ const InfoPage = () => {
       </div>
       <div className="flex align-center gap-10">
         <h3>region:</h3>
-        <p>{data.regionId?.name}</p>
+        <p>{data.regionId ? data.regionId?.name : "no region found"}</p>
       </div>
       <div className="flex align-center gap-10">
         <h3>street:</h3>
-        <p>{data.streetId?.name}</p>
+        <p>{data.streetId ? data.streetId?.name : "no street found"}</p>
       </div>
       <div className="flex align-center gap-10">
         <h3>village:</h3>
-        <p>{data.villageId?.name}</p>
+        <p>{data.villageId ? data.villageId?.name : "no village found"}</p>
       </div>
       <div className="flex align-center gap-10">
         <h3>addressDetails:</h3>
-        <p>{data.addressDetails}</p>
+        <p>{data.addressDetails ? data.addressDetails : "no Details found"}</p>
       </div>
-      <CategoriesShow
-        title="coordinates"
-        data={data.coordinates}
-        name="coordinates"
-      />
 
       <div className="categories grid-3">
+        <CategoriesShow
+          title="coordinates"
+          data={data.coordinates}
+          name="coordinates"
+        />
         <CategoriesShow title="people" name="people" data={data.people} />
         <CategoriesShow title="events" data={data.events} name="name" />
         <CategoriesShow title="parties" data={data.parties} name="name" />
@@ -83,6 +85,7 @@ const InfoPage = () => {
           name="source_name"
         />
       </div>
+      <MediaShow data={data.media} />
     </div>
   );
 };

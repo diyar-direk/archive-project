@@ -88,7 +88,7 @@
   margin-top: 30px;
 }
 div.categories.grid-3 {
-  margin-top: 30px;
+  margin: 30px 0;
   border-radius: 6px;
 }
 div.categories.grid-3 > div {
@@ -105,10 +105,20 @@ div.categories.grid-3 > div {
 div.categories.grid-3 > div:nth-child(even) {
   background-color: var(--aside-color);
 }
+div.categories.grid-3 > div > div {
+  max-height: 250px;
+  overflow-y: auto;
+}
 div.categories.grid-3 > div h2 {
   text-align: center;
   text-transform: capitalize;
   margin-bottom: 10px;
+  position: sticky;
+  background-color: var(--body-color);
+  top: 0;
+}
+div.categories.grid-3 > div:nth-child(even) h2 {
+  background-color: var(--aside-color);
 }
 
 div.categories.grid-3 > div p {
@@ -118,10 +128,80 @@ div.categories.grid-3 > div p {
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: center;
 }
 div.categories.grid-3 > div h3 {
   text-transform: capitalize;
   font-size: 20px;
   text-align: center;
-  color: rgb(183, 25, 25);
+  color: #b71919;
+}
+.media-overlay > article {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+.media-overlay > article > i {
+  font-size: 20px;
+  background-color: #b71919;
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.media-overlay > article > i:hover {
+  box-shadow: #bc2d2d 0px 0px 10px;
+}
+.media-overlay > article > div {
+  background-color: white;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 0 20px #00000036;
+}
+.media-overlay img {
+  max-width: 60svh;
+  max-height: 60vh;
+  object-fit: contain;
+}
+
+.media > h1 {
+  text-align: center;
+  text-align: center;
+  text-transform: capitalize;
+  color: var(--font-color);
+}
+.media > .media-container {
+  padding: 20px;
+  min-height: 200px;
+  border: double 6px var(--body-color);
+  position: relative;
+}
+.media > .media-container > div {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+.media > .media-container > div i {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: var(--font-color);
+  color: var(--body-color);
+  font-size: 13px;
+  opacity: 0.5;
+}
+.media > .media-container > h1 {
+  text-transform: capitalize;
+  color: var(--font-color);
+}
+.media > .media-container > .grid-3 {
+  margin-top: 50px;
 }

@@ -66,7 +66,7 @@ const Profile = () => {
                   src={
                     image
                       ? URL.createObjectURL(image)
-                      : `https://localhost:8000${data?.image}`
+                      : `http://localhost:8000${data?.image}`
                   }
                   alt="profile"
                   className="photo w-100"
