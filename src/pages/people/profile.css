@@ -87,6 +87,38 @@
 .categories-skeleton {
   margin-top: 30px;
 }
+
+.single-info > h1,
+.single-info > h2 {
+  text-transform: capitalize;
+  color: var(--font-color);
+}
+.single-info > p {
+  background: var(--body-color);
+  color: var(--font-color);
+  margin: 10px;
+  padding: 10px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 19px;
+}
+.single-info > div > h2 {
+  color: var(--font-color);
+  text-transform: capitalize;
+  font-weight: 500;
+}
+.single-info > div {
+  margin-bottom: 10px;
+}
+.single-info > div > p {
+  color: var(--font-color);
+  text-transform: capitalize;
+  font-size: 17px;
+}
+.single-info > h2::after,
+.single-info > div > h2::after {
+  content: ":";
+}
 div.categories.grid-3 {
   margin: 30px 0;
   border-radius: 6px;

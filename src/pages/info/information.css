@@ -169,6 +169,7 @@ iframe {
   text-overflow: ellipsis;
   color: var(--font-color);
   font-weight: 500;
+  white-space: nowrap;
 }
 .people-cat .name:hover {
   text-decoration: underline;
