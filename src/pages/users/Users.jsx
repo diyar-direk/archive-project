@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
-const Coordinates = () => {
+const Users = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
@@ -14,11 +14,6 @@ const Coordinates = () => {
   const context = useContext(Context);
   const limit = context?.limit;
   const [filters, setFilters] = useState({
-    country: "",
-    government: "",
-    city: "",
-    villag: "",
-    region: "",
     date: {
       from: "",
       to: "",
@@ -48,16 +43,8 @@ const Coordinates = () => {
     setSelectedItems([]);
 
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Coordinates?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
+    let url = `${baseURL}/Users?active=true&limit=${limit}&page=${page}`;
+
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -68,10 +55,11 @@ const Coordinates = () => {
 
     try {
       const data = await axios.get(url);
-      dataLength.current = data.data.numberOfActiveCoordinates;
+      //   dataLength.current = data.data.numberOfActiveUsers;
+      console.log(data.data);
 
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
+      //   allPeople.current = data.data.data.map((e) => e._id);
+      //   setData(data.data.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -90,16 +78,8 @@ const Coordinates = () => {
     setData([]);
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Coordinates/search?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
+    let url = `${baseURL}/Users/search?active=true&limit=${limit}&page=${page}`;
+
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -187,7 +167,7 @@ const Coordinates = () => {
 
   return (
     <>
-      <h1 className="title"> Coordinates </h1>
+      <h1 className="title"> users </h1>
       <Table
         header={header}
         searchInpPlacecholder={`search by coordinates`}
@@ -197,10 +177,10 @@ const Coordinates = () => {
         items={{ slectedItems: slectedItems, setSelectedItems }}
         filters={{ filters, setFilters, search, setSearch }}
         overlay={{ overlay: overlay, setOverlay }}
-        delete={{ getData, url: "Coordinates", getSearchData }}
+        delete={{ getData, url: "Users", getSearchData }}
       />
     </>
   );
 };
 
-export default Coordinates;
+export default Users;

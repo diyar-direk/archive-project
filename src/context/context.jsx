@@ -5,6 +5,7 @@ const userLang = userLanguage.startsWith("ar") ? "AR" : "EN";
 export const Context = createContext({});
 
 export const baseURL = `http://localhost:8000/api`;
+export const mediaURL = `http://localhost:8000/`;
 
 const Provider = ({ children }) => {
   const [limit, setLimit] = useState(10);
@@ -99,10 +100,6 @@ export const date = (dat) => {
 export function nextJoin(array, obj, stop = false) {
   let text = "";
   for (let i = 0; i < array?.length; i++) {
-    if (stop && i > 2) {
-      text += "...";
-      break;
-    }
     if (array[i + 1]) text += array[i][obj] + " , ";
     else text += array[i][obj];
   }

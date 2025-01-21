@@ -252,6 +252,10 @@ tbody tr:nth-child(even) {
 }
 tbody td {
   padding: 10px;
+  max-width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   text-align: center;
   color: var(--font-color);
   font-size: 18px;
@@ -296,12 +300,13 @@ div.table tbody td i.options {
 
 div.table tbody td div.options {
   position: absolute;
-  width: 150px;
+  display: flex;
   background: var(--body-color);
   box-shadow: var(--box-shadow);
-  left: calc(-100% - 90px);
+  left: calc(-100% - 200px);
+  top: 50%;
+  transform: translateY(-50%);
   padding: 8px;
-  top: 100%;
   opacity: 0;
   z-index: 1;
   pointer-events: none;
@@ -315,14 +320,6 @@ div.table tbody td i.options.active-div + div {
   z-index: 1;
   opacity: 1;
   pointer-events: all;
-}
-
-div.table tbody tr:last-child td i.options.active-div + div,
-div.table tbody tr:first-child td i.options.active-div + div {
-  display: flex;
-  top: 0;
-  width: auto;
-  left: calc(-100% - 200px);
 }
 
 div.table tbody td div.options div.delete {

@@ -178,6 +178,14 @@ form div.form-profile.form label {
   background: var(--section-color);
   box-shadow: var(--box-shadow);
 }
+form div.form-profile.form .cencel {
+  color: white;
+  width: 50%;
+  text-align: center;
+  padding: 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
 form div.form-profile.form label i {
   width: 100%;
   height: 100%;

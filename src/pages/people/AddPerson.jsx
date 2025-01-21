@@ -93,17 +93,11 @@ const AddPerson = () => {
       const formData = new FormData();
 
       keys.forEach((key) => {
-        if (
-          (form[key] && !Array.isArray(form[key])) ||
-          (Array.isArray(form[key]) && form[key]?.length !== 0)
-        ) {
-          if (!Array.isArray(form[key]))
-            formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
-          else {
-            form[key].forEach((item) => {
-              formData.append(`${key}[]`, item._id || item);
-            });
-          }
+        if (form[key]) {
+          formData.append(
+            `${key}`,
+            form[key]?._id ? form[key]?._id : form[key]
+          );
         }
       });
 

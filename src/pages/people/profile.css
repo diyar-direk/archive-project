@@ -66,6 +66,15 @@
 .profile > .info {
   flex: 1;
   min-width: 400px;
+  position: relative;
+}
+.profile > .info > a {
+  position: absolute;
+  right: 20px;
+  color: var(--font-color);
+}
+.profile > .info > a:hover {
+  color: var(--main-color);
 }
 .profile > .info > .flex {
   align-items: center;
@@ -139,7 +148,7 @@ article.person-info:nth-child(even) > div {
   background: var(--body-color);
   color: var(--font-color);
   margin: 10px;
-  padding: 10px;
+  padding: 20px;
   border-radius: 4px;
   font-weight: 500;
   font-size: 19px;

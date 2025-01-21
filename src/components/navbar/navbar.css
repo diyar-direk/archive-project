@@ -183,6 +183,7 @@ aside > div {
   align-items: center !important;
   background: var(--aside-color);
   height: calc(100svh - 75px);
+  overflow-y: auto;
 }
 
 aside > div > div {

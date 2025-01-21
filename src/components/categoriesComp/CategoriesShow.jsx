@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { mediaURL } from "../../context/context";
 
 const CategoriesShow = (props) => {
   return (
@@ -16,7 +17,7 @@ const CategoriesShow = (props) => {
               <div className="flex align-center people-cat gap-10" key={e._id}>
                 <Link to={`/people/${e._id}`} className="profile-image">
                   {e.image ? (
-                    <img src={e.image} alt="" />
+                    <img src={mediaURL + e.image} alt="" />
                   ) : (
                     <i className="fa-solid fa-user"></i>
                   )}

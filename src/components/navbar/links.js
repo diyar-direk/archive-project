@@ -3,8 +3,8 @@ export const links = [
     type: "multi",
     icon: "fa-solid fa-user-group",
     children: [
-      { title: "users", path: "users", role: ["admin"] },
-      { title: "add_user", path: "add_user", role: ["admin"] },
+      { title: "users", path: "/users", role: ["admin"] },
+      { title: "add user", path: "/add_user", role: ["admin"] },
     ],
     title: "users",
     role: ["admin"],

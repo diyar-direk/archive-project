@@ -164,16 +164,10 @@ const Informations = () => {
             className="checkbox"
           ></div>
         </td>
-        <td>
-          {e.subject?.length <= 40
-            ? e.subject
-            : e.subject?.slice(0, 40) + "..."}
-        </td>
+        <td>{e.subject}</td>
         <td>
           <Link to={`${e._id}`} className="name">
-            {e.details?.length <= 40
-              ? e.details
-              : e.details?.slice(0, 40) + "..."}
+            {e.details}
           </Link>
         </td>
         <td>
@@ -195,11 +189,11 @@ const Informations = () => {
             return arr;
           })}
         </td>
-        <td>{nextJoin(e.sources, "source_name", true)}</td>
-        <td>{nextJoin(e.parties, "name", true)}</td>
-        <td>{nextJoin(e.events, "name", true)}</td>
+        <td>{nextJoin(e.sources, "source_name")}</td>
+        <td>{nextJoin(e.parties, "name")}</td>
+        <td>{nextJoin(e.events, "name")}</td>
         <td> {date(e.createdAt)} </td>
-        <td>
+        <td style={{ overflow: "visible" }}>
           <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>
           <div className="options has-visit">
             <div

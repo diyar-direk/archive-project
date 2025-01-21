@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
-import { baseURL, placeholder } from "../../context/context";
+import { baseURL, mediaURL, placeholder } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import { useNavigate, useParams } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 const UpdatePerson = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -24,6 +25,8 @@ const UpdatePerson = () => {
   const nav = useNavigate();
 
   const [form, setForm] = useState({});
+  const [newImage, setNewImage] = useState(false);
+  const [dataLoading, setDataLoading] = useState(true);
 
   const { id } = useParams();
   useEffect(() => {
@@ -37,7 +40,9 @@ const UpdatePerson = () => {
       })
       .catch((err) => {
         console.log(err);
-      });
+        if (err.status === 500) nav("/not-found-404");
+      })
+      .finally(() => setDataLoading(false));
   }, []);
 
   const ignoreSelect = (e) => {
@@ -81,19 +86,24 @@ const UpdatePerson = () => {
     else if (!form.sectionId) setError("please select section");
     else if (!form.sources) setError("please select source");
     else {
+      let newForm = { ...form };
+      newImage && (newForm = { ...form, image: newImage });
       setLoading(true);
-      const keys = Object.keys(form);
+      const keys = Object.keys(newForm);
       const formData = new FormData();
 
       keys.forEach((key) => {
         if (
-          (form[key] && !Array.isArray(form[key])) ||
-          (Array.isArray(form[key]) && form[key]?.length !== 0)
+          (newForm[key] && !Array.isArray(newForm[key])) ||
+          (Array.isArray(newForm[key]) && newForm[key]?.length !== 0)
         ) {
-          if (!Array.isArray(form[key]))
-            formData.append(key, form[key]?._id ? form[key]?._id : form[key]);
+          if (!Array.isArray(newForm[key]))
+            formData.append(
+              key,
+              newForm[key]?._id ? newForm[key]?._id : newForm[key]
+            );
           else {
-            form[key].forEach((item) => {
+            newForm[key].forEach((item) => {
               formData.append(`${key}[]`, item._id || item);
             });
           }
@@ -118,286 +128,306 @@ const UpdatePerson = () => {
         <SendData data={`person`} response={response.current} />
       )}
       {loading && <Loading />}
-      <h1 className="title">add person</h1>
-      <form onSubmit={handleSubmit} className="dashboard-form">
-        <div className="form form-profile">
-          <label className="gap-10 center">
-            <input
-              accept="image/*"
-              type="file"
-              id="image"
-              onInput={(e) => {
-                setForm({ ...form, image: e.target.files[0] });
-              }}
-            />
+      {dataLoading ? (
+        <>
+          <Skeleton width={"50%"} height={"200px"} />
+          <br />
+          <Skeleton width={"100%"} height={"500px"} />
+        </>
+      ) : (
+        <form onSubmit={handleSubmit} className="dashboard-form">
+          <div className="form flex-direction gap-10 form-profile">
+            <label className="gap-10 center">
+              <input
+                accept="image/*"
+                type="file"
+                id="image"
+                onInput={(e) => {
+                  setNewImage(e.target.files[0]);
+                }}
+              />
 
-            {!form.image && <i className="fa-solid fa-user"></i>}
-            {form.image && (
-              <img alt="profile" loading="lazy" src={form.image} />
+              {!form.image && <i className="fa-solid fa-user"></i>}
+              {form.image && (
+                <img
+                  alt="profile"
+                  loading="lazy"
+                  src={
+                    newImage
+                      ? URL.createObjectURL(newImage)
+                      : mediaURL + form.image
+                  }
+                />
+              )}
+            </label>
+            {newImage && (
+              <span onClick={() => setNewImage(false)} className="cencel">
+                cencel
+              </span>
             )}
-          </label>
-        </div>
+          </div>
 
-        <div className="form">
-          <h1>personal information</h1>
-          <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="firstName">first name</label>
-              <input
-                required
-                type="text"
-                id="firstName"
-                className="inp"
-                value={form.firstName}
-                onChange={handleForm}
-                placeholder={`${placeholder} first name`}
-              />
-            </div>
-
-            <div className="flex flex-direction">
-              <label htmlFor="fatherName">fother name</label>
-              <input
-                required
-                value={form.fatherName}
-                onChange={handleForm}
-                type="text"
-                id="fatherName"
-                className="inp"
-                placeholder={`${placeholder} fother name`}
-              />
-            </div>
-
-            <div className="flex flex-direction">
-              <label htmlFor="surName">last name</label>
-              <input
-                value={form.surName}
-                onChange={handleForm}
-                required
-                type="text"
-                id="surName"
-                className="inp"
-                placeholder={`${placeholder} last name`}
-              />
-            </div>
-
-            <div className="flex flex-direction">
-              <label>gender</label>
-              <div className="selecte relative">
-                <div onClick={handleClick} className="inp">
-                  select gender
-                </div>
-                <article>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="gender"
-                    title="Male"
-                  >
-                    male
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="gender"
-                    title="Female"
-                  >
-                    Female
-                  </h2>
-                </article>
+          <div className="form">
+            <h1>personal information</h1>
+            <div className="flex wrap">
+              <div className="flex flex-direction">
+                <label htmlFor="firstName">first name</label>
+                <input
+                  required
+                  type="text"
+                  id="firstName"
+                  className="inp"
+                  value={form.firstName}
+                  onChange={handleForm}
+                  placeholder={`${placeholder} first name`}
+                />
               </div>
-              {form.gender && (
-                <span title="gender" onClick={ignoreSelect}>
-                  {form.gender}
-                </span>
-              )}
-            </div>
 
-            <div className="flex flex-direction">
-              <label>maritalStatus</label>
-              <div className="selecte relative">
-                <div onClick={handleClick} className="inp">
-                  select maritalStatus
-                </div>
-                <article>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="maritalStatus"
-                    title="Married"
-                  >
-                    Married
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="maritalStatus"
-                    title="Single"
-                  >
-                    single
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="maritalStatus"
-                    title="Other"
-                  >
-                    Other
-                  </h2>
-                </article>
+              <div className="flex flex-direction">
+                <label htmlFor="fatherName">fother name</label>
+                <input
+                  required
+                  value={form.fatherName}
+                  onChange={handleForm}
+                  type="text"
+                  id="fatherName"
+                  className="inp"
+                  placeholder={`${placeholder} fother name`}
+                />
               </div>
-              {form.maritalStatus && (
-                <span title="maritalStatus" onClick={ignoreSelect}>
-                  {form.maritalStatus}
-                </span>
-              )}
-            </div>
 
-            <div className="flex flex-direction">
-              <label htmlFor="motherName">mother name</label>
-              <input
-                value={form.motherName}
-                onChange={handleForm}
-                required
-                type="text"
-                id="motherName"
-                className="inp"
-                placeholder={`${placeholder} mother name`}
+              <div className="flex flex-direction">
+                <label htmlFor="surName">last name</label>
+                <input
+                  value={form.surName}
+                  onChange={handleForm}
+                  required
+                  type="text"
+                  id="surName"
+                  className="inp"
+                  placeholder={`${placeholder} last name`}
+                />
+              </div>
+
+              <div className="flex flex-direction">
+                <label>gender</label>
+                <div className="selecte relative">
+                  <div onClick={handleClick} className="inp">
+                    select gender
+                  </div>
+                  <article>
+                    <h2
+                      onClick={(e) => handleFormSelect(e, e.target.title)}
+                      id="gender"
+                      title="Male"
+                    >
+                      male
+                    </h2>
+                    <h2
+                      onClick={(e) => handleFormSelect(e, e.target.title)}
+                      id="gender"
+                      title="Female"
+                    >
+                      Female
+                    </h2>
+                  </article>
+                </div>
+                {form.gender && (
+                  <span title="gender" onClick={ignoreSelect}>
+                    {form.gender}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-direction">
+                <label>maritalStatus</label>
+                <div className="selecte relative">
+                  <div onClick={handleClick} className="inp">
+                    select maritalStatus
+                  </div>
+                  <article>
+                    <h2
+                      onClick={(e) => handleFormSelect(e, e.target.title)}
+                      id="maritalStatus"
+                      title="Married"
+                    >
+                      Married
+                    </h2>
+                    <h2
+                      onClick={(e) => handleFormSelect(e, e.target.title)}
+                      id="maritalStatus"
+                      title="Single"
+                    >
+                      single
+                    </h2>
+                    <h2
+                      onClick={(e) => handleFormSelect(e, e.target.title)}
+                      id="maritalStatus"
+                      title="Other"
+                    >
+                      Other
+                    </h2>
+                  </article>
+                </div>
+                {form.maritalStatus && (
+                  <span title="maritalStatus" onClick={ignoreSelect}>
+                    {form.maritalStatus}
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-direction">
+                <label htmlFor="motherName">mother name</label>
+                <input
+                  value={form.motherName}
+                  onChange={handleForm}
+                  required
+                  type="text"
+                  id="motherName"
+                  className="inp"
+                  placeholder={`${placeholder} mother name`}
+                />
+              </div>
+
+              <div className="flex flex-direction">
+                <label htmlFor="birthDate">date of birth</label>
+                <input
+                  value={form.birthDate}
+                  onChange={handleForm}
+                  required
+                  type="date"
+                  id="birthDate"
+                  className="inp"
+                />
+              </div>
+
+              <div className="flex flex-direction">
+                <label htmlFor="placeOfBirth">place of birth</label>
+                <input
+                  required
+                  value={form.placeOfBirth}
+                  onChange={handleForm}
+                  type="text"
+                  id="placeOfBirth"
+                  className="inp"
+                  placeholder={`${placeholder} place of birth`}
+                />
+              </div>
+
+              <div className="flex flex-direction">
+                <label htmlFor="occupation">occupation</label>
+                <input
+                  value={form.occupation}
+                  onChange={handleForm}
+                  required
+                  type="text"
+                  id="occupation"
+                  className="inp"
+                  placeholder={`${placeholder} occupation`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form">
+            <h1>stay informations</h1>
+            <div className="flex wrap">
+              <FormSelect
+                formKey="country"
+                error={{ error, setError }}
+                form={{ form, setForm }}
               />
-            </div>
-
-            <div className="flex flex-direction">
-              <label htmlFor="birthDate">date of birth</label>
-              <input
-                value={form.birthDate}
-                onChange={handleForm}
-                required
-                type="date"
-                id="birthDate"
-                className="inp"
+              <FormSelect
+                formKey="city"
+                error={{ error, setError }}
+                form={{ form, setForm }}
               />
-            </div>
 
-            <div className="flex flex-direction">
-              <label htmlFor="placeOfBirth">place of birth</label>
-              <input
-                required
-                value={form.placeOfBirth}
-                onChange={handleForm}
-                type="text"
-                id="placeOfBirth"
-                className="inp"
-                placeholder={`${placeholder} place of birth`}
+              <FormSelect
+                formKey="government"
+                error={{ error, setError }}
+                form={{ form, setForm }}
               />
-            </div>
 
-            <div className="flex flex-direction">
-              <label htmlFor="occupation">occupation</label>
-              <input
-                value={form.occupation}
-                onChange={handleForm}
-                required
-                type="text"
-                id="occupation"
-                className="inp"
-                placeholder={`${placeholder} occupation`}
+              <FormSelect
+                formKey="village"
+                error={{ error, setError }}
+                form={{ form, setForm }}
+              />
+              <FormSelect
+                formKey="region"
+                error={{ error, setError }}
+                form={{ form, setForm }}
+              />
+              <FormSelect
+                formKey="street"
+                error={{ error, setError }}
+                form={{ form, setForm }}
+              />
+
+              <div className="flex flex-direction">
+                <label htmlFor="addressDetails">addressDetails</label>
+                <textarea
+                  value={form.addressDetails}
+                  onChange={handleForm}
+                  className="inp"
+                  placeholder="test"
+                  id="addressDetails"
+                  rows={4}
+                ></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div className="form">
+            <h1>contact informations</h1>
+            <div className="flex wrap">
+              <div className="flex flex-direction">
+                <label htmlFor="phone">phone</label>
+                <input
+                  required
+                  value={form.phone}
+                  onChange={handleForm}
+                  type="text"
+                  id="phone"
+                  className="inp"
+                  placeholder={`${placeholder} phone`}
+                />
+              </div>
+              <div className="flex flex-direction">
+                <label htmlFor="email">email</label>
+                <input
+                  value={form.email}
+                  onChange={handleForm}
+                  type="email"
+                  id="email"
+                  className="inp"
+                  placeholder={`${placeholder} email`}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="form">
+            <h1>more informations</h1>
+            <div className="flex wrap">
+              <FormSelect
+                formKey="section"
+                error={{ error, setError }}
+                form={{ form, setForm }}
+              />
+              <FormSelect
+                formKey="sources"
+                error={{ error, setError }}
+                form={{ form, setForm }}
               />
             </div>
           </div>
-        </div>
 
-        <div className="form">
-          <h1>stay informations</h1>
-          <div className="flex wrap">
-            <FormSelect
-              formKey="country"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-            <FormSelect
-              formKey="city"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="government"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="village"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-            <FormSelect
-              formKey="region"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-            <FormSelect
-              formKey="street"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <div className="flex flex-direction">
-              <label htmlFor="addressDetails">addressDetails</label>
-              <textarea
-                value={form.addressDetails}
-                onChange={handleForm}
-                className="inp"
-                placeholder="test"
-                id="addressDetails"
-                rows={4}
-              ></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div className="form">
-          <h1>contact informations</h1>
-          <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="phone">phone</label>
-              <input
-                required
-                value={form.phone}
-                onChange={handleForm}
-                type="text"
-                id="phone"
-                className="inp"
-                placeholder={`${placeholder} phone`}
-              />
-            </div>
-            <div className="flex flex-direction">
-              <label htmlFor="email">email</label>
-              <input
-                value={form.email}
-                onChange={handleForm}
-                type="email"
-                id="email"
-                className="inp"
-                placeholder={`${placeholder} email`}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className="form">
-          <h1>more informations</h1>
-          <div className="flex wrap">
-            <FormSelect
-              formKey="section"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-            <FormSelect
-              formKey="sources"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-          </div>
-        </div>
-
-        {error && <p className="error"> {error} </p>}
-        <button className="btn">save</button>
-      </form>
+          {error && <p className="error"> {error} </p>}
+          <button className="btn">save</button>
+        </form>
+      )}
     </>
   );
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, date } from "../../context/context";
+import { baseURL, Context, date, mediaURL } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css";
@@ -195,8 +195,8 @@ const People = (props) => {
         </td>
         <td>
           <Link to={`/people/${e._id}`}>
-            {e.photo ? (
-              <img src={e.photo} className="photo" alt="" />
+            {e.image ? (
+              <img src={`${mediaURL}${e.image}`} className="photo" alt="" />
             ) : (
               <i className="photo fa-solid fa-user"></i>
             )}
@@ -221,7 +221,7 @@ const People = (props) => {
         <td> {e.phone} </td>
         <td> {e.email} </td>
         <td> {date(e.createdAt)} </td>
-        <td>
+        <td style={{ overflow: "visible" }}>
           {!props?.workSpace && (
             <>
               <i

@@ -20,6 +20,8 @@ import InfoPage from "./pages/info/InfoPage";
 import AddCoordinates from "./pages/coordinates/AddCoordinates";
 import Coordinates from "./pages/coordinates/Coordinates";
 import UpdatePerson from "./pages/people/UpdatePerson";
+import UpdateCoordinates from "./pages/coordinates/UpdateCordinates";
+import Users from "./pages/users/Users";
 
 function App() {
   return (
@@ -27,6 +29,7 @@ function App() {
       <Routes>
         <Route path="login" element={<LoginForm />} />
         <Route path="*" element={<Dashboard />}>
+          <Route path="users" element={<Users />} />
           <Route path="people" element={<People />} />
           <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
@@ -44,7 +47,8 @@ function App() {
           <Route path="informations" element={<Informations />} />
           <Route path="informations/:id" element={<InfoPage />} />
           <Route path="add_information" element={<AddInformation />} />
-          <Route path="Coordinates" element={<Coordinates />} />
+          <Route path="coordinates" element={<Coordinates />} />
+          <Route path="coordinates/:id" element={<UpdateCoordinates />} />
           <Route path="add_coordinates" element={<AddCoordinates />} />
         </Route>
       </Routes>

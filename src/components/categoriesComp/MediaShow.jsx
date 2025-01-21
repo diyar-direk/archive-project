@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { mediaURL } from "../../context/context";
 
 const MediaShow = (props) => {
   const data = props.data;
@@ -8,8 +9,6 @@ const MediaShow = (props) => {
       .length <= 0;
 
   const [overlay, setOverlay] = useState(false);
-
-  
 
   return (
     <>
@@ -55,9 +54,10 @@ const MediaShow = (props) => {
                   <div className="center">
                     {data.images.map((e) => (
                       <img
+                        key={e}
                         onClick={() => setOverlay(e)}
                         alt=""
-                        src={`http://localhost:8000${e}`}
+                        src={`${mediaURL}${e}`}
                       />
                     ))}
                   </div>
@@ -65,14 +65,14 @@ const MediaShow = (props) => {
                 {data.videos.length > 0 && (
                   <div className="center">
                     {data.videos.map((e) => (
-                      <video controls src={e}></video>
+                      <video key={e} controls src={e}></video>
                     ))}
                   </div>
                 )}
                 {data.audios.length > 0 && (
                   <div className="center">
                     {data.audios.map((e) => (
-                      <audio controls src={e}></audio>
+                      <audio key={e} controls src={e}></audio>
                     ))}
                   </div>
                 )}

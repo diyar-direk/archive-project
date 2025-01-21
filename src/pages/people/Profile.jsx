@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
-import { baseURL, date } from "../../context/context";
+import { baseURL, date, mediaURL } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 const Profile = () => {
   const { id } = useParams();
@@ -84,7 +84,7 @@ const Profile = () => {
                       <>
                         <Link to={`/people/${e._id}`} className="profile-image">
                           {e.image ? (
-                            <img src={e.image} alt="" />
+                            <img src={mediaURL + e.image} alt="" />
                           ) : (
                             <i className="fa-solid fa-user"></i>
                           )}
@@ -129,7 +129,7 @@ const Profile = () => {
                   src={
                     image
                       ? URL.createObjectURL(image)
-                      : `http://localhost:8000/${data?.image}`
+                      : `${mediaURL}${data?.image}`
                   }
                   alt="profile"
                   className="photo w-100"
@@ -172,6 +172,10 @@ const Profile = () => {
           </article>
         ) : (
           <div className="info">
+            <Link
+              to={`/update_person/${id}`}
+              className="fa-regular fa-pen-to-square"
+            ></Link>
             <div className="flex">
               <h2>name</h2>
               <p>
