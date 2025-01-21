@@ -39,8 +39,8 @@ function App() {
           <Route path="sources" element={<Sources />} />
           <Route path="event" element={<Event />} />
           <Route path="party" element={<Party />} />
-          <Route path="infromations" element={<Informations />} />
-          <Route path="infromations/:id" element={<InfoPage />} />
+          <Route path="informations" element={<Informations />} />
+          <Route path="informations/:id" element={<InfoPage />} />
           <Route path="add_information" element={<AddInformation />} />
           <Route path="Coordinates" element={<Coordinates />} />
           <Route path="add_coordinates" element={<AddCoordinates />} />

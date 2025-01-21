@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
 import { baseURL, date } from "../../context/context";
@@ -8,10 +8,16 @@ const Profile = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(true);
+  const [infoLoading, setInfoLoading] = useState(true);
+  const [informations, setInformatios] = useState(false);
   const nav = useNavigate();
 
   useEffect(() => {
     getData();
+  }, [id]);
+  useEffect(() => {
+    const time = setTimeout(getInfo, 1000);
+    return () => clearTimeout(time);
   }, [id]);
 
   async function getData() {
@@ -27,6 +33,19 @@ const Profile = () => {
     }
   }
 
+  async function getInfo() {
+    try {
+      const res = await axios.get(
+        `${baseURL}/Information?people=${id}&active=true&fields=people,subject`
+      );
+      setInformatios(res.data.informations);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setInfoLoading(false);
+    }
+  }
+
   const [image, setImage] = useState(false);
 
   const updateProfile = async (e) => {
@@ -35,8 +54,7 @@ const Profile = () => {
     formData.append("image", image);
 
     try {
-      const data = await axios.patch(`${baseURL}/people/${id}`, formData);
-      if (data.status === 200) console.log(data);
+      await axios.patch(`${baseURL}/people/${id}`, formData);
     } catch (error) {
       console.log(error);
       alert("some error please try agin");
@@ -44,6 +62,50 @@ const Profile = () => {
       setImage(false);
     }
   };
+
+  const info =
+    informations &&
+    informations?.map((e) => {
+      return (
+        <article className="person-info">
+          <h2>subject</h2>
+          <p>{e.subject}</p>
+          <h2>realted people</h2>
+          {e.people.length > 1 ? (
+            <div>
+              <div>
+                {e.people?.map((e) => (
+                  <div
+                    className="flex align-center people-cat gap-10"
+                    key={e._id}
+                  >
+                    {e._id !== id && (
+                      <>
+                        <Link to={`/people/${e._id}`} className="profile-image">
+                          {e.image ? (
+                            <img src={e.image} alt="" />
+                          ) : (
+                            <i className="fa-solid fa-user"></i>
+                          )}
+                        </Link>
+                        <Link to={`/people/${e._id}`} className="name">
+                          {e.firstName} {e.surName}
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p>no other people found</p>
+          )}
+          <Link to={`/informations/${e._id}`} className="flex btn">
+            show details
+          </Link>
+        </article>
+      );
+    });
 
   return (
     <>
@@ -66,7 +128,7 @@ const Profile = () => {
                   src={
                     image
                       ? URL.createObjectURL(image)
-                      : `http://localhost:8000${data?.image}`
+                      : `http://localhost:8000/${data?.image}`
                   }
                   alt="profile"
                   className="photo w-100"
@@ -173,53 +235,24 @@ const Profile = () => {
               <h2>email</h2>
               <p className="email"> {data?.email} </p>
             </div>
+            <div className="flex">
+              <h2>section</h2>
+              <p className="email"> {data?.sectionId?.name} </p>
+            </div>
           </div>
         )}
       </div>
-      {loading ? (
-        <article className="categories-skeleton">
-          <Skeleton />
-        </article>
-      ) : (
-        <div className="categories grid-3">
-          <div>
-            <h2>events</h2>
-            {data?.events?.length > 0 ? (
-              data?.events?.map((e) => (
-                <p key={e._id}>
-                  <span>event name:</span> {e.name}
-                </p>
-              ))
-            ) : (
-              <h3>no events found</h3>
-            )}
-          </div>
-          <div className="section-color">
-            <h2>parties</h2>
-            {data?.parties?.length > 0 ? (
-              data?.parties?.map((e) => (
-                <p key={e._id}>
-                  <span>Party name:</span> {e.name}
-                </p>
-              ))
-            ) : (
-              <h3>no events found</h3>
-            )}
-          </div>
-          <div>
-            <h2>sources</h2>
-            {data?.sources?.length > 10 ? (
-              data?.sources?.map((e) => (
-                <p key={e._id}>
-                  <span>source name:</span> {e.source_name}
-                </p>
-              ))
-            ) : (
-              <h3>no events found</h3>
-            )}
-          </div>
-        </div>
-      )}
+
+      <div className="flex person-info flex-direction gap-20">
+        {infoLoading ? (
+          <>
+            <Skeleton height={"200px"} width={"100%"} />
+            <Skeleton height={"200px"} width={"100%"} />
+          </>
+        ) : (
+          info
+        )}
+      </div>
     </>
   );
 };

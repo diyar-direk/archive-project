@@ -87,6 +87,48 @@
 .categories-skeleton {
   margin-top: 30px;
 }
+div.person-info {
+  margin-top: 30px;
+}
+article.person-info {
+  background-color: var(--body-color);
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: var(--box-shadow);
+}
+article.person-info:nth-child(even) {
+  background-color: var(--aside-color);
+}
+article.person-info > h2 {
+  color: var(--font-color);
+  text-transform: capitalize;
+  margin-bottom: 10px;
+  width: fit-content;
+}
+article.person-info > h2::after {
+  content: " : ";
+}
+
+article.person-info > p {
+  font-weight: 500;
+  margin: 10px 0;
+  font-size: 19px;
+  color: var(--font-color);
+}
+article.person-info > div {
+  padding: 20px;
+  background-color: var(--aside-color);
+  margin-bottom: 30px;
+}
+article.person-info > div > div {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0 10px;
+  border-radius: 4px;
+}
+article.person-info:nth-child(even) > div {
+  background-color: var(--body-color);
+}
 
 .single-info > h1,
 .single-info > h2 {

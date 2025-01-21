@@ -96,9 +96,13 @@ export const date = (dat) => {
   return birthDate;
 };
 
-export function nextJoin(array, obj) {
+export function nextJoin(array, obj, stop = false) {
   let text = "";
   for (let i = 0; i < array?.length; i++) {
+    if (stop && i > 2) {
+      text += "...";
+      break;
+    }
     if (array[i + 1]) text += array[i][obj] + " , ";
     else text += array[i][obj];
   }

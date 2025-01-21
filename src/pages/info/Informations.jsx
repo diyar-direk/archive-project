@@ -164,7 +164,11 @@ const Informations = () => {
             className="checkbox"
           ></div>
         </td>
-        <td>{e.subject}</td>
+        <td>
+          {e.subject?.length <= 40
+            ? e.subject
+            : e.subject?.slice(0, 40) + "..."}
+        </td>
         <td>
           <Link to={`${e._id}`} className="name">
             {e.details?.length <= 40
@@ -177,17 +181,23 @@ const Informations = () => {
         </td>
         <td> {e.governmentId?.name} </td>
         <td>
-          {e.people?.map((person, i) => (
-            <Link className="name" key={i} to={`/people/${person._id}`}>
-              {e.people[i + 1]
-                ? `${person.firstName} ${person.surName} , `
-                : `${person.firstName} ${person.surName}`}
-            </Link>
-          ))}
+          {e.people?.map((person, i) => {
+            const arr = [];
+            if (i < 3)
+              arr.push(
+                <Link className="name" key={i} to={`/people/${person._id}`}>
+                  {e.people[i + 1]
+                    ? `${person.firstName} ${person.surName} , `
+                    : `${person.firstName} ${person.surName}`}
+                </Link>
+              );
+            else if (i === 3) arr.push(<span>...</span>);
+            return arr;
+          })}
         </td>
-        <td>{nextJoin(e.sources, "source_name")}</td>
-        <td>{nextJoin(e.parties, "name")}</td>
-        <td>{nextJoin(e.events, "name")}</td>
+        <td>{nextJoin(e.sources, "source_name", true)}</td>
+        <td>{nextJoin(e.parties, "name", true)}</td>
+        <td>{nextJoin(e.events, "name", true)}</td>
         <td> {date(e.createdAt)} </td>
         <td>
           <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>

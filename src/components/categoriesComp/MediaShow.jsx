@@ -9,6 +9,8 @@ const MediaShow = (props) => {
 
   const [overlay, setOverlay] = useState(false);
 
+  
+
   return (
     <>
       {overlay && (
@@ -52,7 +54,11 @@ const MediaShow = (props) => {
                 {data.images.length > 0 && (
                   <div className="center">
                     {data.images.map((e) => (
-                      <img onClick={() => setOverlay(e)} alt="" src={e} />
+                      <img
+                        onClick={() => setOverlay(e)}
+                        alt=""
+                        src={`http://localhost:8000${e}`}
+                      />
                     ))}
                   </div>
                 )}

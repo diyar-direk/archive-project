@@ -49,7 +49,7 @@ export const links = [
   {
     icon: "fa-solid fa-sitemap",
     children: [
-      { title: "informations", path: "/infromations", role: ["admin", "user"] },
+      { title: "informations", path: "/informations", role: ["admin", "user"] },
       { title: "add information", path: "/add_information", role: ["admin"] },
     ],
     title: "informations",
