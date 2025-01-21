@@ -19,6 +19,7 @@ import AddInformation from "./pages/info/AddInformation";
 import InfoPage from "./pages/info/InfoPage";
 import AddCoordinates from "./pages/coordinates/AddCoordinates";
 import Coordinates from "./pages/coordinates/Coordinates";
+import UpdatePerson from "./pages/people/UpdatePerson";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path="people" element={<People />} />
           <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
+          <Route path="update_person/:id" element={<UpdatePerson />} />
           <Route path="countries" element={<Countries />} />
           <Route path="governments" element={<Government />} />
           <Route path="cities" element={<City />} />

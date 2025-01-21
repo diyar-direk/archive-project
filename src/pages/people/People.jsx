@@ -241,7 +241,7 @@ const People = (props) => {
                 >
                   <i className="fa-solid fa-trash"></i> delete
                 </div>
-                <Link to={`${e._id}`} className="flex update">
+                <Link to={`/update_person/${e._id}`} className="flex update">
                   <i className="fa-regular fa-pen-to-square"></i>
                   update
                 </Link>

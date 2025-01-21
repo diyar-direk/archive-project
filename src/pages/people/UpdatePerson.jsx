@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
 import { baseURL, placeholder } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
-const AddPerson = () => {
+import { useNavigate, useParams } from "react-router-dom";
+const UpdatePerson = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
     e.stopPropagation();
@@ -20,32 +21,24 @@ const AddPerson = () => {
   });
 
   const [error, setError] = useState(false);
+  const nav = useNavigate();
 
-  const [form, setForm] = useState({
-    //personal data
-    image: "",
-    firstName: "",
-    fatherName: "",
-    surName: "",
-    gender: "",
-    maritalStatus: "",
-    motherName: "",
-    birthDate: "",
-    placeOfBirth: "",
-    occupation: "",
-    countryId: "",
-    governmentId: "",
-    cityId: "",
-    villageId: "",
-    regionId: "",
-    streetId: "",
-    addressDetails: "",
-    email: "",
-    phone: "",
-    sectionId: "",
-    //categories data
-    sources: "",
-  });
+  const [form, setForm] = useState({});
+
+  const { id } = useParams();
+  useEffect(() => {
+    axios
+      .get(`${baseURL}/people/${id}`)
+      .then((res) => {
+        setForm({
+          ...res.data.data,
+          birthDate: res.data.data.birthDate.split("T")[0],
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const ignoreSelect = (e) => {
     setForm({ ...form, [e.target.title]: "" });
@@ -108,39 +101,11 @@ const AddPerson = () => {
       });
 
       try {
-        const data = await axios.post(`${baseURL}/people`, formData);
-        if (data.status === 201) {
-          responseFun(true);
-          setForm({
-            //personal data
-            image: "",
-            firstName: "",
-            fatherName: "",
-            surName: "",
-            gender: "",
-            maritalStatus: "",
-            motherName: "",
-            birthDate: "",
-            placeOfBirth: "",
-            occupation: "",
-            countryId: "",
-            governmentId: "",
-            cityId: "",
-            villageId: "",
-            regionId: "",
-            streetId: "",
-            addressDetails: "",
-            email: "",
-            phone: "",
-            sectionId: "",
-            //categories data
-            sources: "",
-          });
-        }
+        const data = await axios.patch(`${baseURL}/people/${id}`, formData);
+        if (data.status === 200) nav("/people");
       } catch (error) {
         console.log(error);
-        if (error.status === 400) responseFun("reapeted data");
-        else responseFun(false);
+        responseFun(false);
       } finally {
         setLoading(false);
       }
@@ -168,11 +133,7 @@ const AddPerson = () => {
 
             {!form.image && <i className="fa-solid fa-user"></i>}
             {form.image && (
-              <img
-                alt="profile"
-                loading="lazy"
-                src={URL.createObjectURL(form.image)}
-              />
+              <img alt="profile" loading="lazy" src={form.image} />
             )}
           </label>
         </div>
@@ -441,4 +402,4 @@ const AddPerson = () => {
   );
 };
 
-export default AddPerson;
+export default UpdatePerson;

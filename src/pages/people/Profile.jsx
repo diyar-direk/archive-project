@@ -55,6 +55,7 @@ const Profile = () => {
 
     try {
       await axios.patch(`${baseURL}/people/${id}`, formData);
+      getData();
     } catch (error) {
       console.log(error);
       alert("some error please try agin");
@@ -67,7 +68,7 @@ const Profile = () => {
     informations &&
     informations?.map((e) => {
       return (
-        <article className="person-info">
+        <article key={e._id} className="person-info">
           <h2>subject</h2>
           <p>{e.subject}</p>
           <h2>realted people</h2>
