@@ -22,16 +22,7 @@ const Users = () => {
 
   const [search, setSearch] = useState("");
 
-  const header = [
-    "coordinates",
-    "place",
-    "government",
-    "street",
-    "region",
-    "source",
-    "note",
-    "create at",
-  ];
+  const header = ["username", "role", "section", "create at"];
 
   useEffect(() => {
     if (!search) getData();
@@ -52,14 +43,11 @@ const Users = () => {
       : !filters.date.from &&
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
-
     try {
       const data = await axios.get(url);
-      //   dataLength.current = data.data.numberOfActiveUsers;
-      console.log(data.data);
-
-      //   allPeople.current = data.data.data.map((e) => e._id);
-      //   setData(data.data.data);
+      dataLength.current = data.data.numberOfActiveUsers;
+      allPeople.current = data.data.users.map((e) => e._id);
+      setData(data.data.users);
     } catch (error) {
       console.log(error);
     } finally {
@@ -91,6 +79,7 @@ const Users = () => {
       const data = await axios.post(url, {
         search: search,
       });
+
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
 
@@ -132,16 +121,11 @@ const Users = () => {
             className="checkbox"
           ></div>
         </td>
-        <td>{e.coordinates}</td>
-        <td>
-          {e.countryId.name} / {e.cityId.name}
-        </td>
-        <td> {e.governmentId?.name} </td>
+        <td>{e.username}</td>
 
-        <td>{e.streetId?.name}</td>
-        <td>{e.regionId?.name}</td>
-        <td>{e.sources?.source_name}</td>
-        <td>{e?.note}</td>
+        <td> {e.role} </td>
+
+        <td>{e.sectionId?.name || "all sections"}</td>
         <td>{date(e.createdAt)}</td>
         <td>
           <div className="center gap-10 actions">
@@ -170,7 +154,6 @@ const Users = () => {
       <h1 className="title"> users </h1>
       <Table
         header={header}
-        searchInpPlacecholder={`search by coordinates`}
         loading={loading}
         page={{ page: page, setPage, dataLength: dataLength.current }}
         data={{ data: tableData, allData: allPeople.current }}

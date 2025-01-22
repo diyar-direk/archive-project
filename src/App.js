@@ -22,6 +22,8 @@ import Coordinates from "./pages/coordinates/Coordinates";
 import UpdatePerson from "./pages/people/UpdatePerson";
 import UpdateCoordinates from "./pages/coordinates/UpdateCordinates";
 import Users from "./pages/users/Users";
+import AddUser from "./pages/users/AddUser";
+import UpdateInfo from "./pages/info/UpdateInfo";
 
 function App() {
   return (
@@ -30,6 +32,7 @@ function App() {
         <Route path="login" element={<LoginForm />} />
         <Route path="*" element={<Dashboard />}>
           <Route path="users" element={<Users />} />
+          <Route path="add_user" element={<AddUser />} />
           <Route path="people" element={<People />} />
           <Route path="people/:id" element={<Profile />} />
           <Route path="add_person" element={<AddPerson />} />
@@ -47,6 +50,7 @@ function App() {
           <Route path="informations" element={<Informations />} />
           <Route path="informations/:id" element={<InfoPage />} />
           <Route path="add_information" element={<AddInformation />} />
+          <Route path="update_info/:id" element={<UpdateInfo />} />
           <Route path="coordinates" element={<Coordinates />} />
           <Route path="coordinates/:id" element={<UpdateCoordinates />} />
           <Route path="add_coordinates" element={<AddCoordinates />} />

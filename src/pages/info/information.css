@@ -65,6 +65,7 @@ form .files .flex {
 form .files .flex h3 {
   text-transform: capitalize;
   color: var(--font-color);
+  font-size: 16px;
 }
 form .files .flex h4 {
   font-weight: 500;

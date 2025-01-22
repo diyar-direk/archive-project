@@ -95,7 +95,11 @@ const AddInformation = () => {
             formData[key] = form[key].map((itm) => itm._id || itm);
           }
         } else {
-          formData[key] = null;
+          if (!Array.isArray(form[key])) {
+            formData[key] = null;
+          } else {
+            formData[key] = [];
+          }
         }
       });
 

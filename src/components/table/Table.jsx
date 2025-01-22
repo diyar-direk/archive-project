@@ -299,7 +299,7 @@ const Table = (props) => {
       </div>
 
       {!props?.workSpace?.workSpace &&
-        props.items?.slectedItems?.length > 1 && (
+        props.items?.slectedItems?.length > 0 && (
           <div
             onClick={(e) => {
               e.stopPropagation();
@@ -307,8 +307,8 @@ const Table = (props) => {
             }}
             className="gap-10 delete-all"
           >
-            <i className="fa-solid fa-trash"></i> delete all (
-            {props.items.slectedItems.length})
+            <i className="fa-solid fa-trash"></i> delete (
+            {props.items.slectedItems.length}) Item
           </div>
         )}
       <div className="pagination flex">

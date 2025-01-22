@@ -12,9 +12,6 @@
   color: var(--font-color);
   caret-color: var(--main-color);
 }
-.table-search input[type="text"] {
-  flex: 2;
-}
 
 .table-search .filter {
   color: var(--font-color);

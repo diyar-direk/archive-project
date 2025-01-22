@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { baseURL, searchPlaceholder } from "../../context/context";
 import "./form-select.css";
 import axios from "axios";
@@ -59,40 +59,60 @@ const FormSelect = (props) => {
       Coordinates: [],
     },
   });
+  const refData = useRef({
+    countryId: props.form.form.countryId._id,
+    cityId: props.form.form.cityId._id,
+  });
 
   useEffect(() => {
-    props.form.setForm({
-      ...props.form.form,
-      governmentId: "",
-      cityId: "",
-    });
-    setAllDataSelect({
-      ...allDataSelect,
-      data: { ...allDataSelect.data, Cities: [], Governments: [] },
-      searchData: {
-        ...allDataSelect.searchData,
-        Cities: [],
-        Governments: [],
-      },
-    });
+    if (
+      !props.form.form.countryId ||
+      (props.form.form.countryId._id &&
+        refData.current.countryId !== props.form.form.countryId._id)
+    ) {
+      props.form.setForm({
+        ...props.form.form,
+        governmentId: "",
+        cityId: "",
+      });
+      setAllDataSelect({
+        ...allDataSelect,
+        data: { ...allDataSelect.data, Cities: [], Governments: [] },
+        searchData: {
+          ...allDataSelect.searchData,
+          Cities: [],
+          Governments: [],
+        },
+      });
+    }
+
+    return () => 0;
   }, [props.form.form.countryId]);
+
   useEffect(() => {
-    props.form.setForm({
-      ...props.form.form,
-      villageId: "",
-      regionId: "",
-      streetId: "",
-    });
-    setAllDataSelect({
-      ...allDataSelect,
-      data: { ...allDataSelect.data, Regions: [], Streets: [], Villages: [] },
-      searchData: {
-        ...allDataSelect.searchData,
-        Regions: [],
-        Streets: [],
-        Villages: [],
-      },
-    });
+    if (
+      !props.form.form.cityId ||
+      (props.form.form.cityId._id &&
+        refData.current.cityId !== props.form.form.cityId._id)
+    ) {
+      props.form.setForm({
+        ...props.form.form,
+        villageId: "",
+        regionId: "",
+        streetId: "",
+      });
+      setAllDataSelect({
+        ...allDataSelect,
+        data: { ...allDataSelect.data, Regions: [], Streets: [], Villages: [] },
+        searchData: {
+          ...allDataSelect.searchData,
+          Regions: [],
+          Streets: [],
+          Villages: [],
+        },
+      });
+    }
+    return () => 0;
   }, [props.form.form.cityId]);
 
   const getFltrData = (key) => {

@@ -65,6 +65,7 @@ const UpdateCoordinates = () => {
     }
   }
   const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
+
   useEffect(() => {
     error && setError(false);
   }, [coordinates]);
@@ -90,22 +91,8 @@ const UpdateCoordinates = () => {
       )}`;
 
       try {
-        const res = await axios.post(`${baseURL}/Coordinates`, data);
-        if (res.status === 201) {
-          responseFun(true);
-          setForm({
-            countryId: "",
-            governmentId: "",
-            cityId: "",
-            note: "",
-            streetId: "",
-            regionId: "",
-            villageId: "",
-            sources: "",
-            sectionId: "",
-          });
-          setCoordinates({ lat: null, lng: null });
-        }
+        const res = await axios.patch(`${baseURL}/Coordinates/${id}`, data);
+        if (res.status === 200) nav("/coordinates");
       } catch (error) {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");

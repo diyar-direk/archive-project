@@ -1,5 +1,7 @@
-import React, { useState } from "react";
 import Mammoth from "mammoth";
+import { baseURL, mediaURL } from "./../../context/context";
+import { useState } from "react";
+import axios from "axios";
 
 const DocumentsShow = (props) => {
   const addperson = (file) => {
@@ -62,74 +64,161 @@ const DocumentsShow = (props) => {
     }
   };
   const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
+  const [deleteDoc, setDeleteDoc] = useState({
+    image: {},
+    video: {},
+    audio: {},
+    list: {},
+  });
+  const [overlay, setOverlay] = useState(false);
+
+  const deleteData = async () => {
+    try {
+      await axios.patch(`${baseURL}${props.backendKey}`, {
+        imageIds: [deleteDoc[props.data]._id],
+      });
+      const data = props.documents.documents[props.data].filter(
+        (itm) => itm !== deleteDoc[props.data]
+      );
+      props.documents.setDocuments({
+        ...props.documents.documents,
+        [props.data]: data,
+      });
+    } catch (error) {
+      console.log(error);
+      alert("some error please try again");
+    }
+    finally {
+      setOverlay(false);
+    }
+  };
 
   return (
-    <div className="form">
-      <h1>{props.data} selected</h1>
-      <div className="grid-3">
-        {props.documents.documents[props.data].map((e, i) => {
-          return (
-            <div className="flex gap-10 docments relative" key={i}>
-              {props.data === "image" ? (
-                <img loading="lazy" src={URL.createObjectURL(e)} alt="" />
-              ) : props.data === "video" ? (
-                <video src={URL.createObjectURL(e)} controls></video>
-              ) : props.data === "audio" ? (
-                <audio src={URL.createObjectURL(e)} controls></audio>
-              ) : (
-                <div className="c-pointer flex flex-direction relative" key={i}>
-                  <div
-                    className="flex gap-10 files"
-                    onClick={() => addperson(e)}
+    <>
+      {overlay && (
+        <div className="overlay">
+          <div onClick={(e) => e.stopPropagation()}>
+            <h1>are you sure yo want to delete this itms</h1>
+            <div className="flex gap-10 wrap">
+              <div onClick={deleteData} className="delete-all overlay-btn">
+                <i className="fa-solid fa-trash"></i> delete
+              </div>
+              <div
+                onClick={() => {
+                  setDeleteDoc({
+                    image: {},
+                    video: {},
+                    audio: {},
+                    list: {},
+                  });
+                  setOverlay(false);
+                }}
+                className="delete-all cencel overlay-btn"
+              >
+                <i className="fa-solid fa-ban"></i> cencel
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      <div className="form">
+        <h1>{props.data} selected</h1>
+        <div className="grid-3">
+          {props.documents.documents[props.data].map((e, i) => {
+            return (
+              <div className="flex gap-10 docments relative" key={i}>
+                {props.data === "image" ? (
+                  <img
+                    loading="lazy"
+                    src={!e._id ? URL.createObjectURL(e) : mediaURL + e.src}
+                    alt=""
+                  />
+                ) : props.data === "video" ? (
+                  <video
+                    src={!e._id ? URL.createObjectURL(e) : mediaURL + e.src}
+                    controls
+                  ></video>
+                ) : props.data === "audio" ? (
+                  <audio
+                    src={!e._id ? URL.createObjectURL(e) : mediaURL + e.src}
+                    controls
+                  ></audio>
+                ) : (
+                  <article
+                    className="c-pointer flex flex-direction relative"
+                    key={i}
+                    style={{ minWidth: "auto" }}
                   >
-                    <img
-                      src={require(`./${e.name.split(".").pop()}.png`)}
-                      alt=""
-                    />
-                    <div className="flex flex-direction">
-                      <h3>{e.name}</h3>
-                      <h4>{formatFileSize(e.size)}</h4>
+                    <div
+                      className="flex gap-10 wrap files"
+                      onClick={() => addperson(e)}
+                    >
+                      <img
+                        src={
+                          !e._id
+                            ? require(`./${e.name.split(".").pop()}.png`)
+                            : require(`./${e.src.split(".").pop()}.png`)
+                        }
+                        alt=""
+                      />
+                      <div
+                        style={{ minWidth: "auto", padding: "0" }}
+                        className="flex flex-direction"
+                      >
+                        <h3>{e.name ? e.name : e.src}</h3>
+                        {e.size && <h4>{formatFileSize(e.size)}</h4>}
+                      </div>
                     </div>
-                  </div>
+                    <div
+                      onClick={() => {
+                        if (e._id) {
+                          setOverlay(true);
+                          setDeleteDoc({ ...deleteDoc, list: e });
+                        } else {
+                          const updatedFiles = props.documents.documents[
+                            props.data
+                          ].filter((f) => f !== e);
+                          props.documents.setDocuments({
+                            ...props.documents.documents,
+                            [props.data]: updatedFiles,
+                          });
+                        }
+                      }}
+                      className="remove-doc gap-10"
+                    >
+                      delete
+                      <i className="fa-solid fa-trash-can"></i>
+                    </div>
+                  </article>
+                )}
+                {props.data !== "list" && (
                   <div
                     onClick={() => {
-                      const updatedFiles = props.documents.documents[
-                        props.data
-                      ].filter((f) => f !== e);
-                      props.documents.setDocuments({
-                        ...props.documents.documents,
-                        [props.data]: updatedFiles,
-                      });
+                      if (e._id) {
+                        setOverlay(true);
+                        setDeleteDoc({ ...deleteDoc, [props.data]: e });
+                      } else {
+                        const data = props.documents.documents[
+                          props.data
+                        ].filter((itm) => itm !== e);
+                        props.documents.setDocuments({
+                          ...props.documents.documents,
+                          [props.data]: data,
+                        });
+                      }
                     }}
-                    className="remove-doc gap-10"
+                    className="flex gap-10 remove-doc"
                   >
                     delete
-                    <i className="fa-solid fa-trash-can"></i>
+                    <i className=" fa-solid fa-trash-can"></i>
                   </div>
-                </div>
-              )}
-              {props.data !== "list" && (
-                <div
-                  onClick={() => {
-                    const data = props.documents.documents[props.data].filter(
-                      (itm) => itm !== e
-                    );
-                    props.documents.setDocuments({
-                      ...props.documents.documents,
-                      [props.data]: data,
-                    });
-                  }}
-                  className="flex gap-10 remove-doc"
-                >
-                  delete
-                  <i className=" fa-solid fa-trash-can"></i>
-                </div>
-              )}
-            </div>
-          );
-        })}
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
