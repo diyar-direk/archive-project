@@ -294,6 +294,20 @@ div.categories.grid-3 > div h3 {
   top: 20px;
   left: 20px;
 }
+.media > .media-container > p.add-media {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background: #2d2e85;
+  color: white;
+  padding: 7px;
+  border-radius: 4px;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+.media > .media-container > p.add-media:hover {
+  background: #25266e;
+}
 .media > .media-container > div i {
   display: flex;
   align-items: center;
@@ -339,4 +353,48 @@ div.categories.grid-3 > div h3 {
 }
 .media > .media-container > .grid-3 p.delete:hover {
   background-color: #a01717;
+}
+.media-overlay form label {
+  padding: 10px;
+  background: var(--body-color);
+  border-radius: 4px;
+  min-width: 250px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  font-weight: 500;
+  font-size: 18px;
+  gap: 10px;
+  color: var(--font-color);
+}
+.media-overlay form label i {
+  font-size: 17px;
+}
+.media-overlay form .trash {
+  color: #bc2d2d;
+  font-size: 20px;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #a017172f;
+  border-radius: 50%;
+  cursor: pointer;
+  margin: 0 0 0 auto;
+  margin-bottom: 10px;
+}
+.media-overlay form .save {
+  width: 100%;
+}
+.media-overlay form input {
+  display: none;
+}
+.media-overlay form img,
+.media-overlay form video,
+.media-overlay form audio {
+  max-width: 50vh;
+  max-height: 50vh;
 }

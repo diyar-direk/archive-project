@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { mediaURL } from "../../context/context";
+import { baseURL, mediaURL } from "../../context/context";
+import axios from "axios";
+import Loading from "../loading/Loading";
 
 const MediaShow = (props) => {
   const data = props.data;
@@ -7,30 +9,296 @@ const MediaShow = (props) => {
   const noData =
     [...data.images, ...data.documents, ...data.audios, ...data.videos]
       .length <= 0;
-
+  const [formLoading, setFormLoading] = useState(false);
   const [overlay, setOverlay] = useState(false);
+  const [form, setForm] = useState({
+    images: "",
+    videos: "",
+    audios: "",
+    documents: "",
+  });
   const [actions, setActions] = useState({
     showImage: false,
     deleteData: false,
     addData: false,
   });
+  const deleteData = async () => {
+    try {
+      await axios.patch(`${baseURL}/media/${actions.deleteData.data}`, {
+        ids: actions.deleteData.id,
+      });
+      props.getData();
+    } catch (error) {
+      console.log(error);
+      alert("some error please try again");
+    } finally {
+      setActions({ showImage: false, deleteData: false, addData: false });
+      setOverlay(false);
+    }
+  };
+  const submitData = async (e) => {
+    e.preventDefault();
+    try {
+      setFormLoading(true);
+      const keys = Object.keys(form);
+      const formData = new FormData();
+      const res = keys.filter((key) => form[key])[0];
+
+      formData.append("informationId", props.id);
+      formData.append(res, form[res]);
+      const data = await axios.post(`${baseURL}/media/${res}`, formData);
+      console.log(data);
+      setForm({
+        images: "",
+        videos: "",
+        audios: "",
+        documents: "",
+      });
+      setActions({
+        showImage: false,
+        deleteData: false,
+        addData: false,
+      });
+      setOverlay(false);
+      props.getData();
+    } catch (error) {
+      console.log(error);
+      alert("some error pleasse tyr again");
+    } finally {
+      setFormLoading(false);
+    }
+  };
 
   return (
     <>
-      {overlay && (
+      {formLoading && <Loading />}
+      {overlay && !formLoading && (
         <div
-          onClick={() => setOverlay(false)}
+          onClick={() => {
+            setActions({ showImage: false, deleteData: false, addData: false });
+            setOverlay(false);
+          }}
           className="overlay media-overlay"
         >
-          <article>
-            <i
-              onClick={() => setOverlay(false)}
-              className="fa-classic fa-solid fa-xmark fa-fw"
-            ></i>
-            <div>
-              <img src={`${mediaURL}${actions.showImage}`} alt="" />
+          {actions.showImage ? (
+            <article>
+              <i
+                onClick={() => {
+                  setActions({
+                    showImage: false,
+                    deleteData: false,
+                    addData: false,
+                  });
+                  setOverlay(false);
+                }}
+                className="fa-classic fa-solid fa-xmark fa-fw"
+              ></i>
+              <div>
+                <img src={`${mediaURL}${actions.showImage}`} alt="" />
+              </div>
+            </article>
+          ) : actions.deleteData ? (
+            <div onClick={(e) => e.stopPropagation()}>
+              <h1>are you sure yo want to delete this itms</h1>
+              <div className="flex gap-10 wrap">
+                <div onClick={deleteData} className="delete-all overlay-btn">
+                  <i className="fa-solid fa-trash"></i> delete
+                </div>
+                <div
+                  onClick={() => {
+                    setActions({
+                      showImage: false,
+                      deleteData: false,
+                      addData: false,
+                    });
+                    setOverlay(false);
+                  }}
+                  className="delete-all cencel overlay-btn"
+                >
+                  <i className="fa-solid fa-ban"></i> cencel
+                </div>
+              </div>
             </div>
-          </article>
+          ) : (
+            <div>
+              <form
+                onSubmit={submitData}
+                className="flex gap-20 flex-direction"
+              >
+                {!form.images &&
+                !form.audios &&
+                !form.documents &&
+                !form.videos ? (
+                  <>
+                    <label
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      htmlFor="photo"
+                    >
+                      add image
+                      <i className="fa-regular fa-image"></i>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id="photo"
+                        onInput={(e) => {
+                          setForm({
+                            images: e.target.files[0],
+                            videos: "",
+                            audios: "",
+                            documents: "",
+                          });
+                        }}
+                      />
+                    </label>
+
+                    <label
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      htmlFor="video"
+                    >
+                      add video
+                      <i className="fa-solid fa-video"></i>
+                      <input
+                        type="file"
+                        accept="video/*"
+                        id="video"
+                        onInput={(e) => {
+                          setForm({
+                            videos: e.target.files[0],
+                            images: "",
+                            audios: "",
+                            documents: "",
+                          });
+                        }}
+                      />
+                    </label>
+
+                    <label
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      htmlFor="audio"
+                    >
+                      add audio
+                      <i className="fa-solid fa-headphones"></i>
+                      <input
+                        type="file"
+                        accept=".mp3, .wav, .mpeg, .ogg, .flac, .aac"
+                        id="audio"
+                        onInput={(e) => {
+                          setForm({
+                            audios: e.target.files[0],
+                            images: "",
+                            videos: "",
+                            documents: "",
+                          });
+                        }}
+                      />
+                    </label>
+                    <label
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      htmlFor="documents"
+                    >
+                      add documents
+                      <i className="fa-solid fa-file"></i>
+                      <input
+                        type="file"
+                        accept=".pdf, .docx, .txt"
+                        id="documents"
+                        onInput={(e) => {
+                          setForm({
+                            documents: e.target.files[0],
+                            images: "",
+                            audios: "",
+                            videos: "",
+                          });
+                        }}
+                      />
+                    </label>
+                  </>
+                ) : (
+                  <>
+                    {form.images && (
+                      <div>
+                        <i
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setForm({
+                              images: "",
+                              videos: "",
+                              audios: "",
+                              documents: "",
+                            });
+                          }}
+                          className="trash fa-regular fa-trash-can"
+                        ></i>
+                        <img
+                          onClick={(e) => e.stopPropagation()}
+                          src={URL.createObjectURL(form.images)}
+                          alt=""
+                        />
+                      </div>
+                    )}
+                    {form.videos && (
+                      <div>
+                        <i
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setForm({
+                              images: "",
+                              videos: "",
+                              audios: "",
+                              documents: "",
+                            });
+                          }}
+                          className="trash fa-regular fa-trash-can"
+                        ></i>
+                        <video
+                          onClick={(e) => e.stopPropagation()}
+                          controls
+                          src={URL.createObjectURL(form.videos)}
+                          alt=""
+                        />
+                      </div>
+                    )}
+                    {form.audios && (
+                      <div>
+                        <i
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setForm({
+                              images: "",
+                              videos: "",
+                              audios: "",
+                              documents: "",
+                            });
+                          }}
+                          className="trash fa-regular fa-trash-can"
+                        ></i>
+                        <audio
+                          onClick={(e) => e.stopPropagation()}
+                          controls
+                          src={URL.createObjectURL(form.audios)}
+                          alt=""
+                        />
+                      </div>
+                    )}
+                    <button
+                      onClick={(e) => e.stopPropagation()}
+                      className="btn save"
+                    >
+                      save
+                    </button>
+                  </>
+                )}
+              </form>
+            </div>
+          )}
         </div>
       )}
       <div>
@@ -51,13 +319,28 @@ const MediaShow = (props) => {
                 <i className="fa-solid fa-file"></i> {data.documents.length}
               </h4>
             </div>
+            <p
+              onClick={(e) => {
+                e.preventDefault();
+                setActions({
+                  showImage: false,
+                  deleteData: false,
+                  addData: true,
+                });
+                setOverlay(true);
+              }}
+              className="add-media center gap-10"
+            >
+              add media <i className="fa-solid fa-plus"></i>
+            </p>
+
             {noData ? (
               <h1>no media found</h1>
             ) : (
               <article className="w-100 grid-3">
                 {data.images.length > 0 &&
                   data.images.map((e) => (
-                    <div key={e} className="center flex-direction">
+                    <div key={e._id} className="center flex-direction">
                       <img
                         onClick={() => {
                           setActions({
@@ -70,20 +353,31 @@ const MediaShow = (props) => {
                         alt=""
                         src={`${mediaURL}${e.src}`}
                       />
-                      <p className="center gap-10 delete">
+                      <p
+                        onClick={(ele) => {
+                          ele.preventDefault();
+                          setOverlay(true);
+                          setActions({
+                            showImage: false,
+                            deleteData: { data: "images", id: e._id },
+                            addData: false,
+                          });
+                        }}
+                        className="center gap-10 delete"
+                      >
                         delete <i className="fa-regular fa-trash-can"></i>
                       </p>
                     </div>
                   ))}
                 {data.videos.length > 0 &&
                   data.videos.map((e) => (
-                    <div key={e} className="center flex-direction">
+                    <div key={e._id} className="center flex-direction">
                       <video controls src={`${mediaURL}${e.src}`}></video>
                     </div>
                   ))}
                 {data.audios.length > 0 &&
                   data.audios.map((e) => (
-                    <div key={e} className="center flex-direction">
+                    <div key={e._id} className="center flex-direction">
                       <audio controls src={`${mediaURL}${e.src}`}></audio>
                     </div>
                   ))}

@@ -51,6 +51,7 @@ textarea:focus::placeholder {
   padding: 20px;
   background-color: var(--border-color);
   border-radius: 6px;
+  min-width: 280px;
 }
 
 .overlay > div h1 {

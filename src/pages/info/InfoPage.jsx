@@ -11,17 +11,23 @@ const InfoPage = () => {
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const nav = useNavigate();
+
   useEffect(() => {
-    !loading && setLoading(true);
-    axios
-      .get(`${baseURL}/Information/${id}`)
-      .then((res) => setData(res.data.data))
-      .catch((err) => {
-        console.log(err);
-        if (err.status === 500) nav("/not-fond");
-      })
-      .finally(() => setLoading(false));
+    getData();
   }, []);
+
+  const getData = async () => {
+    !loading && setLoading(true);
+    try {
+      const res = await axios.get(`${baseURL}/Information/${id}`);
+      setData(res.data.data);
+    } catch (err) {
+      console.log(err);
+      if (err.status === 500) nav("/not-fond");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return loading ? (
     <div className="flex flex-direction gap-20">
@@ -89,7 +95,7 @@ const InfoPage = () => {
           name="source_name"
         />
       </div>
-      <MediaShow data={data.media} />
+      <MediaShow id={id} data={data.media} getData={getData} />
     </div>
   );
 };
