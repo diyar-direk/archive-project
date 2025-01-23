@@ -46,8 +46,7 @@ const MediaShow = (props) => {
 
       formData.append("informationId", props.id);
       formData.append(res, form[res]);
-      const data = await axios.post(`${baseURL}/media/${res}`, formData);
-      console.log(data);
+      await axios.post(`${baseURL}/media/${res}`, formData);
       setForm({
         images: "",
         videos: "",
@@ -373,12 +372,40 @@ const MediaShow = (props) => {
                   data.videos.map((e) => (
                     <div key={e._id} className="center flex-direction">
                       <video controls src={`${mediaURL}${e.src}`}></video>
+                      <p
+                        onClick={(ele) => {
+                          ele.preventDefault();
+                          setOverlay(true);
+                          setActions({
+                            showImage: false,
+                            deleteData: { data: "videos", id: e._id },
+                            addData: false,
+                          });
+                        }}
+                        className="center gap-10 delete"
+                      >
+                        delete <i className="fa-regular fa-trash-can"></i>
+                      </p>
                     </div>
                   ))}
                 {data.audios.length > 0 &&
                   data.audios.map((e) => (
                     <div key={e._id} className="center flex-direction">
                       <audio controls src={`${mediaURL}${e.src}`}></audio>
+                      <p
+                        onClick={(ele) => {
+                          ele.preventDefault();
+                          setOverlay(true);
+                          setActions({
+                            showImage: false,
+                            deleteData: { data: "audios", id: e._id },
+                            addData: false,
+                          });
+                        }}
+                        className="center gap-10 delete"
+                      >
+                        delete <i className="fa-regular fa-trash-can"></i>
+                      </p>
                     </div>
                   ))}
               </article>

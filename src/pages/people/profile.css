@@ -335,10 +335,16 @@ div.categories.grid-3 > div h3 {
   border-radius: 4px;
   padding: 10px;
 }
-.media > .media-container > .grid-3 > div.flex-direction > img {
+.media > .media-container > .grid-3 > div.flex-direction > img,
+.media > .media-container > .grid-3 > div.flex-direction > audio,
+.media > .media-container > .grid-3 > div.flex-direction > video {
   height: 100%;
   object-fit: contain;
   cursor: pointer;
+}
+.media > .media-container > .grid-3 > div.flex-direction > audio,
+.media > .media-container > .grid-3 > div.flex-direction > video {
+  width: 100%;
 }
 .media > .media-container > .grid-3 p.delete {
   background-color: #bc2d2d;
