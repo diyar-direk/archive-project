@@ -60,8 +60,8 @@ const FormSelect = (props) => {
     },
   });
   const refData = useRef({
-    countryId: props.form.form.countryId._id,
-    cityId: props.form.form.cityId._id,
+    countryId: props.form.form.countryId?._id,
+    cityId: props.form.form.cityId?._id,
   });
 
   useEffect(() => {
