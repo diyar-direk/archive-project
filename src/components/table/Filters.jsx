@@ -19,6 +19,7 @@ const Filters = (props) => {
 
   const arrayOfKeys = [
     { fltrKey: "gender", backendKey: "gender" },
+    { fltrKey: "role", backendKey: "role" },
     { fltrKey: "maritalStatus", backendKey: "maritalStatus" },
     { fltrKey: "country", backendKey: "Countries" },
     { fltrKey: "government", backendKey: "Governments" },
@@ -347,6 +348,39 @@ const Filters = (props) => {
                 }}
               >
                 Other
+              </h2>
+            </article>
+          ) : e === "role" ? (
+            <article>
+              <h2
+                data-name="role"
+                data-data=""
+                onClick={(e) => {
+                  selectFilters(e);
+                  removeClass(e);
+                }}
+              >
+                all roles
+              </h2>
+              <h2
+                data-name="role"
+                data-data="admin"
+                onClick={(e) => {
+                  selectFilters(e);
+                  removeClass(e);
+                }}
+              >
+                admin
+              </h2>
+              <h2
+                data-name="role"
+                data-data="user"
+                onClick={(e) => {
+                  selectFilters(e);
+                  removeClass(e);
+                }}
+              >
+                user
               </h2>
             </article>
           ) : (

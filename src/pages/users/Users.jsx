@@ -14,6 +14,7 @@ const Users = () => {
   const context = useContext(Context);
   const limit = context?.limit;
   const [filters, setFilters] = useState({
+    role: "",
     date: {
       from: "",
       to: "",
@@ -35,6 +36,8 @@ const Users = () => {
 
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Users?active=true&limit=${limit}&page=${page}`;
+
+    filters.role && (url += `&role=${filters.role}`);
 
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
@@ -67,6 +70,8 @@ const Users = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Users/search?active=true&limit=${limit}&page=${page}`;
+
+    filters.role && (url += `&role=${filters.role}`);
 
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)

@@ -338,7 +338,7 @@ div.categories.grid-3 > div h3 {
 .media > .media-container > .grid-3 > div.flex-direction > img,
 .media > .media-container > .grid-3 > div.flex-direction > audio,
 .media > .media-container > .grid-3 > div.flex-direction > video {
-  height: 100%;
+  height: calc(100% - 40px);
   object-fit: contain;
   cursor: pointer;
 }
@@ -349,12 +349,12 @@ div.categories.grid-3 > div h3 {
 .media > .media-container > .grid-3 p.delete {
   background-color: #bc2d2d;
   color: white;
-  padding: 7px 10px;
+  height: 40px;
   font-weight: 500;
   text-transform: capitalize;
   width: 100%;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: 5px;
   border-radius: 4px;
 }
 .media > .media-container > .grid-3 p.delete:hover {

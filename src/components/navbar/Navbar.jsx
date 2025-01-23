@@ -1,7 +1,7 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import "./navbar.css";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context";
 import { links } from "./links";
 
@@ -120,15 +120,81 @@ const Navbar = () => {
       </NavLink>
     );
   });
+  const [form, setForm] = useState("");
+  const nav = useNavigate();
+
+  const search = () => {
+    let reasult = [];
+    if (form.length > 0) {
+      links?.forEach((link, i) => {
+        link?.children?.forEach((e) => {
+          if (
+            e.title?.toLowerCase().includes(form.toLowerCase()) ||
+            e.path.toLowerCase().includes(form.toLowerCase())
+          ) {
+            reasult.push(
+              <Link key={e.path} onClick={() => setForm("")} to={e.path}>
+                {e.title || "Unnamed"}
+              </Link>
+            );
+          }
+        });
+      });
+    }
+    if (reasult.length === 0) {
+      reasult.push(<p key={1}>no result found</p>);
+    }
+    return reasult;
+  };
+
+  const searchClick = (e) => {
+    e.preventDefault();
+    if (form.length > 0) {
+      const matchedPage = links?.find((link) =>
+        link?.children?.some(
+          (child) =>
+            child.title.toLowerCase().includes(form.toLowerCase()) ||
+            child.path.toLowerCase().includes(form.toLowerCase())
+        )
+      );
+
+      if (matchedPage) {
+        const matchedChild = matchedPage.children.find(
+          (child) =>
+            child.title.toLowerCase().includes(form.toLowerCase()) ||
+            child.path.toLowerCase().includes(form.toLowerCase())
+        );
+
+        if (matchedChild) {
+          nav(matchedChild.path);
+        }
+      } else {
+        const path = form.replaceAll(" ", "_");
+        nav(`/dashboard/${path}`);
+      }
+      setForm("");
+    }
+  };
 
   return (
     <>
       <nav className={`${context?.isClosed ? "closed" : ""} center`}>
         <div className="container between gap-20">
-          <Link to={"/s"} className="search flex-1 center">
-            <span className="flex-1">search for somthing</span>
+          <form
+            onSubmit={searchClick}
+            className="relative search flex-1 center"
+          >
+            <input
+              required
+              value={form}
+              onChange={(e) => setForm(e.target.value)}
+              type="text"
+              className="flex-1"
+              placeholder="search for pages"
+            />
             <button className="fa-solid fa-magnifying-glass"></button>
-          </Link>
+            {form.length > 0 && <div className="results"> {search()} </div>}
+          </form>
           <div className="setting center">
             <i
               onClick={modeFun}
