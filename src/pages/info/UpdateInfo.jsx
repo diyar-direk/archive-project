@@ -6,7 +6,7 @@ import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import People from "./../people/People";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import FormSelect from "../../components/form/FormSelect";
 import DocumentsShow from "./DocumentsShow";
 import Skeleton from "react-loading-skeleton";
@@ -39,6 +39,7 @@ const UpdateInfo = () => {
     const selectDiv = document.querySelector("div.form .selecte .inp.active");
     selectDiv && selectDiv.classList.remove("active");
   });
+  const nav = useNavigate();
 
   const [error, setError] = useState(false);
 
@@ -160,12 +161,10 @@ const UpdateInfo = () => {
           }
         }
 
-        if (data.status === 201) {
-        }
+        if (data.status === 200) nav("/informations");
       } catch (error) {
         console.log(error);
-        if (error.status === 400) responseFun("reapeted data");
-        else responseFun(false);
+        responseFun(false);
       } finally {
         setLoading(false);
       }

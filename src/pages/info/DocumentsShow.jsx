@@ -75,7 +75,7 @@ const DocumentsShow = (props) => {
   const deleteData = async () => {
     try {
       await axios.patch(`${baseURL}${props.backendKey}`, {
-        imageIds: [deleteDoc[props.data]._id],
+        ids: [deleteDoc[props.data]._id],
       });
       const data = props.documents.documents[props.data].filter(
         (itm) => itm !== deleteDoc[props.data]
@@ -87,8 +87,7 @@ const DocumentsShow = (props) => {
     } catch (error) {
       console.log(error);
       alert("some error please try again");
-    }
-    finally {
+    } finally {
       setOverlay(false);
     }
   };

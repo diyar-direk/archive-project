@@ -9,6 +9,11 @@ const MediaShow = (props) => {
       .length <= 0;
 
   const [overlay, setOverlay] = useState(false);
+  const [actions, setActions] = useState({
+    showImage: false,
+    deleteData: false,
+    addData: false,
+  });
 
   return (
     <>
@@ -23,7 +28,7 @@ const MediaShow = (props) => {
               className="fa-classic fa-solid fa-xmark fa-fw"
             ></i>
             <div>
-              <img src={overlay} alt="" />
+              <img src={`${mediaURL}${actions.showImage}`} alt="" />
             </div>
           </article>
         </div>
@@ -50,32 +55,38 @@ const MediaShow = (props) => {
               <h1>no media found</h1>
             ) : (
               <article className="w-100 grid-3">
-                {data.images.length > 0 && (
-                  <div className="center">
-                    {data.images.map((e) => (
+                {data.images.length > 0 &&
+                  data.images.map((e) => (
+                    <div key={e} className="center flex-direction">
                       <img
-                        key={e}
-                        onClick={() => setOverlay(e)}
+                        onClick={() => {
+                          setActions({
+                            showImage: e.src,
+                            deleteData: false,
+                            addData: false,
+                          });
+                          setOverlay(true);
+                        }}
                         alt=""
-                        src={`${mediaURL}${e}`}
+                        src={`${mediaURL}${e.src}`}
                       />
-                    ))}
-                  </div>
-                )}
-                {data.videos.length > 0 && (
-                  <div className="center">
-                    {data.videos.map((e) => (
-                      <video key={e} controls src={e}></video>
-                    ))}
-                  </div>
-                )}
-                {data.audios.length > 0 && (
-                  <div className="center">
-                    {data.audios.map((e) => (
-                      <audio key={e} controls src={e}></audio>
-                    ))}
-                  </div>
-                )}
+                      <p className="center gap-10 delete">
+                        delete <i className="fa-regular fa-trash-can"></i>
+                      </p>
+                    </div>
+                  ))}
+                {data.videos.length > 0 &&
+                  data.videos.map((e) => (
+                    <div key={e} className="center flex-direction">
+                      <video controls src={`${mediaURL}${e.src}`}></video>
+                    </div>
+                  ))}
+                {data.audios.length > 0 &&
+                  data.audios.map((e) => (
+                    <div key={e} className="center flex-direction">
+                      <audio controls src={`${mediaURL}${e.src}`}></audio>
+                    </div>
+                  ))}
               </article>
             )}
           </div>

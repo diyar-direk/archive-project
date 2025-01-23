@@ -81,6 +81,7 @@
   gap: 10px;
   margin-bottom: 8px;
   color: var(--font-color);
+  flex-wrap: wrap;
 }
 .profile > .info > .flex h2 {
   font-size: 19px;
@@ -137,6 +138,23 @@ article.person-info > div > div {
 }
 article.person-info:nth-child(even) > div {
   background-color: var(--body-color);
+}
+.single-info > a {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  color: var(--font-color);
+  background: var(--aside-color);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: var(--box-shadow);
+}
+.single-info > a:hover {
+  background-color: var(--border-color);
 }
 
 .single-info > h1,
@@ -245,11 +263,18 @@ div.categories.grid-3 > div h3 {
   padding: 10px;
   border-radius: 4px;
   box-shadow: 0 0 20px #00000036;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  min-height: 150px;
 }
 .media-overlay img {
   max-width: 60svh;
   max-height: 60vh;
   object-fit: contain;
+  width: 100%;
+  height: 100%;
 }
 
 .media > h1 {
@@ -287,4 +312,31 @@ div.categories.grid-3 > div h3 {
 }
 .media > .media-container > .grid-3 {
   margin-top: 50px;
+}
+.media > .media-container > .grid-3 > div.flex-direction {
+  justify-content: space-between;
+  min-height: 160px;
+  background: var(--body-color);
+  max-height: 300px;
+  border-radius: 4px;
+  padding: 10px;
+}
+.media > .media-container > .grid-3 > div.flex-direction > img {
+  height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+.media > .media-container > .grid-3 p.delete {
+  background-color: #bc2d2d;
+  color: white;
+  padding: 7px 10px;
+  font-weight: 500;
+  text-transform: capitalize;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+.media > .media-container > .grid-3 p.delete:hover {
+  background-color: #a01717;
 }

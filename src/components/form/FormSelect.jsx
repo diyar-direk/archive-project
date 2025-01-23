@@ -123,7 +123,7 @@ const FormSelect = (props) => {
         props.form.form[key.requiredKey]._id
       }`);
 
-    if (allDataSelect.data[key.key]?.length <= 0)
+    if (allDataSelect?.data[key.key]?.length <= 0)
       axios
         .get(url)
         .then((res) => {
@@ -316,7 +316,7 @@ const FormSelect = (props) => {
                         : itm?.coordinates}
                     </h2>
                   ))}
-                  {allDataSelect?.searchData[keyValues.key].length === 0 && (
+                  {allDataSelect?.searchData[keyValues.key]?.length === 0 && (
                     <p>no data</p>
                   )}
                 </>
@@ -334,7 +334,7 @@ const FormSelect = (props) => {
             : props.form.form[keyValues.formKey].source_name}
         </span>
       )}
-      {props.type && props.form.form[keyValues.formKey].length > 0 && (
+      {props.type && props.form.form[keyValues.formKey]?.length > 0 && (
         <div className="flex selceted-itms">
           {props.form.form[keyValues.formKey].map((span) => (
             <span

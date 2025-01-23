@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { baseURL } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
@@ -34,7 +34,12 @@ const InfoPage = () => {
       </div>
     </div>
   ) : (
-    <div className="single-info">
+    <div className="relative single-info">
+      <Link
+        to={`/update_info/${id}`}
+        title="update"
+        className="fa-regular fa-pen-to-square"
+      ></Link>
       <h1> {data.subject} </h1>
       <h2>details</h2>
       <p>{data.details}</p>
