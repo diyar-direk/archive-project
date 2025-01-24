@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
@@ -24,8 +24,13 @@ import UpdateCoordinates from "./pages/coordinates/UpdateCordinates";
 import Users from "./pages/users/Users";
 import AddUser from "./pages/users/AddUser";
 import UpdateInfo from "./pages/info/UpdateInfo";
+import { useEffect } from "react";
 
 function App() {
+  const location = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   return (
     <div className="App">
       <Routes>

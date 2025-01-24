@@ -2,7 +2,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
-import { Link } from "react-router-dom";
 const Users = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -144,10 +143,6 @@ const Users = () => {
               }}
               className="delete fa-solid fa-trash"
             ></i>
-            <Link
-              to={`${e._id}`}
-              className="update fa-regular fa-pen-to-square"
-            ></Link>
           </div>
         </td>
       </tr>

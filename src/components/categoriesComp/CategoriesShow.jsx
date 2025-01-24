@@ -6,11 +6,11 @@ const CategoriesShow = (props) => {
   return (
     <div>
       <div>
-        <h2>{props.title}</h2>
+        <h2 className="font-color">{props.title}</h2>
         {props.data?.length > 0 ? (
           props.data?.map((e) =>
             props.name !== "people" ? (
-              <p key={e._id}>
+              <p className="font-color" key={e._id}>
                 <span>{props.title} name:</span> <span> {e[props.name]}</span>
               </p>
             ) : (
@@ -29,7 +29,7 @@ const CategoriesShow = (props) => {
             )
           )
         ) : (
-          <h3>no {props.title} found</h3>
+          <h3 className="font-color">no {props.title} found</h3>
         )}
       </div>
     </div>

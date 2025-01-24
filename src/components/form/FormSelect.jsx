@@ -286,8 +286,16 @@ const FormSelect = (props) => {
                       const filteredCountries =
                         allDataSelect?.data?.[keyValues.key]?.filter((e) =>
                           e.name
-                            .toLowerCase()
-                            .includes(inp.target.value.toLowerCase())
+                            ? e.name
+                                .toLowerCase()
+                                .includes(inp.target.value.toLowerCase())
+                            : e.source_name
+                            ? e.source_name
+                                .toLowerCase()
+                                .includes(inp.target.value.toLowerCase())
+                            : e.coordinates
+                                .toLowerCase()
+                                .includes(inp.target.value.toLowerCase())
                         ) || [];
                       setAllDataSelect((prevState) => ({
                         ...prevState,

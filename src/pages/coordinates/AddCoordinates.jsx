@@ -113,9 +113,9 @@ const AddCoordinates = () => {
         <h1 className="title">Add Coordinates</h1>
         <div className="form">
           <div>
-            <h2>Click on the Map to Get Coordinates</h2>
-            <h3>Latitude: {coordinates.lat}</h3>
-            <h3>Longitude: {coordinates.lng}</h3>
+            <h2 className="font-color">Click on the Map to Get Coordinates</h2>
+            <h3 className="font-color">Latitude: {coordinates.lat}</h3>
+            <h3 className="font-color">Longitude: {coordinates.lng}</h3>
 
             <MapContainer
               center={[51.505, -0.09]}
