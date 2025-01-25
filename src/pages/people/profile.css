@@ -142,7 +142,7 @@ article.person-info:nth-child(even) > div {
 .single-info > a {
   position: absolute;
   right: 0;
-  top: -10px;
+  top: -15px;
   color: var(--font-color);
   background: var(--aside-color);
   width: 30px;
@@ -346,7 +346,8 @@ div.categories.grid-3 > div h3 {
 .media > .media-container > .grid-3 > div.flex-direction > video {
   width: 100%;
 }
-.media > .media-container > .grid-3 p.delete {
+.media > .media-container > .grid-3 p.delete,
+.media > .media-container > .grid-3 a.view {
   background-color: #bc2d2d;
   color: white;
   height: 40px;
@@ -356,6 +357,9 @@ div.categories.grid-3 > div h3 {
   cursor: pointer;
   margin-top: 5px;
   border-radius: 4px;
+}
+.media > .media-container > .grid-3 a.view {
+  background-color: #2d2e85;
 }
 .media > .media-container > .grid-3 p.delete:hover {
   background-color: #a01717;

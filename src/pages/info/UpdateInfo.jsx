@@ -113,7 +113,7 @@ const UpdateInfo = () => {
         const videosDoc = new FormData();
         const audioDoc = new FormData();
         const documentDoc = new FormData();
-        if (newImages.length > 0) {
+        if (newImages?.length > 0) {
           imagesDoc.append("informationId", id);
           newImages.forEach((item) => {
             imagesDoc.append(`images`, item);
@@ -125,7 +125,7 @@ const UpdateInfo = () => {
           }
         }
 
-        if (newVideos.length > 0) {
+        if (newVideos?.length > 0) {
           videosDoc.append("informationId", id);
           newVideos.forEach((item) => {
             videosDoc.append(`videos`, item);
@@ -137,7 +137,7 @@ const UpdateInfo = () => {
           }
         }
 
-        if (newAudios.length > 0) {
+        if (newAudios?.length > 0) {
           audioDoc.append("informationId", id);
           newAudios.forEach((item) => {
             audioDoc.append(`audios`, item);
@@ -149,7 +149,7 @@ const UpdateInfo = () => {
           }
         }
 
-        if (newFiles.length > 0) {
+        if (newFiles?.length > 0) {
           documentDoc.append("informationId", id);
           newFiles.forEach((item) => {
             documentDoc.append(`documents`, item);
@@ -196,9 +196,9 @@ const UpdateInfo = () => {
           />
           <div className="selected-people flex wrap gap-10">
             <h2 className="text-capitalize font-color">{`people selectd : ${
-              form.people.length <= 0 ? "no one" : ""
+              form?.people?.length <= 0 ? "no one" : ""
             }`}</h2>
-            {form.people.length > 0 &&
+            {form?.people?.length > 0 &&
               form.people.map((e) => (
                 <div key={e._id} className="center gap-10">
                   <Link
@@ -446,7 +446,7 @@ const UpdateInfo = () => {
               </div>
             </div>
 
-            {documents.image.length > 0 && (
+            {documents?.image?.length > 0 && (
               <DocumentsShow
                 backendKey="/media/images"
                 documents={{ documents, setDocuments }}
@@ -454,7 +454,7 @@ const UpdateInfo = () => {
               />
             )}
 
-            {documents.video.length > 0 && (
+            {documents?.video?.length > 0 && (
               <DocumentsShow
                 backendKey="/media/videos"
                 documents={{ documents, setDocuments }}
@@ -462,7 +462,7 @@ const UpdateInfo = () => {
               />
             )}
 
-            {documents.audio.length > 0 && (
+            {documents?.audio?.length > 0 && (
               <DocumentsShow
                 backendKey="/media/audios"
                 documents={{ documents, setDocuments }}
@@ -470,7 +470,7 @@ const UpdateInfo = () => {
               />
             )}
 
-            {uploadedFiles.list.length > 0 && (
+            {uploadedFiles?.list.length > 0 && (
               <DocumentsShow
                 backendKey="/media/documents"
                 popup={{ setIsPopupOpen, isPopupOpen }}

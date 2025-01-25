@@ -93,7 +93,7 @@ const Navbar = () => {
   };
 
   const pagesLinks = links?.map((link, i) => {
-    return link.type === "multi" ? (
+    return (
       <div title={link.title} key={i} className="links">
         <div onClick={openDiv} className="center">
           <i className={link.icon}></i>
@@ -108,18 +108,9 @@ const Navbar = () => {
           ))}
         </article>
       </div>
-    ) : (
-      <NavLink
-        title={link.title}
-        key={i}
-        to={link.path}
-        className="w-100 justify-start center"
-      >
-        <i className={link.icon}></i>
-        <h1> {link.title} </h1>
-      </NavLink>
     );
   });
+
   const [form, setForm] = useState("");
   const nav = useNavigate();
 

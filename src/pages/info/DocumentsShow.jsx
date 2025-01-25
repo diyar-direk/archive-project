@@ -70,6 +70,7 @@ const DocumentsShow = (props) => {
     audio: {},
     list: {},
   });
+
   const [overlay, setOverlay] = useState(false);
 
   const deleteData = async () => {
@@ -123,7 +124,7 @@ const DocumentsShow = (props) => {
       <div className="form">
         <h1>{props.data} selected</h1>
         <div className="grid-3">
-          {props.documents.documents[props.data].map((e, i) => {
+          {props?.documents?.documents[props.data]?.map((e, i) => {
             return (
               <div className="flex gap-10 docments relative" key={i}>
                 {props.data === "image" ? (
@@ -148,26 +149,43 @@ const DocumentsShow = (props) => {
                     key={i}
                     style={{ minWidth: "auto" }}
                   >
-                    <div
-                      className="flex gap-10 wrap files"
-                      onClick={() => addperson(e)}
-                    >
-                      <img
-                        src={
-                          !e._id
-                            ? require(`./${e.name.split(".").pop()}.png`)
-                            : require(`./${e.src.split(".").pop()}.png`)
-                        }
-                        alt=""
-                      />
+                    {!e._id ? (
                       <div
-                        style={{ minWidth: "auto", padding: "0" }}
-                        className="flex flex-direction"
+                        className="flex gap-10 wrap files"
+                        onClick={() => addperson(e)}
                       >
-                        <h3>{e.name ? e.name : e.src}</h3>
-                        {e.size && <h4>{formatFileSize(e.size)}</h4>}
+                        <img
+                          src={require(`./${e.name.split(".").pop()}.png`)}
+                          alt=""
+                        />
+                        <div
+                          style={{ minWidth: "auto", padding: "0" }}
+                          className="flex flex-direction"
+                        >
+                          <h3>{e.name.split("/").pop()}</h3>
+                          <h4>{formatFileSize(e.size)}</h4>
+                        </div>
                       </div>
-                    </div>
+                    ) : (
+                      <a
+                        href={mediaURL + e.src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex gap-10 wrap files"
+                      >
+                        <img
+                          src={require(`./${e.src.split(".").pop()}.png`)}
+                          alt=""
+                        />
+                        <div
+                          style={{ minWidth: "auto", padding: "0" }}
+                          className="flex flex-direction"
+                        >
+                          <h3>{e.src.split("/").pop()}</h3>
+                        </div>
+                      </a>
+                    )}
+
                     <div
                       onClick={() => {
                         if (e._id) {

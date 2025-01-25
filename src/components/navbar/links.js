@@ -1,6 +1,5 @@
 export const links = [
   {
-    type: "multi",
     icon: "fa-solid fa-user-group",
     children: [
       { title: "users", path: "/users", role: ["admin"] },
@@ -16,7 +15,6 @@ export const links = [
       { title: "add person", path: "/add_person", role: ["admin"] },
     ],
     title: "people",
-    type: "multi",
     role: ["admin", "user"],
   },
   {
@@ -30,7 +28,6 @@ export const links = [
       { title: "regions", path: "/regions", role: ["admin"] },
     ],
     title: "Addresses",
-    type: "multi",
     role: ["admin", "user"],
   },
 
@@ -43,7 +40,6 @@ export const links = [
       { title: "party", path: "/party", role: ["admin"] },
     ],
     title: "Catagories",
-    type: "multi",
     role: ["admin", "user"],
   },
   {
@@ -53,7 +49,6 @@ export const links = [
       { title: "add information", path: "/add_information", role: ["admin"] },
     ],
     title: "informations",
-    type: "multi",
     role: ["admin", "user"],
   },
   {
@@ -63,14 +58,6 @@ export const links = [
       { title: "add coordinates", path: "/add_coordinates", role: ["admin"] },
     ],
     title: "Coordinates",
-    type: "multi",
-    role: ["admin", "user"],
-  },
-  {
-    icon: "fa-solid fa-map-location-dot",
-    title: "test",
-    path: "/test",
-    type: "single",
     role: ["admin", "user"],
   },
 ];

@@ -94,7 +94,6 @@ body.arabic .selecte .inp::before {
   z-index: -1;
   pointer-events: none;
   max-height: 300px;
-
   overflow-y: auto;
   text-align: center;
 }
@@ -142,7 +141,10 @@ div.form .selecte > article h2:not(:last-of-type) {
 .selecte > article h2:hover {
   background-color: var(--section-color);
 }
-
+form.dashboard-form > button.btn {
+  width: 50%;
+  font-size: 20px;
+}
 div.form div.selceted-itms {
   margin-top: 10px;
   gap: 10px;

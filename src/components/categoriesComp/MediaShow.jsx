@@ -5,6 +5,7 @@ import Loading from "../loading/Loading";
 
 const MediaShow = (props) => {
   const data = props.data;
+  const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
 
   const noData =
     [...data.images, ...data.documents, ...data.audios, ...data.videos]
@@ -24,6 +25,7 @@ const MediaShow = (props) => {
   });
   const deleteData = async () => {
     try {
+      setFormLoading(true);
       await axios.patch(`${baseURL}/media/${actions.deleteData.data}`, {
         ids: actions.deleteData.id,
       });
@@ -33,9 +35,11 @@ const MediaShow = (props) => {
       alert("some error please try again");
     } finally {
       setActions({ showImage: false, deleteData: false, addData: false });
+      setFormLoading(true);
       setOverlay(false);
     }
   };
+
   const submitData = async (e) => {
     e.preventDefault();
     try {
@@ -287,6 +291,34 @@ const MediaShow = (props) => {
                         />
                       </div>
                     )}
+                    {form.documents && (
+                      <div>
+                        <i
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setForm({
+                              images: "",
+                              videos: "",
+                              audios: "",
+                              documents: "",
+                            });
+                          }}
+                          className="trash fa-regular fa-trash-can"
+                        ></i>
+                        <div className="flex gap-10 wrap files">
+                          <img
+                            src={require(`../../pages/info/${form.documents.name
+                              .split(".")
+                              .pop()}.png`)}
+                            alt=""
+                          />
+                          <div className="flex flex-direction">
+                            <h3>{form.documents.name}</h3>
+                            <h4>{formatFileSize(form.documents.size)}</h4>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     <button
                       onClick={(e) => e.stopPropagation()}
                       className="btn save"
@@ -300,6 +332,7 @@ const MediaShow = (props) => {
           )}
         </div>
       )}
+
       <div>
         <div className="flex gap-10 flex-direction media">
           <h1>medias</h1>
@@ -406,6 +439,49 @@ const MediaShow = (props) => {
                       >
                         delete <i className="fa-regular fa-trash-can"></i>
                       </p>
+                    </div>
+                  ))}
+                {data.documents.length > 0 &&
+                  data.documents.map((e) => (
+                    <div key={e._id} className="center flex-direction">
+                      <div className="center gap-10 wrap">
+                        <img
+                          loading="lazy"
+                          src={require(`../../pages/info/${e.src
+                            .split(".")
+                            .pop()}.png`)}
+                          alt=""
+                        />
+                        <div className="flex flex-direction">
+                          <h3 className="font-color">
+                            {e.src.split("/").pop()}
+                          </h3>
+                        </div>
+                      </div>
+                      <div className="flex w-100 gap-10 wrap">
+                        <p
+                          onClick={(ele) => {
+                            ele.preventDefault();
+                            setOverlay(true);
+                            setActions({
+                              showImage: false,
+                              deleteData: { data: "documents", id: e._id },
+                              addData: false,
+                            });
+                          }}
+                          className="center gap-10 flex-1 delete"
+                        >
+                          delete <i className="fa-regular fa-trash-can"></i>
+                        </p>
+                        <a
+                          href={`${mediaURL}${e.src}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 center gap-10 view"
+                        >
+                          view file<i className="fa-regular fa-eye"></i>
+                        </a>
+                      </div>
                     </div>
                   ))}
               </article>
