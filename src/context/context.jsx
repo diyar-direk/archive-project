@@ -8,6 +8,7 @@ export const baseURL = `http://localhost:8000/api`;
 export const mediaURL = `http://localhost:8000/`;
 
 const Provider = ({ children }) => {
+  const [progressBar, setProgress] = useState(false);
   const [limit, setLimit] = useState(10);
   const [mode, setMode] = useState(+localStorage.getItem("isDark") || false);
   const [language, setLanguage] = useState(
@@ -78,6 +79,8 @@ const Provider = ({ children }) => {
         showButton,
         limit,
         setLimit,
+        setProgress,
+        progressBar,
       }}
     >
       {children}

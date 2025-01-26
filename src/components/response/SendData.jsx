@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
 import errorImg from "./error.png";
 import completeImg from "./complete.png";
 import "./overlay.css";
-import { Context } from "../../context/context";
 const SendData = (props) => {
-  const context = useContext(Context);
   return (
     <div className="center response">
       <img

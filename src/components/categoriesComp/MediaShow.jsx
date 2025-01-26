@@ -50,7 +50,13 @@ const MediaShow = (props) => {
 
       formData.append("informationId", props.id);
       formData.append(res, form[res]);
-      await axios.post(`${baseURL}/media/${res}`, formData);
+      await axios.post(`${baseURL}/media/${res}`, formData, {
+        onUploadProgress: (progress) => {
+          const persent =
+            Math.floor((progress.loaded * 100) / progress.total) + "%";
+          document.querySelector("div.loading.overlay >h1").innerHTML = persent;
+        },
+      });
       setForm({
         images: "",
         videos: "",
@@ -404,7 +410,11 @@ const MediaShow = (props) => {
                 {data.videos.length > 0 &&
                   data.videos.map((e) => (
                     <div key={e._id} className="center flex-direction">
-                      <video controls src={`${mediaURL}${e.src}`}></video>
+                      <video
+                        className="flex-1"
+                        controls
+                        src={`${mediaURL}${e.src}`}
+                      ></video>
                       <p
                         onClick={(ele) => {
                           ele.preventDefault();
@@ -424,7 +434,11 @@ const MediaShow = (props) => {
                 {data.audios.length > 0 &&
                   data.audios.map((e) => (
                     <div key={e._id} className="center flex-direction">
-                      <audio controls src={`${mediaURL}${e.src}`}></audio>
+                      <audio
+                        className="flex-1"
+                        controls
+                        src={`${mediaURL}${e.src}`}
+                      ></audio>
                       <p
                         onClick={(ele) => {
                           ele.preventDefault();
@@ -444,7 +458,7 @@ const MediaShow = (props) => {
                 {data.documents.length > 0 &&
                   data.documents.map((e) => (
                     <div key={e._id} className="center flex-direction">
-                      <div className="center gap-10 wrap">
+                      <div className="center flex-1 gap-10 wrap">
                         <img
                           loading="lazy"
                           src={require(`../../pages/info/${e.src

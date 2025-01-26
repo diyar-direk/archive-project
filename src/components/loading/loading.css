@@ -7,6 +7,9 @@ div.loading > article {
   rotate: 0;
   animation: rotate 1s linear infinite;
 }
+div.loading > h1 {
+  color: var(--font-color);
+}
 @keyframes rotate {
   100% {
     rotate: 360deg;
