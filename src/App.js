@@ -25,46 +25,54 @@ import Users from "./pages/users/Users";
 import AddUser from "./pages/users/AddUser";
 import UpdateInfo from "./pages/info/UpdateInfo";
 import { useEffect } from "react";
+import DashboardAuth from "./Auth/DashboardAuth";
+import Refresh from "./Auth/Refresh";
 
 function App() {
   const location = useLocation();
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
   return (
     <div className="App">
-      <div className=" progres">
+      {/* <div className=" progres">
         <div className="relative">
-          <h4>100%</h4>
+          <h4>0%</h4>
           <span></span>
         </div>
-      </div>
+      </div> */}
+
       <Routes>
-        <Route path="login" element={<LoginForm />} />
-        <Route path="*" element={<Dashboard />}>
-          <Route path="users" element={<Users />} />
-          <Route path="add_user" element={<AddUser />} />
-          <Route path="people" element={<People />} />
-          <Route path="people/:id" element={<Profile />} />
-          <Route path="add_person" element={<AddPerson />} />
-          <Route path="update_person/:id" element={<UpdatePerson />} />
-          <Route path="countries" element={<Countries />} />
-          <Route path="governments" element={<Government />} />
-          <Route path="cities" element={<City />} />
-          <Route path="villages" element={<Village />} />
-          <Route path="regions" element={<Region />} />
-          <Route path="streets" element={<Street />} />
-          <Route path="sections" element={<Sections />} />
-          <Route path="sources" element={<Sources />} />
-          <Route path="event" element={<Event />} />
-          <Route path="party" element={<Party />} />
-          <Route path="informations" element={<Informations />} />
-          <Route path="informations/:id" element={<InfoPage />} />
-          <Route path="add_information" element={<AddInformation />} />
-          <Route path="update_info/:id" element={<UpdateInfo />} />
-          <Route path="coordinates" element={<Coordinates />} />
-          <Route path="coordinates/:id" element={<UpdateCoordinates />} />
-          <Route path="add_coordinates" element={<AddCoordinates />} />
+        <Route path="/" element={<LoginForm />} />
+        <Route element={<Refresh />}>
+          <Route element={<DashboardAuth />}>
+            <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="users" element={<Users />} />
+              <Route path="add_user" element={<AddUser />} />
+              <Route path="people" element={<People />} />
+              <Route path="people/:id" element={<Profile />} />
+              <Route path="add_person" element={<AddPerson />} />
+              <Route path="update_person/:id" element={<UpdatePerson />} />
+              <Route path="countries" element={<Countries />} />
+              <Route path="governments" element={<Government />} />
+              <Route path="cities" element={<City />} />
+              <Route path="villages" element={<Village />} />
+              <Route path="regions" element={<Region />} />
+              <Route path="streets" element={<Street />} />
+              <Route path="sections" element={<Sections />} />
+              <Route path="sources" element={<Sources />} />
+              <Route path="event" element={<Event />} />
+              <Route path="party" element={<Party />} />
+              <Route path="informations" element={<Informations />} />
+              <Route path="informations/:id" element={<InfoPage />} />
+              <Route path="add_information" element={<AddInformation />} />
+              <Route path="update_info/:id" element={<UpdateInfo />} />
+              <Route path="coordinates" element={<Coordinates />} />
+              <Route path="coordinates/:id" element={<UpdateCoordinates />} />
+              <Route path="add_coordinates" element={<AddCoordinates />} />
+            </Route>
+          </Route>
         </Route>
       </Routes>
     </div>

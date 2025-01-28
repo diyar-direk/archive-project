@@ -6,7 +6,6 @@ import Loading from "../loading/Loading";
 const MediaShow = (props) => {
   const data = props.data;
   const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
-
   const noData =
     [...data.images, ...data.documents, ...data.audios, ...data.videos]
       .length <= 0;
@@ -47,7 +46,6 @@ const MediaShow = (props) => {
       const keys = Object.keys(form);
       const formData = new FormData();
       const res = keys.filter((key) => form[key])[0];
-
       formData.append("informationId", props.id);
       formData.append(res, form[res]);
       await axios.post(`${baseURL}/media/${res}`, formData, {

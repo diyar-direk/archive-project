@@ -27,12 +27,7 @@ const Provider = ({ children }) => {
   };
 
   const [selectedLang, setSelectedLang] = useState("");
-  const [userDetails, setUserDetails] = useState({
-    isAdmin: false,
-    token: "",
-    userDetails: {},
-    role: "",
-  });
+  const [userDetails, setUserDetails] = useState({});
 
   useEffect(() => {
     localStorage.setItem("isDark", mode ? 1 : 0);

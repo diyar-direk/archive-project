@@ -91,7 +91,6 @@ const AddUser = () => {
           formData[key] = form[key];
         }
       });
-      console.log(formData);
 
       try {
         const data = await axios.post(`${baseURL}/Users`, formData);

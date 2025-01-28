@@ -38,9 +38,9 @@
   color: var(--font-color);
 }
 .progres > div > span {
-  background-color: var(--main-color);
+  background-color: #1ab01e;
   height: 100%;
-  width: 40%;
+  width: 1%;
   display: block;
 }
 .response h1 {
