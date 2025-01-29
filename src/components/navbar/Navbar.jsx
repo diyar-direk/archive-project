@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context";
 import { links } from "./links";
+import { useCookies } from "react-cookie";
 
 const Navbar = () => {
   const context = useContext(Context);
+
   const location = useLocation();
 
   window.addEventListener("click", () => {
@@ -87,9 +89,12 @@ const Navbar = () => {
     context.setLanguage(e.target.dataset.lang);
   };
   const navigate = useNavigate();
+  const [, , removeCookie] = useCookies(["archive_cookie"]);
 
   const handleLogout = () => {
-    navigate("/login");
+    navigate("/");
+    removeCookie("archive_cookie");
+    window.location.reload();
   };
 
   const pagesLinks = links?.map((link, i) => {
@@ -272,9 +277,12 @@ const Navbar = () => {
                 )}
               </div>
             </span>
-            <h3 className="log-out center c-pointer aside">
+            <h3
+              onClick={handleLogout}
+              className="log-out center c-pointer aside"
+            >
               <i className="fa-solid fa-right-from-bracket"></i>
-              <span onClick={handleLogout}>log out </span>
+              <span>log out </span>
             </h3>
           </div>
         </div>

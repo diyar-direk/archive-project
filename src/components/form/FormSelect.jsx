@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { baseURL, searchPlaceholder } from "../../context/context";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { baseURL, Context, searchPlaceholder } from "../../context/context";
 import "./form-select.css";
 import axios from "axios";
 
@@ -16,7 +16,8 @@ const FormSelect = (props) => {
   });
 
   const keyValues = Keys(props.formKey);
-
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const [dataLoading, setDataLoading] = useState({
     Countries: true,
     Governments: true,
@@ -125,7 +126,7 @@ const FormSelect = (props) => {
 
     if (allDataSelect?.data[key.key]?.length <= 0)
       axios
-        .get(url)
+        .get(url, { headers: { Authorization: "Bearer " + token } })
         .then((res) => {
           setAllDataSelect({
             data: {

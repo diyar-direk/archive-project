@@ -13,6 +13,7 @@ const Informations = () => {
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
   const limit = context?.limit;
+  const token = context.userDetails.token;
   const [filters, setFilters] = useState({
     country: "",
     government: "",
@@ -49,6 +50,8 @@ const Informations = () => {
 
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Information?active=true&limit=${limit}&page=${page}`;
+    context.userDetails.role === "user" &&
+      (url += `&sectionId=${context.userDetails.sectionId}`);
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -67,7 +70,9 @@ const Informations = () => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dataLength.current = data.data.numberOfActiveInformations;
 
       allPeople.current = data.data.informations.map((e) => e._id);
@@ -91,6 +96,8 @@ const Informations = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Information/search?active=true&limit=${limit}&page=${page}`;
+    context.userDetails.role === "user" &&
+      (url += `&sectionId=${context.userDetails.sectionId}`);
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -108,9 +115,13 @@ const Informations = () => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       console.log(data.data);

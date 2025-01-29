@@ -26,7 +26,6 @@ nav .search input {
   padding: 10px;
   background-color: transparent;
   border: none;
-  font-size: 15px;
   color: var(--font-color);
 }
 
@@ -467,8 +466,8 @@ div.short-cut div.short-links a:hover {
 }
 
 .log-show {
-  display: flex; /* أو display: grid */
-  gap: 20px; /* مسافة بين العناصر */
+  display: flex;
+  gap: 20px;
 }
 @media (max-width: 1000px) {
   aside,
@@ -524,8 +523,8 @@ div.short-cut div.short-links a:hover {
   nav .setting .info p {
     font-size: 14px;
   }
-  nav .search {
-    padding: 6px 10px;
+  nav .search input {
+    padding: 8px;
   }
   nav .search > button {
     font-size: 15px;
@@ -596,6 +595,14 @@ div.short-cut div.short-links a:hover {
   nav .log-out {
     display: none;
   }
+  nav .search .results a,
+  nav .search .results p {
+    padding: 3px 0;
+    font-size: 15px;
+  }
+  nav .search .results {
+    padding: 8px 10px;
+  }
   nav .setting .lang + div.languages h2 {
     font-size: 15px;
     padding: 8px;
@@ -607,13 +614,23 @@ div.short-cut div.short-links a:hover {
     width: 95px;
     bottom: -110px;
   }
-  nav .setting .mode {
+  nav .setting .mode,
+  nav .setting .lang i {
     width: 25px;
     height: 25px;
     font-size: 12px;
   }
   nav .search > button {
     font-size: 13px;
+  }
+  nav .search input {
+    padding: 6px;
+  }
+  nav .search > button {
+    margin-right: 10px;
+  }
+  nav > div {
+    gap: 10px !important;
   }
 
   aside,
@@ -676,10 +693,18 @@ div.short-cut div.short-links a:hover {
     height: 30px;
   }
 }
+
 @media (max-width: 600px) {
   aside,
   aside > div {
     width: 180px;
+  }
+  nav .search .results a,
+  nav .search .results p {
+    font-size: 13px;
+  }
+  nav .search .results {
+    padding: 6px 8px;
   }
   div.open-aside {
     left: 180px;
@@ -751,9 +776,7 @@ div.short-cut div.short-links a:hover {
   .log-out.aside {
     font-size: 13px;
   }
-  nav .setting .lang i.fa-earth-americas {
-    display: none;
-  }
+
   nav .setting .lang + div.languages h2 {
     font-size: 13px;
   }
@@ -811,12 +834,7 @@ div.short-cut div.short-links a:hover {
   nav .setting .lang span {
     font-size: 11px;
   }
-  nav .setting .lang i {
-    font-size: 9px;
-  }
-  nav .setting .mode {
-    font-size: 9px;
-  }
+
   nav .setting {
     gap: 5px;
   }

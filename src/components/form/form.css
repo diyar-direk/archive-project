@@ -297,3 +297,163 @@ form.addresses .select > article h2:hover {
 form.addresses button.btn {
   font-size: 18px;
 }
+
+@media (max-width: 1060px) {
+  form.addresses {
+    gap: 10px;
+  }
+  form.addresses h1 {
+    font-size: 20px;
+  }
+  form.addresses label {
+    font-size: 15px;
+  }
+  form.addresses .inp {
+    font-size: 13px;
+  }
+  form.addresses button.btn {
+    font-size: 15px;
+    padding: 8px;
+  }
+  form.addresses .selecte > article > input {
+    font-size: 12px;
+  }
+  form.addresses .selecte > article h2 {
+    font-size: 13px !important;
+    padding: 4px !important;
+  }
+}
+@media (max-width: 960px) {
+  h1.title + div.flex.align-start.gap-20.wrap {
+    flex-direction: column;
+  }
+  h1.title + div.flex.align-start.gap-20.wrap > form,
+  h1.title + div.flex.align-start.gap-20.wrap > div {
+    width: 100%;
+  }
+  form div.form-profile.form label {
+    width: 180px;
+    height: 180px;
+  }
+  form.dashboard-form > div.form h1 {
+    font-size: 24px;
+  }
+  form.dashboard-form > div.form > div label {
+    font-size: 17px;
+  }
+  form.dashboard-form > div.form > div {
+    gap: 20px;
+  }
+  form.dashboard-form > div.form > div .flex-direction .inp {
+    padding: 9px;
+    font-size: 16px;
+  }
+  form.dashboard-form > div.form > div span {
+    margin-top: 5px;
+    font-size: 15px;
+    padding: 9px;
+  }
+  form.dashboard-form > button.btn {
+    font-size: 18px;
+  }
+  .selecte > article h2,
+  div.form .selecte > article p {
+    font-size: 15px;
+  }
+  div.form .selecte > article input {
+    font-size: 14px;
+  }
+}
+@media (max-width: 660px) {
+  form.addresses {
+    gap: 20px;
+    max-width: 100%;
+  }
+  form div.form-profile.form {
+    width: 100%;
+  }
+  form div.form-profile.form label i {
+    font-size: 45px;
+  }
+  form div.form-profile.form label {
+    width: 165px;
+    height: 165px;
+  }
+  form.dashboard-form > div.form h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  form.dashboard-form > div.form > div label {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  form.dashboard-form > div.form > div .flex-direction .inp {
+    padding: 8px;
+    font-size: 14px;
+  }
+  form.dashboard-form > div.form > div span {
+    font-size: 14px;
+  }
+  form.dashboard-form > button.btn {
+    font-size: 17px;
+    width: 100%;
+  }
+  form.dashboard-form > div.form {
+    margin-bottom: 30px;
+    padding: 20px;
+  }
+  .selecte > article h2,
+  div.form .selecte > article p {
+    font-size: 13px;
+  }
+  .selecte > article {
+    max-height: 230px;
+  }
+  div.form .selecte > article input {
+    font-size: 13px;
+  }
+}
+@media (max-width: 500px) {
+  form div.form-profile.form label {
+    width: 140px;
+    height: 140px;
+  }
+  form.dashboard-form > div.form > div {
+    gap: 15px;
+  }
+  form div.form-profile.form label i {
+    font-size: 35px;
+  }
+  form.dashboard-form > div.form h1 {
+    font-size: 17px;
+  }
+  form.dashboard-form > div.form > div label {
+    font-size: 14px;
+  }
+  form.dashboard-form > div.form > div .flex-direction .inp {
+    font-size: 13px;
+  }
+  form.dashboard-form > div.form > div span {
+    font-size: 12px;
+  }
+  form.dashboard-form > button.btn {
+    font-size: 15px;
+    padding: 6px;
+  }
+  form.dashboard-form > div.form {
+    margin-bottom: 20px;
+  }
+  form.dashboard-form > div.form > div .flex-direction {
+    min-width: 100%;
+  }
+  .selecte > article h2,
+  div.form .selecte > article p {
+    font-size: 12px;
+  }
+  div.form .selecte > article input {
+    font-size: 12px;
+  }
+  .selecte > article {
+    max-height: 200px;
+  }
+}

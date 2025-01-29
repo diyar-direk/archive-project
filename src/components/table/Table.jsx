@@ -8,7 +8,7 @@ const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
   const context = useContext(Context);
   const limit = context?.limit;
-
+  const token = context.userDetails.token;
   const [hasFltr, setHasFltr] = useState(false);
 
   const createPags = (limit, dataLength) => {
@@ -111,7 +111,12 @@ const Table = (props) => {
       if (props.items.slectedItems.length > 1) {
         const data = await axios.patch(
           `${baseURL}/${props.delete.url}/deActivate-many`,
-          { ids: props.items.slectedItems }
+          { ids: props.items.slectedItems },
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
         );
         if (data.status === 200) {
           props.overlay.setOverlay(false);
@@ -128,7 +133,8 @@ const Table = (props) => {
       } else {
         const data = await axios.patch(
           `${baseURL}/${props.delete.url}/deActivate/${props.items.slectedItems[0]}`,
-          []
+          [],
+          { headers: { Authorization: "Bearer " + token } }
         );
         if (data.status === 200) {
           props.overlay.setOverlay(false);
@@ -246,7 +252,7 @@ const Table = (props) => {
         />
 
         <button className="btn center gap-10">
-          search <i className="fa-solid fa-magnifying-glass"></i>
+          <span>search</span> <i className="fa-solid fa-magnifying-glass"></i>
         </button>
         {!props?.workSpace?.workSpace && (
           <i

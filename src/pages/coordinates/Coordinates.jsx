@@ -49,6 +49,8 @@ const Coordinates = () => {
 
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Coordinates?active=true&limit=${limit}&page=${page}`;
+    context.userDetails.role === "user" &&
+      (url += `&sectionId=${context.userDetails.sectionId}`);
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -91,6 +93,8 @@ const Coordinates = () => {
     setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/Coordinates/search?active=true&limit=${limit}&page=${page}`;
+    context.userDetails.role === "user" &&
+      (url += `&sectionId=${context.userDetails.sectionId}`);
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>

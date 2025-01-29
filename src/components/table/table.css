@@ -21,11 +21,11 @@
 
 .overlay > .table-fltr {
   width: 70%;
-  min-height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 10px;
+  padding: 40px 20px;
 }
 
 .overlay .date-fltr {
@@ -47,15 +47,15 @@
   color: var(--font-color);
   text-transform: capitalize;
 }
-.overlay .date-fltr > span {
+.overlay .date-fltr > i {
+  color: var(--font-color);
   cursor: pointer;
-  font-weight: bold;
 }
 
 .overlay .filters {
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   align-items: flex-start;
 }
@@ -127,7 +127,6 @@ input.fltr-search {
 div.table {
   overflow-x: auto;
   max-width: 100%;
-  min-width: 600px;
   overflow-y: hidden;
   white-space: nowrap;
 }
@@ -394,4 +393,224 @@ div.table div.actions .delete {
 }
 div.table div.actions .update {
   color: #4400ff;
+}
+@media (max-width: 1050px) {
+  div.table thead th {
+    padding: 8px;
+    font-size: 17px;
+  }
+  tbody td {
+    padding: 8px;
+    font-size: 16px;
+  }
+  table .checkbox {
+    width: 13px;
+    height: 13px;
+  }
+  table .photo {
+    width: 32px;
+    height: 32px;
+  }
+  div.table tbody td div.options > div,
+  div.table tbody td div.options > a {
+    gap: 8px !important;
+    padding: 8px !important;
+    font-size: 15px !important;
+  }
+  div.table tbody td div.options > div i,
+  div.table tbody td div.options > a i {
+    font-size: 14px !important;
+  }
+  div.table tbody td div.options {
+    left: calc(-100% - 180px);
+  }
+  .pagination h3 {
+    width: 30px;
+    height: 30px;
+  }
+  form.table-search .btn {
+    gap: 5px;
+  }
+  form.table-search .btn,
+  form.table-search > input {
+    height: 40px;
+  }
+  .overlay .filters {
+    gap: 10px;
+  }
+  .overlay .date-fltr {
+    gap: 10px;
+  }
+  div.table div.actions i {
+    font-size: 16px;
+  }
+}
+@media (max-width: 850px) {
+  div.table thead th {
+    font-size: 15px;
+  }
+  tbody td {
+    font-size: 14px;
+    max-width: 190px;
+    padding: 7px;
+  }
+  table .photo {
+    width: 30px;
+    height: 30px;
+  }
+  table i.photo {
+    font-size: 11px;
+  }
+  .pagination h3 {
+    width: 26px;
+    height: 26px;
+    font-size: 16px;
+  }
+  form.table-search .btn i,
+  input.fltr-search {
+    font-size: 13px;
+  }
+  .overlay .date-fltr span,
+  .overlay .date-fltr > i {
+    font-size: 14px;
+  }
+  .react-datepicker__input-container .react-datepicker__calendar-icon {
+    font-size: 13px;
+  }
+  .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 5px 8px 5px 25px;
+  }
+  .overlay div.filters-setting > span {
+    font-size: 17px;
+  }
+  .overlay .filters .select article h2,
+  .overlay .filters .select div,
+  .overlay .filters .select article p {
+    font-size: 14px;
+  }
+  .overlay .filters .select div.active + article {
+    max-height: 180px;
+  }
+  .overlay > .table-fltr {
+    width: 90%;
+  }
+  table .table-loading {
+    font-size: 20px;
+  }
+  .delete-all {
+    font-size: 15px;
+  }
+  .delete-all i {
+    font-size: 13px;
+  }
+  div.table div.actions i {
+    font-size: 15px;
+  }
+  table th select {
+    font-size: 13px;
+  }
+}
+@media (max-width: 650px) {
+  div.table thead th {
+    font-size: 13px;
+  }
+  tbody td {
+    font-size: 12px;
+    max-width: 160px;
+    padding: 7px;
+  }
+  table .photo {
+    width: 28px;
+    height: 28px;
+  }
+  table i.photo {
+    font-size: 10px;
+  }
+  div.table tbody td div.options > div,
+  div.table tbody td div.options > a {
+    gap: 6px !important;
+    padding: 4px !important;
+    font-size: 13px !important;
+  }
+  div.table tbody td div.options > div i,
+  div.table tbody td div.options > a i {
+    font-size: 13px !important;
+  }
+  .pagination h3 {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+  form.table-search .btn,
+  form.table-search > input {
+    height: 35px;
+  }
+  form.table-search .btn span {
+    display: none;
+  }
+  .table-search .filter {
+    font-size: 15px;
+  }
+  .delete-all {
+    font-size: 13px;
+  }
+  .delete-all i {
+    font-size: 11px;
+  }
+  div.table div.actions i {
+    font-size: 13px;
+  }
+  table th select {
+    font-size: 11px;
+  }
+  div.table tbody td div.options {
+    left: calc(-100% - 145px);
+  }
+}
+
+@media (max-width: 550px) {
+  .overlay > .table-fltr {
+    padding: 30px 20px;
+    width: 100%;
+  }
+  .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 4px 7px 4px 21px;
+  }
+  .react-datepicker__input-container .react-datepicker__calendar-icon {
+    font-size: 12px;
+  }
+  .overlay .date-fltr span,
+  .overlay .date-fltr > i {
+    font-size: 13px;
+  }
+  .overlay .date-fltr {
+    gap: 5px;
+  }
+  .overlay .filters .select article h2,
+  .overlay .filters .select div,
+  .overlay .filters .select article p {
+    font-size: 13px;
+  }
+  .overlay div.filters-setting > span {
+    font-size: 16px;
+  }
+  .overlay .filters .select div.active + article {
+    max-height: 140px;
+  }
+  form.table-search .btn i,
+  input.fltr-search {
+    font-size: 12px;
+  }
+  .overlay .filters {
+    grid-template-columns: 1fr;
+  }
+  table .table-loading {
+    font-size: 17px;
+  }
+  .delete-all {
+    font-size: 12px;
+  }
+  .delete-all i {
+    font-size: 10px;
+  }
 }

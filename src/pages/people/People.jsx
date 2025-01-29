@@ -13,7 +13,9 @@ const People = (props) => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
+  const token = context.userDetails.token;
   const limit = context?.limit;
+
   const [filters, setFilters] = useState({
     gender: "",
     maritalStatus: "",
@@ -55,6 +57,9 @@ const People = (props) => {
 
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
+    context.userDetails.role === "user" &&
+      (url += `&sectionId=${context.userDetails.sectionId}`);
+
     const keys = Object.keys(filters);
     !props?.workSpace &&
       keys.forEach(
@@ -74,7 +79,9 @@ const People = (props) => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       dataLength.current = data.data.numberOfActivePeople;
 
       allPeople.current = !props?.workSpace
@@ -101,6 +108,8 @@ const People = (props) => {
     !props?.workSpace && setSelectedItems([]);
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people/search?active=true&limit=${limit}&page=${page}`;
+    context.userDetails.role === "user" &&
+      (url += `&sectionId=${context.userDetails.sectionId}`);
     const keys = Object.keys(filters);
     !props?.workSpace &&
       keys.forEach(
@@ -120,9 +129,15 @@ const People = (props) => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) =>
         !props?.workSpace ? e._id : e

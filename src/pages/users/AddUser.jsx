@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
-import { baseURL, placeholder } from "../../context/context";
+import { baseURL, Context, placeholder } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
@@ -56,7 +56,8 @@ const AddUser = () => {
     setForm({ ...form, [e.target.id]: itm });
     error && setError(false);
   };
-
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
 
@@ -93,7 +94,9 @@ const AddUser = () => {
       });
 
       try {
-        const data = await axios.post(`${baseURL}/Users`, formData);
+        const data = await axios.post(`${baseURL}/Users`, formData, {
+          headers: { Authorization: "Bearer " + token },
+        });
         if (data.status === 201) {
           responseFun(true);
           setForm({

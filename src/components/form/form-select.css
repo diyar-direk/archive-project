@@ -66,7 +66,9 @@ form.addresses .flex-direction > span {
   text-align: center;
   text-transform: capitalize;
   cursor: pointer;
+  border-radius: 4px;
 }
 form.addresses .flex-direction > span:hover {
   background-color: var(--main-color);
+  color: white;
 }

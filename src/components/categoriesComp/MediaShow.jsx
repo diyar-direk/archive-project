@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { baseURL, mediaURL } from "../../context/context";
+import React, { useContext, useState } from "react";
+import { baseURL, Context, mediaURL } from "../../context/context";
 import axios from "axios";
 import Loading from "../loading/Loading";
 
@@ -22,12 +22,23 @@ const MediaShow = (props) => {
     deleteData: false,
     addData: false,
   });
+  const context = useContext(Context);
+  const token = context.userDetails.token;
+
   const deleteData = async () => {
     try {
       setFormLoading(true);
-      await axios.patch(`${baseURL}/media/${actions.deleteData.data}`, {
-        ids: actions.deleteData.id,
-      });
+      await axios.patch(
+        `${baseURL}/media/${actions.deleteData.data}`,
+        {
+          ids: actions.deleteData.id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       props.getData();
     } catch (error) {
       console.log(error);
@@ -54,6 +65,7 @@ const MediaShow = (props) => {
             Math.floor((progress.loaded * 100) / progress.total) + "%";
           document.querySelector("div.loading.overlay >h1").innerHTML = persent;
         },
+        Authorization: "Bearer " + token,
       });
       setForm({
         images: "",

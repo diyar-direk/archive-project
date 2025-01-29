@@ -23,6 +23,7 @@ const Users = () => {
   const [search, setSearch] = useState("");
 
   const header = ["username", "role", "section", "create at"];
+  const token = context.userDetails.token;
 
   useEffect(() => {
     if (!search) getData();
@@ -46,7 +47,9 @@ const Users = () => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dataLength.current = data.data.numberOfActiveUsers;
       allPeople.current = data.data.users.map((e) => e._id);
       setData(data.data.users);
@@ -80,9 +83,13 @@ const Users = () => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
 
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);

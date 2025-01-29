@@ -84,4 +84,16 @@ export const links = [
     title: "Coordinates",
     role: ["admin", "user"],
   },
+  {
+    icon: "fa-solid fa-folder-open",
+    children: [
+      {
+        title: "back ups",
+        path: "/dashboard/backup",
+        role: ["admin", "user"],
+      },
+    ],
+    title: "back up",
+    role: ["admin", "user"],
+  },
 ];

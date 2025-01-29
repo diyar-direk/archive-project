@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { baseURL } from "../../context/context";
+import React, { useContext, useEffect, useState } from "react";
+import { baseURL, Context } from "../../context/context";
 import DatePicker from "react-datepicker";
 
 const Filters = (props) => {
@@ -16,6 +16,8 @@ const Filters = (props) => {
   const [fltr, setFltr] = useState(props.fltr.fltr || {});
 
   const keys = Object.keys(fltr);
+  const context = useContext(Context);
+  const token = context.userDetails.token;
 
   const arrayOfKeys = [
     { fltrKey: "gender", backendKey: "gender" },
@@ -89,7 +91,11 @@ const Filters = (props) => {
     if (props.dataArray.data.data[key]?.length <= 0) {
       setDataLoading({ ...dataLoading, [key]: true });
       try {
-        const res = await axios.get(url);
+        const res = await axios.get(url, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
 
         const currentData = props.dataArray.data;
 
@@ -489,9 +495,11 @@ const Filters = (props) => {
               }
             />
           </div>
-          <span className="flex-1" onClick={refreshFilter}>
-            refresh data
-          </span>
+          <i
+            title="refresh data"
+            onClick={refreshFilter}
+            className="fa-solid fa-rotate-right"
+          ></i>
         </div>
 
         <div className="filters">{fltrData}</div>

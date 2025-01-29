@@ -38,6 +38,7 @@ const LoginForm = () => {
           role: res.data.user.role,
           username: res.data.user.username,
           token,
+          _id: res.data.user._id,
         };
         res.data.user.sectionId && (user.sectionId = res.data.user.sectionId);
         context.setUserDetails(user);
@@ -48,7 +49,7 @@ const LoginForm = () => {
       console.log(error);
       if (error.status === 400) {
         setError("wrong username or password");
-      }
+      } else setError("network error");
     } finally {
       setLoading(false);
     }

@@ -29,6 +29,8 @@ const City = () => {
   });
 
   const context = useContext(Context);
+  const token = context.userDetails.token;
+
   const limit = context?.limit;
 
   const [responseOverlay, setResponseOverlay] = useState(false);
@@ -94,7 +96,9 @@ const City = () => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
 
       dataLength.current = data.data.numberOfActiveCities;
       allPeople.current = data.data.data.map((e) => e._id);
@@ -124,9 +128,13 @@ const City = () => {
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -203,7 +211,8 @@ const City = () => {
         if (update) {
           const data = await axios.patch(
             `${baseURL}/Cities/${update._id}`,
-            formData
+            formData,
+            { headers: { Authorization: "Bearer " + token } }
           );
 
           if (data.status === 200) {
@@ -211,7 +220,9 @@ const City = () => {
           }
           setUpdate(false);
         } else {
-          const data = await axios.post(`${baseURL}/Cities`, formData);
+          const data = await axios.post(`${baseURL}/Cities`, formData, {
+            headers: { Authorization: "Bearer " + token },
+          });
           if (data.status === 201) {
             responseFun(true);
           }

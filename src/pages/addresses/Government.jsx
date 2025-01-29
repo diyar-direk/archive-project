@@ -27,7 +27,7 @@ const Government = () => {
   const [search, setSearch] = useState("");
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
-
+  const token = context.userDetails.token;
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -81,7 +81,9 @@ const Government = () => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dataLength.current = data.data.numberOfActiveGovernments;
       allPeople.current = data.data.data.map((e) => e._id);
 
@@ -111,9 +113,13 @@ const Government = () => {
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -191,7 +197,8 @@ const Government = () => {
         if (update) {
           const data = await axios.patch(
             `${baseURL}/Governments/${update._id}`,
-            formData
+            formData,
+            { headers: { Authorization: "Bearer " + token } }
           );
 
           if (data.status === 200) {
@@ -199,7 +206,9 @@ const Government = () => {
           }
           setUpdate(false);
         } else {
-          const data = await axios.post(`${baseURL}/Governments`, formData);
+          const data = await axios.post(`${baseURL}/Governments`, formData, {
+            headers: { Authorization: "Bearer " + token },
+          });
           if (data.status === 201) {
             responseFun(true);
           }

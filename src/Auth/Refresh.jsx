@@ -19,16 +19,17 @@ const Refresh = () => {
       });
       if (profile.data.user.active) {
         const user = {
-          role: profile.data.user,
+          role: profile.data.user.role,
           username: profile.data.user.username,
           token: cookie.archive_cookie,
+          _id: profile.data.user._id,
         };
         profile.data.user.sectionId &&
           (user.sectionId = profile.data.user.sectionId);
         context.setUserDetails(user);
       }
     } catch (err) {
-      console.error("Error refreshing token:", err);
+      console.log(err);
     } finally {
       setLoading(false);
     }

@@ -30,6 +30,7 @@ const Region = () => {
   });
   const context = useContext(Context);
   const limit = context?.limit;
+  const token = context.userDetails.token;
 
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -95,7 +96,9 @@ const Region = () => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
 
       dataLength.current = data.data.numberOfActiveRegions;
       allPeople.current = data.data.data.map((e) => e._id);
@@ -132,9 +135,15 @@ const Region = () => {
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        {
+          headers: { Authorization: "Bearer " + token },
+        }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -212,7 +221,10 @@ const Region = () => {
         if (update) {
           const data = await axios.patch(
             `${baseURL}/Regions/${update._id}`,
-            formData
+            formData,
+            {
+              headers: { Authorization: "Bearer " + token },
+            }
           );
 
           if (data.status === 200) {
@@ -220,7 +232,9 @@ const Region = () => {
           }
           setUpdate(false);
         } else {
-          const data = await axios.post(`${baseURL}/Regions`, formData);
+          const data = await axios.post(`${baseURL}/Regions`, formData, {
+            headers: { Authorization: "Bearer " + token },
+          });
           if (data.status === 201) {
             responseFun(true);
           }

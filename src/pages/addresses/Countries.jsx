@@ -42,6 +42,7 @@ const Countries = () => {
       setResponseOverlay(false);
     }, 3000);
   };
+  const token = context.userDetails.token;
 
   const header = ["name", "creat at"];
   const [name, setName] = useState("");
@@ -75,7 +76,9 @@ const Countries = () => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dataLength.current = data.data.numberOfActiveCountries;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -108,9 +111,13 @@ const Countries = () => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -180,16 +187,24 @@ const Countries = () => {
     setFormLoading(true);
     try {
       if (update) {
-        const data = await axios.patch(`${baseURL}/Countries/${update._id}`, {
-          name,
-        });
+        const data = await axios.patch(
+          `${baseURL}/Countries/${update._id}`,
+          {
+            name,
+          },
+          { headers: { Authorization: "Bearer " + token } }
+        );
 
         if (data.status === 200) {
           responseFun(true);
         }
         setUpdate(false);
       } else {
-        const data = await axios.post(`${baseURL}/Countries`, { name: name });
+        const data = await axios.post(
+          `${baseURL}/Countries`,
+          { name: name },
+          { headers: { Authorization: "Bearer " + token } }
+        );
         if (data.status === 201) {
           responseFun(true);
         }
