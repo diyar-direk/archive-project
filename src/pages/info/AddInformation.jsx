@@ -120,6 +120,7 @@ const AddInformation = () => {
             await axios.post(`${baseURL}/media/images`, imagesDoc);
           } catch (error) {
             console.log(error);
+            alert("error in uploading images");
           }
         }
 
@@ -131,6 +132,7 @@ const AddInformation = () => {
           try {
             await axios.post(`${baseURL}/media/videos`, videosDoc);
           } catch (error) {
+            alert("error in uploading videos");
             console.log(error);
           }
         }
@@ -143,6 +145,7 @@ const AddInformation = () => {
           try {
             await axios.post(`${baseURL}/media/audios`, audioDoc);
           } catch (error) {
+            alert("error in uploading audios");
             console.log(error);
           }
         }
@@ -155,6 +158,7 @@ const AddInformation = () => {
           try {
             await axios.post(`${baseURL}/media/documents`, documentDoc);
           } catch (error) {
+            alert("error in uploading documents");
             console.log(error);
           }
         }

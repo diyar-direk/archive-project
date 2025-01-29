@@ -20,6 +20,7 @@ const Refresh = () => {
       if (profile.data.user.active) {
         const user = {
           role: profile.data.user.role,
+          isAdmin: profile.data.user.role === "admin",
           username: profile.data.user.username,
           token: cookie.archive_cookie,
           _id: profile.data.user._id,

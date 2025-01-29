@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "../../components/form/form.css";
-import { baseURL, placeholder } from "../../context/context";
+import { baseURL, Context, placeholder } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
@@ -13,7 +13,8 @@ const AddPerson = () => {
     divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
     e.target.classList.toggle("active");
   };
-
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   window.addEventListener("click", () => {
     const selectDiv = document.querySelector("div.form .selecte .inp.active");
     selectDiv && selectDiv.classList.remove("active");
@@ -102,7 +103,15 @@ const AddPerson = () => {
       });
 
       try {
-        const data = await axios.post(`${baseURL}/people`, formData);
+        const data = await axios.post(`${baseURL}/people`, formData, {
+          onUploadProgress: (progress) => {
+            const persent =
+              Math.floor((progress.loaded * 100) / progress.total) + "%";
+            document.querySelector("div.loading.overlay >h1").innerHTML =
+              persent;
+          },
+          Authorization: "Bearer " + token,
+        });
         if (data.status === 201) {
           responseFun(true);
           setForm({

@@ -36,6 +36,7 @@ const LoginForm = () => {
         const token = res.data.token;
         const user = {
           role: res.data.user.role,
+          isAdmin: res.data.user.role === "admin",
           username: res.data.user.username,
           token,
           _id: res.data.user._id,

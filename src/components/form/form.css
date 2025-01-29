@@ -412,11 +412,14 @@ form.addresses button.btn {
   div.form .selecte > article input {
     font-size: 13px;
   }
+  form.dashboard-form > div.form > div .flex-direction {
+    min-width: 100%;
+  }
 }
 @media (max-width: 500px) {
   form div.form-profile.form label {
-    width: 140px;
-    height: 140px;
+    width: 130px;
+    height: 130px;
   }
   form.dashboard-form > div.form > div {
     gap: 15px;
@@ -443,9 +446,7 @@ form.addresses button.btn {
   form.dashboard-form > div.form {
     margin-bottom: 20px;
   }
-  form.dashboard-form > div.form > div .flex-direction {
-    min-width: 100%;
-  }
+
   .selecte > article h2,
   div.form .selecte > article p {
     font-size: 12px;
