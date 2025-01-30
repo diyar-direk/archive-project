@@ -161,7 +161,7 @@ const UpdateInfo = () => {
           }
         }
 
-        if (data.status === 200) nav("/informations");
+        if (data.status === 200) nav("/dashboard/informations");
       } catch (error) {
         console.log(error);
         responseFun(false);
@@ -202,7 +202,7 @@ const UpdateInfo = () => {
               form.people.map((e) => (
                 <div key={e._id} className="center gap-10">
                   <Link
-                    to={`/people/${e._id}`}
+                    to={`/dashboard/people/${e._id}`}
                     className="center text-capitalize font-color"
                   >
                     {e.firstName} {e.surName}

@@ -59,7 +59,7 @@ const UpdateCoordinates = () => {
       setCoordinates({ lat: coordinat[0], lng: coordinat[1] });
     } catch (error) {
       console.log(error);
-      error.status === 500 && nav(`/error-404`);
+      error.status === 500 && nav(`/dashboard/error-404`);
     } finally {
       setDataLoading(false);
     }
@@ -92,7 +92,7 @@ const UpdateCoordinates = () => {
 
       try {
         const res = await axios.patch(`${baseURL}/Coordinates/${id}`, data);
-        if (res.status === 200) nav("/coordinates");
+        if (res.status === 200) nav("/dashboard/coordinates");
       } catch (error) {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");

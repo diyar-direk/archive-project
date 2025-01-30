@@ -27,6 +27,7 @@ import UpdateInfo from "./pages/info/UpdateInfo";
 import { useEffect } from "react";
 import DashboardAuth from "./Auth/DashboardAuth";
 import Refresh from "./Auth/Refresh";
+import AdminAuth from "./Auth/AdminAuth";
 
 function App() {
   const location = useLocation();
@@ -48,8 +49,11 @@ function App() {
         <Route element={<Refresh />}>
           <Route element={<DashboardAuth />}>
             <Route path="/dashboard" element={<Dashboard />}>
-              <Route path="users" element={<Users />} />
-              <Route path="add_user" element={<AddUser />} />
+              <Route element={<AdminAuth />}>
+                <Route path="users" element={<Users />} />
+                <Route path="add_user" element={<AddUser />} />
+                <Route path="sections" element={<Sections />} />
+              </Route>
               <Route path="people" element={<People />} />
               <Route path="people/:id" element={<Profile />} />
               <Route path="add_person" element={<AddPerson />} />
@@ -60,7 +64,6 @@ function App() {
               <Route path="villages" element={<Village />} />
               <Route path="regions" element={<Region />} />
               <Route path="streets" element={<Street />} />
-              <Route path="sections" element={<Sections />} />
               <Route path="sources" element={<Sources />} />
               <Route path="event" element={<Event />} />
               <Route path="party" element={<Party />} />

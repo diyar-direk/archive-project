@@ -298,6 +298,14 @@ form.addresses button.btn {
   font-size: 18px;
 }
 
+form.dashboard-form .cordinates h3 {
+  margin: 10px 0;
+  text-transform: capitalize;
+}
+form.dashboard-form .cordinates h2 {
+  text-transform: capitalize;
+}
+
 @media (max-width: 1060px) {
   form.addresses {
     gap: 10px;
@@ -326,6 +334,12 @@ form.addresses button.btn {
 @media (max-width: 960px) {
   h1.title + div.flex.align-start.gap-20.wrap {
     flex-direction: column;
+  }
+  form.dashboard-form .cordinates h2 {
+    font-size: 22px;
+  }
+  form.dashboard-form .cordinates h3 {
+    font-size: 17px;
   }
   h1.title + div.flex.align-start.gap-20.wrap > form,
   h1.title + div.flex.align-start.gap-20.wrap > div {
@@ -415,6 +429,12 @@ form.addresses button.btn {
   form.dashboard-form > div.form > div .flex-direction {
     min-width: 100%;
   }
+  form.dashboard-form .cordinates h2 {
+    font-size: 18px;
+  }
+  form.dashboard-form .cordinates h3 {
+    font-size: 15px;
+  }
 }
 @media (max-width: 500px) {
   form div.form-profile.form label {
@@ -456,5 +476,11 @@ form.addresses button.btn {
   }
   .selecte > article {
     max-height: 200px;
+  }
+  form.dashboard-form .cordinates h2 {
+    font-size: 16px;
+  }
+  form.dashboard-form .cordinates h3 {
+    font-size: 14px;
   }
 }

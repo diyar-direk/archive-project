@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import "../people/profile.css";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { baseURL } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
 import MediaShow from "../../components/categoriesComp/MediaShow";
@@ -10,6 +11,8 @@ const InfoPage = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const nav = useNavigate();
 
   useEffect(() => {
@@ -19,11 +22,13 @@ const InfoPage = () => {
   const getData = async () => {
     !loading && setLoading(true);
     try {
-      const res = await axios.get(`${baseURL}/Information/${id}`);
+      const res = await axios.get(`${baseURL}/Information/${id}`, {
+        headers: { Authorization: "Bearer " + token },
+      });
       setData(res.data.data);
     } catch (err) {
       console.log(err);
-      if (err.status === 500) nav("/not-fond");
+      if (err.status === 500) nav("/dashboard/not-fond");
     } finally {
       setLoading(false);
     }
@@ -42,7 +47,7 @@ const InfoPage = () => {
   ) : (
     <div className="relative single-info">
       <Link
-        to={`/update_info/${id}`}
+        to={`/dashboard/update_info/${id}`}
         title="update"
         className="fa-regular fa-pen-to-square"
       ></Link>

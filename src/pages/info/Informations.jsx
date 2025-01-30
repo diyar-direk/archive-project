@@ -190,7 +190,11 @@ const Informations = () => {
             const arr = [];
             if (i < 3)
               arr.push(
-                <Link className="name" key={i} to={`/people/${person._id}`}>
+                <Link
+                  className="name"
+                  key={i}
+                  to={`/dashboard/people/${person._id}`}
+                >
                   {e.people[i + 1]
                     ? `${person.firstName} ${person.surName} , `
                     : `${person.firstName} ${person.surName}`}
@@ -219,7 +223,10 @@ const Informations = () => {
             >
               <i className="fa-solid fa-trash"></i> delete
             </div>
-            <Link to={`/update_info/${e._id}`} className="flex update">
+            <Link
+              to={`/dashboard/update_info/${e._id}`}
+              className="flex update"
+            >
               <i className="fa-regular fa-pen-to-square"></i>
               update
             </Link>

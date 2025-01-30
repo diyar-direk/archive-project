@@ -40,7 +40,7 @@ const UpdatePerson = () => {
       })
       .catch((err) => {
         console.log(err);
-        if (err.status === 500) nav("/not-found-404");
+        if (err.status === 500) nav("/dashboard/not-found-404");
       })
       .finally(() => setDataLoading(false));
   }, []);
@@ -112,7 +112,7 @@ const UpdatePerson = () => {
 
       try {
         const data = await axios.patch(`${baseURL}/people/${id}`, formData);
-        if (data.status === 200) nav("/people");
+        if (data.status === 200) nav("/dashboard/people");
       } catch (error) {
         console.log(error);
         responseFun(false);

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
-import { baseURL, date, mediaURL } from "../../context/context";
+import { baseURL, Context, date, mediaURL } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 const Profile = () => {
   const { id } = useParams();
@@ -10,6 +10,8 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [infoLoading, setInfoLoading] = useState(true);
   const [informations, setInformatios] = useState(false);
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const nav = useNavigate();
 
   useEffect(() => {
@@ -23,7 +25,9 @@ const Profile = () => {
   async function getData() {
     !loading && setLoading(true);
     try {
-      const data = await axios.get(`${baseURL}/people/${id}`);
+      const data = await axios.get(`${baseURL}/people/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setData(data.data.data);
     } catch (error) {
       console.log(error);
@@ -36,7 +40,8 @@ const Profile = () => {
   async function getInfo() {
     try {
       const res = await axios.get(
-        `${baseURL}/Information?people=${id}&active=true&fields=people,subject`
+        `${baseURL}/Information?people=${id}&active=true&fields=people,subject`,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setInformatios(res.data.informations);
     } catch (error) {
@@ -54,7 +59,9 @@ const Profile = () => {
     formData.append("image", image);
 
     try {
-      await axios.patch(`${baseURL}/people/${id}`, formData);
+      await axios.patch(`${baseURL}/people/${id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       getData();
     } catch (error) {
       console.log(error);
@@ -82,14 +89,20 @@ const Profile = () => {
                   >
                     {e._id !== id && (
                       <>
-                        <Link to={`/people/${e._id}`} className="profile-image">
+                        <Link
+                          to={`/dashboard/people/${e._id}`}
+                          className="profile-image"
+                        >
                           {e.image ? (
                             <img src={mediaURL + e.image} alt="" />
                           ) : (
                             <i className="fa-solid fa-user"></i>
                           )}
                         </Link>
-                        <Link to={`/people/${e._id}`} className="name">
+                        <Link
+                          to={`/dashboard/people/${e._id}`}
+                          className="name"
+                        >
                           {e.firstName} {e.surName}
                         </Link>
                       </>
@@ -101,7 +114,7 @@ const Profile = () => {
           ) : (
             <p>no other people found</p>
           )}
-          <Link to={`/informations/${e._id}`} className="flex btn">
+          <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
             show details
           </Link>
         </article>
@@ -173,7 +186,7 @@ const Profile = () => {
         ) : (
           <div className="info">
             <Link
-              to={`/update_person/${id}`}
+              to={`/dashboard/update_person/${id}`}
               className="fa-regular fa-pen-to-square"
             ></Link>
             <div className="flex">

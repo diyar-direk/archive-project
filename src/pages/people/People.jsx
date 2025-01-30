@@ -209,7 +209,7 @@ const People = (props) => {
           ></div>
         </td>
         <td>
-          <Link to={`/people/${e._id}`}>
+          <Link to={`/dashboard/people/${e._id}`}>
             {e.image ? (
               <img src={`${mediaURL}${e.image}`} className="photo" alt="" />
             ) : (
@@ -218,7 +218,7 @@ const People = (props) => {
           </Link>
         </td>
         <td>
-          <Link to={`/people/${e._id}`} className="name">
+          <Link to={`/dashboard/people/${e._id}`} className="name">
             {e.firstName} {e.fatherName} {e.surName}
           </Link>
         </td>
@@ -256,7 +256,10 @@ const People = (props) => {
                 >
                   <i className="fa-solid fa-trash"></i> delete
                 </div>
-                <Link to={`/update_person/${e._id}`} className="flex update">
+                <Link
+                  to={`/dashboard/update_person/${e._id}`}
+                  className="flex update"
+                >
                   <i className="fa-regular fa-pen-to-square"></i>
                   update
                 </Link>

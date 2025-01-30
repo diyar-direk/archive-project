@@ -133,7 +133,6 @@ article.person-info > div {
 article.person-info > div > div {
   max-height: 300px;
   overflow-y: auto;
-  margin: 0 10px;
   border-radius: 4px;
 }
 article.person-info:nth-child(even) > div {
@@ -156,7 +155,9 @@ article.person-info:nth-child(even) > div {
 .single-info > a:hover {
   background-color: var(--border-color);
 }
-
+.single-info > h1 {
+  font-size: 27px;
+}
 .single-info > h1,
 .single-info > h2 {
   text-transform: capitalize;
@@ -407,4 +408,236 @@ div.categories.grid-3 > div h3 {
 .media-overlay form audio {
   max-width: 50vh;
   max-height: 50vh;
+}
+
+@media (max-width: 800px) {
+  .profile > .info {
+    min-width: 100%;
+  }
+  .profile > .image h3 {
+    font-size: 17px;
+  }
+  .profile > .info > .flex h2 {
+    font-size: 17px;
+  }
+  .profile > .image label {
+    font-size: 15px;
+  }
+  .profile > .info > .flex p {
+    font-size: 15px;
+  }
+  article.person-info > h2 {
+    font-size: 19px;
+  }
+  article.person-info > p {
+    font-size: 16px;
+  }
+  article.person-info > div {
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  article.person-info > .btn {
+    font-size: 14px;
+  }
+  .single-info > h1 {
+    font-size: 20px;
+  }
+  .single-info > h2,
+  .single-info > div > h2 {
+    font-size: 18px;
+  }
+  .single-info > p {
+    padding: 10px;
+    font-size: 17px;
+  }
+  .single-info > div > p {
+    font-size: 16px;
+  }
+  div.categories.grid-3 > div > div h2,
+  .single-info > div h2.font-color {
+    font-size: 20px;
+  }
+  div.categories.grid-3 > div h3,
+  .single-info > div h3.font-color {
+    font-size: 17px;
+  }
+  .single-info > a {
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+  }
+  div.categories.grid-3 > div p,
+  .single-info > div > p {
+    font-size: 16px;
+  }
+  .media > h1 {
+    font-size: 25px;
+  }
+  .media > .media-container .gap-20 {
+    gap: 10px;
+  }
+  .media > .media-container .gap-20 > h4 {
+    gap: 5px;
+  }
+  .media > .media-container > div i {
+    width: 25px;
+    height: 25px;
+    font-size: 11px;
+  }
+  .media > .media-container > p.add-media {
+    border-radius: 50%;
+    padding: 0;
+    width: 25px;
+    height: 25px;
+  }
+  .media > .media-container > p.add-media span {
+    display: none;
+  }
+}
+@media (max-width: 670px) {
+  .profile > .image h3 {
+    font-size: 16px;
+  }
+  .profile > .info > a {
+    font-size: 14px;
+  }
+  .profile > .info > .flex {
+    gap: 5px;
+  }
+  .profile > .image,
+  .image-skeleton {
+    width: 100%;
+    gap: 18px;
+  }
+  .profile > .info > .flex h2 {
+    font-size: 15px;
+  }
+  .profile > .image label {
+    font-size: 14px;
+    padding: 8px;
+  }
+  .profile > .info > .flex p {
+    font-size: 14px;
+  }
+  article.person-info > h2 {
+    font-size: 17px;
+  }
+  article.person-info {
+    padding: 15px;
+  }
+  article.person-info > p {
+    font-size: 15px;
+  }
+  .single-info > h1 {
+    font-size: 17px;
+  }
+  .single-info > h2,
+  .single-info > div > h2 {
+    font-size: 16px;
+  }
+  .single-info > p {
+    font-size: 15px;
+  }
+  .single-info > div > p {
+    font-size: 14px;
+  }
+  div.categories.grid-3 > div h2,
+  .single-info > div h2.font-color {
+    font-size: 18px;
+  }
+  div.categories.grid-3 > div h3,
+  .single-info > div h3.font-color {
+    font-size: 15px;
+  }
+  .single-info > a {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+  .single-info > div {
+    gap: 5px;
+  }
+  div.categories.grid-3 {
+    gap: 10px;
+  }
+  div.categories.grid-3 > div p,
+  .single-info > div > p {
+    font-size: 15px;
+  }
+  .media > .media-container > div i {
+    left: 10px;
+  }
+  .media > .media-container > div i,
+  .media > .media-container > p.add-media {
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+  }
+  .media > .media-container > p.add-media {
+    right: 10px;
+  }
+  .media > .media-container {
+    padding: 20px 10px;
+  }
+}
+@media (max-width: 550px) {
+  .profile > .image h3 {
+    font-size: 15px;
+  }
+  .profile > .info > a {
+    font-size: 12px;
+    right: 10px;
+  }
+
+  .profile > .info > .flex h2 {
+    font-size: 13px;
+  }
+  .profile > .image label {
+    font-size: 12px;
+    padding: 8px;
+  }
+  .profile > .info > .flex p {
+    font-size: 12px;
+  }
+  .profile > div {
+    padding: 10px;
+  }
+  article.person-info > h2 {
+    font-size: 15px;
+  }
+  article.person-info > p {
+    font-size: 13px;
+  }
+  article.person-info {
+    padding: 10px;
+  }
+  article.person-info > .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .single-info > h1 {
+    font-size: 15px;
+  }
+  .single-info > h2,
+  .single-info > div > h2 {
+    font-size: 14px;
+  }
+  .single-info > div > p {
+    font-size: 12px;
+  }
+  div.categories.grid-3 > div h2,
+  .single-info > div h2.font-color {
+    font-size: 16px;
+  }
+  div.categories.grid-3 > div h3,
+  .single-info > div h3.font-color {
+    font-size: 14px;
+  }
+  div.categories.grid-3 > div p,
+  .single-info > div > p {
+    font-size: 14px;
+  }
+  .media > h1 {
+    font-size: 20px;
+  }
 }

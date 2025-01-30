@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import "../../components/form/form.css";
 import "leaflet/dist/leaflet.css";
 import FormSelect from "../../components/form/FormSelect";
 import Loading from "../../components/loading/Loading";
@@ -112,7 +113,7 @@ const AddCoordinates = () => {
       <form onSubmit={handleSubmit} className="dashboard-form">
         <h1 className="title">Add Coordinates</h1>
         <div className="form">
-          <div>
+          <div className="cordinates">
             <h2 className="font-color">Click on the Map to Get Coordinates</h2>
             <h3 className="font-color">Latitude: {coordinates.lat}</h3>
             <h3 className="font-color">Longitude: {coordinates.lng}</h3>

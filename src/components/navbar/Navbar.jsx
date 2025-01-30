@@ -98,22 +98,26 @@ const Navbar = () => {
   };
 
   const pagesLinks = links?.map((link, i) => {
-    return (
-      <div title={link.title} key={i} className="links">
-        <div onClick={openDiv} className="center">
-          <i className={link.icon}></i>
-          <h1 className="flex-1">{link.title}</h1>
-          <i className="arrow fa-solid fa-chevron-right"></i>
+    if (link.role.includes(context.userDetails.role))
+      return (
+        <div title={link.title} key={i} className="links">
+          <div onClick={openDiv} className="center">
+            <i className={link.icon}></i>
+            <h1 className="flex-1">{link.title}</h1>
+            <i className="arrow fa-solid fa-chevron-right"></i>
+          </div>
+          <article>
+            {link?.children?.map(
+              (e, i) =>
+                e.role.includes(context.userDetails.role) && (
+                  <NavLink key={i} to={e.path}>
+                    {e.title}
+                  </NavLink>
+                )
+            )}
+          </article>
         </div>
-        <article>
-          {link?.children?.map((e, i) => (
-            <NavLink key={i} to={e.path}>
-              {e.title}
-            </NavLink>
-          ))}
-        </article>
-      </div>
-    );
+      );
   });
 
   const [form, setForm] = useState("");
@@ -122,19 +126,21 @@ const Navbar = () => {
   const search = () => {
     let reasult = [];
     if (form.length > 0) {
-      links?.forEach((link, i) => {
-        link?.children?.forEach((e) => {
-          if (
-            e.title?.toLowerCase().includes(form.toLowerCase()) ||
-            e.path.toLowerCase().includes(form.toLowerCase())
-          ) {
-            reasult.push(
-              <Link key={e.path} onClick={() => setForm("")} to={e.path}>
-                {e.title || "Unnamed"}
-              </Link>
-            );
-          }
-        });
+      links?.forEach((link) => {
+        if (link.role.includes(context.userDetails.role))
+          link?.children?.forEach((e) => {
+            if (
+              link.role.includes(context.userDetails.role) &&
+              (e.title?.toLowerCase().includes(form.toLowerCase()) ||
+                e.path.toLowerCase().includes(form.toLowerCase()))
+            ) {
+              reasult.push(
+                <Link key={e.path} onClick={() => setForm("")} to={e.path}>
+                  {e.title || "Unnamed"}
+                </Link>
+              );
+            }
+          });
       });
     }
     if (reasult.length === 0) {
@@ -146,12 +152,15 @@ const Navbar = () => {
   const searchClick = (e) => {
     e.preventDefault();
     if (form.length > 0) {
-      const matchedPage = links?.find((link) =>
-        link?.children?.some(
-          (child) =>
-            child.title.toLowerCase().includes(form.toLowerCase()) ||
-            child.path.toLowerCase().includes(form.toLowerCase())
-        )
+      const matchedPage = links?.find(
+        (link) =>
+          link.role.includes(context.userDetails.role) &&
+          link?.children?.some(
+            (child) =>
+              child.role.includes(context.userDetails.role) &&
+              (child.title.toLowerCase().includes(form.toLowerCase()) ||
+                child.path.toLowerCase().includes(form.toLowerCase()))
+          )
       );
 
       if (matchedPage) {

@@ -379,7 +379,8 @@ const MediaShow = (props) => {
               }}
               className="add-media center gap-10"
             >
-              add media <i className="fa-solid fa-plus"></i>
+              <span> add media </span>
+              <i className="fa-solid fa-plus"></i>
             </p>
 
             {noData ? (
