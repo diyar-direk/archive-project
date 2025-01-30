@@ -269,17 +269,19 @@ const Table = (props) => {
         <table className={props.loading || props.data?.data ? "loading" : ""}>
           <thead>
             <tr>
-              <th>
-                {props.data.allData.length > 0 && (
-                  <div
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      checkAll(e);
-                    }}
-                    className="checkbox select-all"
-                  ></div>
-                )}
-              </th>
+              {!props.hideActionForUser && (
+                <th>
+                  {props.data.allData.length > 0 && (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        checkAll(e);
+                      }}
+                      className="checkbox select-all"
+                    ></div>
+                  )}
+                </th>
+              )}
               {header}
               <th>
                 <select onChange={updateLimit} value={limit}>

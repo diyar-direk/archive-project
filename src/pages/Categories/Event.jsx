@@ -16,6 +16,7 @@ const Event = () => {
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
   const context = useContext(Context);
+  const token = context.userDetails.token;
   const limit = context?.limit;
   const [filters, setFilters] = useState({
     date: {
@@ -87,7 +88,9 @@ const Event = () => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dataLength.current = data.data.numberOfActiveEvents;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -123,9 +126,13 @@ const Event = () => {
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -155,36 +162,40 @@ const Event = () => {
 
   const tableData = data?.map((e) => (
     <tr key={e._id}>
-      <td>
-        <div
-          onClick={(target) => {
-            target.stopPropagation();
-            checkOne(target, e._id);
-          }}
-          className="checkbox"
-        ></div>
-      </td>
+      {context.userDetails.isAdmin && (
+        <td>
+          <div
+            onClick={(target) => {
+              target.stopPropagation();
+              checkOne(target, e._id);
+            }}
+            className="checkbox"
+          ></div>
+        </td>
+      )}
       <td>{e.name}</td>
       <td>{date(e.createdAt)}</td>
       <td>
-        <div className="center gap-10 actions">
-          <i
-            onClick={(event) => {
-              event.stopPropagation();
-              setOverlay(true);
-              const allSelectors = document.querySelectorAll(".checkbox");
-              allSelectors.forEach((e) => e.classList.remove("active"));
-              setSelectedItems([e._id]);
-            }}
-            className="delete fa-solid fa-trash"
-          ></i>
-          <i
-            onClick={() => {
-              setUpdate(e);
-            }}
-            className="update fa-regular fa-pen-to-square"
-          ></i>
-        </div>
+        {context.userDetails.isAdmin && (
+          <div className="center gap-10 actions">
+            <i
+              onClick={(event) => {
+                event.stopPropagation();
+                setOverlay(true);
+                const allSelectors = document.querySelectorAll(".checkbox");
+                allSelectors.forEach((e) => e.classList.remove("active"));
+                setSelectedItems([e._id]);
+              }}
+              className="delete fa-solid fa-trash"
+            ></i>
+            <i
+              onClick={() => {
+                setUpdate(e);
+              }}
+              className="update fa-regular fa-pen-to-square"
+            ></i>
+          </div>
+        )}
       </td>
     </tr>
   ));
@@ -198,7 +209,8 @@ const Event = () => {
       if (update) {
         const data = await axios.patch(
           `${baseURL}/Events/${update._id}`,
-          formData
+          formData,
+          { headers: { Authorization: "Bearer " + token } }
         );
 
         if (data.status === 200) {
@@ -231,36 +243,39 @@ const Event = () => {
       {formLoading && <Loading />}
       <h1 className="title">Events</h1>
       <div className="flex align-start gap-20 wrap">
-        <form onSubmit={handleSubmit} className="addresses">
-          <h1>{update ? "update this country" : "add new Events"}</h1>
-          <label htmlFor="name">Events name</label>
-          <input
-            ref={ref}
-            className="inp"
-            required
-            placeholder="please write a Events name"
-            value={form.name}
-            type="text"
-            onInput={(e) => setForm({ ...form, name: e.target.value })}
-            id="name"
-          />
+        {context.userDetails.isAdmin && (
+          <form onSubmit={handleSubmit} className="addresses">
+            <h1>{update ? "update this country" : "add new Events"}</h1>
+            <label htmlFor="name">Events name</label>
+            <input
+              ref={ref}
+              className="inp"
+              required
+              placeholder="please write a Events name"
+              value={form.name}
+              type="text"
+              onInput={(e) => setForm({ ...form, name: e.target.value })}
+              id="name"
+            />
 
-          <div className="flex wrap gap-10">
-            <button className={`${update ? "save" : ""} btn flex-1`}>
-              {update ? "save" : "add"}
-            </button>
-            {update && (
-              <button
-                onClick={() => setUpdate(false)}
-                className="btn flex-1 cencel "
-              >
-                cencel
+            <div className="flex wrap gap-10">
+              <button className={`${update ? "save" : ""} btn flex-1`}>
+                {update ? "save" : "add"}
               </button>
-            )}
-          </div>
-        </form>
+              {update && (
+                <button
+                  onClick={() => setUpdate(false)}
+                  className="btn flex-1 cencel "
+                >
+                  cencel
+                </button>
+              )}
+            </div>
+          </form>
+        )}
         <div className="flex-1">
           <Table
+            hideActionForUser={!context.userDetails.isAdmin}
             header={header}
             loading={loading}
             page={{ page: page, setPage, dataLength: dataLength.current }}

@@ -553,6 +553,7 @@ div.table div.actions .update {
   }
   .delete-all {
     font-size: 13px;
+    padding: 8px;
   }
   .delete-all i {
     font-size: 11px;

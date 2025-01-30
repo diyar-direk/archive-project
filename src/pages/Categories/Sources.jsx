@@ -20,6 +20,7 @@ const Sources = () => {
   const ref = useRef(null);
   const [formLoading, setFormLoading] = useState(false);
   const context = useContext(Context);
+  const token = context.userDetails.token;
   const [filters, setFilters] = useState({
     date: {
       from: "",
@@ -91,7 +92,9 @@ const Sources = () => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
 
       dataLength.current = data.data.numberOfActiveSources;
       allPeople.current = data.data.data.map((e) => e._id);
@@ -147,9 +150,13 @@ const Sources = () => {
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -162,37 +169,41 @@ const Sources = () => {
 
   const tableData = data?.map((e) => (
     <tr key={e._id}>
-      <td>
-        <div
-          onClick={(target) => {
-            target.stopPropagation();
-            checkOne(target, e._id);
-          }}
-          className="checkbox"
-        ></div>
-      </td>
+      {context.userDetails.isAdmin && (
+        <td>
+          <div
+            onClick={(target) => {
+              target.stopPropagation();
+              checkOne(target, e._id);
+            }}
+            className="checkbox"
+          ></div>
+        </td>
+      )}
       <td>{e.source_name}</td>
       <td>{date(e.createdAt)}</td>
       <td>{e.source_credibility}</td>
       <td>
-        <div className="center gap-10 actions">
-          <i
-            onClick={(event) => {
-              event.stopPropagation();
-              setOverlay(true);
-              const allSelectors = document.querySelectorAll(".checkbox");
-              allSelectors.forEach((e) => e.classList.remove("active"));
-              setSelectedItems([e._id]);
-            }}
-            className="delete fa-solid fa-trash"
-          ></i>
-          <i
-            onClick={() => {
-              setUpdate(e);
-            }}
-            className="update fa-regular fa-pen-to-square"
-          ></i>
-        </div>
+        {context.userDetails.isAdmin && (
+          <div className="center gap-10 actions">
+            <i
+              onClick={(event) => {
+                event.stopPropagation();
+                setOverlay(true);
+                const allSelectors = document.querySelectorAll(".checkbox");
+                allSelectors.forEach((e) => e.classList.remove("active"));
+                setSelectedItems([e._id]);
+              }}
+              className="delete fa-solid fa-trash"
+            ></i>
+            <i
+              onClick={() => {
+                setUpdate(e);
+              }}
+              className="update fa-regular fa-pen-to-square"
+            ></i>
+          </div>
+        )}
       </td>
     </tr>
   ));
@@ -206,7 +217,8 @@ const Sources = () => {
       if (update) {
         const data = await axios.patch(
           `${baseURL}/Sources/${update._id}`,
-          formData
+          formData,
+          { headers: { Authorization: "Bearer " + token } }
         );
 
         if (data.status === 200) {
@@ -214,7 +226,9 @@ const Sources = () => {
         }
         setUpdate(false);
       } else {
-        const data = await axios.post(`${baseURL}/Sources`, formData);
+        const data = await axios.post(`${baseURL}/Sources`, formData, {
+          headers: { Authorization: "Bearer " + token },
+        });
         if (data.status === 201) {
           responseFun(true);
         }
@@ -239,50 +253,53 @@ const Sources = () => {
       {formLoading && <Loading />}
       <h1 className="title">Sources</h1>
       <div className="flex align-start gap-20 wrap">
-        <form onSubmit={handleSubmit} className="addresses">
-          <h1>{update ? "Update this source" : "Add new source"}</h1>
-          <label htmlFor="source_name">Source Name</label>
-          <input
-            ref={ref}
-            className="inp"
-            required
-            placeholder="Please write a source name"
-            value={form.source_name}
-            type="text"
-            onInput={(e) => setForm({ ...form, source_name: e.target.value })}
-            id="source_name"
-          />
+        {context.userDetails.isAdmin && (
+          <form onSubmit={handleSubmit} className="addresses">
+            <h1>{update ? "Update this source" : "Add new source"}</h1>
+            <label htmlFor="source_name">Source Name</label>
+            <input
+              ref={ref}
+              className="inp"
+              required
+              placeholder="Please write a source name"
+              value={form.source_name}
+              type="text"
+              onInput={(e) => setForm({ ...form, source_name: e.target.value })}
+              id="source_name"
+            />
 
-          <label htmlFor="source_credibility">Source Credibility</label>
-          <select
-            className="inp center gap-10 w-100"
-            id="source_credibility"
-            value={form.source_credibility}
-            onChange={(e) =>
-              setForm({ ...form, source_credibility: e.target.value })
-            }
-          >
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
-          </select>
+            <label htmlFor="source_credibility">Source Credibility</label>
+            <select
+              className="inp center gap-10 w-100"
+              id="source_credibility"
+              value={form.source_credibility}
+              onChange={(e) =>
+                setForm({ ...form, source_credibility: e.target.value })
+              }
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
 
-          <div className="flex wrap gap-10">
-            <button className={`${update ? "save" : ""} btn flex-1`}>
-              {update ? "Save" : "Add"}
-            </button>
-            {update && (
-              <button
-                onClick={() => setUpdate(false)}
-                className="btn flex-1 cencel "
-              >
-                Cancel
+            <div className="flex wrap gap-10">
+              <button className={`${update ? "save" : ""} btn flex-1`}>
+                {update ? "Save" : "Add"}
               </button>
-            )}
-          </div>
-        </form>
+              {update && (
+                <button
+                  onClick={() => setUpdate(false)}
+                  className="btn flex-1 cencel "
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+          </form>
+        )}
         <div className="flex-1">
           <Table
+            hideActionForUser={true}
             header={header}
             loading={loading}
             page={{ page: page, setPage, dataLength: dataLength.current }}

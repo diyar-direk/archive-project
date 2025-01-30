@@ -12,6 +12,7 @@ const Coordinates = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
+  const token = context.userDetails.token;
   const limit = context?.limit;
   const [filters, setFilters] = useState({
     country: "",
@@ -69,7 +70,9 @@ const Coordinates = () => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
       dataLength.current = data.data.numberOfActiveCoordinates;
 
       allPeople.current = data.data.data.map((e) => e._id);
@@ -112,9 +115,13 @@ const Coordinates = () => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
 

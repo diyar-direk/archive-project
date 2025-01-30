@@ -415,6 +415,9 @@ body::-webkit-scrollbar {
   main {
     margin-top: 55px;
   }
+  .overlay > div h1 {
+    font-size: 23px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -441,9 +444,24 @@ body::-webkit-scrollbar {
   .btn {
     font-size: 12px;
   }
+  .overlay > div h1 {
+    font-size: 20px;
+  }
 }
 @media (max-width: 500px) {
   main > div.dashboard-container {
     width: calc(100% - 55px);
+  }
+  .overlay > div h1 {
+    font-size: 17px;
+  }
+}
+@media (max-width: 400px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .overlay > div {
+    min-width: auto;
+    width: 100%;
   }
 }

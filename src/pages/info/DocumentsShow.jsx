@@ -1,6 +1,6 @@
 import Mammoth from "mammoth";
-import { baseURL, mediaURL } from "./../../context/context";
-import { useState } from "react";
+import { baseURL, Context, mediaURL } from "./../../context/context";
+import { useContext, useState } from "react";
 import axios from "axios";
 
 const DocumentsShow = (props) => {
@@ -70,14 +70,19 @@ const DocumentsShow = (props) => {
     audio: {},
     list: {},
   });
-
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const [overlay, setOverlay] = useState(false);
 
   const deleteData = async () => {
     try {
-      await axios.patch(`${baseURL}${props.backendKey}`, {
-        ids: [deleteDoc[props.data]._id],
-      });
+      await axios.patch(
+        `${baseURL}${props.backendKey}`,
+        {
+          ids: [deleteDoc[props.data]._id],
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       const data = props.documents.documents[props.data].filter(
         (itm) => itm !== deleteDoc[props.data]
       );

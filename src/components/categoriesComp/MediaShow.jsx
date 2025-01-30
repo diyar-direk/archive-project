@@ -60,12 +60,12 @@ const MediaShow = (props) => {
       formData.append("informationId", props.id);
       formData.append(res, form[res]);
       await axios.post(`${baseURL}/media/${res}`, formData, {
+        headers: { Authorization: "Bearer " + token },
         onUploadProgress: (progress) => {
           const persent =
             Math.floor((progress.loaded * 100) / progress.total) + "%";
           document.querySelector("div.loading.overlay >h1").innerHTML = persent;
         },
-        Authorization: "Bearer " + token,
       });
       setForm({
         images: "",

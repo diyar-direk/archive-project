@@ -43,7 +43,7 @@ const AddPerson = () => {
     addressDetails: "",
     email: "",
     phone: "",
-    sectionId: "",
+    sectionId: context?.userDetails?.sectionId || "",
     //categories data
     sources: "",
   });
@@ -135,7 +135,7 @@ const AddPerson = () => {
             addressDetails: "",
             email: "",
             phone: "",
-            sectionId: "",
+            sectionId: context?.userDetails?.sectionId || "",
             //categories data
             sources: "",
           });
@@ -424,11 +424,13 @@ const AddPerson = () => {
         <div className="form">
           <h1>more informations</h1>
           <div className="flex wrap">
-            <FormSelect
-              formKey="section"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
+            {context.userDetails.isAdmin && (
+              <FormSelect
+                formKey="section"
+                error={{ error, setError }}
+                form={{ form, setForm }}
+              />
+            )}
             <FormSelect
               formKey="sources"
               error={{ error, setError }}

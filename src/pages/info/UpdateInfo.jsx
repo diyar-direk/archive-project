@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
 import "./information.css";
 import { baseURL } from "../../context/context";
@@ -10,14 +10,19 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import FormSelect from "../../components/form/FormSelect";
 import DocumentsShow from "./DocumentsShow";
 import Skeleton from "react-loading-skeleton";
+import { Context } from "./../../context/context";
 const UpdateInfo = () => {
   const { id } = useParams();
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const [dataLoading, setDataLoading] = useState(true);
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     axios
-      .get(`${baseURL}/Information/${id}`)
+      .get(`${baseURL}/Information/${id}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
       .then((res) => {
         setForm(res.data.data);
         setDocuments({
@@ -103,7 +108,8 @@ const UpdateInfo = () => {
       try {
         const data = await axios.patch(
           `${baseURL}/Information/${id}`,
-          formData
+          formData,
+          { headers: { Authorization: "Bearer " + token } }
         );
         const newImages = documents.image.filter((itm) => !itm._id);
         const newVideos = documents.video.filter((itm) => !itm._id);
@@ -119,7 +125,9 @@ const UpdateInfo = () => {
             imagesDoc.append(`images`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/images`, imagesDoc);
+            await axios.post(`${baseURL}/media/images`, imagesDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             console.log(error);
           }
@@ -131,7 +139,9 @@ const UpdateInfo = () => {
             videosDoc.append(`videos`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/videos`, videosDoc);
+            await axios.post(`${baseURL}/media/videos`, videosDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             console.log(error);
           }
@@ -143,7 +153,9 @@ const UpdateInfo = () => {
             audioDoc.append(`audios`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/audios`, audioDoc);
+            await axios.post(`${baseURL}/media/audios`, audioDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             console.log(error);
           }
@@ -155,7 +167,9 @@ const UpdateInfo = () => {
             documentDoc.append(`documents`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/documents`, documentDoc);
+            await axios.post(`${baseURL}/media/documents`, documentDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             console.log(error);
           }
@@ -321,11 +335,13 @@ const UpdateInfo = () => {
             <div className="form">
               <h1>more informations</h1>
               <div className="flex wrap">
-                <FormSelect
-                  formKey="section"
-                  error={{ error, setError }}
-                  form={{ form, setForm }}
-                />
+                {context.userDetails.isAdmin && (
+                  <FormSelect
+                    formKey="section"
+                    error={{ error, setError }}
+                    form={{ form, setForm }}
+                  />
+                )}
 
                 <FormSelect
                   formKey="events"

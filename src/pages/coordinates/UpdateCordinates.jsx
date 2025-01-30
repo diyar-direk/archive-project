@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import FormSelect from "../../components/form/FormSelect";
@@ -8,6 +8,7 @@ import axios from "axios";
 import { baseURL } from "../../context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+import { Context } from "./../../context/context";
 
 const MapClickHandler = ({ setCoordinates }) => {
   useMapEvents({
@@ -21,6 +22,8 @@ const MapClickHandler = ({ setCoordinates }) => {
 };
 
 const UpdateCoordinates = () => {
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const [dataLloading, setDataLoading] = useState(true);
@@ -52,7 +55,9 @@ const UpdateCoordinates = () => {
   async function getData() {
     !dataLloading && setDataLoading(true);
     try {
-      const data = await axios.get(`${baseURL}/Coordinates/${id}`);
+      const data = await axios.get(`${baseURL}/Coordinates/${id}`, {
+        headers: { Authorization: "Bearer " + token },
+      });
       setForm(data.data.data);
       const coordinat = data.data.data.coordinates.split(",");
 
@@ -91,7 +96,9 @@ const UpdateCoordinates = () => {
       )}`;
 
       try {
-        const res = await axios.patch(`${baseURL}/Coordinates/${id}`, data);
+        const res = await axios.patch(`${baseURL}/Coordinates/${id}`, data, {
+          headers: { Authorization: "Bearer " + token },
+        });
         if (res.status === 200) nav("/dashboard/coordinates");
       } catch (error) {
         console.log(error);
@@ -169,11 +176,13 @@ const UpdateCoordinates = () => {
           <div className="form">
             <h1>more informations</h1>
             <div className="flex wrap">
-              <FormSelect
-                formKey="section"
-                error={{ error, setError }}
-                form={{ form, setForm }}
-              />
+              {context.userDetails.isAdmin && (
+                <FormSelect
+                  formKey="section"
+                  error={{ error, setError }}
+                  form={{ form, setForm }}
+                />
+              )}
               <FormSelect
                 formKey="sources"
                 error={{ error, setError }}

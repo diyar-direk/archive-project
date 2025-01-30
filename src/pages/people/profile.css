@@ -330,7 +330,7 @@ div.categories.grid-3 > div h3 {
 }
 .media > .media-container > .grid-3 > div.flex-direction {
   justify-content: space-between;
-  min-height: 160px;
+  min-height: 180px;
   background: var(--body-color);
   max-height: 300px;
   border-radius: 4px;
@@ -365,11 +365,13 @@ div.categories.grid-3 > div h3 {
 .media > .media-container > .grid-3 p.delete:hover {
   background-color: #a01717;
 }
+.media-overlay form:has(label) {
+  min-width: 400px;
+}
 .media-overlay form label {
   padding: 10px;
   background: var(--body-color);
   border-radius: 4px;
-  min-width: 250px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -493,6 +495,29 @@ div.categories.grid-3 > div h3 {
   .media > .media-container > p.add-media span {
     display: none;
   }
+  .media > .media-container > .grid-3 {
+    gap: 20px;
+  }
+  .media > .media-container > .grid-3 p.delete,
+  .media > .media-container > .grid-3 a.view {
+    height: 35px;
+    font-size: 15px;
+  }
+  .media > .media-container > .grid-3 > div.flex-direction > img,
+  .media > .media-container > .grid-3 > div.flex-direction > audio,
+  .media > .media-container > .grid-3 > div.flex-direction > video {
+    height: calc(100% - 35px);
+  }
+  .media-overlay form:has(label) {
+    min-width: 300px;
+  }
+  .media-overlay form label {
+    font-size: 16px;
+    gap: 8px;
+  }
+  .media-overlay form label i {
+    font-size: 14px;
+  }
 }
 @media (max-width: 670px) {
   .profile > .image h3 {
@@ -579,6 +604,33 @@ div.categories.grid-3 > div h3 {
   .media > .media-container {
     padding: 20px 10px;
   }
+  div.categories.grid-3 > div > div {
+    max-height: 190px;
+  }
+  .media > .media-container > .grid-3 > div.flex-direction > div.center {
+    flex-direction: column;
+  }
+  .media > .media-container > .grid-3 p.delete,
+  .media > .media-container > .grid-3 a.view {
+    height: 30px;
+    font-size: 13px;
+  }
+  .media-overlay form:has(label) {
+    min-width: auto;
+  }
+  .media-overlay form label {
+    font-size: 14px;
+    gap: 7px;
+    padding: 8px;
+  }
+  .media-overlay form label i {
+    font-size: 13px;
+  }
+  .media-overlay form .trash {
+    font-size: 15px;
+    width: 25px;
+    height: 25px;
+  }
 }
 @media (max-width: 550px) {
   .profile > .image h3 {
@@ -639,5 +691,10 @@ div.categories.grid-3 > div h3 {
   }
   .media > h1 {
     font-size: 20px;
+  }
+  .media-overlay > article > i {
+    font-size: 15px;
+    width: 22px;
+    height: 22px;
   }
 }

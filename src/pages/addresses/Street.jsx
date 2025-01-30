@@ -29,6 +29,7 @@ const Street = () => {
   });
   const [search, setSearch] = useState("");
   const context = useContext(Context);
+  const token = context.userDetails.token;
   const limit = context?.limit;
 
   const [responseOverlay, setResponseOverlay] = useState(false);
@@ -95,7 +96,9 @@ const Street = () => {
         (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.get(url);
+      const data = await axios.get(url, {
+        headers: { Authorization: "Bearer " + token },
+      });
 
       dataLength.current = data.data.numberOfActiveStreets;
       allPeople.current = data.data.data.map((e) => e._id);
@@ -132,9 +135,13 @@ const Street = () => {
       (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
 
     try {
-      const data = await axios.post(url, {
-        search: search,
-      });
+      const data = await axios.post(
+        url,
+        {
+          search: search,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
       setData(data.data.data);
@@ -164,37 +171,41 @@ const Street = () => {
 
   const tableData = data?.map((e) => (
     <tr key={e._id}>
-      <td>
-        <div
-          onClick={(target) => {
-            target.stopPropagation();
-            checkOne(target, e._id);
-          }}
-          className="checkbox"
-        ></div>
-      </td>
+      {context.userDetails.isAdmin && (
+        <td>
+          <div
+            onClick={(target) => {
+              target.stopPropagation();
+              checkOne(target, e._id);
+            }}
+            className="checkbox"
+          ></div>
+        </td>
+      )}
       <td>{e.name}</td>
       <td>{e.city?.name}</td>
       <td>{date(e.createdAt)}</td>
       <td>
-        <div className="center gap-10 actions">
-          <i
-            onClick={(event) => {
-              event.stopPropagation();
-              setOverlay(true);
-              const allSelectors = document.querySelectorAll(".checkbox");
-              allSelectors.forEach((e) => e.classList.remove("active"));
-              setSelectedItems([e._id]);
-            }}
-            className="delete fa-solid fa-trash"
-          ></i>
-          <i
-            onClick={() => {
-              setUpdate(e);
-            }}
-            className="update fa-regular fa-pen-to-square"
-          ></i>
-        </div>
+        {context.userDetails.isAdmin && (
+          <div className="center gap-10 actions">
+            <i
+              onClick={(event) => {
+                event.stopPropagation();
+                setOverlay(true);
+                const allSelectors = document.querySelectorAll(".checkbox");
+                allSelectors.forEach((e) => e.classList.remove("active"));
+                setSelectedItems([e._id]);
+              }}
+              className="delete fa-solid fa-trash"
+            ></i>
+            <i
+              onClick={() => {
+                setUpdate(e);
+              }}
+              className="update fa-regular fa-pen-to-square"
+            ></i>
+          </div>
+        )}
       </td>
     </tr>
   ));
@@ -211,7 +222,8 @@ const Street = () => {
         if (update) {
           const data = await axios.patch(
             `${baseURL}/Streets/${update._id}`,
-            formData
+            formData,
+            { headers: { Authorization: "Bearer " + token } }
           );
 
           if (data.status === 200) {
@@ -219,7 +231,9 @@ const Street = () => {
           }
           setUpdate(false);
         } else {
-          const data = await axios.post(`${baseURL}/Streets`, formData);
+          const data = await axios.post(`${baseURL}/Streets`, formData, {
+            headers: { Authorization: "Bearer " + token },
+          });
           if (data.status === 201) {
             responseFun(true);
           }
@@ -245,42 +259,45 @@ const Street = () => {
       {formLoading && <Loading />}
       <h1 className="title">Streets</h1>
       <div className="flex align-start gap-20 wrap">
-        <form onSubmit={handleSubmit} className="addresses">
-          <h1>{update ? "update this country" : "add new street"}</h1>
-          <label htmlFor="name">street name</label>
-          <input
-            ref={ref}
-            className="inp"
-            required
-            placeholder="please write a street name"
-            value={form.name}
-            type="text"
-            onInput={(e) => setForm({ ...form, name: e.target.value })}
-            id="name"
-          />
+        {context.userDetails.isAdmin && (
+          <form onSubmit={handleSubmit} className="addresses">
+            <h1>{update ? "update this country" : "add new street"}</h1>
+            <label htmlFor="name">street name</label>
+            <input
+              ref={ref}
+              className="inp"
+              required
+              placeholder="please write a street name"
+              value={form.name}
+              type="text"
+              onInput={(e) => setForm({ ...form, name: e.target.value })}
+              id="name"
+            />
 
-          <FormSelect
-            formKey="allCity"
-            error={{ error, setError }}
-            form={{ form, setForm }}
-          />
-          {error && <p className="error"> {error} </p>}
-          <div className="flex wrap gap-10">
-            <button className={`${update ? "save" : ""} btn flex-1`}>
-              {update ? "save" : "add"}
-            </button>
-            {update && (
-              <button
-                onClick={() => setUpdate(false)}
-                className="btn flex-1 cencel "
-              >
-                cencel
+            <FormSelect
+              formKey="allCity"
+              error={{ error, setError }}
+              form={{ form, setForm }}
+            />
+            {error && <p className="error"> {error} </p>}
+            <div className="flex wrap gap-10">
+              <button className={`${update ? "save" : ""} btn flex-1`}>
+                {update ? "save" : "add"}
               </button>
-            )}
-          </div>
-        </form>
+              {update && (
+                <button
+                  onClick={() => setUpdate(false)}
+                  className="btn flex-1 cencel "
+                >
+                  cencel
+                </button>
+              )}
+            </div>
+          </form>
+        )}
         <div className="flex-1">
           <Table
+            hideActionForUser={!context.userDetails.isAdmin}
             header={header}
             loading={loading}
             page={{ page: page, setPage, dataLength: dataLength.current }}

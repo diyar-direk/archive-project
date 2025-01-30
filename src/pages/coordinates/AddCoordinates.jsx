@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
 import "../../components/form/form.css";
 import "leaflet/dist/leaflet.css";
@@ -6,7 +6,7 @@ import FormSelect from "../../components/form/FormSelect";
 import Loading from "../../components/loading/Loading";
 import SendData from "../../components/response/SendData";
 import axios from "axios";
-import { baseURL } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 
 const MapClickHandler = ({ setCoordinates }) => {
   useMapEvents({
@@ -20,6 +20,8 @@ const MapClickHandler = ({ setCoordinates }) => {
 };
 
 const AddCoordinates = () => {
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -50,7 +52,7 @@ const AddCoordinates = () => {
     regionId: "",
     villageId: "",
     sources: "",
-    sectionId: "",
+    sectionId: context.userDetails.sectionId || "",
   });
   const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
   useEffect(() => {
@@ -78,7 +80,9 @@ const AddCoordinates = () => {
       )}`;
 
       try {
-        const res = await axios.post(`${baseURL}/Coordinates`, data);
+        const res = await axios.post(`${baseURL}/Coordinates`, data, {
+          headers: { Authorization: "Bearer " + token },
+        });
         if (res.status === 201) {
           responseFun(true);
           setForm({
@@ -90,7 +94,7 @@ const AddCoordinates = () => {
             regionId: "",
             villageId: "",
             sources: "",
-            sectionId: "",
+            sectionId: context.userDetails.sectionId || "",
           });
           setCoordinates({ lat: null, lng: null });
         }
@@ -168,11 +172,13 @@ const AddCoordinates = () => {
         <div className="form">
           <h1>more informations</h1>
           <div className="flex wrap">
-            <FormSelect
-              formKey="section"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
+            {context.userDetails.isAdmin && (
+              <FormSelect
+                formKey="section"
+                error={{ error, setError }}
+                form={{ form, setForm }}
+              />
+            )}
             <FormSelect
               formKey="sources"
               error={{ error, setError }}

@@ -115,7 +115,8 @@ nav .setting .lang + div.languages {
   background: var(--body-color);
   bottom: -130px;
   box-shadow: var(--box-shadow);
-  left: -20px;
+  left: 50%;
+  transform: translateX(-50%);
   opacity: 0;
   z-index: -1;
   pointer-events: none;
@@ -139,7 +140,7 @@ nav .setting .lang + div.languages h2.active {
   font-weight: bold;
 }
 nav .setting .lang + div.languages.active-div {
-  bottom: -150px;
+  bottom: -140px;
 }
 nav .setting .mode {
   color: var(--font-color);
@@ -565,11 +566,9 @@ div.short-cut div.short-links a:hover {
     right: 65px;
   }
   nav .setting .lang + div.languages.active-div {
-    bottom: -145px;
+    bottom: -137px;
   }
-  nav .setting .lang + div.languages {
-    left: -100%;
-  }
+
   body.arabic nav .setting .lang + div.languages {
     right: -100%;
   }
@@ -608,11 +607,12 @@ div.short-cut div.short-links a:hover {
     padding: 8px;
   }
   nav .setting .lang + div.languages.active-div {
-    bottom: -130px;
+    bottom: -123px;
   }
   nav .setting .lang + div.languages {
     width: 95px;
     bottom: -110px;
+    left: -100%;
   }
   nav .setting .mode,
   nav .setting .lang i {
@@ -781,7 +781,7 @@ div.short-cut div.short-links a:hover {
     font-size: 13px;
   }
   nav .setting .lang + div.languages.active-div {
-    bottom: -119px;
+    bottom: -114px;
   }
   nav .setting .lang + div.languages {
     width: 70px;

@@ -52,7 +52,6 @@ function App() {
               <Route element={<AdminAuth />}>
                 <Route path="users" element={<Users />} />
                 <Route path="add_user" element={<AddUser />} />
-                <Route path="sections" element={<Sections />} />
               </Route>
               <Route path="people" element={<People />} />
               <Route path="people/:id" element={<Profile />} />
@@ -64,6 +63,7 @@ function App() {
               <Route path="villages" element={<Village />} />
               <Route path="regions" element={<Region />} />
               <Route path="streets" element={<Street />} />
+                <Route path="sections" element={<Sections />} />
               <Route path="sources" element={<Sources />} />
               <Route path="event" element={<Event />} />
               <Route path="party" element={<Party />} />

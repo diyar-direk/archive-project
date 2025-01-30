@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
 import { baseURL, mediaURL, placeholder } from "../../context/context";
 import axios from "axios";
@@ -7,8 +7,11 @@ import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+import { Context } from "./../../context/context";
 const UpdatePerson = () => {
   const [loading, setLoading] = useState(false);
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const handleClick = (e) => {
     e.stopPropagation();
     const divs = document.querySelectorAll("div.form .selecte .inp.active");
@@ -31,7 +34,9 @@ const UpdatePerson = () => {
   const { id } = useParams();
   useEffect(() => {
     axios
-      .get(`${baseURL}/people/${id}`)
+      .get(`${baseURL}/people/${id}`, {
+        headers: { Authorization: "Bearer " + token },
+      })
       .then((res) => {
         setForm({
           ...res.data.data,
@@ -111,7 +116,9 @@ const UpdatePerson = () => {
       });
 
       try {
-        const data = await axios.patch(`${baseURL}/people/${id}`, formData);
+        const data = await axios.patch(`${baseURL}/people/${id}`, formData, {
+          headers: { Authorization: "Bearer " + token },
+        });
         if (data.status === 200) nav("/dashboard/people");
       } catch (error) {
         console.log(error);
@@ -411,11 +418,13 @@ const UpdatePerson = () => {
           <div className="form">
             <h1>more informations</h1>
             <div className="flex wrap">
-              <FormSelect
-                formKey="section"
-                error={{ error, setError }}
-                form={{ form, setForm }}
-              />
+              {context.userDetails.isAdmin && (
+                <FormSelect
+                  formKey="section"
+                  error={{ error, setError }}
+                  form={{ form, setForm }}
+                />
+              )}
               <FormSelect
                 formKey="sources"
                 error={{ error, setError }}

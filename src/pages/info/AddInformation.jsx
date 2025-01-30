@@ -1,7 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "../../components/form/form.css";
 import "./information.css";
-import { baseURL } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
@@ -10,6 +10,8 @@ import { Link } from "react-router-dom";
 import FormSelect from "../../components/form/FormSelect";
 import DocumentsShow from "./DocumentsShow";
 const AddInformation = () => {
+  const context = useContext(Context);
+  const token = context.userDetails.token;
   const [loading, setLoading] = useState(false);
 
   window.addEventListener("click", () => {
@@ -26,7 +28,7 @@ const AddInformation = () => {
     subject: "",
     note: "",
     details: "",
-    sectionId: "",
+    sectionId: context.userDetails.sectionId || "",
     cityId: "",
     countryId: "",
     governmentId: "",
@@ -104,7 +106,9 @@ const AddInformation = () => {
       });
 
       try {
-        const data = await axios.post(`${baseURL}/Information`, formData);
+        const data = await axios.post(`${baseURL}/Information`, formData, {
+          headers: { Authorization: "Bearer " + token },
+        });
         const id = data.data.data._id;
 
         const imagesDoc = new FormData();
@@ -117,7 +121,9 @@ const AddInformation = () => {
             imagesDoc.append(`images`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/images`, imagesDoc);
+            await axios.post(`${baseURL}/media/images`, imagesDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             console.log(error);
             alert("error in uploading images");
@@ -130,7 +136,9 @@ const AddInformation = () => {
             videosDoc.append(`videos`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/videos`, videosDoc);
+            await axios.post(`${baseURL}/media/videos`, videosDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             alert("error in uploading videos");
             console.log(error);
@@ -143,7 +151,9 @@ const AddInformation = () => {
             audioDoc.append(`audios`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/audios`, audioDoc);
+            await axios.post(`${baseURL}/media/audios`, audioDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             alert("error in uploading audios");
             console.log(error);
@@ -156,7 +166,9 @@ const AddInformation = () => {
             documentDoc.append(`documents`, item);
           });
           try {
-            await axios.post(`${baseURL}/media/documents`, documentDoc);
+            await axios.post(`${baseURL}/media/documents`, documentDoc, {
+              headers: { Authorization: "Bearer " + token },
+            });
           } catch (error) {
             alert("error in uploading documents");
             console.log(error);
@@ -172,7 +184,7 @@ const AddInformation = () => {
             subject: "",
             note: "",
             details: "",
-            sectionId: "",
+            sectionId: context.userDetails.sectionId || "",
             cityId: "",
             countryId: "",
             governmentId: "",
@@ -339,11 +351,13 @@ const AddInformation = () => {
         <div className="form">
           <h1>more informations</h1>
           <div className="flex wrap">
-            <FormSelect
-              formKey="section"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
+            {context.userDetails.isAdmin && (
+              <FormSelect
+                formKey="section"
+                error={{ error, setError }}
+                form={{ form, setForm }}
+              />
+            )}
 
             <FormSelect
               formKey="events"
