@@ -4,12 +4,14 @@ import axios from "axios";
 import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
 import Filters from "./Filters";
+import { useLocation } from "react-router-dom";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
   const context = useContext(Context);
   const limit = context?.limit;
   const token = context.userDetails.token;
   const [hasFltr, setHasFltr] = useState(false);
+  const location = useLocation();
 
   const createPags = (limit, dataLength) => {
     const pages = Math.ceil(dataLength / limit);
@@ -47,7 +49,7 @@ const Table = (props) => {
 
   useEffect(() => {
     const handleClick = () => {
-      if (props.overlay.overlay) {
+      if (props?.overlay?.overlay) {
         props.overlay.setOverlay(false);
         if (props.items.slectedItems.length < 2)
           props.items.setSelectedItems([]);
@@ -63,7 +65,7 @@ const Table = (props) => {
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  }, [props.overlay, hasFltr, props.items]);
+  }, [props?.overlay, hasFltr, props.items]);
 
   const checkAll = (e) => {
     const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
@@ -119,7 +121,7 @@ const Table = (props) => {
           }
         );
         if (data.status === 200) {
-          props.overlay.setOverlay(false);
+          props?.overlay?.setOverlay(false);
           if (
             props.data.allData.length - props.items.slectedItems.length === 0 &&
             props.page.page !== 1
@@ -137,7 +139,7 @@ const Table = (props) => {
           { headers: { Authorization: "Bearer " + token } }
         );
         if (data.status === 200) {
-          props.overlay.setOverlay(false);
+          props?.overlay?.setOverlay(false);
           if (
             props.data.allData.length - props.items.slectedItems.length === 0 &&
             props.page.page !== 1
@@ -234,26 +236,31 @@ const Table = (props) => {
           props.filters.setSearch(beforSubmit);
           props.page.setPage(1);
         }}
-        className="flex center gap-10 table-search"
+        className="flex align-center justify-end gap-10 table-search"
       >
-        <input
-          type="text"
-          placeholder={`${
-            props.searchInpPlacecholder
-              ? props.searchInpPlacecholder
-              : "search by name"
-          }`}
-          value={beforSubmit}
-          onInput={(e) => {
-            e.target.value === "" && props.filters.setSearch("");
-            setBeforeSubmit(e.target.value);
-          }}
-          required
-        />
+        {!location.pathname.includes("/backup") && (
+          <>
+            <input
+              type="text"
+              placeholder={`${
+                props.searchInpPlacecholder
+                  ? props.searchInpPlacecholder
+                  : "search by name"
+              }`}
+              value={beforSubmit}
+              onInput={(e) => {
+                e.target.value === "" && props.filters.setSearch("");
+                setBeforeSubmit(e.target.value);
+              }}
+              required
+            />
 
-        <button className="btn center gap-10">
-          <span>search</span> <i className="fa-solid fa-magnifying-glass"></i>
-        </button>
+            <button className="btn center gap-10">
+              <span>search</span>{" "}
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </>
+        )}
         {!props?.workSpace?.workSpace && (
           <i
             title="filters"
@@ -311,7 +318,7 @@ const Table = (props) => {
           <div
             onClick={(e) => {
               e.stopPropagation();
-              props.overlay.setOverlay(true);
+              props?.overlay?.setOverlay(true);
             }}
             className="gap-10 delete-all"
           >

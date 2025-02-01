@@ -73,6 +73,10 @@
   right: 20px;
   color: var(--font-color);
 }
+body.arabic .profile > .info > a {
+  right: auto;
+  left: 20px;
+}
 .profile > .info > a:hover {
   color: var(--main-color);
 }
@@ -151,6 +155,10 @@ article.person-info:nth-child(even) > div {
   justify-content: center;
   border-radius: 50%;
   box-shadow: var(--box-shadow);
+}
+body.arabic .single-info > a {
+  right: auto;
+  left: 0;
 }
 .single-info > a:hover {
   background-color: var(--border-color);
@@ -294,6 +302,7 @@ div.categories.grid-3 > div h3 {
   position: absolute;
   top: 20px;
   left: 20px;
+  direction: ltr;
 }
 .media > .media-container > p.add-media {
   position: absolute;
@@ -639,6 +648,9 @@ div.categories.grid-3 > div h3 {
   .profile > .info > a {
     font-size: 12px;
     right: 10px;
+  }
+  body.arabic .profile > .info > a {
+    left: 10px;
   }
 
   .profile > .info > .flex h2 {

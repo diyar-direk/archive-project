@@ -123,9 +123,13 @@ const City = () => {
     let url = `${baseURL}/Cities/search?active=true&limit=${limit}&page=${page}`;
     filters.country && (url += `&country=${filters.country._id}`);
 
-    filters.date.from &&
-      filters.date.to &&
-      (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`);
+    filters.date.from && filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
+      : filters.date.from && !filters.date.to
+      ? (url += `&createdAt[gte]=${filters.date.from}`)
+      : !filters.date.from &&
+        filters.date.to &&
+        (url += `&createdAt[lte]=${filters.date.to}`);
 
     try {
       const data = await axios.post(

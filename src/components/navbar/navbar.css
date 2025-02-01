@@ -38,6 +38,10 @@ nav .search > button {
   border: none;
   background: transparent;
 }
+body.arabic nav .search > button {
+  margin-left: 15px;
+  margin-right: 0;
+}
 nav .search .results {
   position: absolute;
   background-color: var(--body-color);
@@ -569,12 +573,12 @@ div.short-cut div.short-links a:hover {
     bottom: -137px;
   }
 
-  body.arabic nav .setting .lang + div.languages {
-    right: -100%;
-  }
   div.short-cut {
     right: 40px;
     bottom: 40px;
+  }
+  body.arabic div.short-cut {
+    left: 40px;
   }
   div.short-cut i.plus {
     width: 45px;
@@ -614,6 +618,9 @@ div.short-cut div.short-links a:hover {
     bottom: -110px;
     left: -100%;
   }
+  body.arabic nav .setting .lang + div.languages {
+    left: 100%;
+  }
   nav .setting .mode,
   nav .setting .lang i {
     width: 25px;
@@ -628,6 +635,9 @@ div.short-cut div.short-links a:hover {
   }
   nav .search > button {
     margin-right: 10px;
+  }
+  body.arabic nav .search > button {
+    margin-left: 10px;
   }
   nav > div {
     gap: 10px !important;
@@ -790,6 +800,9 @@ div.short-cut div.short-links a:hover {
   div.short-cut {
     right: 30px;
   }
+  body.arabic div.short-cut {
+    left: 30px;
+  }
   div.short-cut i.plus {
     width: 40px;
     height: 40px;
@@ -843,12 +856,5 @@ div.short-cut div.short-links a:hover {
   }
   nav .search > button {
     font-size: 12px;
-  }
-
-  nav .setting .lang + div.languages {
-    left: -40px;
-  }
-  body.arabic nav .setting .lang + div.languages {
-    right: -40px;
   }
 }

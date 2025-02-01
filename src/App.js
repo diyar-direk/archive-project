@@ -28,6 +28,7 @@ import { useEffect } from "react";
 import DashboardAuth from "./Auth/DashboardAuth";
 import Refresh from "./Auth/Refresh";
 import AdminAuth from "./Auth/AdminAuth";
+import Backup from "./pages/backup/Backup";
 
 function App() {
   const location = useLocation();
@@ -52,6 +53,7 @@ function App() {
               <Route element={<AdminAuth />}>
                 <Route path="users" element={<Users />} />
                 <Route path="add_user" element={<AddUser />} />
+                <Route path="backup" element={<Backup />} />
               </Route>
               <Route path="people" element={<People />} />
               <Route path="people/:id" element={<Profile />} />
@@ -63,7 +65,7 @@ function App() {
               <Route path="villages" element={<Village />} />
               <Route path="regions" element={<Region />} />
               <Route path="streets" element={<Street />} />
-                <Route path="sections" element={<Sections />} />
+              <Route path="sections" element={<Sections />} />
               <Route path="sources" element={<Sources />} />
               <Route path="event" element={<Event />} />
               <Route path="party" element={<Party />} />

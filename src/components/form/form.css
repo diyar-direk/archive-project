@@ -96,6 +96,7 @@ body.arabic .selecte .inp::before {
   max-height: 300px;
   overflow-y: auto;
   text-align: center;
+  overflow-x: hidden;
 }
 
 .selecte .inp.active + article {
@@ -123,6 +124,8 @@ div.form .selecte > article input {
   margin-bottom: 10px;
   cursor: pointer;
   font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 div.form .selecte > article h2 {

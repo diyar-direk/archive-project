@@ -43,6 +43,9 @@
   color: var(--font-color);
   padding: 6px 10px 5px 30px;
 }
+body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
+  padding: 6px 30px 5px 10px;
+}
 .overlay .date-fltr span {
   color: var(--font-color);
   text-transform: capitalize;
@@ -267,17 +270,15 @@ tbody td {
   width: 35px;
   height: 35px;
   background-color: transparent;
-  color: var(--font-color);
+  color: var(--main-color);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 6px;
-  border: solid 1px var(--font-color);
   cursor: pointer;
 }
 .pagination h3.active,
 .pagination h3:hover {
-  border: solid 1px transparent;
   background-color: var(--main-color);
   color: white;
 }
@@ -308,7 +309,8 @@ div.table tbody td div.options {
   pointer-events: none;
 }
 body.arabic div.table tbody td div.options {
-  right: -115px;
+  left: auto;
+  right: calc(-100% - 200px);
 }
 
 div.table tbody td i.options.active-div + div {
@@ -424,6 +426,9 @@ div.table div.actions .update {
   div.table tbody td div.options {
     left: calc(-100% - 180px);
   }
+  body.arabic div.table tbody td div.options {
+    right: calc(-100% - 180px);
+  }
   .pagination h3 {
     width: 30px;
     height: 30px;
@@ -479,6 +484,9 @@ div.table div.actions .update {
   }
   .overlay .date-fltr .react-datepicker-wrapper input {
     padding: 5px 8px 5px 25px;
+  }
+  body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 5px 25px 5px 7px;
   }
   .overlay div.filters-setting > span {
     font-size: 17px;
@@ -567,6 +575,9 @@ div.table div.actions .update {
   div.table tbody td div.options {
     left: calc(-100% - 145px);
   }
+  body.arabic div.table tbody td div.options {
+    right: calc(-100% - 145px);
+  }
 }
 
 @media (max-width: 550px) {
@@ -576,6 +587,9 @@ div.table div.actions .update {
   }
   .overlay .date-fltr .react-datepicker-wrapper input {
     padding: 4px 7px 4px 21px;
+  }
+  body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 4px 21px 4px 7px;
   }
   .react-datepicker__input-container .react-datepicker__calendar-icon {
     font-size: 12px;

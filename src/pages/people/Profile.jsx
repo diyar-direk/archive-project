@@ -10,6 +10,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [infoLoading, setInfoLoading] = useState(true);
   const [informations, setInformatios] = useState(false);
+  const [overlay, setOverlay] = useState(false);
   const context = useContext(Context);
   const token = context.userDetails.token;
   const nav = useNavigate();
@@ -123,6 +124,18 @@ const Profile = () => {
 
   return (
     <>
+      {overlay && (
+        <div
+          onClick={() => setOverlay(false)}
+          className="overlay media-overlay"
+        >
+          <article>
+            <div>
+              <img src={overlay} alt="" />
+            </div>
+          </article>
+        </div>
+      )}
       <div className="profile wrap flex">
         {loading ? (
           <article className="image-skeleton">
@@ -139,13 +152,20 @@ const Profile = () => {
               )}
               {(data?.image || image) && (
                 <img
+                  onClick={() => {
+                    setOverlay(
+                      image
+                        ? URL.createObjectURL(image)
+                        : `${mediaURL}${data?.image}`
+                    );
+                  }}
                   src={
                     image
                       ? URL.createObjectURL(image)
                       : `${mediaURL}${data?.image}`
                   }
                   alt="profile"
-                  className="photo w-100"
+                  className="photo w-100 c-pointer"
                 />
               )}
             </div>
