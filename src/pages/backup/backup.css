@@ -1,0 +1,21 @@
+.overlay form.backup input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  border: none;
+  background: var(--body-color);
+  min-width: 300px;
+  font-size: 17px;
+}
+.overlay form.backup button {
+  width: 100%;
+  font-size: 17px;
+}
+.overlay .warning > i {
+  color: red;
+  font-size: 100px;
+}
+.overlay .warning span {
+  color: red;
+  font-weight: bold;
+}

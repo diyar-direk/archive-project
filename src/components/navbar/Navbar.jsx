@@ -308,9 +308,21 @@ const Navbar = () => {
           ></i>
         )}
         <div className="short-links flex-direction center gap-10 flex">
-          <Link className="fa-solid fa-house" href="#"></Link>
-          <Link className="fa-solid fa-house" href="#"></Link>
-          <Link className="fa-solid fa-house" href="#"></Link>
+          <Link
+            title="people"
+            className="fa-solid fa-people-group"
+            to={"/dashboard/people"}
+          ></Link>
+          <Link
+            title="sections"
+            className="fa-solid fa-layer-group"
+            to={"/dashboard/sections"}
+          ></Link>
+          <Link
+            title="informations"
+            className="fa-solid fa-sitemap"
+            to={"/dashboard/informations"}
+          ></Link>
         </div>
       </div>
     </>

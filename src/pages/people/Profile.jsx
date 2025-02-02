@@ -29,6 +29,13 @@ const Profile = () => {
       const data = await axios.get(`${baseURL}/people/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      if (
+        context.userDetails.role === "user" &&
+        context.userDetails.sectionId !== data.data.data.sectionId._id
+      ) {
+        nav("/dashboard/not-found-404");
+        return;
+      }
       setData(data.data.data);
     } catch (error) {
       console.log(error);

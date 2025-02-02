@@ -24,6 +24,13 @@ const UpdateInfo = () => {
         headers: { Authorization: "Bearer " + token },
       })
       .then((res) => {
+        if (
+          context.userDetails.role === "user" &&
+          context.userDetails.sectionId !== res.data.data.sectionId._id
+        ) {
+          nav("/dashboard/not-found-404");
+          return;
+        }
         setForm(res.data.data);
         setDocuments({
           image: res.data.data.media.images,

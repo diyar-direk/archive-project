@@ -25,14 +25,22 @@ const InfoPage = () => {
       const res = await axios.get(`${baseURL}/Information/${id}`, {
         headers: { Authorization: "Bearer " + token },
       });
+      if (
+        context.userDetails.role === "user" &&
+        context.userDetails.sectionId !== res.data.data.sectionId._id
+      ) {
+        nav("/dashboard/not-found-404");
+        return;
+      }
       setData(res.data.data);
     } catch (err) {
-      console.log(err);
       if (err.status === 500) nav("/dashboard/not-fond");
+      console.log(err);
     } finally {
       setLoading(false);
     }
   };
+  console.log(data);
 
   return loading ? (
     <div className="flex flex-direction gap-20">
@@ -100,7 +108,7 @@ const InfoPage = () => {
           name="source_name"
         />
       </div>
-      <MediaShow id={id} data={data.media} getData={getData} />
+      {data.media && <MediaShow id={id} data={data?.media} getData={getData} />}
     </div>
   );
 };

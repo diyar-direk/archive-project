@@ -102,10 +102,10 @@ export const links = [
       {
         title: "back ups",
         path: "/dashboard/backup",
-        role: ["admin", "user"],
+        role: ["admin"],
       },
     ],
     title: "back up",
-    role: ["admin", "user"],
+    role: ["admin"],
   },
 ];

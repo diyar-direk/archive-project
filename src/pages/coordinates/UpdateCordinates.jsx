@@ -58,6 +58,13 @@ const UpdateCoordinates = () => {
       const data = await axios.get(`${baseURL}/Coordinates/${id}`, {
         headers: { Authorization: "Bearer " + token },
       });
+      if (
+        context.userDetails.role === "user" &&
+        context.userDetails.sectionId !== data.data.data.sectionId._id
+      ) {
+        nav("/dashboard/not-found-404");
+        return;
+      }
       setForm(data.data.data);
       const coordinat = data.data.data.coordinates.split(",");
 

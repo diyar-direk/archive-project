@@ -3,16 +3,21 @@ import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
-
+import "./backup.css";
 const Backup = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
+  const [form, setForm] = useState({
+    username: context.userDetails.username,
+    password: "",
+  });
+
   const limit = context?.limit;
   const token = context.userDetails.token;
-  const [search, setSearch] = useState("");
+  const [overlay, setOverlay] = useState({});
   const [filters, setFilters] = useState({
     date: {
       from: "",
@@ -23,8 +28,8 @@ const Backup = () => {
   const header = ["root", "creat at"];
 
   useEffect(() => {
-    if (!search) getData();
-  }, [page, search, limit, filters]);
+    getData();
+  }, [page, limit, filters]);
 
   const getData = async () => {
     setLoading(true);
@@ -42,43 +47,7 @@ const Backup = () => {
         headers: { Authorization: "Bearer " + token },
       });
       dataLength.current = data.data.numberOfroots;
-      console.log(data.data);
 
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, search, limit, filters]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-    let url = `${baseURL}/backup/roots/search?limit=${limit}&page=${page}`;
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      dataLength.current = data.data.numberOfActiveResults;
       setData(data.data.data);
     } catch (error) {
       console.log(error);
@@ -91,40 +60,138 @@ const Backup = () => {
     <tr key={e._id}>
       <td>{e.root}</td>
       <td>{date(e.createdAt)}</td>
-      <td></td>
+      <td>
+        <p
+          onClick={() => {
+            setOverlay({ isActive: true, root: e });
+          }}
+          style={{ color: "#27c12d", fontWeight: "500" }}
+          className="c-pointer text-capitalize"
+        >
+          use this backup
+        </p>
+      </td>
     </tr>
   ));
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${baseURL}/Users/login`, form);
+      if (res.status === 200) {
+        setOverlay({ ...overlay, showStatus: true });
+        setForm({ ...form, password: "" });
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) {
+        alert("wrong username or password");
+      } else alert("network error");
+    }
+  };
+  const handleYes = async () => {
+    try {
+      await axios.post(
+        `${baseURL}/backup/${overlay.type}`,
+        { backupFolderPath: overlay.root.root },
+        { headers: { Authorization: "Bearer " + token } }
+      );
+      
+    } catch (error) {
+      console.log(error);
+      alert("somthing want wrong");
+    }
+  };
   return (
     <>
-      <h1 className="title">Sections</h1>
-      <div className="flex align-start gap-20 wrap">
-        {context.userDetails.isAdmin && (
-          <form className="addresses">
-            <h1>dsa</h1>
-            <label htmlFor="name">section name</label>
-            <input
-              className="inp"
-              required
-              placeholder="please write a section name"
-              type="text"
-              id="name"
-            />
-            <div className="flex wrap gap-10">
-              <button className={`btn flex-1`}>add</button>
-            </div>
-          </form>
-        )}
-        <div className="flex-1">
-          <Table
-            hideActionForUser={true}
-            header={header}
-            loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength.current }}
-            data={{ data: countryData }}
-            filters={{ search, setSearch, filters, setFilters }}
-          />
+      {overlay?.isActive && (
+        <div
+          onClick={() => {
+            setOverlay({});
+          }}
+          className="overlay"
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            {!overlay.form && !overlay.showStatus ? (
+              <>
+                <h1>which operation would you like to proceed with</h1>
+                <p
+                  className="font-color"
+                  style={{ marginBottom: "10px", fontWeight: "500" }}
+                >
+                  {overlay.root.root}
+                </p>
+                <div className="flex gap-10 wrap">
+                  <div
+                    onClick={() =>
+                      setOverlay({ ...overlay, form: true, type: "replace" })
+                    }
+                    className="btn overlay-btn"
+                  >
+                    <i className="fa-solid fa-repeat"></i>
+                    replace
+                  </div>
+                  <div
+                    onClick={() =>
+                      setOverlay({ ...overlay, form: true, type: "restore" })
+                    }
+                    className="delete-all save overlay-btn"
+                  >
+                    <i className="fa-solid fa-window-restore"></i>
+                    restore
+                  </div>
+                </div>
+              </>
+            ) : overlay.form && !overlay.showStatus ? (
+              <form
+                onSubmit={handleSubmit}
+                className="backup center flex-direction gap-10"
+              >
+                <input
+                  type="password"
+                  required
+                  placeholder="please write your password"
+                  value={form.password}
+                  onChange={(e) =>
+                    setForm({ ...form, password: e.target.value })
+                  }
+                />
+                <button className="btn">submit</button>
+              </form>
+            ) : (
+              <div className="flex warning center flex-direction gap-10 wrap">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <h1>
+                  <span>warning</span> this might delete or modify the database
+                </h1>
+                <div className="flex w-100 center gap-20">
+                  <div className="save delete-all overlay-btn">
+                    <i className="fa-solid fa-check"></i> yes
+                  </div>
+                  <div
+                    onClick={() => {
+                      setOverlay({});
+                    }}
+                    className="delete-all overlay-btn"
+                  >
+                    <i className="fa-solid fa-ban"></i> no
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+      )}
+      <h1 className="title">Sections</h1>
+      <div className="flex-1">
+        <Table
+          hideActionForUser={true}
+          header={header}
+          loading={loading}
+          page={{ page: page, setPage, dataLength: dataLength.current }}
+          data={{ data: countryData }}
+          filters={{ filters, setFilters }}
+        />
       </div>
     </>
   );

@@ -34,6 +34,7 @@ const LoginForm = () => {
       const res = await axios.post(`${baseURL}/Users/login`, form);
       if (res.data.user.active) {
         const token = res.data.token;
+
         const user = {
           role: res.data.user.role,
           isAdmin: res.data.user.role === "admin",
@@ -55,6 +56,8 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
+
+
 
   return (
     <div className="login-body">

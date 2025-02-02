@@ -4,10 +4,10 @@ import axios from "axios";
 import Loading from "../loading/Loading";
 
 const MediaShow = (props) => {
-  const data = props.data;
+  const data = props?.data;
   const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
   const noData =
-    [...data.images, ...data.documents, ...data.audios, ...data.videos]
+    [...data?.images, ...data?.documents, ...data?.audios, ...data?.videos]
       .length <= 0;
   const [formLoading, setFormLoading] = useState(false);
   const [overlay, setOverlay] = useState(false);
@@ -355,13 +355,14 @@ const MediaShow = (props) => {
           <div className="media-container center">
             <div className="flex gap-20 wrap">
               <h4 className="center gap-10 font-color">
-                <i className="fa-regular fa-image"></i> {data.images.length}
+                <i className="fa-regular fa-image"></i> {data?.images?.length}
               </h4>
               <h4 className="center gap-10 font-color">
-                <i className="fa-solid fa-video"></i> {data.videos.length}
+                <i className="fa-solid fa-video"></i> {data?.videos?.length}
               </h4>
               <h4 className="center gap-10 font-color">
-                <i className="fa-solid fa-microphone"></i> {data.audios.length}
+                <i className="fa-solid fa-microphone"></i>{" "}
+                {data?.audios?.length}
               </h4>
               <h4 className="center gap-10 font-color">
                 <i className="fa-solid fa-file"></i> {data.documents.length}
@@ -387,8 +388,8 @@ const MediaShow = (props) => {
               <h1>no media found</h1>
             ) : (
               <article className="w-100 grid-3">
-                {data.images.length > 0 &&
-                  data.images.map((e) => (
+                {data?.images?.length > 0 &&
+                  data?.images?.map((e) => (
                     <div key={e._id} className="center flex-direction">
                       <img
                         onClick={() => {
@@ -418,8 +419,8 @@ const MediaShow = (props) => {
                       </p>
                     </div>
                   ))}
-                {data.videos.length > 0 &&
-                  data.videos.map((e) => (
+                {data?.videos?.length > 0 &&
+                  data?.videos?.map((e) => (
                     <div key={e._id} className="center flex-direction">
                       <video
                         className="flex-1"
@@ -442,8 +443,8 @@ const MediaShow = (props) => {
                       </p>
                     </div>
                   ))}
-                {data.audios.length > 0 &&
-                  data.audios.map((e) => (
+                {data?.audios?.length > 0 &&
+                  data?.audios?.map((e) => (
                     <div key={e._id} className="center flex-direction">
                       <audio
                         className="flex-1"
@@ -466,8 +467,8 @@ const MediaShow = (props) => {
                       </p>
                     </div>
                   ))}
-                {data.documents.length > 0 &&
-                  data.documents.map((e) => (
+                {data?.documents?.length > 0 &&
+                  data?.documents?.map((e) => (
                     <div key={e._id} className="center flex-direction">
                       <div className="center flex-1 gap-10 wrap">
                         <img

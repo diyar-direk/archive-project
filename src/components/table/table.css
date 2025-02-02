@@ -260,6 +260,9 @@ tbody td {
   font-size: 18px;
   position: relative;
 }
+tbody tr:hover {
+  background-color: #10378511;
+}
 
 .pagination {
   margin-top: 10px;
