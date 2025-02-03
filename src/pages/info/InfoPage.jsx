@@ -40,7 +40,6 @@ const InfoPage = () => {
       setLoading(false);
     }
   };
-  console.log(data);
 
   return loading ? (
     <div className="flex flex-direction gap-20">

@@ -29,6 +29,7 @@ import DashboardAuth from "./Auth/DashboardAuth";
 import Refresh from "./Auth/Refresh";
 import AdminAuth from "./Auth/AdminAuth";
 import Backup from "./pages/backup/Backup";
+import StreamComponent from "./pages/StreamComponent";
 
 function App() {
   const location = useLocation();
@@ -50,6 +51,7 @@ function App() {
         <Route element={<Refresh />}>
           <Route element={<DashboardAuth />}>
             <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="test" element={<StreamComponent />} />
               <Route element={<AdminAuth />}>
                 <Route path="users" element={<Users />} />
                 <Route path="add_user" element={<AddUser />} />

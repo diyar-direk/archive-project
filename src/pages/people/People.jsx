@@ -57,19 +57,20 @@ const People = (props) => {
 
     document.querySelector("th .checkbox")?.classList.remove("active");
     let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
-    context.userDetails.role === "user" &&
-      (url += `&sectionId=${context.userDetails.sectionId}`);
+    const params = new URLSearchParams();
 
-    const keys = Object.keys(filters);
-    !props?.workSpace &&
-      keys.forEach(
-        (key) =>
-          key !== "date" &&
-          filters[key] &&
-          (url += `&${filters[key]._id ? key + "Id" : key}=${
-            filters[key]._id ? filters[key]._id : filters[key]
-          }`)
-      );
+    context.userDetails.role === "user" &&
+      params.append("sectionId", context.userDetails.sectionId);
+
+    Object.keys(filters).forEach((key) => {
+      if (key !== "date" && filters[key]) {
+        params.append(
+          filters[key]._id ? `${key}Id` : key,
+          filters[key]._id || filters[key]
+        );
+      }
+    });
+
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -77,7 +78,8 @@ const People = (props) => {
       : !filters.date.from &&
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
-
+    url += `&${params.toString()}`;
+    
     try {
       const data = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },

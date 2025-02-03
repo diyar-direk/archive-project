@@ -45,7 +45,7 @@ const LoginForm = () => {
         res.data.user.sectionId && (user.sectionId = res.data.user.sectionId);
         context.setUserDetails(user);
         setCookie("archive_cookie", token);
-        navigate("/dashboard");
+        navigate("/dashboard/people");
       }
     } catch (error) {
       console.log(error);
@@ -56,8 +56,6 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
-
-
 
   return (
     <div className="login-body">
