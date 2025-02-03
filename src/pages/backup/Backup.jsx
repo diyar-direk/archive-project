@@ -96,7 +96,6 @@ const Backup = () => {
         { backupFolderPath: overlay.root.root },
         { headers: { Authorization: "Bearer " + token } }
       );
-      
     } catch (error) {
       console.log(error);
       alert("somthing want wrong");
@@ -143,10 +142,7 @@ const Backup = () => {
                 </div>
               </>
             ) : overlay.form && !overlay.showStatus ? (
-              <form
-                onSubmit={handleSubmit}
-                className="backup center flex-direction gap-10"
-              >
+              <form onSubmit={handleSubmit} className="backup center gap-10">
                 <input
                   type="password"
                   required
@@ -156,7 +152,10 @@ const Backup = () => {
                     setForm({ ...form, password: e.target.value })
                   }
                 />
-                <button className="btn">submit</button>
+                <button
+                  title="submit"
+                  className="btn fa-solid fa-paper-plane"
+                ></button>
               </form>
             ) : (
               <div className="flex warning center flex-direction gap-10 wrap">
@@ -183,6 +182,9 @@ const Backup = () => {
         </div>
       )}
       <h1 className="title">Sections</h1>
+      <button className="center create-backup gap-2 btn save">
+        create backup <i class="fa-solid fa-plus"></i>
+      </button>
       <div className="flex-1">
         <Table
           hideActionForUser={true}
