@@ -150,7 +150,16 @@ const Coordinates = () => {
       document.querySelector("th .checkbox").classList.remove("active");
     }
   };
-
+  const openOptions = (e) => {
+    e.stopPropagation();
+    const div = document.querySelectorAll("div.table tbody td i.options");
+    div.forEach((ele) => {
+      if (ele !== e.target) {
+        ele.classList.remove("active-div");
+      }
+    });
+    e.target.classList.toggle("active-div");
+  };
   const tableData = data?.map((e) => {
     return (
       <tr key={e._id}>
@@ -163,7 +172,11 @@ const Coordinates = () => {
             className="checkbox"
           ></div>
         </td>
-        <td>{e.coordinates}</td>
+        <td>
+          <Link className="name" to={`/dashboard/coordinate/${e._id}`}>
+            {e.coordinates}
+          </Link>
+        </td>
         <td>
           {e.countryId.name} / {e.cityId.name}
         </td>
@@ -174,9 +187,10 @@ const Coordinates = () => {
         <td>{e.sources?.source_name}</td>
         <td>{e?.note}</td>
         <td>{date(e.createdAt)}</td>
-        <td>
-          <div className="center gap-10 actions">
-            <i
+        <td style={{ overflow: "visible" }}>
+          <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>
+          <div className="options has-visit">
+            <div
               onClick={(event) => {
                 event.stopPropagation();
                 setOverlay(true);
@@ -184,12 +198,20 @@ const Coordinates = () => {
                 allSelectors.forEach((e) => e.classList.remove("active"));
                 setSelectedItems([e._id]);
               }}
-              className="delete fa-solid fa-trash"
-            ></i>
+              className="flex delete"
+            >
+              <i className="fa-solid fa-trash"></i> delete
+            </div>
             <Link
-              to={`${e._id}`}
-              className="update fa-regular fa-pen-to-square"
-            ></Link>
+              to={`/dashboard/coordinates/${e._id}`}
+              className="flex update"
+            >
+              <i className="fa-regular fa-pen-to-square"></i>
+              update
+            </Link>
+            <Link to={`/dashboard/coordinate/${e._id}`} className="flex visit">
+              <i className="fa-solid fa-eye"> </i> details
+            </Link>
           </div>
         </td>
       </tr>

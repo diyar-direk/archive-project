@@ -10,9 +10,21 @@ const CategoriesShow = (props) => {
         {props.data?.length > 0 ? (
           props.data?.map((e) =>
             props.name !== "people" ? (
-              <p className="font-color" key={e._id}>
-                <span>{props.title} name:</span> <span> {e[props.name]}</span>
-              </p>
+              props.name !== "coordinates" ? (
+                <p className="font-color" key={e._id}>
+                  <span>{props.title} name:</span> <span> {e[props.name]}</span>
+                </p>
+              ) : (
+                <Link
+                  style={{ display: "block" }}
+                  to={`/dashboard/coordinates/${e._id}`}
+                  className="font-color people-cat"
+                  key={e._id}
+                >
+                  <span>{props.title} name:</span>
+                  <span className="name"> {e[props.name]}</span>
+                </Link>
+              )
             ) : (
               <div className="flex align-center people-cat gap-10" key={e._id}>
                 <Link to={`/people/${e._id}`} className="profile-image">

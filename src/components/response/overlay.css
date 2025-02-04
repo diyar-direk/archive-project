@@ -52,7 +52,14 @@
 .response img {
   width: 40px;
 }
-
+.not-found {
+  min-height: 40vh;
+  height: 100%;
+}
+.not-found h1 {
+  color: var(--font-color);
+  text-transform: capitalize;
+}
 @media (max-width: 1000px) {
   .response {
     top: 60px;
@@ -94,6 +101,9 @@
   .response img {
     width: 25px;
   }
+  .not-found h1 {
+    font-size: 26px;
+  }
 }
 @media (max-width: 500px) {
   .response h1 {
@@ -101,5 +111,8 @@
   }
   .response img {
     width: 20px;
+  }
+  .not-found h1 {
+    font-size: 24px;
   }
 }

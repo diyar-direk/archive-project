@@ -104,13 +104,13 @@ const AddPerson = () => {
 
       try {
         const data = await axios.post(`${baseURL}/people`, formData, {
+          headers: { Authorization: "Bearer " + token },
           onUploadProgress: (progress) => {
             const persent =
               Math.floor((progress.loaded * 100) / progress.total) + "%";
             document.querySelector("div.loading.overlay >h1").innerHTML =
               persent;
           },
-          Authorization: "Bearer " + token,
         });
         if (data.status === 201) {
           responseFun(true);

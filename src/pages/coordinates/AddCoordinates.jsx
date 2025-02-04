@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { MapContainer, TileLayer, useMapEvents } from "react-leaflet";
+import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
 import "../../components/form/form.css";
 import "leaflet/dist/leaflet.css";
 import FormSelect from "../../components/form/FormSelect";
@@ -7,6 +7,7 @@ import Loading from "../../components/loading/Loading";
 import SendData from "../../components/response/SendData";
 import axios from "axios";
 import { baseURL, Context } from "../../context/context";
+import L from "leaflet";
 
 const MapClickHandler = ({ setCoordinates }) => {
   useMapEvents({
@@ -107,7 +108,14 @@ const AddCoordinates = () => {
       }
     }
   };
-
+  const customIcon = L.icon({
+    iconUrl: require("./icons8-location-pin-48.png"),
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+    shadowSize: [41, 41],
+    shadowAnchor: [12, 41],
+  });
   return (
     <>
       {responseOverlay && (
@@ -129,6 +137,12 @@ const AddCoordinates = () => {
             >
               <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
               <MapClickHandler setCoordinates={setCoordinates} />
+              {coordinates?.lat && coordinates?.lng && (
+                <Marker
+                  position={[coordinates?.lat, coordinates?.lng]}
+                  icon={customIcon}
+                />
+              )}
             </MapContainer>
           </div>
         </div>

@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import "./profile.css";
+import "../people/profile.css";
 import axios from "axios";
-import { baseURL, Context, date, mediaURL } from "../../context/context";
+import { baseURL, Context, mediaURL } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
-const Profile = () => {
+import MapComponent from "./MapComponent";
+const CoordPage = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,7 @@ const Profile = () => {
   async function getData() {
     !loading && setLoading(true);
     try {
-      const data = await axios.get(`${baseURL}/people/${id}`, {
+      const data = await axios.get(`${baseURL}/Coordinates/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (
@@ -36,6 +37,7 @@ const Profile = () => {
         nav("/dashboard/not-found-404");
         return;
       }
+
       setData(data.data.data);
     } catch (error) {
       console.log(error);
@@ -63,26 +65,6 @@ const Profile = () => {
     }
   }
 
-  const [image, setImage] = useState(false);
-
-  const updateProfile = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("image", image);
-
-    try {
-      await axios.patch(`${baseURL}/people/${id}`, formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      getData();
-    } catch (error) {
-      console.log(error);
-      alert("some error please try agin");
-    } finally {
-      setImage(false);
-    }
-  };
-
   const info =
     informations &&
     informations?.map((e) => {
@@ -91,7 +73,7 @@ const Profile = () => {
           <h2>subject</h2>
           <p>{e.subject}</p>
           <h2>realted people</h2>
-          {e.people.length > 1 ? (
+          {e.people.length > 0 ? (
             <div>
               <div>
                 {e.people?.map((e) => (
@@ -124,7 +106,7 @@ const Profile = () => {
               </div>
             </div>
           ) : (
-            <p>no other people found</p>
+            <p>no people found</p>
           )}
           <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
             show details
@@ -147,107 +129,30 @@ const Profile = () => {
           </article>
         </div>
       )}
-      <div className="profile wrap flex">
-        {loading ? (
-          <article className="image-skeleton">
-            <Skeleton height={"300px"} width={"100%"} />
-          </article>
-        ) : (
-          <div className="image center flex-direction">
-            <div className="w-100">
-              <h3>
-                {data?.firstName} {data?.fatherName} {data?.surName}
-              </h3>
-              {!data?.image && !image && (
-                <i className="photo w-100 fa-solid fa-user"></i>
-              )}
-              {(data?.image || image) && (
-                <img
-                  onClick={() => {
-                    setOverlay(
-                      image
-                        ? URL.createObjectURL(image)
-                        : `${mediaURL}${data?.image}`
-                    );
-                  }}
-                  src={
-                    image
-                      ? URL.createObjectURL(image)
-                      : `${mediaURL}${data?.image}`
-                  }
-                  alt="profile"
-                  className="photo w-100 c-pointer"
-                />
-              )}
-            </div>
-            <div className="flex center gap-10 w-100 wrap">
-              {!image && (
-                <label htmlFor="file" className="center gap-10">
-                  <input
-                    onInput={(e) => setImage(e.target.files[0])}
-                    type="file"
-                    id="file"
-                    accept="image/*"
-                  />
-                  update
-                  <i className="fa-regular fa-pen-to-square"></i>
-                </label>
-              )}
-              {image && (
-                <>
-                  <button
-                    onClick={() => setImage(false)}
-                    className="btn flex-1 cencel"
-                  >
-                    cencel
-                  </button>
-                  <button onClick={updateProfile} className="btn flex-1 save">
-                    save
-                  </button>
-                </>
-              )}
-            </div>
+      {loading ? (
+        <article className="flex-1 info-skeleton">
+          <Skeleton height={"400px"} width={"100%"} />
+        </article>
+      ) : (
+        <div className="profile wrap flex">
+          <div style={{ zIndex: 1 }} className="w-100">
+            {data?.coordinates && (
+              <MapComponent
+                lat={data?.coordinates?.split(",")[0]}
+                lng={data?.coordinates?.split(",")[1]}
+              />
+            )}
           </div>
-        )}
-
-        {loading ? (
-          <article className="flex-1 info-skeleton">
-            <Skeleton height={"400px"} width={"100%"} />
-          </article>
-        ) : (
           <div className="info">
             <Link
-              to={`/dashboard/update_person/${id}`}
+              to={`/dashboard/coordinates/${id}`}
               className="fa-regular fa-pen-to-square"
             ></Link>
             <div className="flex">
-              <h2>name</h2>
-              <p>
-                {data?.firstName} {data?.fatherName} {data?.surName}
-              </p>
+              <h2>coordinates</h2>
+              <p>{data?.coordinates}</p>
             </div>
-            <div className="flex">
-              <h2>place and date of birth</h2>
-              <p>
-                {data?.placeOfBirth} {data?.birthDate && date(data?.birthDate)}
-              </p>
-            </div>
-            <div className="flex">
-              <h2>gender</h2>
-              <p>{data?.gender}</p>
-            </div>
-            <div className="flex">
-              <h2>maritalStatus</h2>
-              <p>{data?.maritalStatus}</p>
-            </div>
-            <div className="flex">
-              <h2>occupation</h2>
-              <p>{data?.occupation}</p>
-            </div>
-            <div className="flex">
-              <h2>mother name</h2>
-              <p> {data?.motherName} </p>
-            </div>
+
             <div className="flex">
               <h2>country</h2>
               <p> {data?.countryId?.name} </p>
@@ -269,28 +174,24 @@ const Profile = () => {
               <p> {data?.governmentId?.name} </p>
             </div>
             <div className="flex">
-              <h2>addressDetails</h2>
-              <p> {data?.addressDetails} </p>
-            </div>
-            <div className="flex">
               <h2>village</h2>
               <p> {data?.villageId?.name} </p>
             </div>
             <div className="flex">
-              <h2>phone</h2>
-              <p> {data?.phone} </p>
+              <h2>note</h2>
+              <p> {data?.note} </p>
             </div>
             <div className="flex">
-              <h2>email</h2>
-              <p className="email"> {data?.email} </p>
+              <h2>source</h2>
+              <p> {data?.sources?.source_name} </p>
             </div>
             <div className="flex">
-              <h2>section</h2>
-              <p className="email"> {data?.sectionId?.name} </p>
+              <h2>sectionId</h2>
+              <p> {data?.sectionId?.name} </p>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="flex person-info flex-direction gap-20">
         {infoLoading ? (
@@ -306,4 +207,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default CoordPage;

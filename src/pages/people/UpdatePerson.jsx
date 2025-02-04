@@ -53,7 +53,9 @@ const UpdatePerson = () => {
       })
       .catch((err) => {
         console.log(err);
-        if (err.status === 500) nav("/dashboard/not-found-404");
+        if (err.status === 500 || err.status === 404)
+          nav("/dashboard/error-404");
+        err.status === 403 && nav(`/dashboard/error-403`);
       })
       .finally(() => setDataLoading(false));
   }, []);

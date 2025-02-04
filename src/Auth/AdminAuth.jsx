@@ -8,7 +8,7 @@ const AdminAuth = () => {
   return context.userDetails.role === "admin" ? (
     <Outlet />
   ) : (
-    <Navigate state={{ from: location }} replace to={"/dashboard/error-404"} />
+    <Navigate state={{ from: location }} replace to={"/dashboard/error-403"} />
   );
 };
 

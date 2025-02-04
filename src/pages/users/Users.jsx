@@ -132,7 +132,9 @@ const Users = () => {
             className="checkbox"
           ></div>
         </td>
-        <td>{e.username}</td>
+        <td>
+          {e.username} {context.userDetails._id === e._id && "( me )"}
+        </td>
 
         <td> {e.role} </td>
 

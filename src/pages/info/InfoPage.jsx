@@ -14,6 +14,7 @@ const InfoPage = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const nav = useNavigate();
+  console.log(data);
 
   useEffect(() => {
     getData();
@@ -34,7 +35,8 @@ const InfoPage = () => {
       }
       setData(res.data.data);
     } catch (err) {
-      if (err.status === 500) nav("/dashboard/not-fond");
+      if (err.status === 500 || err.status === 404) nav("/dashboard/error-404");
+      err.status === 403 && nav(`/dashboard/error-403`);
       console.log(err);
     } finally {
       setLoading(false);
@@ -92,12 +94,12 @@ const InfoPage = () => {
         <p>{data.addressDetails ? data.addressDetails : "no Details found"}</p>
       </div>
 
-      <CategoriesShow
-        title="coordinates"
-        data={data.coordinates}
-        name="coordinates"
-      />
       <div className="categories grid-3">
+        <CategoriesShow
+          title="coordinates"
+          data={data.coordinates}
+          name="coordinates"
+        />
         <CategoriesShow title="people" name="people" data={data.people} />
         <CategoriesShow title="events" data={data.events} name="name" />
         <CategoriesShow title="parties" data={data.parties} name="name" />

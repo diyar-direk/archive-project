@@ -30,6 +30,9 @@ import Refresh from "./Auth/Refresh";
 import AdminAuth from "./Auth/AdminAuth";
 import Backup from "./pages/backup/Backup";
 import StreamComponent from "./pages/StreamComponent";
+import PageNotFound from "./components/response/PageNotFound";
+import CoordPage from "./pages/coordinates/CoordPage";
+import AccessDenied from "./components/response/AccessDenied";
 
 function App() {
   const location = useLocation();
@@ -45,12 +48,14 @@ function App() {
           <span></span>
         </div>
       </div> */}
-
       <Routes>
         <Route path="/" element={<LoginForm />} />
+        <Route path="*" element={<PageNotFound />} />
         <Route element={<Refresh />}>
           <Route element={<DashboardAuth />}>
             <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="*" element={<PageNotFound />} />
+              <Route path="error-403" element={<AccessDenied />} />
               <Route path="test" element={<StreamComponent />} />
               <Route element={<AdminAuth />}>
                 <Route path="users" element={<Users />} />
@@ -76,6 +81,7 @@ function App() {
               <Route path="add_information" element={<AddInformation />} />
               <Route path="update_info/:id" element={<UpdateInfo />} />
               <Route path="coordinates" element={<Coordinates />} />
+              <Route path="coordinate/:id" element={<CoordPage />} />
               <Route path="coordinates/:id" element={<UpdateCoordinates />} />
               <Route path="add_coordinates" element={<AddCoordinates />} />
             </Route>
