@@ -39,15 +39,14 @@ function App() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
-
   return (
     <div className="App">
-      {/* <div className=" progres">
+      <div className="progres">
         <div className="relative">
-          <h4>0%</h4>
+          <h4></h4>
           <span></span>
         </div>
-      </div> */}
+      </div>
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="*" element={<PageNotFound />} />

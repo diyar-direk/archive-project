@@ -1,8 +1,7 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { baseURL, Context } from "../context/context";
 
 function StreamComponent() {
-  const [data, setData] = useState("");
   const context = useContext(Context);
   useEffect(() => {
     const fetchData = async () => {
@@ -13,21 +12,15 @@ function StreamComponent() {
       const reader = response.body.getReader();
 
       const decoder = new TextDecoder();
-
-      let receivedText = "";
-
       while (true) {
         const { done, value } = await reader.read();
-        if (done) break;
 
-        receivedText += decoder.decode(value, { stream: true });
-        // setData((prev) => prev + decoder.decode(value, { stream: true }));
+        if (done) break;
         document.querySelector("h3.test").innerHTML = decoder.decode(value, {
           stream: true,
         });
       }
     };
-
     fetchData();
   }, []);
 

@@ -4,11 +4,13 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import "./backup.css";
+import Loading from "../../components/loading/Loading";
 const Backup = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(false);
   const context = useContext(Context);
   const [form, setForm] = useState({
     username: context.userDetails.username,
@@ -89,21 +91,84 @@ const Backup = () => {
       } else alert("network error");
     }
   };
-  const handleYes = async () => {
+
+  const createBackup = async (e) => {
+    const progresDiv = document.querySelector(".progres");
+    progresDiv && (progresDiv.style.display = "flex");
     try {
-      await axios.post(
-        `${baseURL}/backup/${overlay.type}`,
-        { backupFolderPath: overlay.root.root },
-        { headers: { Authorization: "Bearer " + token } }
-      );
-    } catch (error) {
-      console.log(error);
-      alert("somthing want wrong");
+      e.target.disabled = true;
+      const response = await fetch(`${baseURL}/backup`, {
+        method: "POST",
+        headers: { Authorization: "Bearer " + context.userDetails.token },
+      });
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+        document.querySelector(".progres > div > h4").innerHTML =
+          decoder.decode(value, {
+            stream: true,
+          });
+      }
+      document.querySelector(".progres > div > span ").style.width = "100%";
+      document.querySelector(".progres > div > h4").style.color = "white";
+      document.querySelector(".progres > div > h4").innerHTML =
+        "completed successfully";
+    } catch {
+      alert("sumthing want error");
+    } finally {
+      setTimeout(() => {
+        document.querySelector(".progres > div > span ").style.width = "0%";
+        progresDiv && (progresDiv.style.display = "none");
+        getData();
+        e.target.disabled = false;
+      }, 2000);
     }
   };
-  
+  const handleYes = async (e) => {
+    e.stopPropagation();
+
+    try {
+      setDataLoading(true);
+      setOverlay({});
+
+      const response = await fetch(`${baseURL}/backup/${overlay.type}`, {
+        method: "POST",
+        body: JSON.stringify({ backupFolderPath: overlay.root.root }),
+        headers: {
+          Authorization: "Bearer " + context.userDetails.token,
+          "Content-Type": "application/json",
+        },
+      });
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          break;
+        }
+        document.querySelector("div.loading.overlay >h1").innerHTML =
+          decoder.decode(value, {
+            stream: true,
+          });
+      }
+    } catch {
+      alert("sumthing want error");
+    } finally {
+      setDataLoading(false);
+      getData();
+    }
+  };
+
   return (
     <>
+      {dataLoading && <Loading />}
       {overlay?.isActive && (
         <div
           onClick={() => {
@@ -145,6 +210,7 @@ const Backup = () => {
             ) : overlay.form && !overlay.showStatus ? (
               <form onSubmit={handleSubmit} className="backup center gap-10">
                 <input
+                  autoFocus
                   type="password"
                   required
                   placeholder="please write your password"
@@ -160,12 +226,15 @@ const Backup = () => {
               </form>
             ) : (
               <div className="flex warning center flex-direction gap-10 wrap">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+                <i className="fa-solid fa-triangle-exclamation"></i>
                 <h1>
                   <span>warning</span> this might delete or modify the database
                 </h1>
                 <div className="flex w-100 center gap-20">
-                  <div className="save delete-all overlay-btn">
+                  <div
+                    onClick={handleYes}
+                    className="save delete-all overlay-btn"
+                  >
                     <i className="fa-solid fa-check"></i> yes
                   </div>
                   <div
@@ -183,8 +252,11 @@ const Backup = () => {
         </div>
       )}
       <h1 className="title">Sections</h1>
-      <button className="center create-backup gap-2 btn save">
-        create backup <i class="fa-solid fa-plus"></i>
+      <button
+        onClick={createBackup}
+        className="center create-backup gap-2 btn save"
+      >
+        create backup <i className="fa-solid fa-plus"></i>
       </button>
       <div className="flex-1">
         <Table
