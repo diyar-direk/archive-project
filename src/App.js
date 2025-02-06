@@ -29,7 +29,6 @@ import DashboardAuth from "./Auth/DashboardAuth";
 import Refresh from "./Auth/Refresh";
 import AdminAuth from "./Auth/AdminAuth";
 import Backup from "./pages/backup/Backup";
-import StreamComponent from "./pages/StreamComponent";
 import PageNotFound from "./components/response/PageNotFound";
 import CoordPage from "./pages/coordinates/CoordPage";
 import AccessDenied from "./components/response/AccessDenied";
@@ -55,7 +54,6 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="*" element={<PageNotFound />} />
               <Route path="error-403" element={<AccessDenied />} />
-              <Route path="test" element={<StreamComponent />} />
               <Route element={<AdminAuth />}>
                 <Route path="users" element={<Users />} />
                 <Route path="add_user" element={<AddUser />} />

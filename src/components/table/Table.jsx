@@ -5,12 +5,14 @@ import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
 import Filters from "./Filters";
 import { useLocation } from "react-router-dom";
+import Loading from "../loading/Loading";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
   const context = useContext(Context);
   const limit = context?.limit;
   const token = context.userDetails.token;
   const [hasFltr, setHasFltr] = useState(false);
+  const [dataLoading, setDataLoading] = useState(false);
   const location = useLocation();
 
   const createPags = (limit, dataLength) => {
@@ -109,6 +111,8 @@ const Table = (props) => {
   };
 
   const deleteData = async () => {
+    props.overlay.setOverlay(false);
+    setDataLoading(true);
     try {
       if (props.items.slectedItems.length > 1) {
         const data = await axios.patch(
@@ -153,6 +157,9 @@ const Table = (props) => {
       }
     } catch (error) {
       console.log(error);
+      alert("somthing want error");
+    } finally {
+      setDataLoading(false);
     }
   };
   const updateLimit = (e) => {
@@ -192,6 +199,7 @@ const Table = (props) => {
 
   return (
     <>
+      {dataLoading && <Loading />}
       {hasFltr && (
         <Filters
           fltr={{

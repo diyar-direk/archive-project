@@ -36,7 +36,7 @@ const Backup = () => {
   const getData = async () => {
     setLoading(true);
     setData([]);
-    let url = `${baseURL}/backup/roots?limit=${limit}&page=${page}`;
+    let url = `${baseURL}/backup/roots?limit=${limit}&page=${page}&sort=-createdAt`;
     filters.date.from && filters.date.to
       ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
       : filters.date.from && !filters.date.to
@@ -158,7 +158,8 @@ const Backup = () => {
             stream: true,
           });
       }
-    } catch {
+    } catch (err) {
+      console.log(err);
       alert("sumthing want error");
     } finally {
       setDataLoading(false);
