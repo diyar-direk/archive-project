@@ -368,12 +368,7 @@ div.categories.grid-3 > div h3 {
   margin-top: 5px;
   border-radius: 4px;
 }
-.media > .media-container > .grid-3 a.view {
-  background-color: #2d2e85;
-}
-.media > .media-container > .grid-3 p.delete:hover {
-  background-color: #a01717;
-}
+
 .media-overlay form:has(label) {
   min-width: 400px;
 }
@@ -419,6 +414,10 @@ div.categories.grid-3 > div h3 {
 .media-overlay form audio {
   max-width: 50vh;
   max-height: 50vh;
+}
+.media-overlay iframe {
+  width: 450px;
+  height: 500px;
 }
 
 @media (max-width: 800px) {

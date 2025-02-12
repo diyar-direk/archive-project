@@ -14,7 +14,6 @@ const InfoPage = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const nav = useNavigate();
-  console.log(data);
 
   useEffect(() => {
     getData();

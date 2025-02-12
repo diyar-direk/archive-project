@@ -21,6 +21,7 @@ const MediaShow = (props) => {
     showImage: false,
     deleteData: false,
     addData: false,
+    showDocs: false,
   });
   const context = useContext(Context);
   const token = context.userDetails.token;
@@ -44,7 +45,12 @@ const MediaShow = (props) => {
       console.log(error);
       alert("some error please try again");
     } finally {
-      setActions({ showImage: false, deleteData: false, addData: false });
+      setActions({
+        showImage: false,
+        deleteData: false,
+        addData: false,
+        showDocs: false,
+      });
       setFormLoading(true);
       setOverlay(false);
     }
@@ -77,6 +83,7 @@ const MediaShow = (props) => {
         showImage: false,
         deleteData: false,
         addData: false,
+        showDocs: false,
       });
       setOverlay(false);
       props.getData();
@@ -87,14 +94,28 @@ const MediaShow = (props) => {
       setFormLoading(false);
     }
   };
+  const [docDownload, setDocDownload] = useState(false);
 
   return (
     <>
+      {docDownload && (
+        <iframe
+          width={"0px"}
+          height={"0px"}
+          src={docDownload}
+          frameborder="0"
+        ></iframe>
+      )}
       {formLoading && <Loading />}
       {overlay && !formLoading && (
         <div
           onClick={() => {
-            setActions({ showImage: false, deleteData: false, addData: false });
+            setActions({
+              showImage: false,
+              deleteData: false,
+              addData: false,
+              showDocs: false,
+            });
             setOverlay(false);
           }}
           className="overlay media-overlay"
@@ -107,6 +128,7 @@ const MediaShow = (props) => {
                     showImage: false,
                     deleteData: false,
                     addData: false,
+                    showDocs: false,
                   });
                   setOverlay(false);
                 }}
@@ -129,6 +151,7 @@ const MediaShow = (props) => {
                       showImage: false,
                       deleteData: false,
                       addData: false,
+                      showDocs: false,
                     });
                     setOverlay(false);
                   }}
@@ -137,6 +160,10 @@ const MediaShow = (props) => {
                   <i className="fa-solid fa-ban"></i> cencel
                 </div>
               </div>
+            </div>
+          ) : actions.showDocs ? (
+            <div>
+              <iframe src={actions.showDocs}></iframe>
             </div>
           ) : (
             <div>
@@ -375,6 +402,7 @@ const MediaShow = (props) => {
                   showImage: false,
                   deleteData: false,
                   addData: true,
+                  showDocs: false,
                 });
                 setOverlay(true);
               }}
@@ -397,6 +425,7 @@ const MediaShow = (props) => {
                             showImage: e.src,
                             deleteData: false,
                             addData: false,
+                            showDocs: false,
                           });
                           setOverlay(true);
                         }}
@@ -411,6 +440,7 @@ const MediaShow = (props) => {
                             showImage: false,
                             deleteData: { data: "images", id: e._id },
                             addData: false,
+                            showDocs: false,
                           });
                         }}
                         className="center gap-10 delete"
@@ -435,6 +465,7 @@ const MediaShow = (props) => {
                             showImage: false,
                             deleteData: { data: "videos", id: e._id },
                             addData: false,
+                            showDocs: false,
                           });
                         }}
                         className="center gap-10 delete"
@@ -459,6 +490,7 @@ const MediaShow = (props) => {
                             showImage: false,
                             deleteData: { data: "audios", id: e._id },
                             addData: false,
+                            showDocs: false,
                           });
                         }}
                         className="center gap-10 delete"
@@ -467,10 +499,26 @@ const MediaShow = (props) => {
                       </p>
                     </div>
                   ))}
+
                 {data?.documents?.length > 0 &&
                   data?.documents?.map((e) => (
                     <div key={e._id} className="center flex-direction">
-                      <div className="center flex-1 gap-10 wrap">
+                      <div
+                        onClick={() => {
+                          if (e.src.split(".").pop() === "pdf") {
+                            setOverlay(true);
+                            setActions({
+                              showImage: false,
+                              deleteData: false,
+                              addData: false,
+                              showDocs: mediaURL + e.src,
+                            });
+                          } else {
+                            setDocDownload(mediaURL + e.src);
+                          }
+                        }}
+                        className="center c-pointer flex-1 gap-10 wrap"
+                      >
                         <img
                           loading="lazy"
                           src={require(`../../pages/info/${e.src
@@ -493,20 +541,13 @@ const MediaShow = (props) => {
                               showImage: false,
                               deleteData: { data: "documents", id: e._id },
                               addData: false,
+                              showDocs: false,
                             });
                           }}
                           className="center gap-10 flex-1 delete"
                         >
                           delete <i className="fa-regular fa-trash-can"></i>
                         </p>
-                        <a
-                          href={`${mediaURL}${e.src}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 center gap-10 view"
-                        >
-                          view file<i className="fa-regular fa-eye"></i>
-                        </a>
                       </div>
                     </div>
                   ))}
