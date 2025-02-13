@@ -478,3 +478,11 @@ body::-webkit-scrollbar {
     font-size: 14px;
   }
 }
+@media print {
+  nav,
+  aside,
+  div.open-aside,
+  div.short-cut i.plus {
+    display: none !important;
+  }
+}

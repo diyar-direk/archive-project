@@ -122,6 +122,13 @@ article.person-info > h2 {
 article.person-info > h2::after {
   content: " : ";
 }
+.overlay.pdf-overlay > div {
+  background-color: #f0f1f3;
+  padding: 10px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
 
 article.person-info > p {
   font-weight: 500;
@@ -142,25 +149,30 @@ article.person-info > div > div {
 article.person-info:nth-child(even) > div {
   background-color: var(--body-color);
 }
-.single-info > a {
+.single-info > div.info-actions {
   position: absolute;
   right: 0;
   top: -15px;
+}
+.single-info > div.info-actions > a,
+.single-info > div.info-actions > i {
   color: var(--font-color);
-  background: var(--aside-color);
-  width: 30px;
-  height: 30px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   box-shadow: var(--box-shadow);
+  background: var(--aside-color);
+  width: 30px;
+  height: 30px;
 }
-body.arabic .single-info > a {
+body.arabic .single-info > div.info-actions {
   right: auto;
   left: 0;
 }
-.single-info > a:hover {
+.single-info > div.info-actions a:hover,
+.single-info > div.info-actions i:hover {
   background-color: var(--border-color);
 }
 .single-info > h1 {
@@ -170,6 +182,10 @@ body.arabic .single-info > a {
 .single-info > h2 {
   text-transform: capitalize;
   color: var(--font-color);
+}
+.pdf-export.single-info > h1,
+.pdf-export.single-info > h2 {
+  color: black;
 }
 .single-info > p {
   background: var(--body-color);
@@ -185,13 +201,41 @@ body.arabic .single-info > a {
   text-transform: capitalize;
   font-weight: 500;
 }
+.pdf-export.single-info > div > h2 {
+  color: black;
+}
+.close-pdf {
+  width: 40px;
+  height: 40px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  color: #bc2d2d;
+  background-color: #ff00001b;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 20px;
+  margin-left: auto;
+}
+.close-pdf:hover {
+  background-color: #ff000052;
+}
+body.arabic .close-pdf {
+  margin-left: 0;
+  margin-right: auto;
+}
 .single-info > div {
   margin-bottom: 10px;
 }
+
 .single-info > div > p {
   color: var(--font-color);
   text-transform: capitalize;
   font-size: 17px;
+}
+.pdf-export.single-info > div > p {
+  color: black;
 }
 .single-info > h2::after,
 .single-info > div > h2::after {
@@ -471,7 +515,8 @@ div.categories.grid-3 > div h3 {
   .single-info > div h3.font-color {
     font-size: 17px;
   }
-  .single-info > a {
+  .single-info > div.info-actions > a,
+  .single-info > div.info-actions > i {
     width: 25px;
     height: 25px;
     font-size: 14px;
@@ -582,7 +627,8 @@ div.categories.grid-3 > div h3 {
   .single-info > div h3.font-color {
     font-size: 15px;
   }
-  .single-info > a {
+  .single-info > div.info-actions > a,
+  .single-info > div.info-actions > i {
     width: 20px;
     height: 20px;
     font-size: 12px;
@@ -638,6 +684,10 @@ div.categories.grid-3 > div h3 {
     font-size: 15px;
     width: 25px;
     height: 25px;
+  }
+  .media-overlay iframe {
+    width: 350px;
+    height: 450px;
   }
 }
 @media (max-width: 550px) {
@@ -707,5 +757,10 @@ div.categories.grid-3 > div h3 {
     font-size: 15px;
     width: 22px;
     height: 22px;
+  }
+  .media-overlay iframe {
+    width: 100%;
+    height: 350px;
+    max-width: 100%;
   }
 }
