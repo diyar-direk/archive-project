@@ -108,7 +108,18 @@ const Backup = () => {
 
         if (done) {
           break;
+        } else if (
+          decoder
+            .decode(value, {
+              stream: true,
+            })
+            .toLowerCase()
+            .includes("error")
+        ) {
+          alert("sumthing want error");
+          break;
         }
+
         document.querySelector(".progres > div > h4").innerHTML =
           decoder.decode(value, {
             stream: true,
@@ -129,6 +140,7 @@ const Backup = () => {
       }, 2000);
     }
   };
+
   const handleYes = async (e) => {
     e.stopPropagation();
 
@@ -151,6 +163,16 @@ const Backup = () => {
         const { done, value } = await reader.read();
 
         if (done) {
+          break;
+        } else if (
+          decoder
+            .decode(value, {
+              stream: true,
+            })
+            .toLowerCase()
+            .includes("error")
+        ) {
+          alert("sumthing want error");
           break;
         }
         document.querySelector("div.loading.overlay >h1").innerHTML =

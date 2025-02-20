@@ -314,9 +314,9 @@ const Navbar = () => {
             to={"/dashboard/people"}
           ></Link>
           <Link
-            title="sections"
-            className="fa-solid fa-layer-group"
-            to={"/dashboard/sections"}
+            title="search by image"
+            className="fa-solid fa-magnifying-glass"
+            to={"/dashboard/search_by_image"}
           ></Link>
           <Link
             title="informations"

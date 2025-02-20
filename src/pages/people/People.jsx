@@ -81,6 +81,7 @@ const People = (props) => {
     url += `&${params.toString()}`;
     
     try {
+     
       const data = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
