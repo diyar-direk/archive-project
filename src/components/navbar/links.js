@@ -22,6 +22,18 @@ export const links = [
     role: ["admin", "user"],
   },
   {
+    icon: "fa-solid fa-magnifying-glass",
+    children: [
+      {
+        title: "search by image",
+        path: "/dashboard/search_by_image",
+        role: ["admin", "user"],
+      },
+    ],
+    title: "search",
+    role: ["admin", "user"],
+  },
+  {
     icon: "fa-solid fa-map-location-dot",
     children: [
       {
@@ -96,6 +108,7 @@ export const links = [
     title: "Coordinates",
     role: ["admin", "user"],
   },
+
   {
     icon: "fa-solid fa-folder-open",
     children: [
