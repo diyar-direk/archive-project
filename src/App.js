@@ -41,12 +41,6 @@ function App() {
   }, [location.pathname]);
   return (
     <div className="App">
-      <div className="progres">
-        <div className="relative">
-          <h4></h4>
-          <span></span>
-        </div>
-      </div>
       <Routes>
         <Route path="/" element={<LoginForm />} />
         <Route path="*" element={<PageNotFound />} />

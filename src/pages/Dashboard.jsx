@@ -13,6 +13,12 @@ const Dashboard = () => {
   };
   return (
     <>
+      <div className="progres">
+        <div className="relative">
+          <h4></h4>
+          <span></span>
+        </div>
+      </div>
       <Navbar />
 
       <main>

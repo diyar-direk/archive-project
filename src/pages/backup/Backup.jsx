@@ -116,7 +116,11 @@ const Backup = () => {
             .toLowerCase()
             .includes("error")
         ) {
-          alert("sumthing want error");
+          alert(
+            decoder.decode(value, {
+              stream: true,
+            })
+          );
           break;
         }
 
@@ -129,12 +133,14 @@ const Backup = () => {
       document.querySelector(".progres > div > h4").style.color = "white";
       document.querySelector(".progres > div > h4").innerHTML =
         "completed successfully";
-    } catch {
-      alert("sumthing want error");
+    } catch (err) {
+      alert(err);
     } finally {
       setTimeout(() => {
         document.querySelector(".progres > div > span ").style.width = "0%";
         progresDiv && (progresDiv.style.display = "none");
+        document.querySelector(".progres > div > h4").style.color =
+          "var(--font-color)";
         getData();
         e.target.disabled = false;
       }, 2000);
@@ -172,7 +178,11 @@ const Backup = () => {
             .toLowerCase()
             .includes("error")
         ) {
-          alert("sumthing want error");
+          alert(
+            decoder.decode(value, {
+              stream: true,
+            })
+          );
           break;
         }
         document.querySelector("div.loading.overlay >h1").innerHTML =
@@ -182,7 +192,7 @@ const Backup = () => {
       }
     } catch (err) {
       console.log(err);
-      alert("sumthing want error");
+      alert(err);
     } finally {
       setDataLoading(false);
       getData();
