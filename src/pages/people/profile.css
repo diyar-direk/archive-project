@@ -122,13 +122,6 @@ article.person-info > h2 {
 article.person-info > h2::after {
   content: " : ";
 }
-.overlay.pdf-overlay > div {
-  background-color: #f0f1f3;
-  padding: 10px;
-  gap: 10px;
-  display: flex;
-  flex-direction: column;
-}
 
 article.person-info > p {
   font-weight: 500;
@@ -183,10 +176,7 @@ body.arabic .single-info > div.info-actions {
   text-transform: capitalize;
   color: var(--font-color);
 }
-.pdf-export.single-info > h1,
-.pdf-export.single-info > h2 {
-  color: black;
-}
+
 .single-info > p {
   background: var(--body-color);
   color: var(--font-color);
@@ -201,30 +191,7 @@ body.arabic .single-info > div.info-actions {
   text-transform: capitalize;
   font-weight: 500;
 }
-.pdf-export.single-info > div > h2 {
-  color: black;
-}
-.close-pdf {
-  width: 40px;
-  height: 40px;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  color: #bc2d2d;
-  background-color: #ff00001b;
-  border-radius: 50%;
-  margin-bottom: 10px;
-  cursor: pointer;
-  font-size: 20px;
-  margin-left: auto;
-}
-.close-pdf:hover {
-  background-color: #ff000052;
-}
-body.arabic .close-pdf {
-  margin-left: 0;
-  margin-right: auto;
-}
+
 .single-info > div {
   margin-bottom: 10px;
 }
@@ -234,9 +201,7 @@ body.arabic .close-pdf {
   text-transform: capitalize;
   font-size: 17px;
 }
-.pdf-export.single-info > div > p {
-  color: black;
-}
+
 .single-info > h2::after,
 .single-info > div > h2::after {
   content: ":";

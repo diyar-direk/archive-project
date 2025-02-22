@@ -2,8 +2,8 @@ export const links = [
   {
     icon: "fa-solid fa-user-group",
     children: [
-      { title: "users", path: "/dashboard/users", role: ["admin"] },
-      { title: "add user", path: "/dashboard/add_user", role: ["admin"] },
+      { title: "users", path: "users", role: ["admin"] },
+      { title: "add user", path: "add_user", role: ["admin"] },
     ],
     title: "users",
     role: ["admin"],
@@ -11,10 +11,10 @@ export const links = [
   {
     icon: "fa-solid fa-people-group",
     children: [
-      { title: "people", path: "/dashboard/people", role: ["admin", "user"] },
+      { title: "people", path: "people", role: ["admin", "user"] },
       {
         title: "add person",
-        path: "/dashboard/add_person",
+        path: "add_person",
         role: ["admin", "user"],
       },
     ],
@@ -26,7 +26,7 @@ export const links = [
     children: [
       {
         title: "search by image",
-        path: "/dashboard/search_by_image",
+        path: "search_by_image",
         role: ["admin", "user"],
       },
     ],
@@ -38,22 +38,22 @@ export const links = [
     children: [
       {
         title: "countries",
-        path: "/dashboard/countries",
+        path: "countries",
         role: ["admin", "user"],
       },
       {
         title: "governments",
-        path: "/dashboard/governments",
+        path: "governments",
         role: ["admin", "user"],
       },
-      { title: "cities", path: "/dashboard/cities", role: ["admin", "user"] },
+      { title: "cities", path: "cities", role: ["admin", "user"] },
       {
         title: "villages",
-        path: "/dashboard/villages",
+        path: "villages",
         role: ["admin", "user"],
       },
-      { title: "streets", path: "/dashboard/streets", role: ["admin", "user"] },
-      { title: "regions", path: "/dashboard/regions", role: ["admin", "user"] },
+      { title: "streets", path: "streets", role: ["admin", "user"] },
+      { title: "regions", path: "regions", role: ["admin", "user"] },
     ],
     title: "Addresses",
     role: ["admin", "user"],
@@ -64,12 +64,12 @@ export const links = [
     children: [
       {
         title: "sections",
-        path: "/dashboard/sections",
+        path: "sections",
         role: ["admin", "user"],
       },
-      { title: "sources", path: "/dashboard/sources", role: ["admin", "user"] },
-      { title: "event", path: "/dashboard/event", role: ["admin", "user"] },
-      { title: "party", path: "/dashboard/party", role: ["admin", "user"] },
+      { title: "sources", path: "sources", role: ["admin", "user"] },
+      { title: "event", path: "event", role: ["admin", "user"] },
+      { title: "party", path: "party", role: ["admin", "user"] },
     ],
     title: "Catagories",
     role: ["admin", "user"],
@@ -79,12 +79,12 @@ export const links = [
     children: [
       {
         title: "informations",
-        path: "/dashboard/informations",
+        path: "informations",
         role: ["admin", "user"],
       },
       {
         title: "add information",
-        path: "/dashboard/add_information",
+        path: "add_information",
         role: ["admin", "user"],
       },
     ],
@@ -96,12 +96,12 @@ export const links = [
     children: [
       {
         title: "Coordinates",
-        path: "/dashboard/coordinates",
+        path: "coordinates",
         role: ["admin", "user"],
       },
       {
         title: "add coordinates",
-        path: "/dashboard/add_coordinates",
+        path: "add_coordinates",
         role: ["admin", "user"],
       },
     ],
@@ -114,7 +114,7 @@ export const links = [
     children: [
       {
         title: "back ups",
-        path: "/dashboard/backup",
+        path: "backup",
         role: ["admin"],
       },
     ],

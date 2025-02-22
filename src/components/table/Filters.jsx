@@ -71,6 +71,15 @@ const Filters = (props) => {
       }
     }
   };
+  const refreshData = (targetKey) => {
+    props.dataArray.setData({
+      ...props.dataArray.data,
+      searchData:
+        props.dataArray.data.dataWithProps[targetKey].length > 0
+          ? props.dataArray.data.dataWithProps
+          : props.dataArray.data.data,
+    });
+  };
 
   const openDiv = (e) => {
     const allDivs = document.querySelectorAll(
@@ -114,7 +123,11 @@ const Filters = (props) => {
           },
         };
 
-        if ((key === "Cities" || key === "Governments") && fltr.country._id) {
+        if (
+          (key === "Cities" || key === "Governments") &&
+          keys.includes("country") &&
+          fltr.country._id
+        ) {
           updatedData.searchData[key] = updatedData.searchData[key].filter(
             (item) => fltr.country._id === item.country._id
           );
@@ -264,9 +277,10 @@ const Filters = (props) => {
           <div
             title={targetKey.backendKey}
             onClick={(target) => {
-              e !== "gender" &&
-                e !== "maritalStatus" &&
+              if (e !== "gender" && e !== "maritalStatus" && e !== "role") {
                 getFltrData(targetKey.backendKey);
+                refreshData(targetKey.backendKey);
+              }
               openDiv(target);
             }}
             className="center gap-10 w-100"

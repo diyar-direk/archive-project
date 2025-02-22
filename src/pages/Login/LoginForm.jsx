@@ -56,6 +56,7 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
+  const darkMode = context.mode;
 
   return (
     <div className="login-body">
@@ -92,8 +93,14 @@ const LoginForm = () => {
             />
           </div>
 
-          <div className="captcha">
+          <div className="center">
             <ReCAPTCHA
+              theme={darkMode ? "dark" : "light"}
+              style={{
+                marginBottom: "10px",
+                overflowY: "hidden",
+                overflowX: "auto",
+              }}
               sitekey="6Lfwf5cqAAAAADOoNDVACW1IGhwg16vYHCATSmKL"
               onChange={handleCaptcha}
             />

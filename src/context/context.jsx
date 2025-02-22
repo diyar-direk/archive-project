@@ -76,6 +76,7 @@ const Provider = ({ children }) => {
         setLimit,
         setProgress,
         progressBar,
+        mode,
       }}
     >
       {children}

@@ -1,14 +1,12 @@
 import axios from "axios";
 import "../people/profile.css";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
 import MediaShow from "../../components/categoriesComp/MediaShow";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import DataComponent from "./DataComponent ";
+import ExportButton from "./DataComponent ";
 const InfoPage = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -16,12 +14,9 @@ const InfoPage = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const nav = useNavigate();
-  const componentRef = useRef(null);
   useEffect(() => {
     getData();
   }, []);
-
-  const [exportPDF, setExportPDF] = useState(false);
 
   const getData = async () => {
     !loading && setLoading(true);
@@ -46,26 +41,6 @@ const InfoPage = () => {
     }
   };
 
-  const handleExportPDF = async () => {
-    const element = componentRef.current;
-    // تحويل العنصر إلى صورة عبر html2canvas
-    const canvas = await html2canvas(element);
-    const imgData = canvas.toDataURL("image/png");
-
-    // إنشاء مستند PDF وإضافة الصورة إليه
-    const pdf = new jsPDF("p", "pt", "a4");
-    const pageWidth = pdf.internal.pageSize.getWidth();
-
-    // لضبط الصورة بشكل يناسب الصفحة
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pageWidth;
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`${data.subject}.pdf`);
-    setExportPDF(false);
-  };
-
   return loading ? (
     <div className="flex flex-direction gap-20">
       <Skeleton height={"400px"} width={"100%"} />
@@ -76,20 +51,17 @@ const InfoPage = () => {
         <Skeleton height={"200px"} width={"100%"} />
       </div>
     </div>
-  ) : !exportPDF ? (
+  ) : (
     <div className="relative single-info">
       <div className="info-actions flex gap-10">
-        <i
-          title="export as PDF"
-          onClick={() => setExportPDF(true)}
-          className="fa-solid fa-download"
-        ></i>
+        <i title="export as PDF" className="fa-solid fa-download"></i>
         <Link
           to={`/dashboard/update_info/${id}`}
           title="update"
           className="fa-regular fa-pen-to-square"
         ></Link>
       </div>
+      <ExportButton data={data} token={token} />
 
       <h1> {data.subject} </h1>
       <h2>details</h2>
@@ -142,25 +114,6 @@ const InfoPage = () => {
       </div>
       {data.media && <MediaShow id={id} data={data?.media} getData={getData} />}
     </div>
-  ) : (
-    <>
-      <i
-        onClick={() => setExportPDF(false)}
-        className="close-pdf fa-solid fa-xmark"
-      ></i>
-      <DataComponent data={data} ref={componentRef} />
-      <div style={{ marginTop: "20px" }} className="flex gap-20 wrap">
-        <button onClick={handleExportPDF} className="btn flex-1 save">
-          <i className="fa-solid fa-download"></i> export
-        </button>
-        <button
-          onClick={() => setExportPDF(false)}
-          className="btn flex-1 cencel"
-        >
-          <i className="fa-solid fa-ban"></i> cencel
-        </button>
-      </div>
-    </>
   );
 };
 

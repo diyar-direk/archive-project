@@ -274,7 +274,7 @@ const Backup = () => {
           </div>
         </div>
       )}
-      <h1 className="title">Sections</h1>
+      <h1 className="title">back up</h1>
       <button
         onClick={createBackup}
         className="center create-backup gap-2 btn save"

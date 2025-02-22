@@ -7,29 +7,39 @@ import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
+import useFeatchData from "../../hooks/useFeatchData";
 const Region = () => {
-  const [data, setData] = useState([]);
-  const dataLength = useRef(0);
-  const [page, setPage] = useState(1);
-  const allPeople = useRef([]);
-  const [slectedItems, setSelectedItems] = useState([]);
   const [overlay, setOverlay] = useState(false);
-  const [loading, setLoading] = useState(true);
   const response = useRef(true);
   const [error, setError] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
-    country: "",
-    government: "",
     city: "",
     date: {
       from: "",
       to: "",
     },
   });
+
+  const {
+    data,
+    dataLength,
+    allPeople,
+    getData,
+    page,
+    setPage,
+    slectedItems,
+    setSelectedItems,
+    loading,
+  } = useFeatchData({
+    URL: "Regions",
+    filters,
+    search,
+    numberOf: "numberOfActiveRegions",
+  });
+
   const context = useContext(Context);
-  const limit = context?.limit;
   const token = context.userDetails.token;
 
   const [responseOverlay, setResponseOverlay] = useState(false);
@@ -67,96 +77,6 @@ const Region = () => {
     }
     error && setError(false);
   }, [update]);
-
-  useEffect(() => {
-    if (!search) getData();
-  }, [page, filters.city, limit, search]);
-
-  const getData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Regions?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.get(url, {
-        headers: { Authorization: "Bearer " + token },
-      });
-
-      dataLength.current = data.data.numberOfActiveRegions;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, filters.city, search, limit]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Regions/search?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        {
-          headers: { Authorization: "Bearer " + token },
-        }
-      );
-      dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const checkOne = (e, element) => {
     e.target.classList.toggle("active");
@@ -309,11 +229,11 @@ const Region = () => {
             hideActionForUser={!context.userDetails.isAdmin}
             header={header}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength.current }}
-            data={{ data: tableData, allData: allPeople.current }}
+            page={{ page: page, setPage, dataLength: dataLength }}
+            data={{ data: tableData, allData: allPeople }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Regions", getData, getSearchData }}
+            delete={{ url: "Regions", getData }}
             filters={{ search, setSearch, filters, setFilters }}
           />
         </div>

@@ -8,14 +8,9 @@ import "../../components/form/form.css";
 import { Context } from "./../../context/context";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
+import useFeatchData from "../../hooks/useFeatchData";
 const City = () => {
-  const [data, setData] = useState([]);
-  const dataLength = useRef(0);
-  const [page, setPage] = useState(1);
-  const allPeople = useRef([]);
-  const [slectedItems, setSelectedItems] = useState([]);
   const [overlay, setOverlay] = useState(false);
-  const [loading, setLoading] = useState(true);
   const response = useRef(true);
   const [error, setError] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
@@ -27,11 +22,24 @@ const City = () => {
       to: "",
     },
   });
-
+  const {
+    data,
+    dataLength,
+    allPeople,
+    getData,
+    page,
+    setPage,
+    slectedItems,
+    setSelectedItems,
+    loading,
+  } = useFeatchData({
+    URL: "Cities",
+    filters,
+    search,
+    numberOf: "numberOfActiveCities",
+  });
   const context = useContext(Context);
   const token = context.userDetails.token;
-
-  const limit = context?.limit;
 
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -76,78 +84,6 @@ const City = () => {
     error && setError(false);
   }, [update]);
 
-  useEffect(() => {
-    if (!search) getData();
-  }, [page, filters.country, search, limit]);
-
-  const getData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Cities?active=true&limit=${limit}&page=${page}`;
-    filters.country && (url += `&country=${filters.country._id}`);
-
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-    try {
-      const data = await axios.get(url, {
-        headers: { Authorization: "Bearer " + token },
-      });
-
-      dataLength.current = data.data.numberOfActiveCities;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, filters.country, search, limit]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Cities/search?active=true&limit=${limit}&page=${page}`;
-    filters.country && (url += `&country=${filters.country._id}`);
-
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
   const checkOne = (e, element) => {
     e.target.classList.toggle("active");
     if (e.target.classList.contains("active")) {
@@ -300,11 +236,11 @@ const City = () => {
             hideActionForUser={!context.userDetails.isAdmin}
             header={header}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength.current }}
-            data={{ data: tableData, allData: allPeople.current }}
+            page={{ page: page, setPage, dataLength: dataLength }}
+            data={{ data: tableData, allData: allPeople }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "cities", getData, getSearchData }}
+            delete={{ url: "cities", getData }}
             filters={{ search, setSearch, filters, setFilters }}
           />
         </div>

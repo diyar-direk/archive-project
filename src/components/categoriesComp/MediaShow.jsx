@@ -432,6 +432,7 @@ const MediaShow = (props) => {
                         alt=""
                         src={`${mediaURL}${e.src}`}
                       />
+
                       <p
                         onClick={(ele) => {
                           ele.preventDefault();

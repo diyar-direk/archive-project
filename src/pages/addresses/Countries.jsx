@@ -5,28 +5,40 @@ import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
+import useFeatchData from "../../hooks/useFeatchData";
 
 const Countries = () => {
-  const [data, setData] = useState([]);
-  const dataLength = useRef(0);
-  const [page, setPage] = useState(1);
-  const allPeople = useRef([]);
-  const [slectedItems, setSelectedItems] = useState([]);
-  const [overlay, setOverlay] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const response = useRef(true);
-  const [responseOverlay, setResponseOverlay] = useState(false);
-  const ref = useRef(null);
-  const [formLoading, setFormLoading] = useState(false);
-  const context = useContext(Context);
-  const limit = context?.limit;
-  const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     date: {
       from: "",
       to: "",
     },
   });
+  const [search, setSearch] = useState("");
+
+  const {
+    data,
+    dataLength,
+    allPeople,
+    getData,
+    page,
+    setPage,
+    slectedItems,
+    setSelectedItems,
+    loading,
+  } = useFeatchData({
+    URL: "Countries",
+    filters,
+    search,
+    numberOf: "numberOfActiveCountries",
+  });
+
+  const [overlay, setOverlay] = useState(false);
+  const response = useRef(true);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+  const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
+  const context = useContext(Context);
 
   const responseFun = (complete = false) => {
     complete === true
@@ -57,77 +69,6 @@ const Countries = () => {
     }
   }, [update]);
 
-  useEffect(() => {
-    if (!search) getData();
-  }, [page, search, limit, filters]);
-
-  const getData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Countries?active=true&limit=${limit}&page=${page}`;
-
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-    try {
-      const data = await axios.get(url, {
-        headers: { Authorization: "Bearer " + token },
-      });
-      dataLength.current = data.data.numberOfActiveCountries;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, search, limit, filters]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Countries/search?active=true&limit=${limit}&page=${page}`;
-
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const checkOne = (e, element) => {
     e.target.classList.toggle("active");
     if (e.target.classList.contains("active")) {
@@ -136,7 +77,7 @@ const Countries = () => {
         "td .checkbox.active"
       );
       const allSelectors = document.querySelectorAll("td .checkbox");
-      if (allSelectors.length === allActiveSelectors.length)
+      if (allSelectors?.length === allActiveSelectors?.length)
         document.querySelector("th .checkbox").classList.add("active");
     } else {
       setSelectedItems((prevSelected) =>
@@ -268,8 +209,8 @@ const Countries = () => {
             hideActionForUser={!context.userDetails.isAdmin}
             header={header}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength.current }}
-            data={{ data: countryData, allData: allPeople.current }}
+            page={{ page: page, setPage, dataLength: dataLength }}
+            data={{ data: countryData, allData: allPeople }}
             items={{ slectedItems: slectedItems, setSelectedItems }}
             overlay={{ overlay: overlay, setOverlay }}
             delete={{ url: "Countries", getData }}

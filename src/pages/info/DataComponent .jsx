@@ -1,83 +1,159 @@
-import React from "react";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import { AlignmentType, Document, Packer, Paragraph, TextRun } from "docx";
+import { mediaURL } from "../../context/context";
 
-const DataComponent = React.forwardRef((props, ref) => {
-  const data = props.data;
-  return (
-    <div
-      onClick={(e) => e.stopPropagation()}
-      ref={ref}
-      style={{ padding: "20px", backgroundColor: "white" }}
-      className="single-info pdf-export"
-    >
-      <h1 style={{ textAlign: "center" }}>{data.subject}</h1>
-      <div className="flex align-center gap-2">
-        <h2> details</h2>
-        <p>{data.details}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2> note</h2>
-        <p>{data.note}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2> country</h2>
-        <p>{data.countryId?.name}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2> city</h2>
-        <p>{data.cityId?.name}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2> government</h2>
-        <p>{data.governmentId?.name}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2>region</h2>
-        <p>{data.regionId ? data.regionId?.name : "no region found"}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2>street</h2>
-        <p>{data.streetId ? data.streetId?.name : "no street found"}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2>village</h2>
-        <p>{data.villageId ? data.villageId?.name : "no village found"}</p>
-      </div>
-      <div className="flex align-center gap-2">
-        <h2>addressDetails</h2>
-        <p>{data.addressDetails ? data.addressDetails : "no Details found"}</p>
-      </div>
-      <ArrayComponent
-        title="coordinates"
-        data={data.coordinates}
-        name="coordinates"
-      />
-      <ArrayComponent title="people" name="people" data={data.people} />
-      <ArrayComponent title="events" data={data.events} name="name" />
-      <ArrayComponent title="parties" data={data.parties} name="name" />
-      <ArrayComponent title="sources" data={data.sources} name="source_name" />
-    </div>
-  );
-});
+const exportDataAsZip = async (data) => {
+  const zip = new JSZip();
+  const createParagraph = (label, value) => {
+    return new Paragraph({
+      children: [
+        new TextRun({
+          text: `${label}:`,
+          bold: true,
+        }),
+        new TextRun({
+          text: value || "No results found",
+          break: 1,
+        }),
+      ],
+    });
+  };
+  const createArrayParagraph = (label, data) => {
+    return new Paragraph({
+      children: [
+        new TextRun({
+          text: `${label}: `,
+          bold: true,
+        }),
+        ...(data?.length > 0
+          ? data.map(
+              (e) =>
+                new TextRun({
+                  text: e.name
+                    ? e.name
+                    : e.coordinates
+                    ? e.coordinates
+                    : e.source_name
+                    ? e.source_name
+                    : `${e.firstName} ${e.fatherName} ${e.surName}`,
+                  break: 1,
+                })
+            )
+          : [
+              new TextRun({
+                text: "No results found",
+                break: 1,
+              }),
+            ]),
+      ],
+    });
+  };
 
-export default DataComponent;
+  // **📄 إنشاء ملف Word (DOCX) يحتوي على التفاصيل**
+  const doc = new Document({
+    sections: [
+      {
+        properties: {
+          page: {
+            size: {
+              orientation: "portrait",
+            },
+            rtl: false,
+          },
+        },
+        children: [
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: data.subject || "No Subject",
+                size: 48,
+                bold: true,
+              }),
+            ],
+            alignment: AlignmentType.CENTER,
+          }),
+          createParagraph("Details", data.details),
+          createParagraph("Note", data.note),
+          createParagraph("Country", data.countryId?.name),
+          createParagraph("City", data.cityId?.name),
+          createParagraph("Government", data.governmentId?.name),
+          createParagraph("Region", data.regionId?.name),
+          createParagraph("Street", data.streetId?.name),
+          createParagraph("Village", data.villageId?.name),
+          createParagraph("Address Details", data.addressDetails),
+          createArrayParagraph("coordinates", data.coordinates),
+          createArrayParagraph("people", data.people),
+          createArrayParagraph("events", data.events),
+          createArrayParagraph("parties", data.parties),
+          createArrayParagraph("sources", data.sources),
+        ],
+      },
+    ],
+  });
 
-const ArrayComponent = (props) => {
-  return (
-    <div>
-      <h2>{props.title}</h2>
-      {props.data?.length < 1 || !props.data ? (
-        <p>no {props.title} found</p>
-      ) : (
-        props.data?.map((item, i) =>
-          props.name !== "people" ? (
-            <p key={i}>{item[props.name]}</p>
-          ) : (
-            <p key={i}>
-              {item.firstName} {item.fatherName} {item.surName}
-            </p>
-          )
-        )
-      )}
-    </div>
-  );
+  // **📂 تحويل مستند Word إلى Blob وإضافته إلى الـ ZIP**
+  const blob = await Packer.toBlob(doc);
+
+  // **📌 حل مشكلة عدم القدرة على التعديل**
+  const newBlob = new Blob([blob], {
+    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  });
+
+  zip.file("Details.docx", newBlob); // ✅ استخدام `new Blob()` لحل المشكلة
+
+  // **📂 تحميل الوسائط وإضافتها إلى الـ ZIP**
+  const addFileToZip = async (folder, files) => {
+    if (!files || files.length === 0) return;
+
+    await Promise.all(
+      files.map(async (file) => {
+        try {
+          const fileName = file.src.split("/").pop();
+          const fileUrl = mediaURL + file.src;
+
+          const response = await fetch(fileUrl);
+          if (!response.ok) throw new Error(`Failed to fetch ${fileUrl}`);
+
+          const fileBlob = await response.blob();
+          folder.file(fileName, fileBlob);
+        } catch (error) {
+          console.error(" خطأ في تحميل الملف:", error);
+        }
+      })
+    );
+  };
+
+  // **📂 إضافة الوسائط إلى مجلدات منفصلة**
+
+  const mediaFolders = {
+    images: zip.folder("Images"),
+    videos: zip.folder("Videos"),
+    documents: zip.folder("Documents"),
+    audios: zip.folder("Audios"),
+  };
+
+  // إضافة الصور
+  addFileToZip(mediaFolders.images, data.media.images);
+
+  // إضافة الفيديوهات
+  addFileToZip(mediaFolders.videos, data.media.videos);
+
+  // إضافة المستندات
+  addFileToZip(mediaFolders.documents, data.media.documents);
+
+  // إضافة الملفات الصوتية
+  addFileToZip(mediaFolders.audios, data.media.audios);
+
+  // **📥 إنشاء وتحميل ملف ZIP**
+  zip.generateAsync({ type: "blob" }).then((content) => {
+    saveAs(content, `${data.subject}.zip`);
+  });
 };
+
+// **📌 استخدام الزر في React**
+export default function ExportButton({ data }) {
+  return (
+    <button onClick={() => exportDataAsZip(data)}>📥 تنزيل البيانات</button>
+  );
+}

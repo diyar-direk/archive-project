@@ -28,12 +28,23 @@ const Navbar = () => {
     if (window.innerWidth <= 500) {
       const nav = document.querySelector("nav");
       if (!nav.classList.contains("closed")) {
-        nav && nav.classList.add("closed");
         localStorage.setItem("isClosed", true);
         context?.setIsClosed(true);
+        nav && nav.classList.add("closed");
       }
     }
   });
+
+  useEffect(() => {
+    if (window.innerWidth <= 500) {
+      const nav = document.querySelector("nav");
+      if (!nav.classList.contains("closed")) {
+        localStorage.setItem("isClosed", true);
+        context?.setIsClosed(true);
+        nav && nav.classList.add("closed");
+      }
+    }
+  }, []);
 
   const modeFun = () => {
     document.body.classList.toggle("dark");
