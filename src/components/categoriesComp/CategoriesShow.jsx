@@ -27,14 +27,17 @@ const CategoriesShow = (props) => {
               )
             ) : (
               <div className="flex align-center people-cat gap-10" key={e._id}>
-                <Link to={`/people/${e._id}`} className="profile-image">
+                <Link
+                  to={`/dashboard/people/${e._id}`}
+                  className="profile-image"
+                >
                   {e.image ? (
                     <img src={mediaURL + e.image} alt="" />
                   ) : (
                     <i className="fa-solid fa-user"></i>
                   )}
                 </Link>
-                <Link to={`/people/${e._id}`} className="name">
+                <Link to={`/dashboard/people/${e._id}`} className="name">
                   {e.firstName} {e.surName}
                 </Link>
               </div>

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ReCAPTCHA from "react-google-recaptcha";
 import "./Login.css";
 import Loading from "../../components/loading/Loading";
 import axios from "axios";
@@ -8,7 +7,6 @@ import { baseURL, Context } from "../../context/context";
 import { useCookies } from "react-cookie";
 
 const LoginForm = () => {
-  const [captchaVerified, setCaptchaVerified] = useState(false);
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -16,17 +14,8 @@ const LoginForm = () => {
   const [, setCookie] = useCookies(["archive_cookie"]);
   const navigate = useNavigate();
 
-  const handleCaptcha = (value) => {
-    if (value) setCaptchaVerified(true);
-    error && setError(false);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!captchaVerified) {
-      setError("Please verify the CAPTCHA.");
-      return;
-    }
 
     setLoading(true);
 
@@ -56,7 +45,6 @@ const LoginForm = () => {
       setLoading(false);
     }
   };
-  const darkMode = context.mode;
 
   return (
     <div className="login-body">
@@ -93,18 +81,6 @@ const LoginForm = () => {
             />
           </div>
 
-          <div className="center">
-            <ReCAPTCHA
-              theme={darkMode ? "dark" : "light"}
-              style={{
-                marginBottom: "10px",
-                overflowY: "hidden",
-                overflowX: "auto",
-              }}
-              sitekey="6Lfwf5cqAAAAADOoNDVACW1IGhwg16vYHCATSmKL"
-              onChange={handleCaptcha}
-            />
-          </div>
           {error && <p className="error"> {error} </p>}
           <button type="submit" className="login-button">
             LOGIN

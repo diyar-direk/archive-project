@@ -54,14 +54,14 @@ const InfoPage = () => {
   ) : (
     <div className="relative single-info">
       <div className="info-actions flex gap-10">
-        <i title="export as PDF" className="fa-solid fa-download"></i>
+        <i title="export" className="fa-solid fa-download"></i>
         <Link
           to={`/dashboard/update_info/${id}`}
           title="update"
           className="fa-regular fa-pen-to-square"
         ></Link>
       </div>
-      <ExportButton data={data} token={token} />
+      {/* <ExportButton data={data} token={token} /> */}
 
       <h1> {data.subject} </h1>
       <h2>details</h2>
