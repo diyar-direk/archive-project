@@ -353,5 +353,24 @@
     "created_at": "",
     "loading": "",
     "no_data": ""
+  },
+  "filter": {
+    "from": "",
+    "from_date_placeholder": "",
+    "to": "",
+    "to_date_placeholder": "",
+    "all_countries": "",
+    "all_governments": "",
+    "all_cities": "",
+    "all_regions": "",
+    "all_genders": "",
+    "all_martialStatus": "",
+    "all_roles": "",
+    "search_by_name": "",
+    "apply": "",
+    "cancel": "",
+    "created_at": "",
+    "loading": "",
+    "no_data": ""
   }
 }
