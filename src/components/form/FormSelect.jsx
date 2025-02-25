@@ -231,13 +231,21 @@ const FormSelect = (props) => {
   };
 
   const selectCategories = (e, itm) => {
-    if (!props.form.form[e.target.id].includes(itm)) {
+    if (
+      props.form.form[e.target.id] &&
+      !props.form.form[e.target.id]?.includes(itm)
+    ) {
       props.form.setForm({
         ...props.form.form,
         [e.target.id]: [...new Set([...props.form.form[e.target.id], itm])],
       });
 
       props.error.error && props.error.setError(false);
+    } else if (!props.form.form[e.target.id]) {
+      props.form.setForm({
+        ...props.form.form,
+        [e.target.id]: [itm],
+      });
     }
   };
 

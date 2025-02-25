@@ -21,6 +21,8 @@ const Filters = (props) => {
 
   const arrayOfKeys = [
     { fltrKey: "gender", backendKey: "gender" },
+    { fltrKey: "credibility", backendKey: "credibility" },
+    { fltrKey: "source_credibility", backendKey: "source_credibility" },
     { fltrKey: "role", backendKey: "role" },
     { fltrKey: "maritalStatus", backendKey: "maritalStatus" },
     { fltrKey: "country", backendKey: "Countries" },
@@ -277,7 +279,13 @@ const Filters = (props) => {
           <div
             title={targetKey.backendKey}
             onClick={(target) => {
-              if (e !== "gender" && e !== "maritalStatus" && e !== "role") {
+              if (
+                e !== "gender" &&
+                e !== "maritalStatus" &&
+                e !== "role" &&
+                e !== "source_credibility" &&
+                e !== "credibility"
+              ) {
                 getFltrData(targetKey.backendKey);
                 refreshData(targetKey.backendKey);
               }
@@ -401,6 +409,49 @@ const Filters = (props) => {
                 }}
               >
                 user
+              </h2>
+            </article>
+          ) : e !== "source_credibility" || e !== "credibility" ? (
+            <article>
+              <h2
+                data-name={e}
+                data-data=""
+                onClick={(e) => {
+                  selectFilters(e);
+                  removeClass(e);
+                }}
+              >
+                all credibility
+              </h2>
+              <h2
+                data-name={e}
+                data-data="High"
+                onClick={(e) => {
+                  selectFilters(e);
+                  removeClass(e);
+                }}
+              >
+                High
+              </h2>
+              <h2
+                data-name={e}
+                data-data="Medium"
+                onClick={(e) => {
+                  selectFilters(e);
+                  removeClass(e);
+                }}
+              >
+                Medium
+              </h2>
+              <h2
+                data-name={e}
+                data-data="Low"
+                onClick={(e) => {
+                  selectFilters(e);
+                  removeClass(e);
+                }}
+              >
+                Low
               </h2>
             </article>
           ) : (

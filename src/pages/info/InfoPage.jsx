@@ -6,7 +6,6 @@ import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
 import MediaShow from "../../components/categoriesComp/MediaShow";
-import ExportButton from "./DataComponent ";
 const InfoPage = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -41,6 +40,43 @@ const InfoPage = () => {
     }
   };
 
+  const handleExport = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8000/api/information/download-information",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/zip", // تأكد من أن السيرفر يرسل نوع الملف الصحيح
+            Authorization: `Bearer ${token}`, // إذا كنت تحتاج المصادقة
+          },
+          body: JSON.stringify({ informationId: id }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "download.zip";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      // تحرير الموارد بعد التحميل
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Download error:", error);
+      alert("Error downloading the file. Please try again.");
+    }
+  };
+
   return loading ? (
     <div className="flex flex-direction gap-20">
       <Skeleton height={"400px"} width={"100%"} />
@@ -54,20 +90,27 @@ const InfoPage = () => {
   ) : (
     <div className="relative single-info">
       <div className="info-actions flex gap-10">
-        <i title="export" className="fa-solid fa-download"></i>
+        <i
+          onClick={handleExport}
+          title="export"
+          className="fa-solid fa-download"
+        ></i>
         <Link
           to={`/dashboard/update_info/${id}`}
           title="update"
           className="fa-regular fa-pen-to-square"
         ></Link>
       </div>
-      {/* <ExportButton data={data} token={token} /> */}
 
       <h1> {data.subject} </h1>
       <h2>details</h2>
       <p>{data.details}</p>
       <h2>note</h2>
       <p>{data.note}</p>
+      <div className="flex align-center gap-10">
+        <h2> credibility</h2>
+        <p>{data.credibility}</p>
+      </div>
       <div className="flex align-center gap-10">
         <h2> country</h2>
         <p>{data.countryId?.name}</p>

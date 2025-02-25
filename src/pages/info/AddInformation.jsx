@@ -37,11 +37,15 @@ const AddInformation = () => {
     streetId: "",
     addressDetails: "",
     //categories data
+    credibility: "",
     sources: [],
     events: [],
     parties: [],
   });
-
+  const handleFormSelect = (e, itm) => {
+    setForm({ ...form, [e.target.id]: itm });
+    error && setError(false);
+  };
   const handleForm = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
     error && setError(false);
@@ -81,6 +85,7 @@ const AddInformation = () => {
     else if (!form.governmentId) setError("please select government");
     else if (!form.cityId) setError("please select city");
     else if (!form.sectionId) setError("please select section");
+    else if (!form.credibility) setError("please select credibility");
     else {
       setLoading(true);
       const keys = Object.keys(form);
@@ -193,6 +198,7 @@ const AddInformation = () => {
             streetId: "",
             addressDetails: "",
             //categories data
+            credibility: "",
             sources: [],
             events: [],
             parties: [],
@@ -216,6 +222,16 @@ const AddInformation = () => {
 
   const deSelect = (id) => {
     setForm({ ...form, people: form.people.filter((e) => e._id !== id._id) });
+  };
+
+  const handleClick = (e) => {
+    e.stopPropagation();
+    const divs = document.querySelectorAll("div.form .selecte .inp.active");
+    divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
+    e.target.classList.toggle("active");
+  };
+  const ignoreSelect = (e) => {
+    setForm({ ...form, [e.target.title]: "" });
   };
 
   return (
@@ -359,12 +375,50 @@ const AddInformation = () => {
               />
             )}
 
+            <div className="flex flex-direction">
+              <label>credibility</label>
+              <div className="selecte relative">
+                <div onClick={handleClick} className="inp">
+                  select credibility
+                </div>
+                <article>
+                  <h2
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    id="credibility"
+                    title="Low"
+                  >
+                    Low
+                  </h2>
+                  <h2
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    id="credibility"
+                    title="Medium"
+                  >
+                    Medium
+                  </h2>
+                  <h2
+                    onClick={(e) => handleFormSelect(e, e.target.title)}
+                    id="credibility"
+                    title="High"
+                  >
+                    High
+                  </h2>
+                </article>
+              </div>
+              {form.credibility && (
+                <span title="credibility" onClick={ignoreSelect}>
+                  {form.credibility}
+                </span>
+              )}
+            </div>
+
             <FormSelect
               formKey="events"
               type="multi"
               error={{ error, setError }}
               form={{ form, setForm }}
             />
+
             <FormSelect
               formKey="parties"
               type="multi"

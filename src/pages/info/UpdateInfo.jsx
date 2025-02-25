@@ -16,6 +16,7 @@ const UpdateInfo = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const [dataLoading, setDataLoading] = useState(true);
+  const [form, setForm] = useState({});
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -31,6 +32,7 @@ const UpdateInfo = () => {
           nav("/dashboard/not-found-404");
           return;
         }
+
         setForm(res.data.data);
         setDocuments({
           image: res.data.data.media.images,
@@ -54,8 +56,6 @@ const UpdateInfo = () => {
   const nav = useNavigate();
 
   const [error, setError] = useState(false);
-
-  const [form, setForm] = useState({});
 
   const handleForm = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
@@ -194,6 +194,20 @@ const UpdateInfo = () => {
 
   const deSelect = (id) => {
     setForm({ ...form, people: form.people.filter((e) => e._id !== id._id) });
+  };
+
+  const handleFormSelect = (e, itm) => {
+    setForm({ ...form, [e.target.id]: itm });
+    error && setError(false);
+  };
+  const handleClick = (e) => {
+    e.stopPropagation();
+    const divs = document.querySelectorAll("div.form .selecte .inp.active");
+    divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
+    e.target.classList.toggle("active");
+  };
+  const ignoreSelect = (e) => {
+    setForm({ ...form, [e.target.title]: "" });
   };
 
   return (
@@ -349,6 +363,43 @@ const UpdateInfo = () => {
                     form={{ form, setForm }}
                   />
                 )}
+
+                <div className="flex flex-direction">
+                  <label>credibility</label>
+                  <div className="selecte relative">
+                    <div onClick={handleClick} className="inp">
+                      select credibility
+                    </div>
+                    <article>
+                      <h2
+                        onClick={(e) => handleFormSelect(e, e.target.title)}
+                        id="credibility"
+                        title="Low"
+                      >
+                        Low
+                      </h2>
+                      <h2
+                        onClick={(e) => handleFormSelect(e, e.target.title)}
+                        id="credibility"
+                        title="Medium"
+                      >
+                        Medium
+                      </h2>
+                      <h2
+                        onClick={(e) => handleFormSelect(e, e.target.title)}
+                        id="credibility"
+                        title="High"
+                      >
+                        High
+                      </h2>
+                    </article>
+                  </div>
+                  {form.credibility && (
+                    <span title="credibility" onClick={ignoreSelect}>
+                      {form.credibility}
+                    </span>
+                  )}
+                </div>
 
                 <FormSelect
                   formKey="events"

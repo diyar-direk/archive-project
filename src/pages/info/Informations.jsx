@@ -23,6 +23,7 @@ const Informations = () => {
       from: "",
       to: "",
     },
+    credibility: "",
   });
 
   const [search, setSearch] = useState("");
@@ -30,6 +31,7 @@ const Informations = () => {
   const header = [
     "subject",
     "detiles",
+    "credibility",
     "place",
     "government",
     "people",
@@ -181,6 +183,7 @@ const Informations = () => {
             {e.details}
           </Link>
         </td>
+        <td> {e.credibility} </td>
         <td>
           {e.countryId?.name} / {e.cityId?.name} / {e.regionId?.name}
         </td>
@@ -241,7 +244,7 @@ const Informations = () => {
 
   return (
     <>
-      <h1 className="title"> info </h1>
+      <h1 className="title">info</h1>
       <Table
         header={header}
         searchInpPlacecholder={`search by subject`}

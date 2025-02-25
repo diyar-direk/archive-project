@@ -26,6 +26,7 @@ const Sources = () => {
       from: "",
       to: "",
     },
+    source_credibility: "",
   });
   const [search, setSearch] = useState("");
   const limit = context?.limit;
@@ -171,6 +172,8 @@ const Sources = () => {
     }
   };
 
+  console.log(data);
+
   const tableData = data?.map((e) => (
     <tr key={e._id}>
       {context.userDetails.isAdmin && (
@@ -303,7 +306,7 @@ const Sources = () => {
         )}
         <div className="flex-1">
           <Table
-            hideActionForUser={true}
+            hideActionForUser={!context.userDetails.isAdmin}
             header={header}
             loading={loading}
             page={{ page: page, setPage, dataLength: dataLength.current }}

@@ -337,7 +337,7 @@ aside > div > div > .links > article a {
 }
 aside > div > div > .links > article a.active,
 aside > div > div > .links > article a:hover {
-  background-color: var(--border-color);
+  background-color: var(--section-color);
   color: var(--font-color);
 }
 .log-out {
@@ -468,6 +468,7 @@ div.short-cut div.short-links a {
 }
 div.short-cut div.short-links a:hover {
   transform: scale(1.1);
+  background: var(--body-color);
 }
 
 .log-show {

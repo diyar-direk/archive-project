@@ -53,10 +53,10 @@ form.dashboard-form > div.form > div .flex-direction .inp {
   color: var(--font-color);
   width: 100%;
   border-radius: 4px;
-  background-color: var(--aside-color);
+  background-color: var(--section-color);
 }
 form.dashboard-form > div.form > div .flex-direction .inp:focus {
-  background-color: var(--section-color);
+  background-color: var(--aside-color);
 }
 
 .selecte .inp {
