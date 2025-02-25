@@ -1,4 +1,4 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
@@ -341,4 +341,4 @@ const Table = (props) => {
   );
 };
 
-export default memo(Table);
+export default Table;

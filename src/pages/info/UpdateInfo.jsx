@@ -263,7 +263,7 @@ const UpdateInfo = () => {
                     className="inp"
                     placeholder="test"
                     id="subject"
-                    rows={4}
+                    rows={5}
                   ></textarea>
                 </div>
                 <div className="flex flex-direction">
@@ -275,19 +275,7 @@ const UpdateInfo = () => {
                     className="inp"
                     placeholder="test"
                     id="note"
-                    rows={4}
-                  ></textarea>
-                </div>
-                <div className="flex flex-direction">
-                  <label htmlFor="details">details</label>
-                  <textarea
-                    value={form.details}
-                    required
-                    onChange={handleForm}
-                    className="inp"
-                    placeholder="test"
-                    id="details"
-                    rows={4}
+                    rows={5}
                   ></textarea>
                 </div>
               </div>
@@ -419,6 +407,25 @@ const UpdateInfo = () => {
                   error={{ error, setError }}
                   form={{ form, setForm }}
                 />
+              </div>
+            </div>
+
+            <div className="form">
+              <h1>
+                <label htmlFor="details">details</label>
+              </h1>
+              <div className="flex wrap">
+                <div className="flex flex-direction">
+                  <textarea
+                    value={form.details}
+                    required
+                    onChange={handleForm}
+                    className="inp"
+                    placeholder="test"
+                    id="details"
+                    rows={4}
+                  ></textarea>
+                </div>
               </div>
             </div>
 

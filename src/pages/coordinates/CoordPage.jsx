@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../people/profile.css";
 import axios from "axios";
-import { baseURL, Context, mediaURL } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import MapComponent from "./MapComponent";
+import MediaComponent from "../../components/MediaComponent";
 const CoordPage = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -88,7 +89,11 @@ const CoordPage = () => {
                           className="profile-image"
                         >
                           {e.image ? (
-                            <img src={mediaURL + e.image} alt="" />
+                            <MediaComponent
+                              src={e.image}
+                              type="image"
+                              showUserIcon
+                            />
                           ) : (
                             <i className="fa-solid fa-user"></i>
                           )}

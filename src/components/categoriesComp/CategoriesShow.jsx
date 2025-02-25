@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { mediaURL } from "../../context/context";
+import MediaComponent from "../MediaComponent";
 
 const CategoriesShow = (props) => {
   return (
@@ -32,7 +32,7 @@ const CategoriesShow = (props) => {
                   className="profile-image"
                 >
                   {e.image ? (
-                    <img src={mediaURL + e.image} alt="" />
+                    <MediaComponent src={e.image} type="image" showUserIcon />
                   ) : (
                     <i className="fa-solid fa-user"></i>
                   )}

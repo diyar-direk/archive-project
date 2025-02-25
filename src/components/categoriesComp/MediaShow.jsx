@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { baseURL, Context, mediaURL } from "../../context/context";
 import axios from "axios";
 import Loading from "../loading/Loading";
+import MediaComponent from "../MediaComponent";
 
 const MediaShow = (props) => {
   const data = props?.data;
@@ -135,7 +136,7 @@ const MediaShow = (props) => {
                 className="fa-classic fa-solid fa-xmark fa-fw"
               ></i>
               <div>
-                <img src={`${mediaURL}${actions.showImage}`} alt="" />
+                <MediaComponent type="image" src={`${actions.showImage}`} />
               </div>
             </article>
           ) : actions.deleteData ? (
@@ -419,7 +420,8 @@ const MediaShow = (props) => {
                 {data?.images?.length > 0 &&
                   data?.images?.map((e) => (
                     <div key={e._id} className="center flex-direction">
-                      <img
+                      <MediaComponent
+                        type={"image"}
                         onClick={() => {
                           setActions({
                             showImage: e.src,
@@ -429,8 +431,7 @@ const MediaShow = (props) => {
                           });
                           setOverlay(true);
                         }}
-                        alt=""
-                        src={`${mediaURL}${e.src}`}
+                        src={e.src}
                       />
 
                       <p
@@ -453,11 +454,12 @@ const MediaShow = (props) => {
                 {data?.videos?.length > 0 &&
                   data?.videos?.map((e) => (
                     <div key={e._id} className="center flex-direction">
-                      <video
+                      <MediaComponent
+                        type="video"
                         className="flex-1"
-                        controls
-                        src={`${mediaURL}${e.src}`}
-                      ></video>
+                        src={e.src}
+                      />
+
                       <p
                         onClick={(ele) => {
                           ele.preventDefault();
@@ -478,11 +480,11 @@ const MediaShow = (props) => {
                 {data?.audios?.length > 0 &&
                   data?.audios?.map((e) => (
                     <div key={e._id} className="center flex-direction">
-                      <audio
+                      <MediaComponent
+                        type="audio"
                         className="flex-1"
-                        controls
-                        src={`${mediaURL}${e.src}`}
-                      ></audio>
+                        src={e.src}
+                      />
                       <p
                         onClick={(ele) => {
                           ele.preventDefault();

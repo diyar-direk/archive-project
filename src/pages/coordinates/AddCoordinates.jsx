@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import "../../components/form/form.css";
 import FormSelect from "../../components/form/FormSelect";
 import Loading from "../../components/loading/Loading";
@@ -30,12 +30,20 @@ const AddCoordinates = () => {
     }, 3000);
   };
 
+  const [coordinates, setCoordinates] = useState({
+    firstNumber: "",
+    firstLetter: "",
+    secondLetter: "",
+    secondNumber: "",
+    thirdNumber: "",
+  });
+  console.log(coordinates);
+
   const [form, setForm] = useState({
     countryId: "",
     governmentId: "",
     cityId: "",
     note: "",
-    coordinates: "",
     streetId: "",
     regionId: "",
     villageId: "",
@@ -87,6 +95,44 @@ const AddCoordinates = () => {
       }
     }
   };
+  const handleForm = (e) => {
+    const { id, value } = e.target;
+    error && setError(false);
+    setCoordinates({ ...coordinates, [id]: value });
+  };
+
+  const callBack = useCallback(() => {
+    const vaildLetter = [
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+    ];
+
+    const options = vaildLetter.map((e) => (
+      <option key={e} value={e}>
+        {e}
+      </option>
+    ));
+
+    return options;
+  }, []);
 
   return (
     <>
@@ -98,49 +144,65 @@ const AddCoordinates = () => {
         <h1 className="title">Add Coordinates</h1>
         <div className="form">
           <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="coordinates">coordinates</label>
+            <div className="flex coordinates flex-direction">
+              <label htmlFor="firstNumber">MGRS coordinates</label>
 
-              <div className="flex gap-20">
+              <div className="flex wrap gap-20">
                 <input
                   required
-                  type="text"
-                  id="coordinates"
+                  min={0}
+                  max={99}
+                  type="number"
+                  id="firstNumber"
                   className="inp"
-                  value={form.coordinates}
-                  placeholder="ex: 37sFB 9817 703298"
+                  placeholder="ex: 37"
+                  value={coordinates.firstNumber}
+                  onInput={handleForm}
+                />
+                <select
+                  onChange={(e) =>
+                    setCoordinates({
+                      ...coordinates,
+                      firstLetter: e.target.value,
+                    })
+                  }
+                  className="inp"
+                  value={coordinates.firstLetter}
+                >
+                  {callBack()}
+                </select>
+                <input
+                  required
+                  minLength={2}
+                  maxLength={2}
+                  value={coordinates.secondLetter}
+                  onInput={handleForm}
+                  type="text"
+                  id="secondLetter"
+                  className="inp"
+                  placeholder="ex: FB"
                 />
                 <input
                   required
-                  type="text"
-                  id="coordinates"
+                  minLength={1}
+                  maxLength={5}
+                  value={coordinates.secondNumber}
+                  onInput={handleForm}
+                  type="number"
+                  id="secondNumber"
                   className="inp"
-                  value={form.coordinates}
-                  placeholder="ex: 37sFB 9817 703298"
+                  placeholder="ex: 09523"
                 />
                 <input
                   required
-                  type="text"
-                  id="coordinates"
+                  minLength={1}
+                  maxLength={5}
+                  value={coordinates.thirdNumber}
+                  onInput={handleForm}
+                  type="number"
+                  id="thirdNumber"
                   className="inp"
-                  value={form.coordinates}
-                  placeholder="ex: 37sFB 9817 703298"
-                />
-                <input
-                  required
-                  type="text"
-                  id="coordinates"
-                  className="inp"
-                  value={form.coordinates}
-                  placeholder="ex: 37sFB 9817 703298"
-                />
-                <input
-                  required
-                  type="text"
-                  id="coordinates"
-                  className="inp"
-                  value={form.coordinates}
-                  placeholder="ex: 37sFB 9817 703298"
+                  placeholder="ex: 0964"
                 />
               </div>
             </div>

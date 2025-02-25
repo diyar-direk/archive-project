@@ -1,9 +1,10 @@
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, date, mediaURL } from "../../context/context";
+import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css";
+import MediaComponent from "../../components/MediaComponent";
 const People = (props) => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -79,9 +80,8 @@ const People = (props) => {
         filters.date.to &&
         (url += `&createdAt[lte]=${filters.date.to}`);
     url += `&${params.toString()}`;
-    
+
     try {
-     
       const data = await axios.get(url, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -214,7 +214,12 @@ const People = (props) => {
         <td>
           <Link to={`/dashboard/people/${e._id}`}>
             {e.image ? (
-              <img src={`${mediaURL}${e.image}`} className="photo" alt="" />
+              <MediaComponent
+                className="photo"
+                src={e.image}
+                type="image"
+                showUserIcon
+              />
             ) : (
               <i className="photo fa-solid fa-user"></i>
             )}

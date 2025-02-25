@@ -55,6 +55,11 @@ form.dashboard-form > div.form > div .flex-direction .inp {
   border-radius: 4px;
   background-color: var(--section-color);
 }
+form.dashboard-form > div.form > div .flex-direction.coordinates .inp {
+  width: auto;
+  flex: 1;
+  outline: none;
+}
 form.dashboard-form > div.form > div .flex-direction .inp:focus {
   background-color: var(--aside-color);
 }

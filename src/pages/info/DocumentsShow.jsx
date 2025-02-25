@@ -2,6 +2,7 @@ import Mammoth from "mammoth";
 import { baseURL, Context, mediaURL } from "./../../context/context";
 import { useContext, useState } from "react";
 import axios from "axios";
+import MediaComponent from "../../components/MediaComponent";
 
 const DocumentsShow = (props) => {
   const addperson = (file) => {
@@ -133,21 +134,11 @@ const DocumentsShow = (props) => {
             return (
               <div className="flex gap-10 docments relative" key={i}>
                 {props.data === "image" ? (
-                  <img
-                    loading="lazy"
-                    src={!e._id ? URL.createObjectURL(e) : mediaURL + e.src}
-                    alt=""
-                  />
+                  <MediaComponent type="image" src={!e._id ? e : e.src} />
                 ) : props.data === "video" ? (
-                  <video
-                    src={!e._id ? URL.createObjectURL(e) : mediaURL + e.src}
-                    controls
-                  ></video>
+                  <MediaComponent type="video" src={!e._id ? e : e.src} />
                 ) : props.data === "audio" ? (
-                  <audio
-                    src={!e._id ? URL.createObjectURL(e) : mediaURL + e.src}
-                    controls
-                  ></audio>
+                  <MediaComponent type="audio" src={!e._id ? e : e.src} />
                 ) : (
                   <article
                     className="c-pointer flex flex-direction relative"
