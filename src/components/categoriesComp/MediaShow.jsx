@@ -99,14 +99,8 @@ const MediaShow = (props) => {
 
   return (
     <>
-      {docDownload && (
-        <iframe
-          width={"0px"}
-          height={"0px"}
-          src={docDownload}
-          frameborder="0"
-        ></iframe>
-      )}
+      {console.log(docDownload)}
+      {docDownload && <MediaComponent src={`${docDownload}`} />}
       {formLoading && <Loading />}
       {overlay && !formLoading && (
         <div
@@ -164,7 +158,11 @@ const MediaShow = (props) => {
             </div>
           ) : actions.showDocs ? (
             <div>
-              <iframe src={actions.showDocs}></iframe>
+              <MediaComponent
+                type="pdf"
+                className="flex-1"
+                src={actions.showDocs}
+              />
             </div>
           ) : (
             <div>
@@ -514,10 +512,13 @@ const MediaShow = (props) => {
                               showImage: false,
                               deleteData: false,
                               addData: false,
-                              showDocs: mediaURL + e.src,
+                              showDocs: e.src,
                             });
+                            {
+                              console.log(mediaURL);
+                            }
                           } else {
-                            setDocDownload(mediaURL + e.src);
+                            setDocDownload(e.src);
                           }
                         }}
                         className="center c-pointer flex-1 gap-10 wrap"

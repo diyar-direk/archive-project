@@ -14,7 +14,7 @@ function MediaComponent({ src, alt = "", type, showUserIcon, ...props }) {
         return;
       }
       try {
-        const response = await axios.get(`${mediaURL}/${src}`, {
+        const response = await axios.get(`${mediaURL}${src}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -22,23 +22,25 @@ function MediaComponent({ src, alt = "", type, showUserIcon, ...props }) {
         });
 
         const imageBlob = URL.createObjectURL(response.data);
-        console.log(imageBlob);
         setImageUrl(imageBlob);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error(error);
       }
     };
 
     fetchImage();
   }, []);
-
   return imageUrl ? (
     type === "video" ? (
       <video {...props} src={imageUrl} controls></video>
     ) : type === "image" ? (
       <img loading="lazy" {...props} src={imageUrl} alt={alt} />
-    ) : (
+    ) : type === "audio" ? (
       <audio src={imageUrl} controls {...props}></audio>
+    ) : type === "pdf" ? (
+      <iframe src={imageUrl}></iframe>
+    ) : (
+      <a download={src.split("/").pop()} href={imageUrl}></a>
     )
   ) : showUserIcon ? (
     <i className="fa-solid fa-user photo"></i>
