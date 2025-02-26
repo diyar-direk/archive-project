@@ -32,12 +32,11 @@ const AddCoordinates = () => {
 
   const [coordinates, setCoordinates] = useState({
     firstNumber: "",
-    firstLetter: "",
+    firstLetter: "S",
     secondLetter: "",
     secondNumber: "",
     thirdNumber: "",
   });
-  console.log(coordinates);
 
   const [form, setForm] = useState({
     countryId: "",
@@ -125,7 +124,7 @@ const AddCoordinates = () => {
       "X",
     ];
 
-    const options = vaildLetter.map((e) => (
+    const options = vaildLetter.map((e, i) => (
       <option key={e} value={e}>
         {e}
       </option>
@@ -173,7 +172,7 @@ const AddCoordinates = () => {
                 </select>
                 <input
                   required
-                  minLength={2}
+                  minLength={1}
                   maxLength={2}
                   value={coordinates.secondLetter}
                   onInput={handleForm}
@@ -188,7 +187,7 @@ const AddCoordinates = () => {
                   maxLength={5}
                   value={coordinates.secondNumber}
                   onInput={handleForm}
-                  type="number"
+                  type="text"
                   id="secondNumber"
                   className="inp"
                   placeholder="ex: 09523"
@@ -199,7 +198,7 @@ const AddCoordinates = () => {
                   maxLength={5}
                   value={coordinates.thirdNumber}
                   onInput={handleForm}
-                  type="number"
+                  type="text"
                   id="thirdNumber"
                   className="inp"
                   placeholder="ex: 0964"
