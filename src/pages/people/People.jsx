@@ -212,7 +212,7 @@ const People = (props) => {
           ></div>
         </td>
         <td>
-          <Link to={`/dashboard/people/${e._id}`}>
+          <Link to={`/dashboard/people/${e._id}`} className="center">
             {e.image ? (
               <MediaComponent
                 className="photo"

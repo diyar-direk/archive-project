@@ -203,7 +203,7 @@ const Informations = () => {
                     : `${person.firstName} ${person.surName}`}
                 </Link>
               );
-            else if (i === 3) arr.push(<span>...</span>);
+            else if (i === 3) arr.push(<span key={i}>...</span>);
             return arr;
           })}
         </td>

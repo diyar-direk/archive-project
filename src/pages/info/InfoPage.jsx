@@ -103,8 +103,7 @@ const InfoPage = () => {
       </div>
 
       <h1> {data.subject} </h1>
-      <h2>details</h2>
-      <p>{data.details}</p>
+
       <h2>note</h2>
       <p>{data.note}</p>
       <div className="flex align-center gap-10">
@@ -139,6 +138,8 @@ const InfoPage = () => {
         <h2>addressDetails</h2>
         <p>{data.addressDetails ? data.addressDetails : "no Details found"}</p>
       </div>
+      <h2>details</h2>
+      <p>{data.details}</p>
 
       <div className="categories grid-3">
         <CategoriesShow

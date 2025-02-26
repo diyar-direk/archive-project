@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { baseURL, Context, mediaURL } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import Loading from "../loading/Loading";
 import MediaComponent from "../MediaComponent";
@@ -99,7 +99,6 @@ const MediaShow = (props) => {
 
   return (
     <>
-      {console.log(docDownload)}
       {docDownload && <MediaComponent src={`${docDownload}`} />}
       {formLoading && <Loading />}
       {overlay && !formLoading && (
@@ -514,9 +513,6 @@ const MediaShow = (props) => {
                               addData: false,
                               showDocs: e.src,
                             });
-                            {
-                              console.log(mediaURL);
-                            }
                           } else {
                             setDocDownload(e.src);
                           }

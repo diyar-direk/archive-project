@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
-import { baseURL, mediaURL, placeholder } from "../../context/context";
+import { baseURL, placeholder } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
@@ -8,6 +8,7 @@ import FormSelect from "../../components/form/FormSelect";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import { Context } from "./../../context/context";
+import MediaComponent from "../../components/MediaComponent";
 const UpdatePerson = () => {
   const [loading, setLoading] = useState(false);
   const context = useContext(Context);
@@ -165,17 +166,20 @@ const UpdatePerson = () => {
               />
 
               {!form.image && <i className="fa-solid fa-user"></i>}
-              {form.image && (
-                <img
-                  alt="profile"
-                  loading="lazy"
-                  src={
-                    newImage
-                      ? URL.createObjectURL(newImage)
-                      : mediaURL + form.image
-                  }
-                />
-              )}
+              {(form?.image || newImage) &&
+                (newImage ? (
+                  <img
+                    alt=""
+                    className="photo w-100 c-pointer"
+                    src={URL.createObjectURL(newImage)}
+                  />
+                ) : (
+                  <MediaComponent
+                    type="image"
+                    className="photo w-100 c-pointer"
+                    src={`${form?.image}`}
+                  />
+                ))}
             </label>
             {newImage && (
               <span onClick={() => setNewImage(false)} className="cencel">

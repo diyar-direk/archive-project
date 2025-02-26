@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
-import { baseURL, Context, date, mediaURL } from "../../context/context";
+import { baseURL, Context, date } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import MediaComponent from "../../components/MediaComponent";
 import Virtual from "../../components/Virtual";
@@ -108,12 +108,11 @@ const Profile = () => {
                             to={`/dashboard/people/${e._id}`}
                             className="profile-image"
                           >
-                            {console.log(e.image)}
                             {e.image ? (
                               <MediaComponent
                                 src={e.image}
                                 type="image"
-                                // showUserIcon
+                                showUserIcon
                               />
                             ) : (
                               <i className="fa-solid fa-user"></i>
@@ -170,18 +169,26 @@ const Profile = () => {
               {!data?.image && !image && (
                 <i className="photo w-100 fa-solid fa-user"></i>
               )}
-              {(data?.image || image) && (
-                <MediaComponent
-                  type="image"
-                  className="photo w-100 c-pointer"
-                  src={image ? URL.createObjectURL(image) : `${data?.image}`}
-                  onClick={() => {
-                    setOverlay(
-                      image ? URL.createObjectURL(image) : `${data?.image}`
-                    );
-                  }}
-                />
-              )}
+              {(data?.image || image) &&
+                (image ? (
+                  <img
+                    alt=""
+                    className="photo w-100 c-pointer"
+                    src={URL.createObjectURL(image)}
+                    onClick={() => {
+                      setOverlay(image);
+                    }}
+                  />
+                ) : (
+                  <MediaComponent
+                    type="image"
+                    className="photo w-100 c-pointer"
+                    src={`${data?.image}`}
+                    onClick={() => {
+                      setOverlay(`${data?.image}`);
+                    }}
+                  />
+                ))}
             </div>
             <div className="flex center gap-10 w-100 wrap">
               {!image && (

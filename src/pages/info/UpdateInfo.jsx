@@ -92,6 +92,7 @@ const UpdateInfo = () => {
     else if (!form.governmentId) setError("please select government");
     else if (!form.cityId) setError("please select city");
     else if (!form.sectionId) setError("please select section");
+    else if (!form.credibility) setError("please select credibility");
     else {
       setLoading(true);
       const keys = Object.keys(form);

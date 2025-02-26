@@ -1,5 +1,5 @@
 import Mammoth from "mammoth";
-import { baseURL, Context, mediaURL } from "./../../context/context";
+import { baseURL, Context } from "./../../context/context";
 import { useContext, useState } from "react";
 import axios from "axios";
 import MediaComponent from "../../components/MediaComponent";
@@ -99,34 +99,49 @@ const DocumentsShow = (props) => {
     }
   };
 
+  const [showPdf, setShowPdf] = useState(false);
+
   return (
     <>
       {overlay && (
-        <div className="overlay">
-          <div onClick={(e) => e.stopPropagation()}>
-            <h1>are you sure yo want to delete this itms</h1>
-            <div className="flex gap-10 wrap">
-              <div onClick={deleteData} className="delete-all overlay-btn">
-                <i className="fa-solid fa-trash"></i> delete
-              </div>
-              <div
-                onClick={() => {
-                  setDeleteDoc({
-                    image: {},
-                    video: {},
-                    audio: {},
-                    list: {},
-                  });
-                  setOverlay(false);
-                }}
-                className="delete-all cencel overlay-btn"
-              >
-                <i className="fa-solid fa-ban"></i> cencel
+        <div
+          onClick={() => {
+            setOverlay(false);
+            showPdf && setShowPdf(false);
+          }}
+          className="overlay"
+        >
+          {!showPdf ? (
+            <div onClick={(e) => e.stopPropagation()}>
+              <h1>are you sure yo want to delete this itms</h1>
+              <div className="flex gap-10 wrap">
+                <div onClick={deleteData} className="delete-all overlay-btn">
+                  <i className="fa-solid fa-trash"></i> delete
+                </div>
+                <div
+                  onClick={() => {
+                    setDeleteDoc({
+                      image: {},
+                      video: {},
+                      audio: {},
+                      list: {},
+                    });
+                    setOverlay(false);
+                  }}
+                  className="delete-all cencel overlay-btn"
+                >
+                  <i className="fa-solid fa-ban"></i> cencel
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <div onClick={(e) => e.stopPropagation()}>
+              <MediaComponent type="pdf" className="flex-1" src={showPdf} />
+            </div>
+          )}
         </div>
       )}
+
       <div className="form">
         <h1>{props.data} selected</h1>
         <div className="grid-3">
@@ -163,8 +178,11 @@ const DocumentsShow = (props) => {
                         </div>
                       </div>
                     ) : (
-                      <a
-                        href={mediaURL + e.src}
+                      <div
+                        onClick={() => {
+                          setOverlay(true);
+                          setShowPdf(e.src);
+                        }}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex gap-10 wrap files"
@@ -179,7 +197,7 @@ const DocumentsShow = (props) => {
                         >
                           <h3>{e.src.split("/").pop()}</h3>
                         </div>
-                      </a>
+                      </div>
                     )}
 
                     <div
