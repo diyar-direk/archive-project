@@ -183,22 +183,22 @@ const AddCoordinates = () => {
                 />
                 <input
                   required
-                  minLength={1}
-                  maxLength={5}
+                  min={1}
+                  max={99999}
                   value={coordinates.secondNumber}
                   onInput={handleForm}
-                  type="text"
+                  type="number"
                   id="secondNumber"
                   className="inp"
                   placeholder="ex: 09523"
                 />
                 <input
                   required
-                  minLength={1}
-                  maxLength={5}
+                  min={1}
+                  max={99999}
                   value={coordinates.thirdNumber}
                   onInput={handleForm}
-                  type="text"
+                  type="number"
                   id="thirdNumber"
                   className="inp"
                   placeholder="ex: 0964"
