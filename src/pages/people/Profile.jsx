@@ -5,6 +5,7 @@ import axios from "axios";
 import { baseURL, Context, date, mediaURL } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import MediaComponent from "../../components/MediaComponent";
+import Virtual from "../../components/Virtual";
 const Profile = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -88,54 +89,56 @@ const Profile = () => {
     informations &&
     informations?.map((e) => {
       return (
-        <article key={e._id} className="person-info">
-          <h2>subject</h2>
-          <p>{e.subject}</p>
-          <h2>realted people</h2>
-          {e.people.length > 1 ? (
-            <div>
+        <Virtual>
+          <article key={e._id} className="person-info">
+            <h2>subject</h2>
+            <p>{e.subject}</p>
+            <h2>realted people</h2>
+            {e.people.length > 1 ? (
               <div>
-                {e.people?.map((e) => (
-                  <div
-                    className="flex align-center people-cat gap-10"
-                    key={e._id}
-                  >
-                    {e._id !== id && (
-                      <>
-                        <Link
-                          to={`/dashboard/people/${e._id}`}
-                          className="profile-image"
-                        >
-                          {console.log(e.image)}
-                          {e.image ? (
-                            <MediaComponent
-                              src={e.image}
-                              type="image"
-                              // showUserIcon
-                            />
-                          ) : (
-                            <i className="fa-solid fa-user"></i>
-                          )}
-                        </Link>
-                        <Link
-                          to={`/dashboard/people/${e._id}`}
-                          className="name"
-                        >
-                          {e.firstName} {e.surName}
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                ))}
+                <div>
+                  {e.people?.map((e) => (
+                    <div
+                      className="flex align-center people-cat gap-10"
+                      key={e._id}
+                    >
+                      {e._id !== id && (
+                        <>
+                          <Link
+                            to={`/dashboard/people/${e._id}`}
+                            className="profile-image"
+                          >
+                            {console.log(e.image)}
+                            {e.image ? (
+                              <MediaComponent
+                                src={e.image}
+                                type="image"
+                                // showUserIcon
+                              />
+                            ) : (
+                              <i className="fa-solid fa-user"></i>
+                            )}
+                          </Link>
+                          <Link
+                            to={`/dashboard/people/${e._id}`}
+                            className="name"
+                          >
+                            {e.firstName} {e.surName}
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <p>no other people found</p>
-          )}
-          <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
-            show details
-          </Link>
-        </article>
+            ) : (
+              <p>no other people found</p>
+            )}
+            <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
+              show details
+            </Link>
+          </article>
+        </Virtual>
       );
     });
 
