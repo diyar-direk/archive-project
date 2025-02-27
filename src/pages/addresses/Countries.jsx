@@ -6,6 +6,7 @@ import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import useFeatchData from "../../hooks/useFeatchData";
+import useLanguage from "../../hooks/useLanguage";
 
 const Countries = () => {
   const [filters, setFilters] = useState({
@@ -15,7 +16,7 @@ const Countries = () => {
     },
   });
   const [search, setSearch] = useState("");
-
+  const { language } = useLanguage();
   const {
     data,
     dataLength,
@@ -56,7 +57,7 @@ const Countries = () => {
   };
   const token = context.userDetails.token;
 
-  const header = ["name", "creat at"];
+  const header = [language?.country?.country_name, language?.country?.created_at];
   const [name, setName] = useState("");
   const [update, setUpdate] = useState(false);
 
@@ -173,17 +174,17 @@ const Countries = () => {
       )}
       {formLoading && <Loading />}
 
-      <h1 className="title">Countries</h1>
+      <h1 className="title">{language?.header?.countries}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this country" : "add new countery"}</h1>
-            <label htmlFor="name">country name</label>
+            <h1>{update ? language?.country?.update_country : language?.country?.add_new_country}</h1>
+            <label htmlFor="name">{language?.country?.country_name} </label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a country name"
+              placeholder={language?.country?.country_name_placeholder}
               value={name}
               type="text"
               onInput={(e) => setName(e.target.value)}
@@ -191,14 +192,14 @@ const Countries = () => {
             />
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update ? language?.country?.add_btn : language?.country?.save}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel"
                 >
-                  cencel
+                  {language?.country?.cancel}
                 </button>
               )}
             </div>

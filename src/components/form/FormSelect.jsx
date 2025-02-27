@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, searchPlaceholder } from "../../context/context";
 import "./form-select.css";
 import axios from "axios";
+import useLanguage from "../../hooks/useLanguage";
 
 const FormSelect = (props) => {
   const handleClick = (e) => {
@@ -14,7 +15,7 @@ const FormSelect = (props) => {
     const selectDiv = document.querySelector("div.form .selecte .inp.active");
     selectDiv && selectDiv.classList.remove("active");
   });
-
+  const { language } = useLanguage();
   const keyValues = Keys(props.formKey);
   const context = useContext(Context);
   const token = context.userDetails.token;
@@ -156,70 +157,87 @@ const FormSelect = (props) => {
           key: "Cities",
           formKey: "cityId",
           requiredKey: "countryId",
+          translatedRequiredKey: language?.header?.country,
           backendRequiredKey: "country",
+          title: language?.table?.cities,
         };
       case "allCity":
         return {
           key: "Cities",
           formKey: "city",
+          title: language?.table?.cities,
         };
       case "government":
         return {
           key: "Governments",
           formKey: "governmentId",
           requiredKey: "countryId",
+          translatedRequiredKey: language?.header?.country,
           backendRequiredKey: "country",
+          title: language?.table?.governments,
         };
       case "country":
         return {
           key: "Countries",
           formKey: "countryId",
+          title: language?.table?.countries,
         };
       case "coordinates":
         return {
           key: "Coordinates",
           formKey: "coordinates",
+          title: language?.table?.coordinates,
         };
       case "region":
         return {
           key: "Regions",
           formKey: "regionId",
           requiredKey: "cityId",
+          translatedRequiredKey: language?.header?.city,
           backendRequiredKey: "city",
+          title: language?.table?.regions,
         };
       case "street":
         return {
           key: "Streets",
           formKey: "streetId",
           requiredKey: "cityId",
+          translatedRequiredKey: language?.header?.city,
           backendRequiredKey: "city",
+          title: language?.table?.streets,
         };
       case "village":
         return {
           key: "Villages",
           formKey: "villageId",
           requiredKey: "cityId",
+          translatedRequiredKey: language?.header?.city,
           backendRequiredKey: "city",
+          title: language?.table?.villages,
         };
       case "sources":
         return {
           key: "Sources",
           formKey: "sources",
+          title: language?.table?.sources,
         };
       case "events":
         return {
           key: "Events",
           formKey: "events",
+          title: language?.table?.events,
         };
       case "parties":
         return {
           key: "Parties",
           formKey: "parties",
+          title: language?.table?.parties,
         };
       case "section":
         return {
           key: "Sections",
           formKey: "sectionId",
+          title: language?.table?.sections,
         };
       default:
         return "countryId";
@@ -260,7 +278,7 @@ const FormSelect = (props) => {
 
   return (
     <div className="flex flex-direction">
-      <label>{keyValues.key}</label>
+      <label>{keyValues.title}</label>
       <div className="selecte relative">
         <div
           onClick={(e) => {
@@ -271,16 +289,16 @@ const FormSelect = (props) => {
           }}
           className="inp"
         >
-          select {keyValues.key}
+          {language?.table?.select} {keyValues.title}
         </div>
 
         <article>
           {dataLoading[keyValues.key] && !keyValues.requiredKey ? (
-            <p>loading ...</p>
+            <p>{language?.table?.loading}</p>
           ) : props.form.form[keyValues.requiredKey] &&
             dataLoading[keyValues.key] &&
             keyValues.requiredKey ? (
-            <p>loading ...</p>
+            <p>{language?.table?.loading}</p>
           ) : (
             <>
               {!keyValues.requiredKey ||
@@ -290,7 +308,7 @@ const FormSelect = (props) => {
                   <input
                     onClick={(e) => e.stopPropagation()}
                     autoFocus
-                    placeholder={`${searchPlaceholder} ${keyValues.key}`}
+                    placeholder={`${language?.table?.search_for} ${keyValues.title}`}
                     onInput={(inp) => {
                       const filteredCountries =
                         allDataSelect?.data?.[keyValues.key]?.filter((e) =>
@@ -334,11 +352,14 @@ const FormSelect = (props) => {
                     </h2>
                   ))}
                   {allDataSelect?.searchData[keyValues.key]?.length === 0 && (
-                    <p>no data</p>
+                    <p>{language?.table?.no_results}</p>
                   )}
                 </>
               ) : (
-                <p>please select {[keyValues.requiredKey]} first</p>
+                <p>
+                  {language?.table?.please_selecet}{" "}
+                  {[keyValues.translatedRequiredKey]} {language?.table?.first}
+                </p>
               )}
             </>
           )}
