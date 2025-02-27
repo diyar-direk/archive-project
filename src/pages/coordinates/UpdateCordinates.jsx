@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "../../components/form/form.css";
 import FormSelect from "../../components/form/FormSelect";
 import Loading from "../../components/loading/Loading";
@@ -168,7 +162,7 @@ const UpdateCoordinates = () => {
     }
   };
 
-  const callBack = useCallback(() => {
+  const callBack = useMemo(() => {
     const vaildLetter = [
       "C",
       "D",
@@ -237,7 +231,7 @@ const UpdateCoordinates = () => {
                     className="inp"
                     value={coordinates.firstLetter}
                   >
-                    {callBack()}
+                    {callBack}
                   </select>
                   <input
                     required

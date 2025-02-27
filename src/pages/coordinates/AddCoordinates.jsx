@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useContext, useMemo, useRef, useState } from "react";
 import "../../components/form/form.css";
 import FormSelect from "../../components/form/FormSelect";
 import Loading from "../../components/loading/Loading";
@@ -128,7 +128,9 @@ const AddCoordinates = () => {
     }
   };
 
-  const callBack = useCallback(() => {
+  const callBack = useMemo(() => {
+    console.log(1);
+
     const vaildLetter = [
       "C",
       "D",
@@ -195,7 +197,7 @@ const AddCoordinates = () => {
                   className="inp"
                   value={coordinates.firstLetter}
                 >
-                  {callBack()}
+                  {callBack}
                 </select>
                 <input
                   required
