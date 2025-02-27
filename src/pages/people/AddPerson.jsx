@@ -5,6 +5,7 @@ import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
+import useLanguage from "../../hooks/useLanguage";
 const AddPerson = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -19,6 +20,7 @@ const AddPerson = () => {
     const selectDiv = document.querySelector("div.form .selecte .inp.active");
     selectDiv && selectDiv.classList.remove("active");
   });
+  const { language } = useLanguage();
 
   const [error, setError] = useState(false);
 
@@ -81,13 +83,15 @@ const AddPerson = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.maritalStatus) setError("please select maritalStatus");
-    else if (!form.gender) setError("please select gender");
-    else if (!form.countryId) setError("please select country");
-    else if (!form.governmentId) setError("please select government");
-    else if (!form.cityId) setError("please select city");
-    else if (!form.sectionId) setError("please select section");
-    else if (!form.sources) setError("please select source");
+    if (!form.maritalStatus)
+      setError(language?.error?.please_selecet_maritalStatus);
+    else if (!form.gender) setError(language?.error?.please_selecet_gender);
+    else if (!form.countryId) setError(language?.error?.please_selecet_country);
+    else if (!form.governmentId)
+      setError(language?.error?.please_selecet_government);
+    else if (!form.cityId) setError(language?.error?.please_selecet_city);
+    else if (!form.sectionId) setError(language?.error?.please_selecet_section);
+    else if (!form.sources) setError(language?.error?.please_selecet_source);
     else {
       setLoading(true);
       const keys = Object.keys(form);
@@ -156,7 +160,7 @@ const AddPerson = () => {
         <SendData data={`person`} response={response.current} />
       )}
       {loading && <Loading />}
-      <h1 className="title">add person</h1>
+      <h1 className="title">{language?.header?.add_person}</h1>
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form form-profile">
           <label className="gap-10 center">
@@ -181,10 +185,10 @@ const AddPerson = () => {
         </div>
 
         <div className="form">
-          <h1>personal information</h1>
+          <h1>{language?.people?.personal_information}</h1>
           <div className="flex wrap">
             <div className="flex flex-direction">
-              <label htmlFor="firstName">first name</label>
+              <label htmlFor="firstName">{language?.people?.first_name}</label>
               <input
                 required
                 type="text"
@@ -192,12 +196,14 @@ const AddPerson = () => {
                 className="inp"
                 value={form.firstName}
                 onChange={handleForm}
-                placeholder={`${placeholder} first name`}
+                placeholder={language?.people?.first_name_placeholder}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="fatherName">fother name</label>
+              <label htmlFor="fatherName">
+                {language?.people?.father_name}
+              </label>
               <input
                 required
                 value={form.fatherName}
@@ -205,12 +211,12 @@ const AddPerson = () => {
                 type="text"
                 id="fatherName"
                 className="inp"
-                placeholder={`${placeholder} fother name`}
+                placeholder={language?.people?.father_name_placeholder}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="surName">last name</label>
+              <label htmlFor="surName">{language?.people?.last_name}</label>
               <input
                 value={form.surName}
                 onChange={handleForm}
@@ -218,15 +224,15 @@ const AddPerson = () => {
                 type="text"
                 id="surName"
                 className="inp"
-                placeholder={`${placeholder} last name`}
+                placeholder={language?.people?.last_name_placeholder}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label>gender</label>
+              <label>{language?.people?.gender}</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  select gender
+                  {language?.people?.select_gender}
                 </div>
                 <article>
                   <h2
@@ -234,14 +240,14 @@ const AddPerson = () => {
                     id="gender"
                     title="Male"
                   >
-                    male
+                    {language?.people?.male}
                   </h2>
                   <h2
                     onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="gender"
                     title="Female"
                   >
-                    Female
+                    {language?.people?.female}
                   </h2>
                 </article>
               </div>
@@ -253,10 +259,10 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label>maritalStatus</label>
+              <label>{language?.people?.marital_status}</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  select maritalStatus
+                {language?.people?.select_marital_status}
                 </div>
                 <article>
                   <h2
@@ -264,21 +270,21 @@ const AddPerson = () => {
                     id="maritalStatus"
                     title="Married"
                   >
-                    Married
+                    {language?.people?.married}
                   </h2>
                   <h2
                     onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Single"
                   >
-                    single
+                    {language?.people?.single}
                   </h2>
                   <h2
                     onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="maritalStatus"
                     title="Other"
                   >
-                    Other
+                    {language?.people?.other}
                   </h2>
                 </article>
               </div>
@@ -290,7 +296,7 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="motherName">mother name</label>
+              <label htmlFor="motherName"> {language?.people?.motherName}</label>
               <input
                 value={form.motherName}
                 onChange={handleForm}
@@ -298,12 +304,12 @@ const AddPerson = () => {
                 type="text"
                 id="motherName"
                 className="inp"
-                placeholder={`${placeholder} mother name`}
+                placeholder={language?.people?.motherName_placeholder}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="birthDate">date of birth</label>
+              <label htmlFor="birthDate">{language?.people?.date_of_birth}</label>
               <input
                 value={form.birthDate}
                 onChange={handleForm}
@@ -315,7 +321,7 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="placeOfBirth">place of birth</label>
+              <label htmlFor="placeOfBirth">{language?.people?.place_of_birth}</label>
               <input
                 required
                 value={form.placeOfBirth}
@@ -323,12 +329,12 @@ const AddPerson = () => {
                 type="text"
                 id="placeOfBirth"
                 className="inp"
-                placeholder={`${placeholder} place of birth`}
+                placeholder={language?.people?.place_of_birth_placeholder}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="occupation">occupation</label>
+              <label htmlFor="occupation">{language?.people?.occupation}</label>
               <input
                 value={form.occupation}
                 onChange={handleForm}
@@ -336,14 +342,14 @@ const AddPerson = () => {
                 type="text"
                 id="occupation"
                 className="inp"
-                placeholder={`${placeholder} occupation`}
+                placeholder={language?.people?.occupation_placeholder}
               />
             </div>
           </div>
         </div>
 
         <div className="form">
-          <h1>stay informations</h1>
+          <h1>{language?.people?.adress_information}</h1>
           <div className="flex wrap">
             <FormSelect
               formKey="country"
@@ -379,12 +385,12 @@ const AddPerson = () => {
             />
 
             <div className="flex flex-direction">
-              <label htmlFor="addressDetails">addressDetails</label>
+              <label htmlFor="addressDetails">{language?.people?.extra_adress_details}</label>
               <textarea
                 value={form.addressDetails}
                 onChange={handleForm}
                 className="inp"
-                placeholder="test"
+                placeholder={language?.people?.extra_adress_details_placeholder}
                 id="addressDetails"
                 rows={4}
               ></textarea>
@@ -396,7 +402,7 @@ const AddPerson = () => {
           <h1>contact informations</h1>
           <div className="flex wrap">
             <div className="flex flex-direction">
-              <label htmlFor="phone">phone</label>
+              <label htmlFor="phone">{language?.people?.phone}</label>
               <input
                 required
                 value={form.phone}
@@ -404,25 +410,25 @@ const AddPerson = () => {
                 type="text"
                 id="phone"
                 className="inp"
-                placeholder={`${placeholder} phone`}
+                placeholder={language?.people?.phone_placeholder}
               />
             </div>
             <div className="flex flex-direction">
-              <label htmlFor="email">email</label>
+              <label htmlFor="email">{language?.people?.email}</label>
               <input
                 value={form.email}
                 onChange={handleForm}
                 type="email"
                 id="email"
                 className="inp"
-                placeholder={`${placeholder} email`}
+                placeholder={language?.people?.email_placeholder}
               />
             </div>
           </div>
         </div>
 
         <div className="form">
-          <h1>more informations</h1>
+          <h1>{language?.people?.more_information}</h1>
           <div className="flex wrap">
             {context.userDetails.isAdmin && (
               <FormSelect
@@ -440,7 +446,7 @@ const AddPerson = () => {
         </div>
 
         {error && <p className="error"> {error} </p>}
-        <button className="btn">save</button>
+        <button className="btn">{language?.people?.save}</button>
       </form>
     </>
   );

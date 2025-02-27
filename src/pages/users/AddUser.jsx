@@ -5,6 +5,7 @@ import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
+import useLanguage from "../../hooks/useLanguage";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -18,6 +19,7 @@ const AddUser = () => {
     const selectDiv = document.querySelector("div.form .selecte .inp.active");
     selectDiv && selectDiv.classList.remove("active");
   });
+  const { language } = useLanguage();
 
   const [error, setError] = useState(false);
 
@@ -78,10 +80,11 @@ const AddUser = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.role) setError("please select role");
+    if (!form.role) setError(language?.table?.please_selecet_role);
     else if (form.role === "user" && !form.sectionId)
-      setError("please select section");
-    else if (form.password !== passwordCon) setError("passowrd most be same");
+      setError(language?.table?.please_selecet_section);
+    else if (form.password !== passwordCon)
+      setError(language?.table?.password_match);
     else {
       setLoading(true);
       const keys = Object.keys(form);
@@ -116,6 +119,7 @@ const AddUser = () => {
       }
     }
   };
+  console.log(language);
 
   return (
     <>
@@ -123,12 +127,12 @@ const AddUser = () => {
         <SendData data={`person`} response={response.current} />
       )}
       {loading && <Loading />}
-      <h1 className="title">add user</h1>
+      <h1 className="title">{language?.header?.add_users}</h1>
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form">
           <div className="flex wrap">
             <div className="flex flex-direction">
-              <label htmlFor="username">user name</label>
+              <label htmlFor="username">{language?.users?.user_name}</label>
               <input
                 required
                 type="text"
@@ -138,15 +142,15 @@ const AddUser = () => {
                 className="inp"
                 value={form.username}
                 onChange={handleForm}
-                placeholder={`${placeholder} user name`}
+                placeholder={language?.users?.user_name_placeHolder}
               />
             </div>
 
             <div className="flex flex-direction">
-              <label>role</label>
+              <label>{language?.users?.select_role}</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                  select role
+                  {language?.users?.select_role}
                 </div>
                 <article>
                   <h2
@@ -154,14 +158,14 @@ const AddUser = () => {
                     id="role"
                     title="user"
                   >
-                    user
+                    {language?.users?.user}
                   </h2>
                   <h2
                     onClick={(e) => handleFormSelect(e, e.target.title)}
                     id="role"
                     title="admin"
                   >
-                    admin
+                    {language?.users?.admin}
                   </h2>
                 </article>
               </div>
@@ -180,7 +184,7 @@ const AddUser = () => {
             )}
 
             <div className="flex flex-direction">
-              <label htmlFor="password">password</label>
+              <label htmlFor="password">{language?.users?.password}</label>
               <input
                 value={form.password}
                 onChange={handleForm}
@@ -189,11 +193,13 @@ const AddUser = () => {
                 minLength={6}
                 id="password"
                 className="inp"
-                placeholder={`${placeholder} password`}
+                placeholder={language?.users?.password_placeHolder}
               />
             </div>
             <div className="flex flex-direction">
-              <label htmlFor="passwordConf">password confirmation</label>
+              <label htmlFor="passwordConf">
+                {language?.users?.password_confirmation}
+              </label>
               <input
                 value={passwordCon}
                 onChange={(e) => setPasswordCon(e.target.value)}
@@ -201,14 +207,14 @@ const AddUser = () => {
                 type="password"
                 id="passwordConf"
                 className="inp"
-                placeholder={`${placeholder} password`}
+                placeholder={language?.users?.password_confirmation_placeholder}
               />
             </div>
           </div>
         </div>
 
         {error && <p className="error"> {error} </p>}
-        <button className="btn">save</button>
+        <button className="btn">{language?.users?.save}</button>
       </form>
     </>
   );

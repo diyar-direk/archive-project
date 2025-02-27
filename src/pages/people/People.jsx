@@ -5,6 +5,7 @@ import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css";
 import MediaComponent from "../../components/MediaComponent";
+import useLanguage from "../../hooks/useLanguage";
 const People = (props) => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -16,6 +17,7 @@ const People = (props) => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const limit = context?.limit;
+  const { language } = useLanguage();
 
   const [filters, setFilters] = useState({
     gender: "",
@@ -34,17 +36,17 @@ const People = (props) => {
 
   const header = [
     "",
-    "name",
-    "gender",
-    "mother Name",
-    "marital status",
-    "occupation",
-    "place & date of birth",
-    "Place of residence",
-    "government",
-    "phone",
-    "email",
-    "create at",
+    language?.people?.name,
+    language?.people?.gender,
+    language?.people?.motherName,
+    language?.people?.marital_status,
+    language?.people?.occupation,
+    language?.people?.place_date_of_birth,
+    language?.people?.place_of_residence,
+    language?.people?.government,
+    language?.people?.phone,
+    language?.people?.email,
+    language?.people?.created_at,
   ];
 
   useEffect(() => {
@@ -262,17 +264,19 @@ const People = (props) => {
                   }}
                   className="flex delete"
                 >
-                  <i className="fa-solid fa-trash"></i> delete
+                  <i className="fa-solid fa-trash"></i>
+                  {language?.table?.delete}
                 </div>
                 <Link
                   to={`/dashboard/update_person/${e._id}`}
                   className="flex update"
                 >
                   <i className="fa-regular fa-pen-to-square"></i>
-                  update
+                  {language?.table?.update}
                 </Link>
                 <Link to={`${e._id}`} className="flex visit">
-                  <i className="fa-solid fa-circle-user"></i> visit
+                  <i className="fa-solid fa-circle-user"></i>
+                  {language?.table?.visit}
                 </Link>
               </div>
             </>
@@ -284,7 +288,9 @@ const People = (props) => {
 
   return (
     <>
-      {!props?.workSpace && <h1 className="title"> people </h1>}
+      {!props?.workSpace && (
+        <h1 className="title"> {language?.header?.people} </h1>
+      )}
       <Table
         header={header}
         workSpace={{ workSpace: props?.workSpace, infoForm: props?.people }}

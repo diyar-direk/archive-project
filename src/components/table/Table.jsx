@@ -6,6 +6,7 @@ import { Context } from "./../../context/context";
 import Filters from "./Filters";
 import { useLocation } from "react-router-dom";
 import Loading from "../loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
 const Table = (props) => {
   const header = props.header.map((th, i) => <th key={i}> {th} </th>);
   const context = useContext(Context);
@@ -14,7 +15,7 @@ const Table = (props) => {
   const [hasFltr, setHasFltr] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const location = useLocation();
-
+  const { language } = useLanguage();
   const createPags = (limit, dataLength) => {
     const pages = Math.ceil(dataLength / limit);
     if (pages <= 1) return;
@@ -216,12 +217,12 @@ const Table = (props) => {
         <div className="overlay">
           <div onClick={(e) => e.stopPropagation()}>
             <h1>
-              are you sure yo want to delete ({props.items.slectedItems.length})
-              itms
+              {language?.table?.are_you_sure_delete}(
+              {props.items.slectedItems.length}){language?.table?.items}
             </h1>
             <div className="flex gap-10 wrap">
               <div onClick={deleteData} className="delete-all overlay-btn">
-                <i className="fa-solid fa-trash"></i> delete
+                <i className="fa-solid fa-trash"></i> {language?.table?.delete}
               </div>
               <div
                 onClick={() => {
@@ -231,7 +232,7 @@ const Table = (props) => {
                 }}
                 className="delete-all cencel overlay-btn"
               >
-                <i className="fa-solid fa-ban"></i> cencel
+                <i className="fa-solid fa-ban"></i> {language?.table?.cancel}
               </div>
             </div>
           </div>
@@ -253,7 +254,7 @@ const Table = (props) => {
               placeholder={`${
                 props.searchInpPlacecholder
                   ? props.searchInpPlacecholder
-                  : "search by name"
+                  : language?.table?.serach_by_name
               }`}
               value={beforSubmit}
               onInput={(e) => {
@@ -264,7 +265,7 @@ const Table = (props) => {
             />
 
             <button className="btn center gap-10">
-              <span>search</span>{" "}
+              <span>{language?.table?.search_btn}</span>
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </>
@@ -311,11 +312,14 @@ const Table = (props) => {
             className={props.loading || props.data?.data ? "relative" : ""}
           >
             {props.loading ? (
-              <div className="table-loading"> loading ...</div>
+              <div className="table-loading"> {language?.table?.loading}</div>
             ) : props.data?.data?.length > 0 ? (
               props.data.data
             ) : (
-              <div className="table-loading"> no data</div>
+              <div className="table-loading">
+                {" "}
+                {language?.table?.no_results}
+              </div>
             )}
           </tbody>
         </table>
@@ -330,8 +334,8 @@ const Table = (props) => {
             }}
             className="gap-10 delete-all"
           >
-            <i className="fa-solid fa-trash"></i> delete (
-            {props.items.slectedItems.length}) Item
+            <i className="fa-solid fa-trash"></i> {language?.table?.delete} (
+            {props.items.slectedItems.length}){language?.table?.items}
           </div>
         )}
       <div className="pagination flex">
