@@ -51,16 +51,21 @@ const AddCoordinates = () => {
   });
 
   const handleSubmit = async (e) => {
+    const formData = {
+      ...form,
+      coordinates: `${coordinates.firstNumber}${coordinates.firstLetter} ${coordinates.secondLetter} ${coordinates.secondNumber} ${coordinates.thirdNumber}`,
+    };
+
     e.preventDefault();
-    if (!form.countryId) setError("please select country");
-    else if (!form.cityId) setError("please select city");
-    else if (!form.governmentId) setError("please select government");
-    else if (!form.sectionId) setError("please select scetion");
-    else if (!form.sources) setError("please select scetion");
+    if (!formData.countryId) setError("please select country");
+    else if (!formData.cityId) setError("please select city");
+    else if (!formData.governmentId) setError("please select government");
+    else if (!formData.sectionId) setError("please select scetion");
+    else if (!formData.sources) setError("please select source");
     else {
       setLoading(true);
-      const keys = Object.keys(form);
-      const data = { ...form };
+      const keys = Object.keys(formData);
+      const data = { ...formData };
       keys.forEach((key) => {
         data[key]
           ? (data[key] = data[key]?._id ? data[key]?._id : data[key])
@@ -84,6 +89,13 @@ const AddCoordinates = () => {
             sources: "",
             sectionId: context.userDetails.sectionId || "",
           });
+          setCoordinates({
+            firstNumber: "",
+            firstLetter: "S",
+            secondLetter: "",
+            secondNumber: "",
+            thirdNumber: "",
+          });
         }
       } catch (error) {
         console.log(error);
@@ -95,9 +107,25 @@ const AddCoordinates = () => {
     }
   };
   const handleForm = (e) => {
-    const { id, value } = e.target;
-    error && setError(false);
-    setCoordinates({ ...coordinates, [id]: value });
+    const { id, value, maxLength } = e.target;
+
+    const updatedValue = isNaN(value) ? value.toUpperCase() : value;
+
+    if (value.length > maxLength) return;
+
+    if (error) setError(false);
+
+    setCoordinates((prev) => ({ ...prev, [id]: updatedValue }));
+
+    if (value.length === maxLength) {
+      let nextInput = e.target.nextElementSibling;
+
+      while (nextInput && nextInput.tagName !== "INPUT") {
+        nextInput = nextInput.nextElementSibling;
+      }
+
+      nextInput && nextInput.focus();
+    }
   };
 
   const callBack = useCallback(() => {
@@ -149,8 +177,7 @@ const AddCoordinates = () => {
               <div className="flex wrap gap-20">
                 <input
                   required
-                  min={0}
-                  max={99}
+                  maxLength={2}
                   type="number"
                   id="firstNumber"
                   className="inp"
@@ -172,7 +199,6 @@ const AddCoordinates = () => {
                 </select>
                 <input
                   required
-                  minLength={1}
                   maxLength={2}
                   value={coordinates.secondLetter}
                   onInput={handleForm}
@@ -183,8 +209,7 @@ const AddCoordinates = () => {
                 />
                 <input
                   required
-                  min={1}
-                  max={99999}
+                  maxLength={5}
                   value={coordinates.secondNumber}
                   onInput={handleForm}
                   type="number"
@@ -194,8 +219,7 @@ const AddCoordinates = () => {
                 />
                 <input
                   required
-                  min={1}
-                  max={99999}
+                  maxLength={5}
                   value={coordinates.thirdNumber}
                   onInput={handleForm}
                   type="number"

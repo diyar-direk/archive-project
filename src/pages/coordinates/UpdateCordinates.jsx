@@ -1,34 +1,25 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { MapContainer, Marker, TileLayer, useMapEvents } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import "../../components/form/form.css";
 import FormSelect from "../../components/form/FormSelect";
 import Loading from "../../components/loading/Loading";
 import SendData from "../../components/response/SendData";
 import axios from "axios";
-import { baseURL } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
-import { Context } from "./../../context/context";
-import L from "leaflet";
-const MapClickHandler = ({ setCoordinates }) => {
-  useMapEvents({
-    click: (e) => {
-      const { lat, lng } = e.latlng;
-      setCoordinates({ lat, lng });
-    },
-  });
-
-  return null;
-};
 
 const UpdateCoordinates = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [dataLloading, setDataLoading] = useState(true);
-  const nav = useNavigate();
-
+  const [dataLoading, setDataLoading] = useState(false);
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
 
@@ -47,13 +38,35 @@ const UpdateCoordinates = () => {
     }, 3000);
   };
 
-  const [form, setForm] = useState({});
+  const nav = useNavigate();
+
+  const [coordinates, setCoordinates] = useState({
+    firstNumber: "",
+    firstLetter: "S",
+    secondLetter: "",
+    secondNumber: "",
+    thirdNumber: "",
+  });
+
+  const [form, setForm] = useState({
+    countryId: "",
+    governmentId: "",
+    cityId: "",
+    note: "",
+    streetId: "",
+    regionId: "",
+    villageId: "",
+    sources: "",
+    sectionId: context.userDetails.sectionId || "",
+  });
+
   const { id } = useParams();
   useEffect(() => {
     getData();
   }, [id]);
+
   async function getData() {
-    !dataLloading && setDataLoading(true);
+    !dataLoading && setDataLoading(true);
     try {
       const data = await axios.get(`${baseURL}/Coordinates/${id}`, {
         headers: { Authorization: "Bearer " + token },
@@ -66,9 +79,26 @@ const UpdateCoordinates = () => {
         return;
       }
       setForm(data.data.data);
-      const coordinat = data.data.data.coordinates.split(",");
 
-      setCoordinates({ lat: coordinat[0], lng: coordinat[1] });
+      const coordinat = data.data.data.coordinates.split(" ");
+      const firstNumber = coordinat[0]
+        ?.split("")
+        ?.filter((e) => !isNaN(e))
+        .join("");
+      const firstLetter = coordinat[0]
+        ?.split("")
+        ?.filter((e) => isNaN(e))
+        .join("");
+      const secondLetter = coordinat[1];
+      const secondNumber = coordinat[2];
+      const thirdNumber = coordinat[3];
+      setCoordinates({
+        firstNumber,
+        firstLetter,
+        secondLetter,
+        secondNumber,
+        thirdNumber,
+      });
     } catch (error) {
       console.log(error);
       (error.status === 500 || error.status === 404) &&
@@ -78,31 +108,28 @@ const UpdateCoordinates = () => {
       setDataLoading(false);
     }
   }
-  const [coordinates, setCoordinates] = useState({ lat: null, lng: null });
 
-  useEffect(() => {
-    error && setError(false);
-  }, [coordinates]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!coordinates) setError("please select cordinats");
-    else if (!form.countryId) setError("please select country");
-    else if (!form.cityId) setError("please select city");
-    else if (!form.governmentId) setError("please select government");
-    else if (!form.sectionId) setError("please select scetion");
-    else if (!form.sources) setError("please select scetion");
+    const formData = {
+      ...form,
+      coordinates: `${coordinates.firstNumber}${coordinates.firstLetter} ${coordinates.secondLetter} ${coordinates.secondNumber} ${coordinates.thirdNumber}`,
+    };
+
+    if (!formData.countryId) setError("please select country");
+    else if (!formData.cityId) setError("please select city");
+    else if (!formData.governmentId) setError("please select government");
+    else if (!formData.sectionId) setError("please select scetion");
+    else if (!formData.sources) setError("please select scetion");
     else {
       setLoading(true);
-      const keys = Object.keys(form);
-      const data = { ...form };
+      const keys = Object.keys(formData);
+      const data = { ...formData };
       keys.forEach((key) => {
         data[key]
           ? (data[key] = data[key]?._id ? data[key]?._id : data[key])
           : (data[key] = null);
       });
-      data.coordinates = `${parseFloat(coordinates.lat)},${parseFloat(
-        coordinates.lng
-      )}`;
 
       try {
         const res = await axios.patch(`${baseURL}/Coordinates/${id}`, data, {
@@ -118,44 +145,132 @@ const UpdateCoordinates = () => {
       }
     }
   };
-  const customIcon = L.icon({
-    iconUrl: require("./icons8-location-pin-48.png"),
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
-    shadowSize: [41, 41],
-    shadowAnchor: [12, 41],
-  });
+
+  const handleForm = (e) => {
+    const { id, value, maxLength } = e.target;
+
+    const updatedValue = isNaN(value) ? value.toUpperCase() : value;
+
+    if (value.length > maxLength) return;
+
+    if (error) setError(false);
+
+    setCoordinates((prev) => ({ ...prev, [id]: updatedValue }));
+
+    if (value.length === maxLength) {
+      let nextInput = e.target.nextElementSibling;
+
+      while (nextInput && nextInput.tagName !== "INPUT") {
+        nextInput = nextInput.nextElementSibling;
+      }
+
+      nextInput && nextInput.focus();
+    }
+  };
+
+  const callBack = useCallback(() => {
+    const vaildLetter = [
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+    ];
+
+    const options = vaildLetter.map((e, i) => (
+      <option key={e} value={e}>
+        {e}
+      </option>
+    ));
+
+    return options;
+  }, []);
+
   return (
     <>
       {responseOverlay && (
         <SendData data={`person`} response={response.current} />
       )}
       {loading && <Loading />}
-      {dataLloading ? (
-        <Skeleton width={"100%"} height={"400px"} />
+      {dataLoading ? (
+        <Skeleton height={"400px"} width={"100%"} />
       ) : (
         <form onSubmit={handleSubmit} className="dashboard-form">
           <div className="form">
-            <div>
-              <h2>Click on the Map to Get Coordinates</h2>
-              <h3>Latitude: {coordinates.lat}</h3>
-              <h3>Longitude: {coordinates.lng}</h3>
+            <div className="flex wrap">
+              <div className="flex coordinates flex-direction">
+                <label htmlFor="firstNumber">MGRS coordinates</label>
 
-              <MapContainer
-                center={[51.505, -0.09]}
-                zoom={13}
-                style={{ height: "400px", width: "100%", zIndex: 1 }}
-              >
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                <MapClickHandler setCoordinates={setCoordinates} />
-                {coordinates?.lat && coordinates?.lng && (
-                  <Marker
-                    position={[coordinates?.lat, coordinates?.lng]}
-                    icon={customIcon}
+                <div className="flex wrap gap-20">
+                  <input
+                    required
+                    maxLength={2}
+                    type="number"
+                    id="firstNumber"
+                    className="inp"
+                    placeholder="ex: 37"
+                    value={coordinates.firstNumber}
+                    onInput={handleForm}
                   />
-                )}
-              </MapContainer>
+                  <select
+                    onChange={(e) =>
+                      setCoordinates({
+                        ...coordinates,
+                        firstLetter: e.target.value,
+                      })
+                    }
+                    className="inp"
+                    value={coordinates.firstLetter}
+                  >
+                    {callBack()}
+                  </select>
+                  <input
+                    required
+                    maxLength={2}
+                    value={coordinates.secondLetter}
+                    onInput={handleForm}
+                    type="text"
+                    id="secondLetter"
+                    className="inp"
+                    placeholder="ex: FB"
+                  />
+                  <input
+                    required
+                    maxLength={5}
+                    value={coordinates.secondNumber}
+                    onInput={handleForm}
+                    type="number"
+                    id="secondNumber"
+                    className="inp"
+                    placeholder="ex: 09523"
+                  />
+                  <input
+                    required
+                    maxLength={5}
+                    value={coordinates.thirdNumber}
+                    onInput={handleForm}
+                    type="number"
+                    id="thirdNumber"
+                    className="inp"
+                    placeholder="ex: 0964"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="form">
@@ -218,7 +333,7 @@ const UpdateCoordinates = () => {
               <div className="flex flex-direction">
                 <label htmlFor="note">note</label>
                 <textarea
-                  value={form.note}
+                  value={form.note ? form.note : ""}
                   onChange={(e) => setForm({ ...form, note: e.target.value })}
                   className="inp"
                   placeholder="test"
