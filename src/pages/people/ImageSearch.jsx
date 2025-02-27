@@ -14,6 +14,7 @@ const ImageSearch = () => {
   const token = context?.userDetails?.token;
 
   const [response, setResponse] = useState([]);
+  const [overlay, setOverlay] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,41 +42,89 @@ const ImageSearch = () => {
     }
   };
 
-  const data = response?.map((e, i) => (
-    <Virtual key={i}>
-      <div className="image-card">
-        <h3> {(e.similarity * 100).toFixed(2)} % </h3>
-        {e.tableData.informationId ? (
-          <>
-            <MediaComponent type={"image"} src={e.tableData.src} />
-            <Link
-              className="btn"
-              to={`/dashboard/informations/${e.tableData.informationId}`}
-            >
-              show info
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link className="photo" to={`/dashboard/people/${e.tableData._id}`}>
-              <MediaComponent type={"image"} src={e.tableData.image} />
-            </Link>
-            <Link
-              to={`/dashboard/people/${e.tableData._id}`}
-              className="name w-100"
-            >
-              {e.tableData.firstName} {e.tableData.fatherName}
-              {e.tableData.surName}
-            </Link>
-          </>
-        )}
-      </div>
-    </Virtual>
-  ));
+  const data = response?.map((e, i) => {
+    const tableData = e.tableData;
+    const similarity = (e.similarity * 100).toFixed(2);
+    return (
+      <Virtual key={i}>
+        <div className="image-card flex flex-direction gap-20">
+          <h3
+            className={
+              similarity <= 25
+                ? "red"
+                : similarity > 25 && similarity <= 60
+                ? "orange"
+                : "green"
+            }
+          >
+            {similarity} %
+          </h3>
+          {tableData.informationId ? (
+            <>
+              <div className="flex-1 image">
+                <MediaComponent
+                  onClick={() => setOverlay(tableData.src)}
+                  type="image"
+                  src={tableData.src}
+                />
+              </div>
+              <Link
+                className="btn"
+                to={`/dashboard/informations/${tableData.informationId}`}
+              >
+                show info
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="flex-1 center">
+                <div className="photo">
+                  <MediaComponent
+                    type={"image"}
+                    onClick={() => setOverlay(tableData.src)}
+                    src={tableData.image}
+                  />
+                </div>
+              </div>
+
+              <div className="flex info">
+                <Link
+                  to={`/dashboard/people/${tableData._id}`}
+                  className="name flex"
+                >
+                  {tableData.firstName} {tableData.fatherName}
+                  {tableData.surName}
+                </Link>
+                <Link
+                  to={`/dashboard/people/${tableData._id}`}
+                  className="profile-btn"
+                >
+                  visti profile
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+      </Virtual>
+    );
+  });
 
   return (
     <>
       {loading.loading && <Loading />}
+      {overlay && (
+        <div
+          onClick={() => setOverlay(false)}
+          className="overlay media-overlay"
+        >
+          <article>
+            <div>
+              <MediaComponent type="image" src={overlay} />
+            </div>
+          </article>
+        </div>
+      )}
+
       <form
         onSubmit={handleSubmit}
         className="flex flex-direction gap-10 search-image"
@@ -108,7 +157,11 @@ const ImageSearch = () => {
         </button>
         {error && <p className="error"> {error} </p>}
       </form>
-      <div className="grid-3">{data}</div>
+      {loading.loaded && response.length < 1 ? (
+        <h3 className="font-color">no results found</h3>
+      ) : (
+        response.length > 0 && <div className="grid-3">{data}</div>
+      )}
     </>
   );
 };
