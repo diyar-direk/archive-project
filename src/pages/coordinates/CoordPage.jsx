@@ -4,8 +4,8 @@ import "../people/profile.css";
 import axios from "axios";
 import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
-import MapComponent from "./MapComponent";
 import MediaComponent from "../../components/MediaComponent";
+import Virtual from "../../components/Virtual";
 const CoordPage = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -70,53 +70,55 @@ const CoordPage = () => {
     informations &&
     informations?.map((e) => {
       return (
-        <article key={e._id} className="person-info">
-          <h2>subject</h2>
-          <p>{e.subject}</p>
-          <h2>realted people</h2>
-          {e.people.length > 0 ? (
-            <div>
+        <Virtual>
+          <article key={e._id} className="person-info">
+            <h2>subject</h2>
+            <p>{e.subject}</p>
+            <h2>realted people</h2>
+            {e.people.length > 0 ? (
               <div>
-                {e.people?.map((e) => (
-                  <div
-                    className="flex align-center people-cat gap-10"
-                    key={e._id}
-                  >
-                    {e._id !== id && (
-                      <>
-                        <Link
-                          to={`/dashboard/people/${e._id}`}
-                          className="profile-image"
-                        >
-                          {e.image ? (
-                            <MediaComponent
-                              src={e.image}
-                              type="image"
-                              showUserIcon
-                            />
-                          ) : (
-                            <i className="fa-solid fa-user"></i>
-                          )}
-                        </Link>
-                        <Link
-                          to={`/dashboard/people/${e._id}`}
-                          className="name"
-                        >
-                          {e.firstName} {e.surName}
-                        </Link>
-                      </>
-                    )}
-                  </div>
-                ))}
+                <div>
+                  {e.people?.map((e) => (
+                    <div
+                      className="flex align-center people-cat gap-10"
+                      key={e._id}
+                    >
+                      {e._id !== id && (
+                        <>
+                          <Link
+                            to={`/dashboard/people/${e._id}`}
+                            className="profile-image"
+                          >
+                            {e.image ? (
+                              <MediaComponent
+                                src={e.image}
+                                type="image"
+                                showUserIcon
+                              />
+                            ) : (
+                              <i className="fa-solid fa-user"></i>
+                            )}
+                          </Link>
+                          <Link
+                            to={`/dashboard/people/${e._id}`}
+                            className="name"
+                          >
+                            {e.firstName} {e.surName}
+                          </Link>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          ) : (
-            <p>no people found</p>
-          )}
-          <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
-            show details
-          </Link>
-        </article>
+            ) : (
+              <p>no people found</p>
+            )}
+            <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
+              show details
+            </Link>
+          </article>
+        </Virtual>
       );
     });
 
@@ -140,14 +142,6 @@ const CoordPage = () => {
         </article>
       ) : (
         <div className="profile wrap flex">
-          <div style={{ zIndex: 1 }} className="w-100">
-            {data?.coordinates && (
-              <MapComponent
-                lat={data?.coordinates?.split(",")[0]}
-                lng={data?.coordinates?.split(",")[1]}
-              />
-            )}
-          </div>
           <div className="info">
             <Link
               to={`/dashboard/coordinates/${id}`}
