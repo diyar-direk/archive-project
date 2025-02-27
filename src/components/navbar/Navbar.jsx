@@ -3,14 +3,15 @@ import "./navbar.css";
 import { useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { Context } from "../../context/context";
-import { links } from "./links";
 import { useCookies } from "react-cookie";
+import useLanguage from "../../hooks/useLanguage";
 
 const Navbar = () => {
   const context = useContext(Context);
 
   const location = useLocation();
-
+  const { links, language } = useLanguage();
+  
   window.addEventListener("click", () => {
     const langDiv = document.querySelector(
       "nav .setting .lang + div.languages.active-div"
