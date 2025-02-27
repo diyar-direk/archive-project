@@ -238,9 +238,9 @@ const People = (props) => {
           {e.placeOfBirth} {date(e.birthDate)}
         </td>
         <td>
-          {e.countryId.name} / {e.cityId.name}
+          {e.countryId?.name} / {e.cityId?.name}
         </td>
-        <td> {e.governmentId.name} </td>
+        <td> {e.governmentId?.name} </td>
         <td> {e.phone} </td>
         <td> {e.email} </td>
         <td> {date(e.createdAt)} </td>
