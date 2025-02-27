@@ -8,6 +8,7 @@ import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import useFeatchData from "../../hooks/useFeatchData";
+import useLanguage from "../../hooks/useLanguage";
 const Government = () => {
   const [overlay, setOverlay] = useState(false);
   const response = useRef(true);
@@ -34,6 +35,7 @@ const Government = () => {
     search,
     numberOf: "numberOfActiveGovernments",
   });
+  const { language } = useLanguage();
   const context = useContext(Context);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -57,7 +59,11 @@ const Government = () => {
     div && div.classList.remove("active");
   });
 
-  const header = ["name", "country", "creat at"];
+  const header = [
+    language?.government?.government_name,
+    language?.government?.country,
+    language?.government?.created_at,
+  ];
   const [form, setForm] = useState({ name: "", countryId: "" });
   const [update, setUpdate] = useState(false);
 
@@ -133,7 +139,7 @@ const Government = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.countryId) {
-      setError("Please select a country");
+      setError(language?.error?.please_selecet_country);
     } else {
       setFormLoading(true);
       try {
@@ -177,17 +183,23 @@ const Government = () => {
         <SendData data={`country`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Governments</h1>
+      <h1 className="title">{language?.header?.governments}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this country" : "add new government"}</h1>
-            <label htmlFor="name">government name</label>
+            <h1>
+              {update
+                ? language?.government?.update_government
+                : language?.government?.add_new_government}
+            </h1>
+            <label htmlFor="name">
+              {language?.government?.government_name}
+            </label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a government name"
+              placeholder={language?.government?.government_name_placeholder}
               value={form.name}
               type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
@@ -203,14 +215,16 @@ const Government = () => {
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update
+                  ? language?.government?.save
+                  : language?.government?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cencel
+                  {language?.government?.cancel}
                 </button>
               )}
             </div>

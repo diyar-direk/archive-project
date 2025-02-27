@@ -254,7 +254,7 @@ const Navbar = () => {
               </div>
             </article>
             <h4 className="c-pointer log-out center" onClick={handleLogout}>
-              <i className="fa-solid fa-right-from-bracket"></i> log out
+              <i className="fa-solid fa-right-from-bracket"></i> {language?.header?.log_out}
             </h4>
           </div>
         </div>
@@ -285,14 +285,14 @@ const Navbar = () => {
                   <>
                     <h3 className="log-out center aside">
                       <i className="fa-solid fa-eye"></i>
-                      <span>hidden short-cut</span>
+                      <span>{language?.header?.hide_shortCut}</span>
                     </h3>
                   </>
                 ) : (
                   <>
                     <h3 className="log-out center aside">
                       <i className="fa-solid fa-eye-slash"> </i>
-                      <span>show short-cut</span>
+                      <span>{language?.header?.show_shortCut}</span>
                     </h3>
                   </>
                 )}
@@ -303,7 +303,7 @@ const Navbar = () => {
               className="log-out center c-pointer aside"
             >
               <i className="fa-solid fa-right-from-bracket"></i>
-              <span>log out </span>
+              <span>{language?.header?.log_out} </span>
             </h3>
           </div>
         </div>

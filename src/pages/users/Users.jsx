@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
+import useLanguage from "../../hooks/useLanguage";
 const Users = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -19,10 +20,16 @@ const Users = () => {
       to: "",
     },
   });
+  const { language } = useLanguage();
 
   const [search, setSearch] = useState("");
 
-  const header = ["username", "role", "section", "create at"];
+  const header = [
+    language?.users?.username,
+    language?.users?.role,
+    language?.users?.section,
+    language?.users?.created_at,
+  ];
   const token = context.userDetails.token;
 
   useEffect(() => {
@@ -133,7 +140,8 @@ const Users = () => {
           ></div>
         </td>
         <td>
-          {e.username} {context.userDetails._id === e._id && "( me )"}
+          {e.username}{" "}
+          {context.userDetails._id === e._id && language?.users?.you}
         </td>
 
         <td> {e.role} </td>
@@ -160,7 +168,7 @@ const Users = () => {
 
   return (
     <>
-      <h1 className="title"> users </h1>
+      <h1 className="title"> {language?.header?.users} </h1>
       <Table
         header={header}
         loading={loading}

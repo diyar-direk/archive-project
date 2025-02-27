@@ -58,7 +58,6 @@ const Provider = ({ children }) => {
   useEffect(() => {
     getLang();
   }, [language]);
-
   return (
     <Context.Provider
       value={{

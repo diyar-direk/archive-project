@@ -3,66 +3,66 @@ import { Context } from "../context/context";
 
 const useLanguage = () => {
   const context = useContext(Context);
-  const language = context?.language;
+  const language = context?.selectedLang;
 
   const links = [
     {
       icon: "fa-solid fa-user-group",
       children: [
-        { title: "users", path: "users", role: ["admin"] },
-        { title: "add user", path: "add_user", role: ["admin"] },
+        { title: language?.header?.users, path: "users", role: ["admin"] },
+        { title: language?.header?.add_users, path: "add_user", role: ["admin"] },
       ],
-      title: "users",
+      title: language?.header?.users,
       role: ["admin"],
     },
     {
       icon: "fa-solid fa-people-group",
       children: [
-        { title: "people", path: "people", role: ["admin", "user"] },
+        { title: language?.header?.people, path: "people", role: ["admin", "user"] },
         {
-          title: "add person",
+          title: language?.header?.add_person,
           path: "add_person",
           role: ["admin", "user"],
         },
       ],
-      title: "people",
+      title: language?.header?.people,
       role: ["admin", "user"],
     },
     {
       icon: "fa-solid fa-magnifying-glass",
       children: [
         {
-          title: "search by image",
+          title: language?.header?.serach_by_image,
           path: "search_by_image",
           role: ["admin", "user"],
         },
       ],
-      title: "search",
+      title: language?.header?.search,
       role: ["admin", "user"],
     },
     {
       icon: "fa-solid fa-map-location-dot",
       children: [
         {
-          title: "countries",
+          title: language?.header?.countries,
           path: "countries",
           role: ["admin", "user"],
         },
         {
-          title: "governments",
+          title: language?.header?.governments,
           path: "governments",
           role: ["admin", "user"],
         },
-        { title: "cities", path: "cities", role: ["admin", "user"] },
+        { title:language?.header?.cities, path: "cities", role: ["admin", "user"] },
         {
-          title: "villages",
+          title: language?.header?.villages,
           path: "villages",
           role: ["admin", "user"],
         },
-        { title: "streets", path: "streets", role: ["admin", "user"] },
-        { title: "regions", path: "regions", role: ["admin", "user"] },
+        { title: language?.header?.streets, path: "streets", role: ["admin", "user"] },
+        { title: language?.header?.regions, path: "regions", role: ["admin", "user"] },
       ],
-      title: "Addresses",
+      title: language?.header?.adress ,
       role: ["admin", "user"],
     },
 
@@ -70,49 +70,49 @@ const useLanguage = () => {
       icon: "fa-solid fa-layer-group",
       children: [
         {
-          title: "sections",
+          title: language?.header?.sections,
           path: "sections",
           role: ["admin", "user"],
         },
-        { title: "sources", path: "sources", role: ["admin", "user"] },
-        { title: "event", path: "event", role: ["admin", "user"] },
-        { title: "party", path: "party", role: ["admin", "user"] },
+        { title: language?.header?.sources, path: "sources", role: ["admin", "user"] },
+        { title: language?.header?.events, path: "event", role: ["admin", "user"] },
+        { title: language?.header?.parties, path: "party", role: ["admin", "user"] },
       ],
-      title: "Catagories",
+      title: language?.header?.categories,
       role: ["admin", "user"],
     },
     {
       icon: "fa-solid fa-sitemap",
       children: [
         {
-          title: "informations",
+          title: language?.header?.information,
           path: "informations",
           role: ["admin", "user"],
         },
         {
-          title: "add information",
+          title:language?.header?.add_information,
           path: "add_information",
           role: ["admin", "user"],
         },
       ],
-      title: "informations",
+      title: language?.header?.information,
       role: ["admin", "user"],
     },
     {
       icon: "fa-solid fa-thumbtack",
       children: [
         {
-          title: "Coordinates",
+          title: language?.header?.coordinates,
           path: "coordinates",
           role: ["admin", "user"],
         },
         {
-          title: "add coordinates",
+          title: language?.header?.add_coordinates,
           path: "add_coordinates",
           role: ["admin", "user"],
         },
       ],
-      title: "Coordinates",
+      title: language?.header?.coordinates,
       role: ["admin", "user"],
     },
 
@@ -120,12 +120,12 @@ const useLanguage = () => {
       icon: "fa-solid fa-folder-open",
       children: [
         {
-          title: "back ups",
+          title: language?.header?.backUps,
           path: "backup",
           role: ["admin"],
         },
       ],
-      title: "back up",
+      title: language?.header?.backUps,
       role: ["admin"],
     },
   ];
