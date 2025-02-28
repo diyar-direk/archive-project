@@ -70,8 +70,8 @@ const CoordPage = () => {
     informations &&
     informations?.map((e) => {
       return (
-        <Virtual>
-          <article key={e._id} className="person-info">
+        <Virtual key={e._id}>
+          <article className="person-info">
             <h2>subject</h2>
             <p>{e.subject}</p>
             <h2>realted people</h2>

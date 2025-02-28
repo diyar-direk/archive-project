@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, searchPlaceholder } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import "./form-select.css";
 import axios from "axios";
 import useLanguage from "../../hooks/useLanguage";
