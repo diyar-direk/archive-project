@@ -88,7 +88,6 @@ div.grid-3:has(div.image-card) {
       height: 200px;
       border-radius: 50%;
       background-color: var(--section-color);
-      padding: 10px;
       overflow: hidden;
       & img {
         width: 100%;
@@ -132,17 +131,56 @@ div.grid-3:has(div.image-card) {
       & a.profile-btn::before {
         content: "";
         position: absolute;
-        width: 17px;
+        width: 30px;
         height: 174%;
         background: var(--section-color);
         top: -20px;
-        left: -7px;
+        left: -20px;
         transform: rotate(25deg);
         z-index: -1;
       }
     }
   }
 }
+
+body.arabic {
+  & form.search-image {
+    & > i {
+      margin-left: 0;
+      margin-right: auto;
+    }
+  }
+  & div.grid-3:has(div.image-card) {
+    & div.image-card {
+      & .info {
+        & a.profile-btn::before {
+          left: auto;
+          right: -25px;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 700px) {
+  div.grid-3:has(div.image-card) {
+    & div.image-card {
+      gap: 10px;
+      & h3 {
+        padding: 8px;
+        font-size: 16px;
+      }
+      & .info {
+        & a {
+          font-size: 14px;
+        }
+        & a.name {
+          max-width: 150px;
+        }
+      }
+    }
+  }
+}
+
 @media (max-width: 550px) {
   form.search-image {
     width: 100%;
@@ -153,6 +191,56 @@ div.grid-3:has(div.image-card) {
     & > i {
       width: 25px;
       height: 25px;
+    }
+  }
+  div.grid-3:has(div.image-card) {
+    & div.image-card {
+      & .photo {
+        width: 170px;
+        height: 170px;
+      }
+      & .image {
+        max-height: 240px;
+      }
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  div.grid-3:has(div.image-card) {
+    & div.image-card {
+      & h3 {
+        padding: 6px;
+        font-size: 15px;
+      }
+      & .image {
+        max-height: 200px;
+      }
+      & .photo {
+        width: 150px;
+        height: 150px;
+      }
+      & .info {
+        & a {
+          padding: 7px;
+          font-size: 12px;
+        }
+        & a.profile-btn {
+          padding: 7px 16px;
+        }
+      }
+    }
+  }
+  body.arabic {
+    & div.grid-3:has(div.image-card) {
+      & div.image-card {
+        & .info {
+          & a.profile-btn::before {
+            right: 8px;
+            height: 200px;
+          }
+        }
+      }
     }
   }
 }
