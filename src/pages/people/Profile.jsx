@@ -1,28 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
 import { baseURL, Context, date } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import MediaComponent from "../../components/MediaComponent";
-import Virtual from "../../components/Virtual";
+import useInfitFetch from "../../hooks/useInfitFetch";
 const Profile = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(true);
-  const [infoLoading, setInfoLoading] = useState(true);
-  const [informations, setInformatios] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const context = useContext(Context);
+  const [infoPage, setInfoPage] = useState(1);
   const token = context.userDetails.token;
   const nav = useNavigate();
 
   useEffect(() => {
     getData();
-  }, [id]);
-  useEffect(() => {
-    const time = setTimeout(getInfo, 1000);
-    return () => clearTimeout(time);
   }, [id]);
 
   async function getData() {
@@ -49,22 +50,6 @@ const Profile = () => {
     }
   }
 
-  async function getInfo() {
-    let url = `${baseURL}/Information?people=${id}&active=true&fields=people,subject`;
-    context.userDetails.role === "user" &&
-      (url += `&sectionId=${context.userDetails.sectionId}`);
-    try {
-      const res = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setInformatios(res.data.informations);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setInfoLoading(false);
-    }
-  }
-
   const [image, setImage] = useState(false);
 
   const updateProfile = async (e) => {
@@ -85,59 +70,86 @@ const Profile = () => {
     }
   };
 
+  const { informations, infoLoading, hasMore } = useInfitFetch(
+    `people`,
+    id,
+    infoPage
+  );
+  const observer = useRef(null);
+
+  const lastElement = useCallback(
+    (node) => {
+      if (infoLoading) return;
+
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        const firstEntry = entries[0];
+        if (firstEntry?.isIntersecting && hasMore && !infoLoading) {
+          setInfoPage((prev) => prev + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [infoLoading, hasMore]
+  );
+
   const info =
     informations &&
-    informations?.map((e) => {
+    informations?.map((e, i) => {
       return (
-        <Virtual key={e._id}>
-          <article className="person-info">
-            <h2>subject</h2>
-            <p>{e.subject}</p>
-            <h2>realted people</h2>
-            {e.people.length > 1 ? (
+        <article
+          key={e._id}
+          ref={informations.length === i + 1 ? lastElement : null}
+          className="person-info"
+        >
+          <h2>subject</h2>
+          <p>{e.subject}</p>
+          <h2>realted people</h2>
+          {e.people.length > 1 ? (
+            <div>
               <div>
-                <div>
-                  {e.people?.map((e) => (
-                    <div
-                      className="flex align-center people-cat gap-10"
-                      key={e._id}
-                    >
-                      {e._id !== id && (
-                        <>
-                          <Link
-                            to={`/dashboard/people/${e._id}`}
-                            className="profile-image"
-                          >
-                            {e.image ? (
-                              <MediaComponent
-                                src={e.image}
-                                type="image"
-                                showUserIcon
-                              />
-                            ) : (
-                              <i className="fa-solid fa-user"></i>
-                            )}
-                          </Link>
-                          <Link
-                            to={`/dashboard/people/${e._id}`}
-                            className="name"
-                          >
-                            {e.firstName} {e.surName}
-                          </Link>
-                        </>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                {e.people?.map((e) => (
+                  <div
+                    className="flex align-center people-cat gap-10"
+                    key={e._id}
+                  >
+                    {e._id !== id && (
+                      <>
+                        <Link
+                          to={`/dashboard/people/${e._id}`}
+                          className="profile-image"
+                        >
+                          {e.image ? (
+                            <MediaComponent
+                              src={e.image}
+                              type="image"
+                              showUserIcon
+                            />
+                          ) : (
+                            <i className="fa-solid fa-user"></i>
+                          )}
+                        </Link>
+                        <Link
+                          to={`/dashboard/people/${e._id}`}
+                          className="name"
+                        >
+                          {e.firstName} {e.surName}
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                ))}
               </div>
-            ) : (
-              <p>no other people found</p>
-            )}
-            <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
-              show details
-            </Link>
-          </article>
-        </Virtual>
+            </div>
+          ) : (
+            <p>no other people found</p>
+          )}
+          <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
+            show details
+          </Link>
+        </article>
       );
     });
 
@@ -302,16 +314,8 @@ const Profile = () => {
         )}
       </div>
 
-      <div className="flex person-info flex-direction gap-20">
-        {infoLoading ? (
-          <>
-            <Skeleton height={"200px"} width={"100%"} />
-            <Skeleton height={"200px"} width={"100%"} />
-          </>
-        ) : (
-          info
-        )}
-      </div>
+      <div className="flex person-info flex-direction gap-20">{info}</div>
+      {infoLoading && <Skeleton height={"200px"} width={"100%"} />}
     </>
   );
 };

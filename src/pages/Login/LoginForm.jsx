@@ -14,8 +14,7 @@ const LoginForm = () => {
   const context = useContext(Context);
   const [, setCookie] = useCookies(["archive_cookie"]);
   const navigate = useNavigate();
-  const { links, language } = useLanguage();
-  console.log(language);
+  const { language } = useLanguage();
   const handleSubmit = async (e) => {
     e.preventDefault();
 
