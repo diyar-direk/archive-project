@@ -17,7 +17,7 @@ const CategoriesShow = (props) => {
               ) : (
                 <Link
                   style={{ display: "block" }}
-                  to={`/dashboard/coordinates/${e._id}`}
+                  to={`/dashboard/coordinate/${e._id}`}
                   className="font-color people-cat"
                   key={e._id}
                 >

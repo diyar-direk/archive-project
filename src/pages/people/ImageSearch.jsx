@@ -57,7 +57,7 @@ const ImageSearch = () => {
                 : "green"
             }
           >
-            {similarity} %
+            similarity: {similarity} %
           </h3>
           {tableData.informationId ? (
             <>
@@ -157,10 +157,20 @@ const ImageSearch = () => {
         </button>
         {error && <p className="error"> {error} </p>}
       </form>
+
       {loading.loaded && response.length < 1 ? (
         <h3 className="font-color">no results found</h3>
+      ) : response.length > 0 ? (
+        <div className="grid-3">{data}</div>
       ) : (
-        response.length > 0 && <div className="grid-3">{data}</div>
+        loading.loaded && (
+          <h2
+            style={{ textAlign: "center" }}
+            className="font-color text-capitalize"
+          >
+            no result found
+          </h2>
+        )
       )}
     </>
   );

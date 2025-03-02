@@ -30,6 +30,9 @@ function MediaComponent({ src, alt = "", type, showUserIcon, ...props }) {
 
     fetchImage();
   }, []);
+
+  
+
   return imageUrl ? (
     type === "video" ? (
       <video {...props} src={imageUrl} controls></video>
@@ -40,7 +43,7 @@ function MediaComponent({ src, alt = "", type, showUserIcon, ...props }) {
     ) : type === "pdf" ? (
       <iframe src={imageUrl}></iframe>
     ) : (
-      <a download={src.split("/").pop()} href={imageUrl}></a>
+      <iframe hidden src={imageUrl}></iframe>
     )
   ) : showUserIcon ? (
     <i className="fa-solid fa-user photo"></i>

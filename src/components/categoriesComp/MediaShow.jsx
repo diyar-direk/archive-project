@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import Loading from "../loading/Loading";
@@ -96,6 +96,13 @@ const MediaShow = (props) => {
     }
   };
   const [docDownload, setDocDownload] = useState(false);
+
+  useEffect(() => {
+    const removeDoc = setTimeout(() => {
+      docDownload && setDocDownload(false);
+    }, 1000);
+    return () => clearTimeout(removeDoc);
+  }, [docDownload]);
 
   return (
     <>

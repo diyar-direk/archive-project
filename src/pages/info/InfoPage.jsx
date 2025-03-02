@@ -48,8 +48,8 @@ const InfoPage = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Accept: "application/zip", // تأكد من أن السيرفر يرسل نوع الملف الصحيح
-            Authorization: `Bearer ${token}`, // إذا كنت تحتاج المصادقة
+            Accept: "application/zip",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ informationId: id }),
         }
@@ -69,7 +69,6 @@ const InfoPage = () => {
       a.click();
       a.remove();
 
-      // تحرير الموارد بعد التحميل
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Download error:", error);
