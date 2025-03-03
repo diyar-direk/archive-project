@@ -6,6 +6,7 @@ import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
 const Event = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -16,6 +17,7 @@ const Event = () => {
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
   const context = useContext(Context);
+  const { language } = useLanguage();
   const token = context.userDetails.token;
   const limit = context?.limit;
   const [filters, setFilters] = useState({
@@ -47,7 +49,7 @@ const Event = () => {
     div && div.classList.remove("active");
   });
 
-  const header = ["name", "creat at"];
+  const header = [language?.event?.name, language?.event?.created_at];
   const [form, setForm] = useState({ name: "" });
   const [update, setUpdate] = useState(false);
 
@@ -245,17 +247,21 @@ const Event = () => {
         <SendData data={`country`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Events</h1>
+      <h1 className="title">{language?.header?.events}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this country" : "add new Events"}</h1>
-            <label htmlFor="name">Events name</label>
+            <h1>
+              {update
+                ? language?.event?.update_event
+                : language?.event?.add_new_event}
+            </h1>
+            <label htmlFor="name">{language?.event?.event_name}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a Events name"
+              placeholder={language?.event?.event_name_placeholder}
               value={form.name}
               type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
@@ -264,14 +270,14 @@ const Event = () => {
 
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update ? language?.event?.save : language?.event?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cencel
+                  {language?.event?.cancel}
                 </button>
               )}
             </div>

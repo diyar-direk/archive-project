@@ -5,6 +5,7 @@ import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
 
 const Sections = () => {
   const [data, setData] = useState([]);
@@ -17,6 +18,7 @@ const Sections = () => {
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
+  const { language } = useLanguage();
   const [formLoading, setFormLoading] = useState(false);
   const context = useContext(Context);
   const limit = context?.limit;
@@ -44,7 +46,7 @@ const Sections = () => {
     }, 3000);
   };
 
-  const header = ["name", "creat at"];
+  const header = [language?.section?.name, language?.section?.created_at];
   const [name, setName] = useState("");
   const [update, setUpdate] = useState(false);
 
@@ -231,17 +233,21 @@ const Sections = () => {
       )}
       {formLoading && <Loading />}
 
-      <h1 className="title">Sections</h1>
+      <h1 className="title">{language?.header?.sections}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this section" : "add new section"}</h1>
-            <label htmlFor="name">section name</label>
+            <h1>
+              {update
+                ? language?.section?.update_section
+                : language?.section?.add_new_section}
+            </h1>
+            <label htmlFor="name">{language?.section?.section_name}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a section name"
+              placeholder={language?.section?.section_name_placeholder}
               value={name}
               type="text"
               onInput={(e) => setName(e.target.value)}
@@ -249,14 +255,14 @@ const Sections = () => {
             />
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update ? language?.section?.save : language?.section?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cencel
+                  {language?.section?.cancel}
                 </button>
               )}
             </div>

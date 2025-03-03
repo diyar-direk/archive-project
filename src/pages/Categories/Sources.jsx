@@ -6,6 +6,7 @@ import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
 
 const Sources = () => {
   const [data, setData] = useState([]);
@@ -16,6 +17,7 @@ const Sources = () => {
   const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
+  const { language } = useLanguage();
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
   const [formLoading, setFormLoading] = useState(false);
@@ -50,7 +52,11 @@ const Sources = () => {
     div && div.classList.remove("active");
   });
 
-  const header = ["source_name", "created_at", "source_credibility"];
+  const header = [
+    language?.source?.source_name,
+    language?.source?.created_at,
+    language?.source?.source_credibility,
+  ];
   const [form, setForm] = useState({
     source_name: "",
     source_credibility: "High",
@@ -172,8 +178,6 @@ const Sources = () => {
     }
   };
 
-  console.log(data);
-
   const tableData = data?.map((e) => (
     <tr key={e._id}>
       {context.userDetails.isAdmin && (
@@ -258,47 +262,53 @@ const Sources = () => {
         <SendData data={`country`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Sources</h1>
+      <h1 className="title">{language?.header?.sources}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "Update this source" : "Add new source"}</h1>
-            <label htmlFor="source_name">Source Name</label>
+            <h1>
+              {update
+                ? language?.source?.update_source
+                : language?.source?.add_new_source}
+            </h1>
+            <label htmlFor="source_name">{language?.source?.source_name}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="Please write a source name"
+              placeholder={language?.source?.source_name_placeholder}
               value={form.source_name}
               type="text"
               onInput={(e) => setForm({ ...form, source_name: e.target.value })}
               id="source_name"
             />
 
-            <label htmlFor="source_credibility">Source Credibility</label>
-            <select
-              className="inp center gap-10 w-100"
-              id="source_credibility"
-              value={form.source_credibility}
-              onChange={(e) =>
-                setForm({ ...form, source_credibility: e.target.value })
-              }
-            >
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
+            <label htmlFor="source_credibility">
+              {language?.source?.source_credibility}
+            </label>
+              <select
+                className="inp center gap-10 w-100"
+                id="source_credibility"
+                value={form.source_credibility}
+                onChange={(e) =>
+                  setForm({ ...form, source_credibility: e.target.value })
+                }
+              >
+                <option value="High">{language?.source?.high}</option>
+                <option value="Medium">{language?.source?.medium}</option>
+                <option value="Low">{language?.source?.low}</option>
+              </select>
 
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "Save" : "Add"}
+                {update ? language?.source?.save : language?.source?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  Cancel
+                  {language?.source?.cancel}
                 </button>
               )}
             </div>

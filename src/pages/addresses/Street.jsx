@@ -8,11 +8,13 @@ import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import useFeatchData from "../../hooks/useFeatchData";
+import useLanguage from "../../hooks/useLanguage";
 const Street = () => {
   const [overlay, setOverlay] = useState(false);
   const response = useRef(true);
   const [error, setError] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const { language } = useLanguage();
   const [filters, setFilters] = useState({
     city: "",
     date: {
@@ -63,7 +65,11 @@ const Street = () => {
     div && div.classList.remove("active");
   });
 
-  const header = ["name", "city", "creat at"];
+  const header = [
+    language?.street?.name,
+    language?.street?.city,
+    language?.street?.created_at,
+  ];
   const [form, setForm] = useState({ name: "", city: "" });
   const [update, setUpdate] = useState(false);
 
@@ -139,7 +145,7 @@ const Street = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.city) {
-      setError("Please select a city");
+      setError(language?.error?.please_selecet_city);
     } else {
       setFormLoading(true);
       try {
@@ -183,17 +189,21 @@ const Street = () => {
         <SendData data={`country`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Streets</h1>
+      <h1 className="title">{language?.header?.streets}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this country" : "add new street"}</h1>
-            <label htmlFor="name">street name</label>
+            <h1>
+              {update
+                ? language?.street?.update_street
+                : language?.street?.add_new_street}
+            </h1>
+            <label htmlFor="name">{language?.street?.street_name}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a street name"
+              placeholder={language?.street?.street_name_placeholder}
               value={form.name}
               type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
@@ -208,14 +218,14 @@ const Street = () => {
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update ? language?.street?.save : language?.street?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cencel
+                  {language?.street?.cancel}
                 </button>
               )}
             </div>

@@ -3,6 +3,7 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import Loading from "../loading/Loading";
 import MediaComponent from "../MediaComponent";
+import useLanguage from "../../hooks/useLanguage";
 
 const MediaShow = (props) => {
   const data = props?.data;
@@ -18,6 +19,7 @@ const MediaShow = (props) => {
     audios: "",
     documents: "",
   });
+  const { language } = useLanguage();
   const [actions, setActions] = useState({
     showImage: false,
     deleteData: false,
@@ -44,7 +46,7 @@ const MediaShow = (props) => {
       props.getData();
     } catch (error) {
       console.log(error);
-      alert("some error please try again");
+      alert(language?.error?.somthing_went_wrong);
     } finally {
       setActions({
         showImage: false,
@@ -90,7 +92,7 @@ const MediaShow = (props) => {
       props.getData();
     } catch (error) {
       console.log(error);
-      alert("some error pleasse tyr again");
+      alert(language?.error?.somthing_went_wrong);
     } finally {
       setFormLoading(false);
     }
@@ -141,10 +143,11 @@ const MediaShow = (props) => {
             </article>
           ) : actions.deleteData ? (
             <div onClick={(e) => e.stopPropagation()}>
-              <h1>are you sure yo want to delete this itms</h1>
+              <h1>{language?.table?.are_you_sure_delete}</h1>
               <div className="flex gap-10 wrap">
                 <div onClick={deleteData} className="delete-all overlay-btn">
-                  <i className="fa-solid fa-trash"></i> delete
+                  <i className="fa-solid fa-trash"></i>{" "}
+                  {language?.table?.delete}
                 </div>
                 <div
                   onClick={() => {
@@ -158,7 +161,7 @@ const MediaShow = (props) => {
                   }}
                   className="delete-all cencel overlay-btn"
                 >
-                  <i className="fa-solid fa-ban"></i> cencel
+                  <i className="fa-solid fa-ban"></i> {language?.table?.cancel}
                 </div>
               </div>
             </div>
@@ -187,7 +190,7 @@ const MediaShow = (props) => {
                       }}
                       htmlFor="photo"
                     >
-                      add image
+                      {language?.information?.upload_images}
                       <i className="fa-regular fa-image"></i>
                       <input
                         type="file"
@@ -210,7 +213,7 @@ const MediaShow = (props) => {
                       }}
                       htmlFor="video"
                     >
-                      add video
+                      {language?.information?.upload_videos}
                       <i className="fa-solid fa-video"></i>
                       <input
                         type="file"
@@ -233,7 +236,7 @@ const MediaShow = (props) => {
                       }}
                       htmlFor="audio"
                     >
-                      add audio
+                      {language?.information?.upload_audios}
                       <i className="fa-solid fa-headphones"></i>
                       <input
                         type="file"
@@ -255,7 +258,7 @@ const MediaShow = (props) => {
                       }}
                       htmlFor="documents"
                     >
-                      add documents
+                      {language?.information?.upload_documents}
                       <i className="fa-solid fa-file"></i>
                       <input
                         type="file"
@@ -371,7 +374,7 @@ const MediaShow = (props) => {
                       onClick={(e) => e.stopPropagation()}
                       className="btn save"
                     >
-                      save
+                      {language?.information?.save}
                     </button>
                   </>
                 )}
@@ -383,7 +386,7 @@ const MediaShow = (props) => {
 
       <div>
         <div className="flex gap-10 flex-direction media">
-          <h1>medias</h1>
+          <h1> {language?.information?.files}</h1>
           <div className="media-container center">
             <div className="flex gap-20 wrap">
               <h4 className="center gap-10 font-color">
@@ -413,12 +416,12 @@ const MediaShow = (props) => {
               }}
               className="add-media center gap-10"
             >
-              <span> add media </span>
+              <span> {language?.information?.upload_files} </span>
               <i className="fa-solid fa-plus"></i>
             </p>
 
             {noData ? (
-              <h1>no media found</h1>
+              <h1>{language?.information?.no_data}</h1>
             ) : (
               <article className="w-100 grid-3">
                 {data?.images?.length > 0 &&
@@ -451,7 +454,8 @@ const MediaShow = (props) => {
                         }}
                         className="center gap-10 delete"
                       >
-                        delete <i className="fa-regular fa-trash-can"></i>
+                        {language?.information?.delete}{" "}
+                        <i className="fa-regular fa-trash-can"></i>
                       </p>
                     </div>
                   ))}
@@ -477,7 +481,8 @@ const MediaShow = (props) => {
                         }}
                         className="center gap-10 delete"
                       >
-                        delete <i className="fa-regular fa-trash-can"></i>
+                        {language?.information?.delete}{" "}
+                        <i className="fa-regular fa-trash-can"></i>
                       </p>
                     </div>
                   ))}
@@ -502,7 +507,8 @@ const MediaShow = (props) => {
                         }}
                         className="center gap-10 delete"
                       >
-                        delete <i className="fa-regular fa-trash-can"></i>
+                        {language?.information?.delete}{" "}
+                        <i className="fa-regular fa-trash-can"></i>
                       </p>
                     </div>
                   ))}
@@ -553,7 +559,8 @@ const MediaShow = (props) => {
                           }}
                           className="center gap-10 flex-1 delete"
                         >
-                          delete <i className="fa-regular fa-trash-can"></i>
+                          {language?.information?.delete}{" "}
+                          <i className="fa-regular fa-trash-can"></i>
                         </p>
                       </div>
                     </div>

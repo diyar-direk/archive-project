@@ -1,7 +1,9 @@
 import errorImg from "./error.png";
 import completeImg from "./complete.png";
 import "./overlay.css";
+import useLanguage from "../../hooks/useLanguage";
 const SendData = (props) => {
+  const { language } = useLanguage();
   return (
     <div className="center response">
       <img
@@ -11,10 +13,10 @@ const SendData = (props) => {
       />
       <h1>
         {props.response === true
-          ? `sent successfully`
+          ? `${language?.error?.sent}`
           : props.response === 400
-          ? `${props.data} allready exisits`
-          : `network error`}
+          ? `${props.data} ${language?.error?.already_exists}`
+          : `${language?.error?.somthing_went_wrong}`}
       </h1>
     </div>
   );

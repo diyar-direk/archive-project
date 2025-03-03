@@ -3,6 +3,7 @@ import { baseURL, Context } from "./../../context/context";
 import { useContext, useState } from "react";
 import axios from "axios";
 import MediaComponent from "../../components/MediaComponent";
+import useLanguage from "../../hooks/useLanguage";
 
 const DocumentsShow = (props) => {
   const addperson = (file) => {
@@ -39,11 +40,11 @@ const DocumentsShow = (props) => {
           })
           .catch((err) => {
             console.error("Error reading .docx file:", err);
-            alert("Failed to open .docx file.");
+            alert(language?.error?.failed_open);
           });
         return;
       } else {
-        alert("Unsupported file type for preview.");
+        alert(language?.error?.unsupported_type);
       }
 
       props.popup.setIsPopupOpen(true);
@@ -59,9 +60,7 @@ const DocumentsShow = (props) => {
     ) {
       fileReader.readAsArrayBuffer(file);
     } else {
-      alert(
-        "Unsupported file type. Only text, PDF, and DOCX files are allowed."
-      );
+      alert(language?.error?.unsupported_type);
     }
   };
   const formatFileSize = (fileSize) => `${(fileSize / 1024).toFixed(2)} KB`;
@@ -93,14 +92,14 @@ const DocumentsShow = (props) => {
       });
     } catch (error) {
       console.log(error);
-      alert("some error please try again");
+      alert(language?.error?.somthing_went_wrong);
     } finally {
       setOverlay(false);
     }
   };
 
   const [showPdf, setShowPdf] = useState(false);
-
+  const { language } = useLanguage();
   return (
     <>
       {overlay && (
@@ -113,10 +112,11 @@ const DocumentsShow = (props) => {
         >
           {!showPdf ? (
             <div onClick={(e) => e.stopPropagation()}>
-              <h1>are you sure yo want to delete this itms</h1>
+              <h1>{language?.table?.are_you_sure_delete}</h1>
               <div className="flex gap-10 wrap">
                 <div onClick={deleteData} className="delete-all overlay-btn">
-                  <i className="fa-solid fa-trash"></i> delete
+                  <i className="fa-solid fa-trash"></i>{" "}
+                  {language?.table?.delete}
                 </div>
                 <div
                   onClick={() => {
@@ -130,7 +130,7 @@ const DocumentsShow = (props) => {
                   }}
                   className="delete-all cencel overlay-btn"
                 >
-                  <i className="fa-solid fa-ban"></i> cencel
+                  <i className="fa-solid fa-ban"></i> {language?.table?.cancel}
                 </div>
               </div>
             </div>
@@ -143,7 +143,7 @@ const DocumentsShow = (props) => {
       )}
 
       <div className="form">
-        <h1>{props.data} selected</h1>
+        <h1>{props.title}</h1>
         <div className="grid-3">
           {props?.documents?.documents[props.data]?.map((e, i) => {
             return (
@@ -217,7 +217,7 @@ const DocumentsShow = (props) => {
                       }}
                       className="remove-doc gap-10"
                     >
-                      delete
+                      {language?.table?.delete}
                       <i className="fa-solid fa-trash-can"></i>
                     </div>
                   </article>
@@ -240,7 +240,7 @@ const DocumentsShow = (props) => {
                     }}
                     className="flex gap-10 remove-doc"
                   >
-                    delete
+                    {language?.table?.delete}
                     <i className=" fa-solid fa-trash-can"></i>
                   </div>
                 )}

@@ -12,6 +12,7 @@ import { baseURL, Context, date } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import MediaComponent from "../../components/MediaComponent";
 import useInfitFetch from "../../hooks/useInfitFetch";
+import useLanguage from "../../hooks/useLanguage";
 const Profile = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -21,6 +22,7 @@ const Profile = () => {
   const [infoPage, setInfoPage] = useState(1);
   const token = context.userDetails.token;
   const nav = useNavigate();
+  const { language } = useLanguage();
 
   useEffect(() => {
     getData();
@@ -104,9 +106,9 @@ const Profile = () => {
           ref={informations.length === i + 1 ? lastElement : null}
           className="person-info"
         >
-          <h2>subject</h2>
+          <h2>{language?.people?.subject}</h2>
           <p>{e.subject}</p>
-          <h2>realted people</h2>
+          <h2>{language?.people?.related_people}</h2>
           {e.people.length > 1 ? (
             <div>
               <div>
@@ -144,10 +146,10 @@ const Profile = () => {
               </div>
             </div>
           ) : (
-            <p>no other people found</p>
+            <p>{language?.people?.no_related_people}</p>
           )}
           <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
-            show details
+            {language?.people?.show_details}
           </Link>
         </article>
       );
@@ -211,7 +213,7 @@ const Profile = () => {
                     id="file"
                     accept="image/*"
                   />
-                  update
+                  {language?.people?.update}
                   <i className="fa-regular fa-pen-to-square"></i>
                 </label>
               )}
@@ -221,10 +223,10 @@ const Profile = () => {
                     onClick={() => setImage(false)}
                     className="btn flex-1 cencel"
                   >
-                    cencel
+                    {language?.people?.cancel}
                   </button>
                   <button onClick={updateProfile} className="btn flex-1 save">
-                    save
+                    {language?.people?.save}
                   </button>
                 </>
               )}
@@ -243,71 +245,71 @@ const Profile = () => {
               className="fa-regular fa-pen-to-square"
             ></Link>
             <div className="flex">
-              <h2>name</h2>
+              <h2>{language?.people?.name}</h2>
               <p>
                 {data?.firstName} {data?.fatherName} {data?.surName}
               </p>
             </div>
             <div className="flex">
-              <h2>place and date of birth</h2>
+              <h2>{language?.people?.place_date_of_birth}</h2>
               <p>
                 {data?.placeOfBirth} {data?.birthDate && date(data?.birthDate)}
               </p>
             </div>
             <div className="flex">
-              <h2>gender</h2>
+              <h2>{language?.people?.gender}</h2>
               <p>{data?.gender}</p>
             </div>
             <div className="flex">
-              <h2>maritalStatus</h2>
+              <h2>{language?.people?.marital_status}</h2>
               <p>{data?.maritalStatus}</p>
             </div>
             <div className="flex">
-              <h2>occupation</h2>
+              <h2>{language?.people?.occupation}</h2>
               <p>{data?.occupation}</p>
             </div>
             <div className="flex">
-              <h2>mother name</h2>
+              <h2>{language?.people?.motherName}</h2>
               <p> {data?.motherName} </p>
             </div>
             <div className="flex">
-              <h2>country</h2>
+              <h2>{language?.people?.country}</h2>
               <p> {data?.countryId?.name} </p>
             </div>
             <div className="flex">
-              <h2>city</h2>
+              <h2>{language?.people?.city}</h2>
               <p> {data?.cityId?.name} </p>
             </div>
             <div className="flex">
-              <h2>street</h2>
+              <h2>{language?.people?.street}</h2>
               <p> {data?.streetId?.name} </p>
             </div>
             <div className="flex">
-              <h2>region</h2>
+              <h2>{language?.people?.country}region</h2>
               <p> {data?.regionId?.name} </p>
             </div>
             <div className="flex">
-              <h2>government</h2>
+              <h2>{language?.people?.government}</h2>
               <p> {data?.governmentId?.name} </p>
             </div>
             <div className="flex">
-              <h2>addressDetails</h2>
+              <h2>{language?.people?.extra_adress_details}</h2>
               <p> {data?.addressDetails} </p>
             </div>
             <div className="flex">
-              <h2>village</h2>
+              <h2>{language?.people?.village}</h2>
               <p> {data?.villageId?.name} </p>
             </div>
             <div className="flex">
-              <h2>phone</h2>
+              <h2>{language?.people?.phone}</h2>
               <p> {data?.phone} </p>
             </div>
             <div className="flex">
-              <h2>email</h2>
+              <h2>{language?.people?.email}</h2>
               <p className="email"> {data?.email} </p>
             </div>
             <div className="flex">
-              <h2>section</h2>
+              <h2>{language?.people?.section}</h2>
               <p className="email"> {data?.sectionId?.name} </p>
             </div>
           </div>
