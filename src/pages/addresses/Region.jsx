@@ -8,11 +8,13 @@ import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import useFeatchData from "../../hooks/useFeatchData";
+import useLanguage from "../../hooks/useLanguage";
 const Region = () => {
   const [overlay, setOverlay] = useState(false);
   const response = useRef(true);
   const [error, setError] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const { language } = useLanguage();
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     city: "",
@@ -64,7 +66,11 @@ const Region = () => {
     div && div.classList.remove("active");
   });
 
-  const header = ["name", "city", "creat at"];
+  const header = [
+    language?.region?.name,
+    language?.region?.city,
+    language?.region?.created_at,
+  ];
   const [form, setForm] = useState({ name: "", city: "" });
   const [update, setUpdate] = useState(false);
 
@@ -140,7 +146,7 @@ const Region = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.city) {
-      setError("Please select a city");
+      setError(language?.error?.please_selecet_city);
     } else {
       setFormLoading(true);
       try {
@@ -186,17 +192,21 @@ const Region = () => {
         <SendData data={`country`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">regions</h1>
+      <h1 className="title">{language?.header?.regions}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this country" : "add new region"}</h1>
-            <label htmlFor="name">region name</label>
+            <h1>
+              {update
+                ? language?.region?.update_region
+                : language?.region?.add_new_region}
+            </h1>
+            <label htmlFor="name">{language?.region?.region_name}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a region name"
+              placeholder={language?.region?.region_name_placeholder}
               value={form.name}
               type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
@@ -211,14 +221,14 @@ const Region = () => {
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update ? language?.region?.save : language?.region?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cencel
+                  {language?.region?.cancel}
                 </button>
               )}
             </div>

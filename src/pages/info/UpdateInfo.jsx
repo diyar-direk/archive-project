@@ -11,12 +11,14 @@ import FormSelect from "../../components/form/FormSelect";
 import DocumentsShow from "./DocumentsShow";
 import Skeleton from "react-loading-skeleton";
 import { Context } from "./../../context/context";
+import useLanguage from "../../hooks/useLanguage";
 const UpdateInfo = () => {
   const { id } = useParams();
   const context = useContext(Context);
   const token = context.userDetails.token;
   const [dataLoading, setDataLoading] = useState(true);
   const [form, setForm] = useState({});
+  const { language } = useLanguage();
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
@@ -88,11 +90,14 @@ const UpdateInfo = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.countryId) setError("please select country");
-    else if (!form.governmentId) setError("please select government");
-    else if (!form.cityId) setError("please select city");
-    else if (!form.sectionId) setError("please select section");
-    else if (!form.credibility) setError("please select credibility");
+    if (!form.countryId) setError(language?.error?.select_country);
+    else if (!form.governmentId) setError(language?.error?.select_government);
+    else if (!form.cityId) setError(language?.error?.please_selecet_city);
+    else if (!form.sectionId) setError(language?.error?.please_selecet_section);
+    else if (form.sources.length < 1)
+      setError(language?.error?.please_selecet_source);
+    else if (!form.credibility)
+      setError(language?.error?.please_selecet_credibility);
     else {
       setLoading(true);
       const keys = Object.keys(form);
@@ -225,14 +230,18 @@ const UpdateInfo = () => {
         </>
       ) : (
         <>
-          <h2 className="text-capitalize font-color mb-10">select people</h2>
+          <h2 className="text-capitalize font-color mb-10">
+            {language?.information?.select_people}
+          </h2>
           <People
             workSpace="add_info align-center"
             people={{ setForm, form }}
           />
           <div className="selected-people flex wrap gap-10">
-            <h2 className="text-capitalize font-color">{`people selectd : ${
-              form?.people?.length <= 0 ? "no one" : ""
+            <h2 className="text-capitalize font-color">{`${
+              language?.information?.people_selected
+            } : ${
+              form?.people?.length <= 0 ? language?.information?.no_one : ""
             }`}</h2>
             {form?.people?.length > 0 &&
               form.people.map((e) => (
@@ -253,28 +262,30 @@ const UpdateInfo = () => {
 
           <form onSubmit={handleSubmit} className="dashboard-form">
             <div className="form">
-              <h1>subject info </h1>
+              <h1>{language?.information?.information} </h1>
               <div className="flex wrap">
                 <div className="flex flex-direction">
-                  <label htmlFor="subject">subject</label>
+                  <label htmlFor="subject">
+                    {language?.information?.subject}
+                  </label>
                   <textarea
                     required
                     value={form.subject}
                     onChange={handleForm}
                     className="inp"
-                    placeholder="test"
+                    placeholder={language?.information?.subject_placeholder}
                     id="subject"
                     rows={5}
                   ></textarea>
                 </div>
                 <div className="flex flex-direction">
-                  <label htmlFor="note">note</label>
+                  <label htmlFor="note">{language?.information?.notes}</label>
                   <textarea
                     value={form.note}
                     onChange={handleForm}
                     required
                     className="inp"
-                    placeholder="test"
+                    placeholder={language?.information?.notes_placeholder}
                     id="note"
                     rows={5}
                   ></textarea>
@@ -283,7 +294,7 @@ const UpdateInfo = () => {
             </div>
 
             <div className="form">
-              <h1>place informations</h1>
+              <h1>{language?.information?.adress}</h1>
               <div className="flex wrap">
                 <FormSelect
                   formKey="country"
@@ -329,12 +340,16 @@ const UpdateInfo = () => {
                 />
 
                 <div className="flex flex-direction">
-                  <label htmlFor="addressDetails">addressDetails</label>
+                  <label htmlFor="addressDetails">
+                    {language?.information?.extra_adress_details}
+                  </label>
                   <textarea
                     value={form.addressDetails || ""}
                     onChange={handleForm}
                     className="inp"
-                    placeholder="test"
+                    placeholder={
+                      language?.information?.extra_adress_details_placeholder
+                    }
                     id="addressDetails"
                     rows={4}
                   ></textarea>
@@ -343,7 +358,7 @@ const UpdateInfo = () => {
             </div>
 
             <div className="form">
-              <h1>more informations</h1>
+              <h1>{language?.information?.more_information}</h1>
               <div className="flex wrap">
                 {context.userDetails.isAdmin && (
                   <FormSelect
@@ -354,10 +369,10 @@ const UpdateInfo = () => {
                 )}
 
                 <div className="flex flex-direction">
-                  <label>credibility</label>
+                  <label>{language?.information?.credibility}</label>
                   <div className="selecte relative">
                     <div onClick={handleClick} className="inp">
-                      select credibility
+                      {language?.information?.select_credibility}
                     </div>
                     <article>
                       <h2
@@ -365,21 +380,21 @@ const UpdateInfo = () => {
                         id="credibility"
                         title="Low"
                       >
-                        Low
+                        {language?.information?.low}
                       </h2>
                       <h2
                         onClick={(e) => handleFormSelect(e, e.target.title)}
                         id="credibility"
                         title="Medium"
                       >
-                        Medium
+                        {language?.information?.medium}
                       </h2>
                       <h2
                         onClick={(e) => handleFormSelect(e, e.target.title)}
                         id="credibility"
                         title="High"
                       >
-                        High
+                        {language?.information?.high}
                       </h2>
                     </article>
                   </div>
@@ -413,7 +428,9 @@ const UpdateInfo = () => {
 
             <div className="form">
               <h1>
-                <label htmlFor="details">details</label>
+                <label htmlFor="details">
+                  {language?.information?.details}
+                </label>
               </h1>
               <div className="flex wrap">
                 <div className="flex flex-direction">
@@ -422,7 +439,7 @@ const UpdateInfo = () => {
                     required
                     onChange={handleForm}
                     className="inp"
-                    placeholder="test"
+                    placeholder={language?.information?.details_placeholder}
                     id="details"
                     rows={4}
                   ></textarea>
@@ -431,7 +448,7 @@ const UpdateInfo = () => {
             </div>
 
             <div className="form">
-              <h1>test title2</h1>
+              <h1>{language?.information?.files}</h1>
               <div className="grid-2">
                 <div className="flex flex-direction">
                   <label className="inp document gap-10 center">
@@ -450,7 +467,7 @@ const UpdateInfo = () => {
                         }));
                       }}
                     />
-                    upload image
+                    {language?.information?.upload_images}
                     <i className="fa-regular fa-image"></i>
                   </label>
                 </div>
@@ -472,7 +489,7 @@ const UpdateInfo = () => {
                         }));
                       }}
                     />
-                    upload video
+                    {language?.information?.upload_videos}
                     <i className="fa-solid fa-video"></i>
                   </label>
                 </div>
@@ -494,7 +511,7 @@ const UpdateInfo = () => {
                         }));
                       }}
                     />
-                    upload audio
+                    {language?.information?.upload_audios}
                     <i className="fa-solid fa-microphone"></i>
                   </label>
                 </div>
@@ -521,7 +538,7 @@ const UpdateInfo = () => {
                         }));
                       }}
                     />
-                    Upload Document
+                    {language?.information?.upload_documents}
                     <i className="fa-solid fa-file"></i>
                   </label>
                 </div>
@@ -568,7 +585,7 @@ const UpdateInfo = () => {
             {isPopupOpen && activeFile && (
               <div className="modal-overlay">
                 <div className="modal">
-                  <h2>File Preview</h2>
+                  <h2>{language?.information?.preview_file}</h2>
                   {activeFile.type === "text/plain" ||
                   activeFile.type === "docx" ? (
                     <div className="file-content">{activeFile.content}</div>
@@ -587,17 +604,17 @@ const UpdateInfo = () => {
                         rel="noreferrer"
                         className="btn"
                       >
-                        Open in Browser
+                         {language?.information?.open_in_browser}
                       </a>
                     </>
                   ) : null}
-                  <button onClick={() => setIsPopupOpen(false)}>Close</button>
+                  <button onClick={() => setIsPopupOpen(false)}>{language?.information?.close}</button>
                 </div>
               </div>
             )}
 
             {error && <p className="error"> {error} </p>}
-            <button className="btn">save</button>
+            <button className="btn">{language?.information?.save}</button>
           </form>
         </>
       )}

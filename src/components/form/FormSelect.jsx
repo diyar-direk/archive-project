@@ -160,6 +160,7 @@ const FormSelect = (props) => {
           translatedRequiredKey: language?.header?.country,
           backendRequiredKey: "country",
           title: language?.table?.cities,
+          header: language?.table?.select_city,
         };
       case "allCity":
         return {
@@ -175,18 +176,21 @@ const FormSelect = (props) => {
           translatedRequiredKey: language?.header?.country,
           backendRequiredKey: "country",
           title: language?.table?.governments,
+          header: language?.table?.select_government,
         };
       case "country":
         return {
           key: "Countries",
           formKey: "countryId",
           title: language?.table?.countries,
+          header: language?.table?.select_country,
         };
       case "coordinates":
         return {
           key: "Coordinates",
           formKey: "coordinates",
           title: language?.table?.coordinates,
+          header: language?.table?.select_coordinates,
         };
       case "region":
         return {
@@ -196,6 +200,7 @@ const FormSelect = (props) => {
           translatedRequiredKey: language?.header?.city,
           backendRequiredKey: "city",
           title: language?.table?.regions,
+          header: language?.table?.select_region,
         };
       case "street":
         return {
@@ -205,6 +210,7 @@ const FormSelect = (props) => {
           translatedRequiredKey: language?.header?.city,
           backendRequiredKey: "city",
           title: language?.table?.streets,
+          header: language?.table?.select_street,
         };
       case "village":
         return {
@@ -214,30 +220,35 @@ const FormSelect = (props) => {
           translatedRequiredKey: language?.header?.city,
           backendRequiredKey: "city",
           title: language?.table?.villages,
+          header: language?.table?.select_village,
         };
       case "sources":
         return {
           key: "Sources",
           formKey: "sources",
           title: language?.table?.sources,
+          header: language?.table?.select_source,
         };
       case "events":
         return {
           key: "Events",
           formKey: "events",
           title: language?.table?.events,
+          header: language?.table?.select_event,
         };
       case "parties":
         return {
           key: "Parties",
           formKey: "parties",
           title: language?.table?.parties,
+          header: language?.table?.select_party,
         };
       case "section":
         return {
           key: "Sections",
           formKey: "sectionId",
           title: language?.table?.sections,
+          header: language?.table?.select_section,
         };
       default:
         return "countryId";
@@ -289,7 +300,7 @@ const FormSelect = (props) => {
           }}
           className="inp"
         >
-          {language?.table?.select} {keyValues.title}
+          {keyValues.header}
         </div>
 
         <article>

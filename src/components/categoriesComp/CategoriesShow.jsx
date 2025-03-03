@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import MediaComponent from "../MediaComponent";
+import useLanguage from "../../hooks/useLanguage";
 
 const CategoriesShow = (props) => {
+  const { language } = useLanguage();
   return (
     <div>
       <div>
@@ -12,7 +14,8 @@ const CategoriesShow = (props) => {
             props.name !== "people" ? (
               props.name !== "coordinates" ? (
                 <p className="font-color" key={e._id}>
-                  <span>{props.title} name:</span> <span> {e[props.name]}</span>
+                  <span>{language?.information?.name}</span>{" "}
+                  <span> {e[props.name]}</span>
                 </p>
               ) : (
                 <Link
@@ -21,7 +24,7 @@ const CategoriesShow = (props) => {
                   className="font-color people-cat"
                   key={e._id}
                 >
-                  <span>{props.title} name:</span>
+                  <span>{language?.information?.name}</span>
                   <span className="name"> {e[props.name]}</span>
                 </Link>
               )

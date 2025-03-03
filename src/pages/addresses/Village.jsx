@@ -8,11 +8,13 @@ import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import useFeatchData from "../../hooks/useFeatchData";
+import useLanguage from "../../hooks/useLanguage";
 const Village = () => {
   const [overlay, setOverlay] = useState(false);
   const response = useRef(true);
   const [error, setError] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const { language } = useLanguage();
   const [filters, setFilters] = useState({
     city: "",
     date: {
@@ -61,7 +63,11 @@ const Village = () => {
     div && div.classList.remove("active");
   });
 
-  const header = ["name", "city", "creat at"];
+  const header = [
+    language?.village?.name,
+    language?.village?.city,
+    language?.village?.created_at,
+  ];
   const [form, setForm] = useState({ name: "", city: "" });
   const [update, setUpdate] = useState(false);
 
@@ -137,7 +143,7 @@ const Village = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.city) {
-      setError("Please select a city");
+      setError(language?.error?.please_selecet_city);
     } else {
       setFormLoading(true);
       try {
@@ -181,17 +187,21 @@ const Village = () => {
         <SendData data={`country`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">villages</h1>
+      <h1 className="title">{language?.header?.villages}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this country" : "add new Village"}</h1>
-            <label htmlFor="name">Village name</label>
+            <h1>
+              {update
+                ? language?.village?.update_village
+                : language?.village?.add_new_village}
+            </h1>
+            <label htmlFor="name">{language?.village?.village_name}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a Village name"
+              placeholder={language?.village?.village_name_placeholder}
               value={form.name}
               type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
@@ -205,14 +215,14 @@ const Village = () => {
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update ? language?.village?.save : language?.village?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cencel
+                  {language?.village?.cancel}
                 </button>
               )}
             </div>

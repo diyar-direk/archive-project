@@ -6,6 +6,7 @@ import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
 const Party = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -16,6 +17,7 @@ const Party = () => {
   const [loading, setLoading] = useState(true);
   const response = useRef(true);
   const context = useContext(Context);
+  const { language } = useLanguage();
   const limit = context?.limit;
   const [filters, setFilters] = useState({
     date: {
@@ -46,7 +48,7 @@ const Party = () => {
     div && div.classList.remove("active");
   });
   const token = context.userDetails.token;
-  const header = ["name", "creat at"];
+  const header = [language?.party?.name, language?.party?.created_at];
   const [form, setForm] = useState({ name: "" });
   const [update, setUpdate] = useState(false);
 
@@ -247,17 +249,21 @@ const Party = () => {
         <SendData data={`country`} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Party</h1>
+      <h1 className="title">{language?.header?.parties}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update this country" : "add new Party"}</h1>
-            <label htmlFor="name">Party name</label>
+            <h1>
+              {update
+                ? language?.party?.update_party
+                : language?.party?.add_new_party}
+            </h1>
+            <label htmlFor="name">{language?.party?.party_name}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="please write a Party name"
+              placeholder={language?.party?.party_name_placeholder}
               value={form.name}
               type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
@@ -266,14 +272,14 @@ const Party = () => {
 
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add"}
+                {update ? language?.party?.save : language?.party?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cencel
+                  {language?.party?.cancel}
                 </button>
               )}
             </div>

@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date, nextJoin } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
+import useLanguage from "../../hooks/useLanguage";
 const Informations = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -14,6 +15,7 @@ const Informations = () => {
   const context = useContext(Context);
   const limit = context?.limit;
   const token = context.userDetails.token;
+  const { language } = useLanguage();
   const [filters, setFilters] = useState({
     country: "",
     government: "",
@@ -29,16 +31,16 @@ const Informations = () => {
   const [search, setSearch] = useState("");
 
   const header = [
-    "subject",
-    "detiles",
-    "credibility",
-    "place",
-    "government",
-    "people",
-    "sourses",
-    "parties",
-    "events",
-    "create at",
+    language?.information?.subject,
+    language?.information?.details,
+    language?.information?.credibility,
+    language?.information?.adress,
+    language?.information?.government,
+    language?.information?.people,
+    language?.information?.source,
+    language?.information?.parties,
+    language?.information?.events,
+    language?.information?.created_at,
   ];
 
   useEffect(() => {
@@ -224,17 +226,19 @@ const Informations = () => {
               }}
               className="flex delete"
             >
-              <i className="fa-solid fa-trash"></i> delete
+              <i className="fa-solid fa-trash"></i>{" "}
+              {language?.information?.delete}
             </div>
             <Link
               to={`/dashboard/update_info/${e._id}`}
               className="flex update"
             >
               <i className="fa-regular fa-pen-to-square"></i>
-              update
+              {language?.information?.update}
             </Link>
             <Link to={`${e._id}`} className="flex visit">
-              <i className="fa-solid fa-eye"> </i> details
+              <i className="fa-solid fa-eye"> </i>{" "}
+              {language?.information?.details}
             </Link>
           </div>
         </td>
@@ -244,10 +248,10 @@ const Informations = () => {
 
   return (
     <>
-      <h1 className="title">info</h1>
+      <h1 className="title">{language?.header?.information}</h1>
       <Table
         header={header}
-        searchInpPlacecholder={`search by subject`}
+        searchInpPlacecholder={language?.information?.search_by_subject}
         loading={loading}
         page={{ page: page, setPage, dataLength: dataLength.current }}
         data={{ data: tableData, allData: allPeople.current }}

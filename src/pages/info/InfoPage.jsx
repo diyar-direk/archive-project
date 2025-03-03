@@ -6,12 +6,14 @@ import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
 import MediaShow from "../../components/categoriesComp/MediaShow";
+import useLanguage from "../../hooks/useLanguage";
 const InfoPage = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const { language } = useLanguage();
   const nav = useNavigate();
   useEffect(() => {
     getData();
@@ -72,7 +74,7 @@ const InfoPage = () => {
       window.URL.revokeObjectURL(url);
     } catch (error) {
       console.error("Download error:", error);
-      alert("Error downloading the file. Please try again.");
+      alert(language?.error?.error_downloading);
     }
   };
 
@@ -103,41 +105,41 @@ const InfoPage = () => {
 
       <h1> {data.subject} </h1>
 
-      <h2>note</h2>
+      <h2>{language?.information?.notes}</h2>
       <p>{data.note}</p>
       <div className="flex align-center gap-10">
-        <h2> credibility</h2>
+        <h2> {language?.information?.credibility}</h2>
         <p>{data.credibility}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h2> country</h2>
+        <h2> {language?.information?.country}</h2>
         <p>{data.countryId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h2> city</h2>
+        <h2> {language?.information?.city}</h2>
         <p>{data.cityId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h2> government</h2>
+        <h2> {language?.information?.government}</h2>
         <p>{data.governmentId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h2>region</h2>
+        <h2>{language?.information?.region}</h2>
         <p>{data.regionId ? data.regionId?.name : "no region found"}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h2>street</h2>
+        <h2>{language?.information?.street}</h2>
         <p>{data.streetId ? data.streetId?.name : "no street found"}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h2>village</h2>
+        <h2>{language?.information?.village}</h2>
         <p>{data.villageId ? data.villageId?.name : "no village found"}</p>
       </div>
       <div className="flex align-center gap-10">
-        <h2>addressDetails</h2>
+        <h2>{language?.information?.adress}</h2>
         <p>{data.addressDetails ? data.addressDetails : "no Details found"}</p>
       </div>
-      <h2>details</h2>
+      <h2>{language?.information?.details}</h2>
       <p>{data.details}</p>
 
       <div className="categories grid-3">
@@ -146,11 +148,23 @@ const InfoPage = () => {
           data={data.coordinates}
           name="coordinates"
         />
-        <CategoriesShow title="people" name="people" data={data.people} />
-        <CategoriesShow title="events" data={data.events} name="name" />
-        <CategoriesShow title="parties" data={data.parties} name="name" />
         <CategoriesShow
-          title="sources"
+          title={language?.information?.people}
+          name="people"
+          data={data.people}
+        />
+        <CategoriesShow
+          title={language?.information?.events}
+          data={data.events}
+          name="name"
+        />
+        <CategoriesShow
+          title={language?.information?.parties}
+          data={data.parties}
+          name="name"
+        />
+        <CategoriesShow
+          title={language?.information?.sources}
           data={data.sources}
           name="source_name"
         />
