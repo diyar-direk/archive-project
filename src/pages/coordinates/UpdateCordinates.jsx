@@ -7,6 +7,7 @@ import axios from "axios";
 import { baseURL, Context } from "../../context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+import useLanguage from "../../hooks/useLanguage";
 
 const UpdateCoordinates = () => {
   const context = useContext(Context);
@@ -16,6 +17,7 @@ const UpdateCoordinates = () => {
   const [dataLoading, setDataLoading] = useState(false);
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
+  const { language } = useLanguage();
 
   const responseFun = (complete = false) => {
     complete === true
@@ -110,11 +112,12 @@ const UpdateCoordinates = () => {
       coordinates: `${coordinates.firstNumber}${coordinates.firstLetter} ${coordinates.secondLetter} ${coordinates.secondNumber} ${coordinates.thirdNumber}`,
     };
 
-    if (!formData.countryId) setError("please select country");
-    else if (!formData.cityId) setError("please select city");
-    else if (!formData.governmentId) setError("please select government");
-    else if (!formData.sectionId) setError("please select scetion");
-    else if (!formData.sources) setError("please select scetion");
+    if (!form.countryId) setError(language?.error?.select_country);
+    else if (!form.governmentId) setError(language?.error?.select_government);
+    else if (!form.cityId) setError(language?.error?.please_selecet_city);
+    else if (!form.sectionId) setError(language?.error?.please_selecet_section);
+    else if (!formData.sources)
+      setError(language?.error?.please_selecet_source);
     else {
       setLoading(true);
       const keys = Object.keys(formData);
@@ -268,7 +271,7 @@ const UpdateCoordinates = () => {
             </div>
           </div>
           <div className="form">
-            <h1>stay informations</h1>
+            <h1>{language?.coordinates?.adress}</h1>
             <div className="flex wrap">
               <FormSelect
                 formKey="country"
@@ -305,7 +308,7 @@ const UpdateCoordinates = () => {
             </div>
           </div>
           <div className="form">
-            <h1>more informations</h1>
+            <h1>{language?.coordinates?.more_information}</h1>
             <div className="flex wrap">
               {context.userDetails.isAdmin && (
                 <FormSelect
@@ -325,12 +328,12 @@ const UpdateCoordinates = () => {
           <div className="form">
             <div className="flex wrap">
               <div className="flex flex-direction">
-                <label htmlFor="note">note</label>
+                <label htmlFor="note">{language?.coordinates?.notes}</label>
                 <textarea
                   value={form.note ? form.note : ""}
                   onChange={(e) => setForm({ ...form, note: e.target.value })}
                   className="inp"
-                  placeholder="test"
+                  placeholder={language?.coordinates?.notes_placeholder}
                   id="note"
                   rows={5}
                 ></textarea>
@@ -338,7 +341,7 @@ const UpdateCoordinates = () => {
             </div>
           </div>
           {error && <p className="error">{error}</p>}
-          <button className="btn">save</button>
+          <button className="btn">{language?.coordinates?.save}</button>
         </form>
       )}
     </>

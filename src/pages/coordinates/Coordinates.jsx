@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
+import useLanguage from "../../hooks/useLanguage";
 const Coordinates = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -14,6 +15,7 @@ const Coordinates = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const limit = context?.limit;
+  const { language } = useLanguage();
   const [filters, setFilters] = useState({
     country: "",
     government: "",
@@ -29,14 +31,14 @@ const Coordinates = () => {
   const [search, setSearch] = useState("");
 
   const header = [
-    "coordinates",
-    "place",
-    "government",
-    "street",
-    "region",
-    "source",
-    "note",
-    "create at",
+    language?.coordinates?.coordinates,
+    language?.coordinates?.adress,
+    language?.coordinates?.government,
+    language?.coordinates?.street,
+    language?.coordinates?.region,
+    language?.coordinates?.source,
+    language?.coordinates?.notes,
+    language?.coordinates?.created_at,
   ];
 
   useEffect(() => {
@@ -200,17 +202,19 @@ const Coordinates = () => {
               }}
               className="flex delete"
             >
-              <i className="fa-solid fa-trash"></i> delete
+              <i className="fa-solid fa-trash"></i>{" "}
+              {language?.coordinates?.delete}
             </div>
             <Link
               to={`/dashboard/coordinates/${e._id}`}
               className="flex update"
             >
               <i className="fa-regular fa-pen-to-square"></i>
-              update
+              {language?.coordinates?.update}
             </Link>
             <Link to={`/dashboard/coordinate/${e._id}`} className="flex visit">
-              <i className="fa-solid fa-eye"> </i> details
+              <i className="fa-solid fa-eye"> </i>{" "}
+              {language?.coordinates?.details}
             </Link>
           </div>
         </td>
@@ -220,10 +224,10 @@ const Coordinates = () => {
 
   return (
     <>
-      <h1 className="title"> Coordinates </h1>
+      <h1 className="title"> {language?.header?.coordinates} </h1>
       <Table
         header={header}
-        searchInpPlacecholder={`search by coordinates`}
+        searchInpPlacecholder={language?.coordinates?.search_by_coordinates}
         loading={loading}
         page={{ page: page, setPage, dataLength: dataLength.current }}
         data={{ data: tableData, allData: allPeople.current }}

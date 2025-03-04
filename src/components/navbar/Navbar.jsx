@@ -207,7 +207,7 @@ const Navbar = () => {
               onChange={(e) => setForm(e.target.value)}
               type="text"
               className="flex-1"
-              placeholder="search for pages"
+              placeholder={language?.header?.serach_for_pages}
             />
             <button className="fa-solid fa-magnifying-glass"></button>
             {form.length > 0 && <div className="results"> {search()} </div>}

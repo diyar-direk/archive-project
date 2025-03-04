@@ -5,6 +5,7 @@ import axios from "axios";
 import { date } from "../../context/context";
 import "./backup.css";
 import Loading from "../../components/loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
 const Backup = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -12,6 +13,7 @@ const Backup = () => {
   const [loading, setLoading] = useState(true);
   const [dataLoading, setDataLoading] = useState(false);
   const context = useContext(Context);
+  const { language } = useLanguage();
   const [form, setForm] = useState({
     username: context.userDetails.username,
     password: "",
@@ -27,7 +29,7 @@ const Backup = () => {
     },
   });
 
-  const header = ["root", "creat at"];
+  const header = [language?.backUps?.root, language?.backUps?.created_at];
 
   useEffect(() => {
     getData();
@@ -70,7 +72,7 @@ const Backup = () => {
           style={{ color: "#27c12d", fontWeight: "500" }}
           className="c-pointer text-capitalize"
         >
-          use this backup
+          {language?.backUps?.use_this_backup}
         </p>
       </td>
     </tr>
@@ -212,7 +214,12 @@ const Backup = () => {
           <div onClick={(e) => e.stopPropagation()}>
             {!overlay.form && !overlay.showStatus ? (
               <>
-                <h1>which operation would you like to proceed with</h1>
+                <h1>
+                  {
+                    language?.backUps
+                      ?.which_operation_would_you_like_to_proceed_with
+                  }
+                </h1>
                 <p
                   className="font-color"
                   style={{ marginBottom: "10px", fontWeight: "500" }}
@@ -227,7 +234,7 @@ const Backup = () => {
                     className="btn overlay-btn"
                   >
                     <i className="fa-solid fa-repeat"></i>
-                    replace
+                    {language?.backUps?.replace}
                   </div>
                   <div
                     onClick={() =>
@@ -236,7 +243,7 @@ const Backup = () => {
                     className="delete-all save overlay-btn"
                   >
                     <i className="fa-solid fa-window-restore"></i>
-                    restore
+                    {language?.backUps?.restore}
                   </div>
                 </div>
               </>
@@ -246,7 +253,7 @@ const Backup = () => {
                   autoFocus
                   type="password"
                   required
-                  placeholder="please write your password"
+                  placeholder={language?.backUps?.please_your_enter_password}
                   value={form.password}
                   onChange={(e) =>
                     setForm({ ...form, password: e.target.value })
@@ -261,14 +268,16 @@ const Backup = () => {
               <div className="flex warning center flex-direction gap-10 wrap">
                 <i className="fa-solid fa-triangle-exclamation"></i>
                 <h1>
-                  <span>warning</span> this might delete or modify the database
+                  <span>{language?.backUps?.warning}</span>{" "}
+                  {language?.backUps?.about_deleting_database}
                 </h1>
                 <div className="flex w-100 center gap-20">
                   <div
                     onClick={handleYes}
                     className="save delete-all overlay-btn"
                   >
-                    <i className="fa-solid fa-check"></i> yes
+                    <i className="fa-solid fa-check"></i>{" "}
+                    {language?.backUps?.accept}
                   </div>
                   <div
                     onClick={() => {
@@ -276,7 +285,8 @@ const Backup = () => {
                     }}
                     className="delete-all overlay-btn"
                   >
-                    <i className="fa-solid fa-ban"></i> no
+                    <i className="fa-solid fa-ban"></i>{" "}
+                    {language?.backUps?.cancel}
                   </div>
                 </div>
               </div>
@@ -284,12 +294,13 @@ const Backup = () => {
           </div>
         </div>
       )}
-      <h1 className="title">back up</h1>
+      <h1 className="title">{language?.header?.backUps}</h1>
       <button
         onClick={createBackup}
         className="center create-backup gap-2 btn save"
       >
-        create backup <i className="fa-solid fa-plus"></i>
+        {language?.backUps?.create_new_backup}
+        <i className="fa-solid fa-plus"></i>
       </button>
       <div className="flex-1">
         <Table

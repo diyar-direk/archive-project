@@ -13,6 +13,8 @@ const InfoPage = () => {
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const lang = context.language;
+  console.log(lang);
   const { language } = useLanguage();
   const nav = useNavigate();
   useEffect(() => {
@@ -53,7 +55,7 @@ const InfoPage = () => {
             Accept: "application/zip",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ informationId: id }),
+          body: JSON.stringify({ informationId: id, lang: lang }),
         }
       );
 
@@ -66,7 +68,7 @@ const InfoPage = () => {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "download.zip";
+      a.download = `${id}.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();

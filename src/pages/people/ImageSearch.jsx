@@ -6,12 +6,14 @@ import { baseURL, Context } from "../../context/context";
 import Virtual from "../../components/Virtual";
 import MediaComponent from "../../components/MediaComponent";
 import { Link } from "react-router-dom";
+import useLanguage from "../../hooks/useLanguage";
 const ImageSearch = () => {
   const [image, setImage] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState({ loading: false, loaded: false });
   const context = useContext(Context);
   const token = context?.userDetails?.token;
+  const { language } = useLanguage();
 
   const [response, setResponse] = useState([]);
   const [overlay, setOverlay] = useState(false);
@@ -19,7 +21,7 @@ const ImageSearch = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!image) {
-      setError("please uploade a photo");
+      setError(language?.error?.add_an_image);
       return;
     }
     try {
@@ -36,7 +38,7 @@ const ImageSearch = () => {
       setLoading({ loading: true, loaded: true });
     } catch (error) {
       console.log(error);
-      alert("some error");
+      alert(language?.error?.somthing_went_wrong);
     } finally {
       setLoading({ ...loading, loading: false });
     }
@@ -57,7 +59,7 @@ const ImageSearch = () => {
                 : "green"
             }
           >
-            similarity: {similarity} %
+            {language?.filter?.similarity} {similarity} %
           </h3>
           {tableData.informationId ? (
             <>
@@ -72,7 +74,7 @@ const ImageSearch = () => {
                 className="btn"
                 to={`/dashboard/informations/${tableData.informationId}`}
               >
-                show info
+                {language?.filter?.details}
               </Link>
             </>
           ) : (
@@ -99,7 +101,7 @@ const ImageSearch = () => {
                   to={`/dashboard/people/${tableData._id}`}
                   className="profile-btn"
                 >
-                  visti profile
+                  {language?.filter?.visit_profile}
                 </Link>
               </div>
             </>
@@ -145,21 +147,22 @@ const ImageSearch = () => {
           />
           {!image ? (
             <h3 className="center gap-10">
-              upload your photo <i className="fa-solid fa-plus"></i>
+              {language?.searchImage?.uplaod_your_image}{" "}
+              <i className="fa-solid fa-plus"></i>
             </h3>
           ) : (
             <img alt="" src={URL.createObjectURL(image)} loading="lazy" />
           )}
         </label>
         <button title="submit" className="btn center gap-2" disabled={!image}>
-          search
+          {language?.searchImage?.search}
           <i className="fa-solid fa-magnifying-glass"></i>
         </button>
         {error && <p className="error"> {error} </p>}
       </form>
 
       {loading.loaded && response.length < 1 ? (
-        <h3 className="font-color">no results found</h3>
+        <h3 className="font-color">{language?.searchImage?.no_data}</h3>
       ) : response.length > 0 ? (
         <div className="grid-3">{data}</div>
       ) : (
@@ -168,7 +171,7 @@ const ImageSearch = () => {
             style={{ textAlign: "center" }}
             className="font-color text-capitalize"
           >
-            no result found
+            {language?.searchImage?.no_data}
           </h2>
         )
       )}

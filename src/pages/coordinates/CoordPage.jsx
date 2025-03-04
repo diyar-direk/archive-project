@@ -12,6 +12,7 @@ import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import MediaComponent from "../../components/MediaComponent";
 import useInfitFetch from "../../hooks/useInfitFetch";
+import useLanguage from "../../hooks/useLanguage";
 const CoordPage = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -20,6 +21,7 @@ const CoordPage = () => {
   const [infoPage, setInfoPage] = useState(1);
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const { language } = useLanguage();
 
   async function getData() {
     !loading && setLoading(true);
@@ -85,10 +87,10 @@ const CoordPage = () => {
           ref={informations.length === i + 1 ? lastElement : null}
           className="person-info"
         >
-          <h2>Subject</h2>
+          <h2>{language?.information?.subject}</h2>
           <p>{e.subject}</p>
 
-          <h2>Related People</h2>
+          <h2>{language?.information?.related_people}</h2>
           {e.people.length > 0 ? (
             <div>
               <div>
@@ -126,11 +128,11 @@ const CoordPage = () => {
               </div>
             </div>
           ) : (
-            <p>No people found</p>
+            <p>{language?.information?.no_related_people}</p>
           )}
 
           <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
-            Show Details
+            {language?.information?.show_details}
           </Link>
         </article>
       );
@@ -163,44 +165,44 @@ const CoordPage = () => {
                 className="fa-regular fa-pen-to-square"
               ></Link>
               <div className="flex">
-                <h2>coordinates</h2>
+                <h2>{language?.information?.coordinates}</h2>
                 <p>{data?.coordinates}</p>
               </div>
 
               <div className="flex">
-                <h2>country</h2>
+                <h2>{language?.information?.country}</h2>
                 <p> {data?.countryId?.name} </p>
               </div>
               <div className="flex">
-                <h2>city</h2>
+                <h2>{language?.information?.city}</h2>
                 <p> {data?.cityId?.name} </p>
               </div>
               <div className="flex">
-                <h2>street</h2>
+                <h2>{language?.information?.street}</h2>
                 <p> {data?.streetId?.name} </p>
               </div>
               <div className="flex">
-                <h2>region</h2>
+                <h2>{language?.information?.region}</h2>
                 <p> {data?.regionId?.name} </p>
               </div>
               <div className="flex">
-                <h2>government</h2>
+                <h2>{language?.information?.government}</h2>
                 <p> {data?.governmentId?.name} </p>
               </div>
               <div className="flex">
-                <h2>village</h2>
+                <h2>{language?.information?.village}</h2>
                 <p> {data?.villageId?.name} </p>
               </div>
               <div className="flex">
-                <h2>note</h2>
+                <h2>{language?.information?.notes}</h2>
                 <p> {data?.note} </p>
               </div>
               <div className="flex">
-                <h2>source</h2>
+                <h2>{language?.information?.source}</h2>
                 <p> {data?.sources?.source_name} </p>
               </div>
               <div className="flex">
-                <h2>sectionId</h2>
+                <h2>{language?.information?.section}</h2>
                 <p> {data?.sectionId?.name} </p>
               </div>
             </div>

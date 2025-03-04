@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { baseURL, Context } from "../../context/context";
 import DatePicker from "react-datepicker";
+import useLanguage from "../../hooks/useLanguage";
 
 const Filters = (props) => {
   const [dataLoading, setDataLoading] = useState({
@@ -18,18 +19,59 @@ const Filters = (props) => {
   const keys = Object.keys(fltr);
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const { language } = useLanguage();
 
   const arrayOfKeys = [
-    { fltrKey: "gender", backendKey: "gender" },
-    { fltrKey: "credibility", backendKey: "credibility" },
-    { fltrKey: "source_credibility", backendKey: "source_credibility" },
-    { fltrKey: "role", backendKey: "role" },
-    { fltrKey: "maritalStatus", backendKey: "maritalStatus" },
-    { fltrKey: "country", backendKey: "Countries" },
-    { fltrKey: "government", backendKey: "Governments" },
-    { fltrKey: "city", backendKey: "Cities" },
-    { fltrKey: "region", backendKey: "Regions" },
-    { fltrKey: "villag", backendKey: "Villages" },
+    {
+      fltrKey: "gender",
+      backendKey: "gender",
+      title: language?.table?.all_genders,
+    },
+    {
+      fltrKey: "credibility",
+      backendKey: "credibility",
+      title: language?.table?.all_credibility,
+    },
+    {
+      fltrKey: "source_credibility",
+      backendKey: "source_credibility",
+      title: language?.table?.all_source_credibility,
+    },
+    {
+      fltrKey: "role",
+      backendKey: "role",
+      title: language?.table?.all_roles,
+    },
+    {
+      fltrKey: "maritalStatus",
+      backendKey: "maritalStatus",
+      title: language?.table?.all_marital_status,
+    },
+    {
+      fltrKey: "country",
+      backendKey: "Countries",
+      title: language?.table?.all_countries,
+    },
+    {
+      fltrKey: "government",
+      backendKey: "Governments",
+      title: language?.table?.all_governments,
+    },
+    {
+      fltrKey: "city",
+      backendKey: "Cities",
+      title: language?.table?.all_cities,
+    },
+    {
+      fltrKey: "region",
+      backendKey: "Regions",
+      title: language?.table?.all_regions,
+    },
+    {
+      fltrKey: "villag",
+      backendKey: "Villages",
+      title: language?.table?.all_villages,
+    },
   ];
 
   useEffect(() => {
@@ -298,7 +340,7 @@ const Filters = (props) => {
                 ? fltr[e]?.name
                   ? fltr[e]?.name
                   : fltr[e]
-                : `all ${targetKey.backendKey}`}
+                : `${targetKey.title}`}
             </span>
             <i className="fa-solid fa-sort-down pointer-none"></i>
           </div>
@@ -312,7 +354,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                all gender
+                {language?.table?.all_genders}
               </h2>
               <h2
                 data-name="gender"
@@ -322,7 +364,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                female
+                {language?.people?.female}
               </h2>
               <h2
                 data-name="gender"
@@ -332,7 +374,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                male
+                {language?.people?.male}
               </h2>
             </article>
           ) : e === "maritalStatus" ? (
@@ -345,7 +387,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                all marital
+                {language?.people?.all_marital_status}
               </h2>
               <h2
                 data-name="maritalStatus"
@@ -355,7 +397,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                Married
+                {language?.people?.married}
               </h2>
               <h2
                 data-name="maritalStatus"
@@ -365,7 +407,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                Single
+                {language?.people?.single}
               </h2>
               <h2
                 data-name="maritalStatus"
@@ -375,7 +417,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                Other
+                {language?.people?.other}
               </h2>
             </article>
           ) : e === "role" ? (
@@ -388,7 +430,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                all roles
+                {language?.tabele?.all_roles}
               </h2>
               <h2
                 data-name="role"
@@ -398,7 +440,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                admin
+                {language?.users?.admin}
               </h2>
               <h2
                 data-name="role"
@@ -408,10 +450,10 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                user
+                {language?.users?.user}
               </h2>
             </article>
-          ) : e !== "source_credibility" || e !== "credibility" ? (
+          ) : e === "source_credibility" || e === "credibility" ? (
             <article>
               <h2
                 data-name={e}
@@ -421,7 +463,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                all credibility
+                {language?.table?.all_credibility}
               </h2>
               <h2
                 data-name={e}
@@ -431,7 +473,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                High
+                {language?.information?.high}
               </h2>
               <h2
                 data-name={e}
@@ -441,7 +483,7 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                Medium
+                {language?.information?.medium}
               </h2>
               <h2
                 data-name={e}
@@ -451,13 +493,13 @@ const Filters = (props) => {
                   removeClass(e);
                 }}
               >
-                Low
+                {language?.information?.low}
               </h2>
             </article>
           ) : (
             <article>
               {dataLoading[targetKey.backendKey] ? (
-                <p>loading ...</p>
+                <p>{language?.information?.loading}</p>
               ) : (
                 <>
                   {props.dataArray.data?.data[targetKey.backendKey].length !==
@@ -465,7 +507,7 @@ const Filters = (props) => {
                     <input
                       type="text"
                       className="fltr-search"
-                      placeholder={`search for ${targetKey.backendKey} ...`}
+                      placeholder={language?.table?.serach_by_name}
                       onInput={(inp) => {
                         const filteredCountries =
                           props.dataArray.data.dataWithProps[
@@ -495,7 +537,7 @@ const Filters = (props) => {
                         removeClass(e);
                       }}
                     >
-                      all {targetKey.backendKey}
+                      {targetKey.title}
                     </h2>
                   )}
                   {props.dataArray.data?.searchData[targetKey.backendKey]?.map(
@@ -513,7 +555,7 @@ const Filters = (props) => {
                     )
                   )}
                   {props.dataArray.data?.searchData[targetKey.backendKey]
-                    ?.length <= 0 && <p>no data</p>}
+                    ?.length <= 0 && <p>{language?.information?.no_data}</p>}
                 </>
               )}
             </article>
@@ -528,9 +570,9 @@ const Filters = (props) => {
       <div onClick={(e) => e.stopPropagation()} className="table-fltr">
         <div className="center wrap date-fltr gap-20">
           <div className="relative flex-1 center gap-10">
-            <span>from:</span>
+            <span>{language?.table?.from}</span>
             <DatePicker
-              placeholderText="date from"
+              placeholderText={language?.coordinates?.date_from}
               selected={fltr.date.from}
               showIcon
               showMonthDropdown
@@ -544,9 +586,9 @@ const Filters = (props) => {
             />
           </div>
           <div className="center flex-1 gap-10 relative">
-            <span>to:</span>
+            <span>{language?.table?.to}</span>
             <DatePicker
-              placeholderText="date to"
+              placeholderText={language?.coordinates?.date_to}
               selected={fltr.date.to}
               showIcon
               showMonthDropdown
@@ -577,7 +619,7 @@ const Filters = (props) => {
               props?.hasFltr?.setHasFltr(false);
             }}
           >
-            okay
+            {language?.table?.okay}
           </span>
           <span
             className="cencel-fltr"
@@ -586,7 +628,7 @@ const Filters = (props) => {
               setFltr(props.fltr?.fltr);
             }}
           >
-            cancel
+            {language?.table?.cancel}
           </span>
         </div>
       </div>
