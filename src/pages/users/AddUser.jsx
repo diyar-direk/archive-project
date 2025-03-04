@@ -119,7 +119,6 @@ const AddUser = () => {
       }
     }
   };
-  console.log(language);
 
   return (
     <>

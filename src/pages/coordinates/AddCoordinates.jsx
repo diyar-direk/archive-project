@@ -129,8 +129,6 @@ const AddCoordinates = () => {
   };
 
   const callBack = useMemo(() => {
-    console.log(1);
-
     const vaildLetter = [
       "C",
       "D",
