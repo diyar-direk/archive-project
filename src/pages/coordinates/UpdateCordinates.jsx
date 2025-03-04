@@ -148,13 +148,13 @@ const UpdateCoordinates = () => {
 
     const updatedValue = isNaN(value) ? value.toUpperCase() : value;
 
-    if (value.length > maxLength) return;
+    if (value?.length > maxLength) return;
 
     if (error) setError(false);
 
     setCoordinates((prev) => ({ ...prev, [id]: updatedValue }));
 
-    if (value.length === maxLength) {
+    if (value?.length === maxLength) {
       let nextInput = e.target.nextElementSibling;
 
       while (nextInput && nextInput.tagName !== "INPUT") {

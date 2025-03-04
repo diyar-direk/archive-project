@@ -94,7 +94,7 @@ const UpdateInfo = () => {
     else if (!form.governmentId) setError(language?.error?.select_government);
     else if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
-    else if (form.sources.length < 1)
+    else if (form?.sources?.length < 1)
       setError(language?.error?.please_selecet_source);
     else if (!form.credibility)
       setError(language?.error?.please_selecet_credibility);
@@ -569,7 +569,7 @@ const UpdateInfo = () => {
               />
             )}
 
-            {uploadedFiles?.list.length > 0 && (
+            {uploadedFiles?.list?.length > 0 && (
               <DocumentsShow
                 backendKey="/media/documents"
                 popup={{ setIsPopupOpen, isPopupOpen }}
@@ -604,11 +604,13 @@ const UpdateInfo = () => {
                         rel="noreferrer"
                         className="btn"
                       >
-                         {language?.information?.open_in_browser}
+                        {language?.information?.open_in_browser}
                       </a>
                     </>
                   ) : null}
-                  <button onClick={() => setIsPopupOpen(false)}>{language?.information?.close}</button>
+                  <button onClick={() => setIsPopupOpen(false)}>
+                    {language?.information?.close}
+                  </button>
                 </div>
               </div>
             )}

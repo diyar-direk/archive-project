@@ -150,16 +150,18 @@ const Users = () => {
         <td>{date(e.createdAt)}</td>
         <td>
           <div className="center gap-10 actions">
-            <i
-              onClick={(event) => {
-                event.stopPropagation();
-                setOverlay(true);
-                const allSelectors = document.querySelectorAll(".checkbox");
-                allSelectors.forEach((e) => e.classList.remove("active"));
-                setSelectedItems([e._id]);
-              }}
-              className="delete fa-solid fa-trash"
-            ></i>
+            {context.userDetails._id !== e._id && (
+              <i
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((e) => e.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="delete fa-solid fa-trash"
+              ></i>
+            )}
           </div>
         </td>
       </tr>

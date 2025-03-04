@@ -14,15 +14,13 @@ export default function useInfitFetch(key, id, page, limit = 1) {
     setInfoLoading(true);
     const source = axios.CancelToken.source();
 
+    let url = `${baseURL}/Information?active=true&fields=people,subject&limit=${limit}&page=${page}&${key}=${id}`;
+
+    context.userDetails.role === "user" &&
+      (url += `&sectionId=${context.userDetails.sectionId}`);
+
     axios
-      .get(`${baseURL}/Information`, {
-        params: {
-          active: true,
-          fields: "people,subject",
-          [key]: id,
-          limit,
-          page,
-        },
+      .get(url, {
         headers: { Authorization: `Bearer ${token}` },
         cancelToken: source.token,
       })

@@ -54,6 +54,7 @@ const Coordinates = () => {
     let url = `${baseURL}/Coordinates?active=true&limit=${limit}&page=${page}`;
     context.userDetails.role === "user" &&
       (url += `&sectionId=${context.userDetails.sectionId}`);
+
     const keys = Object.keys(filters);
     keys.forEach(
       (key) =>
@@ -75,6 +76,7 @@ const Coordinates = () => {
       const data = await axios.get(url, {
         headers: { Authorization: "Bearer " + token },
       });
+
       dataLength.current = data.data.numberOfActiveCoordinates;
 
       allPeople.current = data.data.data.map((e) => e._id);

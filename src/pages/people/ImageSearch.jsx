@@ -83,7 +83,7 @@ const ImageSearch = () => {
                 <div className="photo">
                   <MediaComponent
                     type={"image"}
-                    onClick={() => setOverlay(tableData.src)}
+                    onClick={() => setOverlay(tableData.image)}
                     src={tableData.image}
                   />
                 </div>
