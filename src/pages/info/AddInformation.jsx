@@ -239,6 +239,39 @@ const AddInformation = () => {
     setForm({ ...form, [e.target.title]: "" });
   };
 
+  const removeDuplicates = (filesArray) => {
+    const fileMap = new Map();
+    filesArray.forEach((file) => {
+      fileMap.set(file.name, file);
+    });
+    return Array.from(fileMap.values());
+  };
+
+  const handleFiles = (files) => {
+    const imageFiles = files.filter((file) => file.type.startsWith("image/"));
+    const videoFiles = files.filter((file) => file.type.startsWith("video/"));
+    const audioFiles = files.filter((file) => file.type.startsWith("audio/"));
+    const documentFiles = files.filter((file) =>
+      [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "text/plain",
+      ].includes(file.type)
+    );
+
+    setDocuments((prev) => ({
+      ...prev,
+      image: removeDuplicates([...prev.image, ...imageFiles]),
+      video: removeDuplicates([...prev.video, ...videoFiles]),
+      audio: removeDuplicates([...prev.audio, ...audioFiles]),
+    }));
+
+    setUploadedFiles((prev) => ({
+      ...prev,
+      list: removeDuplicates([...prev.list, ...documentFiles]),
+    }));
+  };
+
   return (
     <>
       {responseOverlay && (
@@ -456,97 +489,28 @@ const AddInformation = () => {
 
         <div className="form">
           <h1>{language?.information?.files}</h1>
-          <div className="grid-2">
+          <div>
             <div className="flex flex-direction">
-              <label className="inp document gap-10 center">
-                <input
-                  multiple
-                  accept="image/*"
-                  type="file"
-                  id="image"
-                  onInput={(e) => {
-                    setDocuments((prevDocuments) => ({
-                      ...prevDocuments,
-                      image: [
-                        ...prevDocuments.image,
-                        ...Array.from(e.target.files),
-                      ],
-                    }));
-                  }}
-                />
-                {language?.information?.upload_images}
-                <i className="fa-regular fa-image"></i>
-              </label>
-            </div>
-
-            <div className="flex flex-direction">
-              <label className="inp document gap-10 center">
+              <label
+                className="inp document gap-10 center"
+                onDrop={(e) => {
+                  e.preventDefault();
+                  const files = Array.from(e.dataTransfer.files);
+                  handleFiles(files);
+                }}
+                onDragOver={(e) => e.preventDefault()}
+              >
                 <input
                   type="file"
-                  id="video"
                   multiple
-                  accept="video/*"
+                  accept="image/*, video/*, .mp3, .wav, .mpeg, .ogg, .flac, .aac, .pdf, .docx, .txt"
                   onInput={(e) => {
-                    setDocuments((prevDocuments) => ({
-                      ...prevDocuments,
-                      video: [
-                        ...prevDocuments.video,
-                        ...Array.from(e.target.files),
-                      ],
-                    }));
+                    const files = Array.from(e.target.files);
+                    handleFiles(files);
                   }}
                 />
-                {language?.information?.upload_videos}
-                <i className="fa-solid fa-video"></i>
-              </label>
-            </div>
-
-            <div className="flex flex-direction">
-              <label className="inp document gap-10 center">
-                <input
-                  type="file"
-                  id="audio"
-                  multiple
-                  accept=".mp3, .wav, .mpeg, .ogg, .flac, .aac"
-                  onInput={(e) => {
-                    setDocuments((prevDocuments) => ({
-                      ...prevDocuments,
-                      audio: [
-                        ...prevDocuments.audio,
-                        ...Array.from(e.target.files),
-                      ],
-                    }));
-                  }}
-                />
-                {language?.information?.upload_audios}
-                <i className="fa-solid fa-microphone"></i>
-              </label>
-            </div>
-
-            <div className="flex flex-direction">
-              <label className="inp document gap-10 center">
-                <input
-                  type="file"
-                  id="list"
-                  multiple
-                  accept=".pdf, .docx, .txt"
-                  onInput={(e) => {
-                    const validFiles = Array.from(e.target.files).filter(
-                      (file) =>
-                        [
-                          "application/pdf",
-                          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                          "text/plain",
-                        ].includes(file.type)
-                    );
-                    setUploadedFiles((prevFiles) => ({
-                      ...prevFiles,
-                      list: [...prevFiles.list, ...validFiles],
-                    }));
-                  }}
-                />
-                {language?.information?.upload_documents}
-                <i className="fa-solid fa-file"></i>
+                {language?.information?.upload_files || "Upload Files"}
+                <i className="fa-solid fa-file-upload"></i>
               </label>
             </div>
           </div>

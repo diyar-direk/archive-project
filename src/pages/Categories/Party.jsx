@@ -210,7 +210,6 @@ const Party = () => {
     setFormLoading(true);
     try {
       const formData = { ...form };
-      console.log(formData);
 
       if (update) {
         const data = await axios.patch(

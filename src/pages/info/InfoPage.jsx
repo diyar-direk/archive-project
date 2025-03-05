@@ -14,7 +14,6 @@ const InfoPage = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const lang = context.language;
-  console.log(lang);
   const { language } = useLanguage();
   const nav = useNavigate();
   useEffect(() => {

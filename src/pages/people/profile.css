@@ -249,6 +249,9 @@ div.categories.grid-3 > div p {
   text-overflow: ellipsis;
   text-align: center;
 }
+.add-colon::after {
+  content: " : ";
+}
 div.categories.grid-3 > div h3 {
   text-transform: capitalize;
   font-size: 20px;

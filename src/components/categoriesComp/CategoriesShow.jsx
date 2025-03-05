@@ -14,7 +14,9 @@ const CategoriesShow = (props) => {
             props.name !== "people" ? (
               props.name !== "coordinates" ? (
                 <p className="font-color" key={e._id}>
-                  <span>{language?.information?.name}</span>{" "}
+                  <span className="add-colon">
+                    {language?.information?.name}
+                  </span>{" "}
                   <span> {e[props.name]}</span>
                 </p>
               ) : (
@@ -24,7 +26,9 @@ const CategoriesShow = (props) => {
                   className="font-color people-cat"
                   key={e._id}
                 >
-                  <span>{language?.information?.name}</span>
+                  <span className="add-colon">
+                    {language?.information?.name}
+                  </span>
                   <span className="name"> {e[props.name]}</span>
                 </Link>
               )

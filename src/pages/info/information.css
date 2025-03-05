@@ -4,8 +4,12 @@ form.dashboard-form > div.form > div .flex-direction:has(label.document) {
 form.dashboard-form > div.form > div .flex-direction label.document {
   border: dashed 3px var(--main-color);
   cursor: pointer;
-  min-height: 100px;
+  min-height: 200px;
   background-color: transparent;
+  margin: 0;
+}
+form.dashboard-form > div.form > div .flex-direction label.document:hover {
+  background-color: #334b7c26;
 }
 form.dashboard-form > div.form > div label.document input {
   display: none;

@@ -128,7 +128,6 @@ const Informations = () => {
       );
       dataLength.current = data.data.numberOfActiveResults;
       allPeople.current = data.data.data.map((e) => e._id);
-      console.log(data.data);
 
       setData(data.data.data);
     } catch (error) {

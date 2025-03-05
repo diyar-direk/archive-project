@@ -31,15 +31,19 @@ function MediaComponent({ src, alt = "", type, showUserIcon, ...props }) {
     fetchImage();
   }, []);
 
-  
-
   return imageUrl ? (
     type === "video" ? (
-      <video {...props} src={imageUrl} controls></video>
+      <video draggable={false} {...props} src={imageUrl} controls></video>
     ) : type === "image" ? (
-      <img loading="lazy" {...props} src={imageUrl} alt={alt} />
+      <img
+        draggable={false}
+        loading="lazy"
+        {...props}
+        src={imageUrl}
+        alt={alt}
+      />
     ) : type === "audio" ? (
-      <audio src={imageUrl} controls {...props}></audio>
+      <audio draggable={false} src={imageUrl} controls {...props}></audio>
     ) : type === "pdf" ? (
       <iframe src={imageUrl}></iframe>
     ) : (
