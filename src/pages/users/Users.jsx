@@ -58,7 +58,9 @@ const Users = () => {
         headers: { Authorization: "Bearer " + token },
       });
       dataLength.current = data.data.numberOfActiveUsers;
-      allPeople.current = data.data.users.map((e) => e._id);
+      allPeople.current = data.data.users.filter(
+        (e) => context.userDetails._id !== e._id
+      );
       setData(data.data.users);
     } catch (error) {
       console.log(error);
@@ -99,7 +101,9 @@ const Users = () => {
       );
 
       dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
+      allPeople.current = data.data.data.filter(
+        (e) => context.userDetails._id !== e._id
+      );
 
       setData(data.data.data);
     } catch (error) {
@@ -131,13 +135,15 @@ const Users = () => {
     return (
       <tr key={e._id}>
         <td>
-          <div
-            onClick={(target) => {
-              target.stopPropagation();
-              checkOne(target, e._id);
-            }}
-            className="checkbox"
-          ></div>
+          {context.userDetails._id !== e._id && (
+            <div
+              onClick={(target) => {
+                target.stopPropagation();
+                checkOne(target, e._id);
+              }}
+              className="checkbox"
+            ></div>
+          )}
         </td>
         <td>
           {e.username}{" "}
