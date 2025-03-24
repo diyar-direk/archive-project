@@ -1,0 +1,638 @@
+.table-search {
+  margin-bottom: 15px;
+}
+.table-search input {
+  flex: 1 1;
+  padding: 8px;
+  background: var(--body-color);
+  border: solid 1px var(--border-color);
+  border-radius: 4px;
+  font-size: 15px;
+  box-shadow: var(--box-shadow);
+  color: var(--font-color);
+  caret-color: var(--main-color);
+}
+
+.table-search .filter {
+  color: var(--font-color);
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.overlay > .table-fltr {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 40px 20px;
+}
+
+.overlay .date-fltr {
+  justify-content: flex-start;
+  margin-bottom: 10px;
+}
+.overlay .date-fltr svg.react-datepicker__calendar-icon {
+  fill: var(--font-color);
+}
+.overlay .date-fltr .react-datepicker-wrapper {
+  flex: 1;
+}
+.overlay .date-fltr .react-datepicker-wrapper input {
+  width: 100%;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--body-color);
+  color: var(--font-color);
+  padding: 6px 10px 5px 30px;
+}
+body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
+  padding: 6px 30px 5px 10px;
+}
+.overlay .date-fltr span {
+  color: var(--font-color);
+  text-transform: capitalize;
+}
+.overlay .date-fltr > i {
+  color: var(--font-color);
+  cursor: pointer;
+}
+
+.overlay .filters {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  align-items: flex-start;
+}
+.overlay .filters .select div {
+  padding: 5px;
+  background-color: var(--body-color);
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: capitalize;
+  color: var(--font-color);
+}
+.overlay .filters .select div i {
+  font-size: 13px;
+}
+.overlay .filters .select div.active + article {
+  max-height: 200px;
+  overflow: auto;
+}
+
+.overlay .filters .select article {
+  background: var(--section-color);
+  max-height: 0px;
+  overflow: hidden;
+  margin-top: 2px;
+}
+.overlay .filters .select article h2 {
+  cursor: pointer;
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-align: center;
+  text-transform: capitalize;
+}
+.overlay .filters .select article p {
+  padding: 5px;
+  font-size: 16px;
+  color: var(--font-color);
+  text-transform: capitalize;
+  text-align: center;
+}
+.overlay .filters .select article h2:not(:last-of-type) {
+  border-bottom: solid 1px var(--body-color);
+}
+.overlay .filters .select article h2:hover {
+  background-color: var(--body-color);
+}
+.overlay div.filters-setting > span {
+  font-size: 18px;
+  text-transform: capitalize;
+  font-weight: bold;
+  color: var(--font-color);
+  cursor: pointer;
+}
+.overlay div.filters-setting > span:last-of-type {
+  opacity: 0.8;
+}
+
+input.fltr-search {
+  width: 100%;
+  font-size: 15px;
+  padding: 5px;
+  caret-color: var(--main-color);
+  background: var(--body-color);
+  border: solid 2px var(--border-color);
+  position: sticky;
+  color: var(--font-color);
+  top: 0;
+}
+
+div.table {
+  overflow-x: auto;
+  max-width: 100%;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+
+div.table table {
+  border-spacing: 0px;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+div.table table.loading {
+  min-height: 150px;
+}
+
+div.table thead {
+  background-color: #12264f;
+}
+div.table thead th {
+  font-weight: 600;
+  text-transform: capitalize;
+  text-align: center;
+  font-size: 19px;
+  color: white;
+  padding: 10px;
+}
+
+table .checkbox {
+  position: relative;
+  width: 15px;
+  height: 15px;
+  margin: 0 auto;
+  background-color: #ffffff;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 4px;
+  border: solid 1px var(--border-color);
+}
+table th select {
+  text-align: center;
+  font-weight: bold;
+  background: #e5e4e4;
+  color: black;
+  outline: none;
+}
+table .checkbox.active {
+  border: solid 1px transparent;
+  background-color: transparent;
+}
+table .checkbox::before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  background-color: rgba(16, 228, 16, 0.705);
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transform: scale(0);
+  transition: 0.4s;
+}
+table .checkbox.active::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+table .checkbox::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  rotate: 280deg;
+  opacity: 0;
+  transition: 0.4s;
+}
+table .checkbox.active::after {
+  rotate: 0deg;
+  transition: 0.4s;
+  opacity: 1;
+}
+table .photo {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+table i.photo {
+  background-color: var(--body-color);
+  font-size: 13px;
+  background-color: var(--body-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--font-color);
+  box-shadow: var(--box-shadow);
+}
+table .table-loading {
+  position: absolute;
+  background: var(--body-color);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: capitalize;
+  font-weight: 600;
+  font-size: 25px;
+  letter-spacing: 1px;
+  color: var(--font-color);
+}
+tbody tr:nth-child(odd) {
+  background-color: var(--body-color);
+}
+tbody tr:nth-child(even) {
+  background-color: var(--border-color);
+}
+tbody td {
+  padding: 10px;
+  max-width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  color: var(--font-color);
+  font-size: 18px;
+  position: relative;
+}
+tbody tr:hover {
+  background-color: #10378511;
+}
+
+.pagination {
+  margin-top: 10px;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.pagination h3 {
+  width: 35px;
+  height: 35px;
+  background-color: transparent;
+  color: var(--main-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.pagination h3.active,
+.pagination h3:hover {
+  background-color: var(--main-color);
+  color: white;
+}
+table a.name {
+  color: var(--font-color);
+}
+table a.name:hover {
+  text-decoration: underline;
+}
+div.table tbody td i.options {
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+div.table tbody td div.options {
+  position: absolute;
+  display: flex;
+  background: var(--body-color);
+  box-shadow: var(--box-shadow);
+  left: calc(-100% - 200px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px;
+  opacity: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+body.arabic div.table tbody td div.options {
+  left: auto;
+  right: calc(-100% - 200px);
+}
+
+div.table tbody td i.options.active-div + div {
+  top: 80%;
+  z-index: 1;
+  opacity: 1;
+  pointer-events: all;
+}
+
+div.table tbody td div.options div.delete {
+  gap: 10px;
+  color: var(--font-color);
+  padding: 10px;
+  text-transform: capitalize;
+  cursor: pointer;
+  align-items: center;
+  font-weight: 500;
+  font-size: 16px;
+}
+div.table tbody td div.options .update {
+  font-weight: 500;
+  gap: 10px;
+  color: var(--font-color);
+  padding: 10px;
+  text-transform: capitalize;
+  cursor: pointer;
+  align-items: center;
+  font-size: 16px;
+}
+div.table tbody td div.options .visit {
+  font-weight: 500;
+  gap: 10px;
+  color: var(--font-color);
+  padding: 10px;
+  text-transform: capitalize;
+  cursor: pointer;
+  align-items: center;
+  font-size: 16px;
+}
+div.table tbody td div.options div.delete:hover {
+  background-color: #ce06061c;
+}
+div.table tbody td div.options .update:hover {
+  background-color: #0011ff1f;
+}
+div.table tbody td div.options .visit:hover {
+  background-color: #0e9e3225;
+}
+div.table tbody td div.options div.delete i {
+  color: #ce0606;
+  font-size: 16px;
+}
+div.table tbody td div.options .update i {
+  color: #4400ff;
+  font-size: 16px;
+}
+div.table tbody td div.options .visit i {
+  color: #0e9e32;
+  font-size: 16px;
+}
+.delete-all {
+  background-color: #ce0606;
+  width: fit-content;
+  padding: 10px;
+  color: white;
+  border-radius: 4px;
+  margin: 10px 0;
+  cursor: pointer;
+  text-transform: capitalize;
+  font-size: 17px;
+}
+.delete-all i {
+  font-size: 14px;
+}
+
+div.table div.actions i {
+  cursor: pointer;
+  font-size: 18px;
+}
+div.table div.actions .delete {
+  color: #ce0606;
+}
+div.table div.actions .update {
+  color: #4400ff;
+}
+@media (max-width: 1050px) {
+  div.table thead th {
+    padding: 8px;
+    font-size: 17px;
+  }
+  tbody td {
+    padding: 8px;
+    font-size: 16px;
+  }
+  table .checkbox {
+    width: 13px;
+    height: 13px;
+  }
+  table .photo {
+    width: 32px;
+    height: 32px;
+  }
+  div.table tbody td div.options > div,
+  div.table tbody td div.options > a {
+    gap: 8px !important;
+    padding: 8px !important;
+    font-size: 15px !important;
+  }
+  div.table tbody td div.options > div i,
+  div.table tbody td div.options > a i {
+    font-size: 14px !important;
+  }
+  div.table tbody td div.options {
+    left: calc(-100% - 180px);
+  }
+  body.arabic div.table tbody td div.options {
+    right: calc(-100% - 180px);
+  }
+  .pagination h3 {
+    width: 30px;
+    height: 30px;
+  }
+  form.table-search .btn {
+    gap: 5px;
+  }
+  form.table-search .btn,
+  form.table-search > input {
+    height: 40px;
+  }
+  .overlay .filters {
+    gap: 10px;
+  }
+  .overlay .date-fltr {
+    gap: 10px;
+  }
+  div.table div.actions i {
+    font-size: 16px;
+  }
+}
+@media (max-width: 850px) {
+  div.table thead th {
+    font-size: 15px;
+  }
+  tbody td {
+    font-size: 14px;
+    max-width: 190px;
+    padding: 7px;
+  }
+  table .photo {
+    width: 30px;
+    height: 30px;
+  }
+  table i.photo {
+    font-size: 11px;
+  }
+  .pagination h3 {
+    width: 26px;
+    height: 26px;
+    font-size: 16px;
+  }
+  form.table-search .btn i,
+  input.fltr-search {
+    font-size: 13px;
+  }
+  .overlay .date-fltr span,
+  .overlay .date-fltr > i {
+    font-size: 14px;
+  }
+  .react-datepicker__input-container .react-datepicker__calendar-icon {
+    font-size: 13px;
+  }
+  .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 5px 8px 5px 25px;
+  }
+  body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 5px 25px 5px 7px;
+  }
+  .overlay div.filters-setting > span {
+    font-size: 17px;
+  }
+  .overlay .filters .select article h2,
+  .overlay .filters .select div,
+  .overlay .filters .select article p {
+    font-size: 14px;
+  }
+  .overlay .filters .select div.active + article {
+    max-height: 180px;
+  }
+  .overlay > .table-fltr {
+    width: 90%;
+  }
+  table .table-loading {
+    font-size: 20px;
+  }
+  .delete-all {
+    font-size: 15px;
+  }
+  .delete-all i {
+    font-size: 13px;
+  }
+  div.table div.actions i {
+    font-size: 15px;
+  }
+  table th select {
+    font-size: 13px;
+  }
+}
+@media (max-width: 650px) {
+  div.table thead th {
+    font-size: 13px;
+  }
+  tbody td {
+    font-size: 12px;
+    max-width: 160px;
+    padding: 7px;
+  }
+  table .photo {
+    width: 28px;
+    height: 28px;
+  }
+  table i.photo {
+    font-size: 10px;
+  }
+  div.table tbody td div.options > div,
+  div.table tbody td div.options > a {
+    gap: 6px !important;
+    padding: 4px !important;
+    font-size: 13px !important;
+  }
+  div.table tbody td div.options > div i,
+  div.table tbody td div.options > a i {
+    font-size: 13px !important;
+  }
+  .pagination h3 {
+    width: 25px;
+    height: 25px;
+    font-size: 15px;
+  }
+  form.table-search .btn,
+  form.table-search > input {
+    height: 35px;
+  }
+  form.table-search .btn span {
+    display: none;
+  }
+  .table-search .filter {
+    font-size: 15px;
+  }
+  .delete-all {
+    font-size: 13px;
+    padding: 8px;
+  }
+  .delete-all i {
+    font-size: 11px;
+  }
+  div.table div.actions i {
+    font-size: 13px;
+  }
+  table th select {
+    font-size: 11px;
+  }
+  div.table tbody td div.options {
+    left: calc(-100% - 145px);
+  }
+  body.arabic div.table tbody td div.options {
+    right: calc(-100% - 145px);
+  }
+}
+
+@media (max-width: 550px) {
+  .overlay > .table-fltr {
+    padding: 30px 20px;
+    width: 100%;
+  }
+  .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 4px 7px 4px 21px;
+  }
+  body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
+    padding: 4px 21px 4px 7px;
+  }
+  .react-datepicker__input-container .react-datepicker__calendar-icon {
+    font-size: 12px;
+  }
+  .overlay .date-fltr span,
+  .overlay .date-fltr > i {
+    font-size: 13px;
+  }
+  .overlay .date-fltr {
+    gap: 5px;
+  }
+  .overlay .filters .select article h2,
+  .overlay .filters .select div,
+  .overlay .filters .select article p {
+    font-size: 13px;
+  }
+  .overlay div.filters-setting > span {
+    font-size: 16px;
+  }
+  .overlay .filters .select div.active + article {
+    max-height: 140px;
+  }
+  form.table-search .btn i,
+  input.fltr-search {
+    font-size: 12px;
+  }
+  .overlay .filters {
+    grid-template-columns: 1fr;
+  }
+  table .table-loading {
+    font-size: 17px;
+  }
+  .delete-all {
+    font-size: 12px;
+  }
+  .delete-all i {
+    font-size: 10px;
+  }
+}

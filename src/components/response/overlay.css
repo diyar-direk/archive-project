@@ -1,0 +1,126 @@
+.response {
+  position: fixed;
+  top: 75px;
+  background: var(--body-color);
+  box-shadow: var(--box-shadow);
+  border-radius: 10px;
+  padding: 20px 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 5px;
+  z-index: 2;
+}
+.progres {
+  display: none;
+  position: fixed;
+  top: 75px;
+  background: var(--body-color);
+  box-shadow: var(--box-shadow);
+  min-width: 250px;
+  max-width: 70%;
+  border-radius: 10px;
+  padding: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 5px;
+  z-index: 2;
+}
+.progres > div {
+  width: 100%;
+  background-color: var(--section-color);
+  border-radius: 10px;
+  height: 25px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10px;
+}
+.progres > div > h4 {
+  color: var(--font-color);
+  z-index: 1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.progres > div > span {
+  background-color: #1ab01e;
+  position: absolute;
+  height: 100%;
+  width: 0%;
+  display: block;
+  left: 0;
+}
+.response h1 {
+  color: var(--font-color);
+  font-weight: 500;
+  font-size: 28px;
+  text-transform: capitalize;
+}
+.response img {
+  width: 40px;
+}
+.not-found {
+  min-height: 40vh;
+  height: 100%;
+}
+.not-found h1 {
+  color: var(--font-color);
+  text-transform: capitalize;
+}
+@media (max-width: 1000px) {
+  .response {
+    top: 60px;
+    padding: 20px 20px;
+  }
+  .progres {
+    top: 60px;
+  }
+  .response h1 {
+    font-size: 25px;
+  }
+  .response img {
+    width: 35px;
+  }
+}
+
+@media (max-width: 800px) {
+  .response {
+    top: 55px;
+    padding: 20px 10px;
+  }
+  .progres {
+    top: 55px;
+  }
+  .response h1 {
+    font-size: 20px;
+  }
+  .response img {
+    width: 30px;
+  }
+}
+@media (max-width: 600px) {
+  .response {
+    padding: 10px;
+  }
+  .response h1 {
+    font-size: 16px;
+  }
+  .response img {
+    width: 25px;
+  }
+  .not-found h1 {
+    font-size: 26px;
+  }
+}
+@media (max-width: 500px) {
+  .response h1 {
+    font-size: 14px;
+  }
+  .response img {
+    width: 20px;
+  }
+  .not-found h1 {
+    font-size: 24px;
+  }
+}
