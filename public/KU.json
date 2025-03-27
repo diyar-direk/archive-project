@@ -27,7 +27,8 @@
     "lost": "Rûpel nehat dîtin an jî dibe ku hatiye jêbirin",
     "error_downloading": "Çewtiya dakêşana pelê",
     "add_an_image": "Berî lêgerînê wêneyek bar bike",
-    "somthing_went_wrong": "Tiştek xelet çû"
+    "somthing_went_wrong": "Tiştek xelet çû",
+    "InvalidCoordinates": "Koordînatên nederbasdar"
   },
   "header": {
     "serach_for_pages": "Li rûpelan bigere",

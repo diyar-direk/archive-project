@@ -24,6 +24,8 @@ const UpdateCoordinates = () => {
       ? (response.current = true)
       : complete === "reapeted data"
       ? (response.current = 400)
+      : complete === "Invalid coordinates"
+      ? (response.current = "Invalid coordinates")
       : (response.current = false);
     setResponseOverlay(true);
     window.onclick = () => {
@@ -97,9 +99,9 @@ const UpdateCoordinates = () => {
       });
     } catch (error) {
       console.log(error);
-      (error.status === 500 || error.status === 404) &&
+      if (error.status === 500 || error.status === 404)
         nav(`/dashboard/error-404`);
-      error.status === 403 && nav(`/dashboard/error-403`);
+      else responseFun("Invalid coordinates");
     } finally {
       setDataLoading(false);
     }
