@@ -10,13 +10,13 @@ function MapTiles(props) {
   const loadCoords = () => {
     try {
       // Example MGRS coordinates
-      const mgrsCoords = props.coords || "11D FB 2321 1000"; // Replace this with your dynamic prop
+      const mgrsCoords = props.coords; // Replace this with your dynamic prop
 
       // Convert MGRS to latitude and longitude
-      const latLon = toPoint("37S DV 43380 73755");
+      const latLon = toPoint(mgrsCoords);
       console.log(latLon);
-      lat = latLon[0];
-      lon = latLon[1];
+      lon = latLon[0];
+      lat = latLon[1];
 
       console.log(`Converted MGRS: ${mgrsCoords} -> Lat: ${lat}, Lon: ${lon}`);
     } catch (error) {

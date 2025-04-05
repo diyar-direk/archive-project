@@ -55,9 +55,15 @@ const AddCoordinates = () => {
   const { language } = useLanguage();
 
   const handleSubmit = async (e) => {
+    const coordinants = `${coordinates.firstNumber}${coordinates.firstLetter} ${
+      coordinates.secondLetter
+    } ${formatCoordinates(coordinates.secondNumber)} ${formatCoordinates(
+      coordinates.thirdNumber
+    )}`;
+
     const formData = {
       ...form,
-      coordinates: `${coordinates.firstNumber}${coordinates.firstLetter} ${coordinates.secondLetter} ${coordinates.secondNumber} ${coordinates.thirdNumber}`,
+      coordinates: coordinants,
     };
 
     e.preventDefault();
@@ -316,3 +322,8 @@ const AddCoordinates = () => {
 };
 
 export default AddCoordinates;
+
+export const formatCoordinates = (coordinates) =>
+  coordinates.length < 5
+    ? (coordinates = coordinates.padEnd(5, "0"))
+    : coordinates;

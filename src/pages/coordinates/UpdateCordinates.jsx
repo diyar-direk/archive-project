@@ -8,6 +8,7 @@ import { baseURL, Context } from "../../context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import useLanguage from "../../hooks/useLanguage";
+import { formatCoordinates } from "./AddCoordinates";
 
 const UpdateCoordinates = () => {
   const context = useContext(Context);
@@ -109,9 +110,15 @@ const UpdateCoordinates = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const coordinants = `${coordinates.firstNumber}${coordinates.firstLetter} ${
+      coordinates.secondLetter
+    } ${formatCoordinates(coordinates.secondNumber)} ${formatCoordinates(
+      coordinates.thirdNumber
+    )}`;
+
     const formData = {
       ...form,
-      coordinates: `${coordinates.firstNumber}${coordinates.firstLetter} ${coordinates.secondLetter} ${coordinates.secondNumber} ${coordinates.thirdNumber}`,
+      coordinates: coordinants,
     };
 
     if (!form.countryId) setError(language?.error?.select_country);
