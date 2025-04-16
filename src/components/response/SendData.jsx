@@ -16,6 +16,8 @@ const SendData = (props) => {
           ? `${language?.error?.sent}`
           : props.response === 400
           ? `${props.data} ${language?.error?.already_exists}`
+          : props.response === "Invalid coordinates"
+          ? `${language?.error?.InvalidCoordinates}`
           : `${language?.error?.somthing_went_wrong}`}
       </h1>
     </div>

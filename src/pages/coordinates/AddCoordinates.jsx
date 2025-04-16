@@ -21,6 +21,8 @@ const AddCoordinates = () => {
       ? (response.current = true)
       : complete === "reapeted data"
       ? (response.current = 400)
+      : complete === "Invalid coordinates"
+      ? (response.current = "Invalid coordinates")
       : (response.current = false);
     setResponseOverlay(true);
     window.onclick = () => {
@@ -53,9 +55,15 @@ const AddCoordinates = () => {
   const { language } = useLanguage();
 
   const handleSubmit = async (e) => {
+    const coordinants = `${coordinates.firstNumber}${coordinates.firstLetter} ${
+      coordinates.secondLetter
+    } ${formatCoordinates(coordinates.secondNumber)} ${formatCoordinates(
+      coordinates.thirdNumber
+    )}`;
+
     const formData = {
       ...form,
-      coordinates: `${coordinates.firstNumber}${coordinates.firstLetter} ${coordinates.secondLetter} ${coordinates.secondNumber} ${coordinates.thirdNumber}`,
+      coordinates: coordinants,
     };
 
     e.preventDefault();
@@ -104,6 +112,7 @@ const AddCoordinates = () => {
       } catch (error) {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");
+        else if (error) responseFun("Invalid coordinates");
         else responseFun(false);
       } finally {
         setLoading(false);
@@ -168,7 +177,7 @@ const AddCoordinates = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`person`} response={response.current} />
+        <SendData data={`coordinants`} response={response.current} />
       )}
       {loading && <Loading />}
       <form onSubmit={handleSubmit} className="dashboard-form">
@@ -313,3 +322,8 @@ const AddCoordinates = () => {
 };
 
 export default AddCoordinates;
+
+export const formatCoordinates = (coordinates) =>
+  coordinates.length < 5
+    ? (coordinates = coordinates.padEnd(5, "0"))
+    : coordinates;

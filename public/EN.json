@@ -27,7 +27,8 @@
     "lost": "page not found or maybe deleted",
     "error_downloading": "Error downloading the file.",
     "add_an_image": "Upload an image before searching",
-    "somthing_went_wrong": "Something Went Wrong"
+    "somthing_went_wrong": "Something Went Wrong",
+    "InvalidCoordinates": "Invalid coordinates"
   },
   "header": {
     "serach_for_pages": "Search for pages",

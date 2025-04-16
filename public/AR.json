@@ -27,7 +27,8 @@
     "lost": "الصفحة غير موجودة أو ربما تم حذفها",
     "error_downloading": "خطأ في تنزيل الملف",
     "add_an_image": "قم بتحميل صورة قبل البحث",
-    "somthing_went_wrong": "حدث خطأ ما"
+    "somthing_went_wrong": "حدث خطأ ما",
+    "InvalidCoordinates": "إحداثيات غير صالحة"
   },
   "header": {
     "serach_for_pages": "البحث عن الصفحات",
@@ -440,7 +441,7 @@
     "open_in_browser": "فتح في المتصفح",
     "close": "إغلاق",
     "save": "حفظ",
-    "loading": "جاري التحميل..." ,
+    "loading": "جاري التحميل...",
     "delete": "حذف",
     "show_details": "عرض التفاصيل",
     "no_data": "لا توجد بيانات"
