@@ -146,7 +146,7 @@ const UpdatePerson = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`person`} response={response.current} />
+        <SendData data={language?.header?.person} response={response.current} />
       )}
       {loading && <Loading />}
       {dataLoading ? (

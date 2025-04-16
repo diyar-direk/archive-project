@@ -246,10 +246,10 @@ const Event = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={language?.header?.event} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">{language?.header?.events}</h1>
+      <h1 className="title">{language?.header?.event}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">

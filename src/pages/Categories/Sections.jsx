@@ -229,7 +229,7 @@ const Sections = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`section`} response={response.current} />
+        <SendData data={language?.header?.section} response={response.current} />
       )}
       {formLoading && <Loading />}
 

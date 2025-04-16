@@ -184,7 +184,7 @@ const Village = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={language?.header?.village} response={response.current} />
       )}
       {formLoading && <Loading />}
       <h1 className="title">{language?.header?.villages}</h1>

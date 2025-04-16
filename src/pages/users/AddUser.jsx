@@ -123,7 +123,10 @@ const AddUser = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`person`} response={response.current} />
+        <SendData
+          data={language?.users?.username}
+          response={response.current}
+        />
       )}
       {loading && <Loading />}
       <h1 className="title">{language?.header?.add_users}</h1>

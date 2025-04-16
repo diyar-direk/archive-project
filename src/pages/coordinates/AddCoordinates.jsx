@@ -177,7 +177,7 @@ const AddCoordinates = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`coordinants`} response={response.current} />
+        <SendData data={language?.header?.coordinates} response={response.current} />
       )}
       {loading && <Loading />}
       <form onSubmit={handleSubmit} className="dashboard-form">
