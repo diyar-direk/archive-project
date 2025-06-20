@@ -6,6 +6,8 @@ import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import useLanguage from "../../hooks/useLanguage";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getCountriesApi } from "../addresses/api";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -184,6 +186,16 @@ const AddUser = () => {
                 form={{ form, setForm }}
               />
             )}
+
+            <SelectInputApi
+              fetchData={getCountriesApi}
+              selectLabel={"role"}
+              label={"choose role"}
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, role: option?._id })}
+              value={form.role}
+              onIgnore={() => setForm({ ...form, role: "" })}
+            />
 
             <div className="flex flex-direction">
               <label htmlFor="password">{language?.users?.password}</label>

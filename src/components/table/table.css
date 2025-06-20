@@ -159,6 +159,14 @@ div.table thead th {
   color: white;
   padding: 10px;
 }
+div.table thead th.sort .sort {
+  rotate: 180deg;
+}
+div.table thead th .sort {
+  font-size: 12px;
+  cursor: pointer;
+  margin: 0 3px;
+}
 
 table .checkbox {
   position: relative;
@@ -318,6 +326,9 @@ div.table tbody td div.options {
 body.arabic div.table tbody td div.options {
   left: auto;
   right: calc(-100% - 200px);
+}
+body.arabic div.table tbody td.visible {
+  overflow: visible;
 }
 
 div.table tbody td i.options.active-div + div {
