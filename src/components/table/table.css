@@ -414,6 +414,77 @@ div.table div.actions .delete {
 div.table div.actions .update {
   color: #4400ff;
 }
+.show-rows i {
+  color: var(--font-color);
+  font-size: 19px;
+  cursor: pointer;
+}
+.show-rows > article {
+  background-color: var(--body-color);
+  position: absolute;
+  width: 200px;
+  left: -200px;
+  padding: 10px;
+  z-index: 1;
+  border-radius: 4px;
+  top: 50px;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 250px;
+  overflow-y: auto;
+}
+.show-rows > article div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.show-rows > article div input {
+  flex: 0;
+  border: none;
+  cursor: pointer;
+}
+.show-rows > article div label {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--font-color);
+  text-transform: capitalize;
+  flex: 1;
+  cursor: pointer;
+}
+
+.show-rows > article.active {
+  top: 100%;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.table-pagination h2 {
+  background-color: var(--body-color);
+  padding: 10px;
+  margin-top: 10px;
+  color: var(--font-color);
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+.table-pagination h2 span {
+  color: var(--main-color);
+  font-weight: bold;
+}
+.table-pagination h2 select {
+  background-color: transparent;
+  border: none;
+  color: var(--main-color);
+  font-weight: bold;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+}
+
 @media (max-width: 1050px) {
   div.table thead th {
     padding: 8px;

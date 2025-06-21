@@ -7,6 +7,10 @@ import Filters from "./Filters";
 import { useLocation } from "react-router-dom";
 import Loading from "../loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
+import TabelHeader from "./TabelHeader";
+import TabelBody from "./TabelBody";
+import Pagination from "./Pagination";
+import ShowRows from "./ShowRows";
 const Table = ({
   tabelData,
   allData,
@@ -24,9 +28,11 @@ const Table = ({
   ...props
 }) => {
   const [overlay, setOverlay] = useState(false);
+  const [columnsState, setColumnsState] = useState(columns);
+
   const header = useMemo(
     () =>
-      columns.map(
+      columnsState.map(
         (th) =>
           !th.hidden && (
             <th key={th.headerName}>
@@ -42,45 +48,41 @@ const Table = ({
             </th>
           )
       ),
-    [columns]
+    [columnsState]
   );
 
   const checkOne = useCallback(
-    (e, element) => {
-      e.target.classList.toggle("active");
-      if (e.target.classList.contains("active")) {
-        setSelectedItems((prevSelected) => [...prevSelected, element]);
-        const allActiveSelectors = document.querySelectorAll(
-          "td .checkbox.active"
-        );
-        const allSelectors = document.querySelectorAll("td .checkbox");
-        if (allSelectors.length === allActiveSelectors.length)
-          document.querySelector("th .checkbox").classList.add("active");
+    (elementId) => {
+      if (!selectedItems.some((id) => id === elementId)) {
+        setSelectedItems((prevSelected) => [...prevSelected, elementId]);
       } else {
         setSelectedItems((prevSelected) =>
-          prevSelected.filter((item) => item !== element)
+          prevSelected.filter((item) => item !== elementId)
         );
-        document.querySelector("th .checkbox").classList.remove("active");
       }
     },
-    [setSelectedItems]
+    [setSelectedItems, selectedItems]
   );
 
   const rows = useMemo(
     () =>
       tabelData.map((row) => (
         <tr key={row._id}>
-          {columns.map((column, i) =>
+          {columnsState.map((column, i) =>
             i === 0 && selectable ? (
-              <td key={i}>
-                <div
-                  onClick={(target) => {
-                    target.stopPropagation();
-                    checkOne(target, row);
-                  }}
-                  className={`checkbox`}
-                ></div>
-              </td>
+              <>
+                <td key={i}>
+                  <div
+                    onClick={() => checkOne(row._id)}
+                    className={`checkbox ${
+                      selectedItems.some((id) => id === row._id) ? "active" : ""
+                    }`}
+                  ></div>
+                </td>
+                <td key={column.name} className={column.className}>
+                  {column.getCell ? column.getCell(row) : row[column.name]}
+                </td>
+              </>
             ) : (
               !column.hidden && (
                 <td key={column.name} className={column.className}>
@@ -91,41 +93,15 @@ const Table = ({
           )}
         </tr>
       )),
-    [tabelData, columns, selectable, checkOne]
+    [tabelData, columnsState, selectable, checkOne, selectedItems]
   );
 
   const context = useContext(Context);
-  const limit = context?.limit;
   const token = context.userDetails.token;
   const [hasFltr, setHasFltr] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const location = useLocation();
   const { language } = useLanguage();
-
-  const createPags = useMemo(() => {
-    const pages = Math.ceil(dataLength / limit);
-    if (pages <= 1) return;
-    let h3Pages = [];
-    for (let i = 0; i < pages; i++) {
-      h3Pages.push(
-        <h3
-          onClick={(e) => !loading && updateData(e)}
-          data-page={i + 1}
-          key={i}
-          className={`${i === 0 ? "active" : ""}`}
-        >
-          {i + 1}
-        </h3>
-      );
-    }
-    return h3Pages;
-  }, [limit, dataLength]);
-
-  function updateData(e) {
-    if (currentPage !== +e.target.dataset.page) {
-      setPage(+e.target.dataset.page);
-    }
-  }
 
   useEffect(() => {
     const pages = document.querySelectorAll(".pagination h3");
@@ -154,24 +130,6 @@ const Table = ({
       window.removeEventListener("click", handleClick);
     };
   }, [overlay, hasFltr, selectedItems]);
-
-  const checkAll = (e) => {
-    const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
-    const allSelectors = document.querySelectorAll("td .checkbox");
-
-    if (
-      allActiveSelectors.length >= 0 &&
-      allActiveSelectors.length !== allSelectors.length
-    ) {
-      allSelectors.forEach((e) => e.classList.add("active"));
-      e.target.classList.add("active");
-      setSelectedItems(allData);
-    } else {
-      allSelectors.forEach((e) => e.classList.remove("active"));
-      e.target.classList.remove("active");
-      setSelectedItems([]);
-    }
-  };
 
   const deleteData = async () => {
     setOverlay(false);
@@ -219,12 +177,7 @@ const Table = ({
       setDataLoading(false);
     }
   };
-  const updateLimit = (e) => {
-    if (parseInt(e.target.value) !== limit) {
-      context?.setLimit(parseInt(e.target.value));
-      setPage(1);
-    }
-  };
+
   const [beforSubmit, setBeforeSubmit] = useState("");
 
   const [data, setData] = useState({
@@ -333,43 +286,18 @@ const Table = ({
           }}
           className="fa-solid fa-sliders filter"
         ></i>
+        <ShowRows columns={columnsState} setColumns={setColumnsState} />
       </form>
+
       <div className="table">
         <table className={loading || tabelData ? "loading" : ""}>
-          <thead>
-            <tr>
-              {selectable && (
-                <th>
-                  {allData.length > 0 && (
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        checkAll(e);
-                      }}
-                      className="checkbox select-all"
-                    ></div>
-                  )}
-                </th>
-              )}
-              {header}
-              <th>
-                <select onChange={updateLimit} value={limit}>
-                  <option value="10">10</option>
-                  <option value="15">15</option>
-                  <option value="20">20</option>
-                </select>
-              </th>
-            </tr>
-          </thead>
-          <tbody className={loading || tabelData ? "relative" : ""}>
-            {loading ? (
-              <div className="table-loading"> {language?.table?.loading}</div>
-            ) : rows.length > 0 ? (
-              <>{rows}</>
-            ) : (
-              <div className="table-loading">{language?.table?.no_results}</div>
-            )}
-          </tbody>
+          <TabelHeader
+            selectable={selectable}
+            allData={allData}
+            setSelectedItems={setSelectedItems}
+            header={header}
+          />
+          <TabelBody loading={loading} rows={rows} />
         </table>
       </div>
 
@@ -385,7 +313,12 @@ const Table = ({
           {selectedItems.length}){language?.table?.items}
         </div>
       )}
-      <div className="pagination flex">{createPags}</div>
+      <Pagination
+        dataLength={dataLength}
+        currentPage={currentPage}
+        loading={loading}
+        setPage={setPage}
+      />
     </>
   );
 };

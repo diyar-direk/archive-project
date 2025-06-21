@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const openOptions = (e) => {
   e.target.classList.toggle("active-div");
 };
 const columns = [
-  { name: "id", headerName: "ID", hidden: true },
+  { name: "_id", headerName: "_id", hidden: false },
   {
     name: "image",
     headerName: "profile",
@@ -141,21 +141,6 @@ const People = () => {
   });
 
   const [search, setSearch] = useState("");
-
-  const header = [
-    "",
-    language?.people?.name,
-    language?.people?.gender,
-    language?.people?.motherName,
-    language?.people?.marital_status,
-    language?.people?.occupation,
-    language?.people?.place_date_of_birth,
-    language?.people?.place_of_residence,
-    language?.people?.government,
-    language?.people?.phone,
-    language?.people?.email,
-    language?.people?.created_at,
-  ];
 
   useEffect(() => {
     if (!search) getData();
