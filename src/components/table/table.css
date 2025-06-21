@@ -1,7 +1,7 @@
 .table-search {
   margin-bottom: 15px;
 }
-.table-search input {
+.table-search > input {
   flex: 1 1;
   padding: 8px;
   background: var(--body-color);
@@ -303,91 +303,25 @@ table a.name {
 table a.name:hover {
   text-decoration: underline;
 }
-div.table tbody td i.options {
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
 
 div.table tbody td div.options {
-  position: absolute;
-  display: flex;
-  background: var(--body-color);
-  box-shadow: var(--box-shadow);
-  left: calc(-100% - 200px);
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 8px;
-  opacity: 0;
-  z-index: 1;
-  pointer-events: none;
+  gap: 10px;
 }
-body.arabic div.table tbody td div.options {
-  left: auto;
-  right: calc(-100% - 200px);
-}
-body.arabic div.table tbody td.visible {
-  overflow: visible;
+div.table tbody td div.options .visit i,
+div.table tbody td div.options div.delete i,
+div.table tbody td div.options .update i {
+  font-size: 17px;
+  cursor: pointer;
 }
 
-div.table tbody td i.options.active-div + div {
-  top: 80%;
-  z-index: 1;
-  opacity: 1;
-  pointer-events: all;
-}
-
-div.table tbody td div.options div.delete {
-  gap: 10px;
-  color: var(--font-color);
-  padding: 10px;
-  text-transform: capitalize;
-  cursor: pointer;
-  align-items: center;
-  font-weight: 500;
-  font-size: 16px;
-}
-div.table tbody td div.options .update {
-  font-weight: 500;
-  gap: 10px;
-  color: var(--font-color);
-  padding: 10px;
-  text-transform: capitalize;
-  cursor: pointer;
-  align-items: center;
-  font-size: 16px;
-}
-div.table tbody td div.options .visit {
-  font-weight: 500;
-  gap: 10px;
-  color: var(--font-color);
-  padding: 10px;
-  text-transform: capitalize;
-  cursor: pointer;
-  align-items: center;
-  font-size: 16px;
-}
-div.table tbody td div.options div.delete:hover {
-  background-color: #ce06061c;
-}
-div.table tbody td div.options .update:hover {
-  background-color: #0011ff1f;
-}
-div.table tbody td div.options .visit:hover {
-  background-color: #0e9e3225;
-}
 div.table tbody td div.options div.delete i {
   color: #ce0606;
-  font-size: 16px;
 }
 div.table tbody td div.options .update i {
   color: #4400ff;
-  font-size: 16px;
 }
 div.table tbody td div.options .visit i {
   color: #0e9e32;
-  font-size: 16px;
 }
 .delete-all {
   background-color: #ce0606;
@@ -404,16 +338,6 @@ div.table tbody td div.options .visit i {
   font-size: 14px;
 }
 
-div.table div.actions i {
-  cursor: pointer;
-  font-size: 18px;
-}
-div.table div.actions .delete {
-  color: #ce0606;
-}
-div.table div.actions .update {
-  color: #4400ff;
-}
 .show-rows i {
   color: var(--font-color);
   font-size: 19px;
@@ -442,11 +366,17 @@ div.table div.actions .update {
   gap: 6px;
   margin-bottom: 4px;
 }
-.show-rows > article div input {
-  flex: 0;
+.show-rows > article input.search {
+  width: 100%;
+  background: var(--section-color);
   border: none;
-  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--font-color);
 }
+
 .show-rows > article div label {
   font-size: 17px;
   font-weight: 500;
@@ -454,6 +384,12 @@ div.table div.actions .update {
   text-transform: capitalize;
   flex: 1;
   cursor: pointer;
+}
+.show-rows > article h4 {
+  color: var(--font-color);
+  & span {
+    color: var(--main-color);
+  }
 }
 
 .show-rows > article.active {
@@ -502,22 +438,6 @@ div.table div.actions .update {
     width: 32px;
     height: 32px;
   }
-  div.table tbody td div.options > div,
-  div.table tbody td div.options > a {
-    gap: 8px !important;
-    padding: 8px !important;
-    font-size: 15px !important;
-  }
-  div.table tbody td div.options > div i,
-  div.table tbody td div.options > a i {
-    font-size: 14px !important;
-  }
-  div.table tbody td div.options {
-    left: calc(-100% - 180px);
-  }
-  body.arabic div.table tbody td div.options {
-    right: calc(-100% - 180px);
-  }
   .pagination h3 {
     width: 30px;
     height: 30px;
@@ -534,9 +454,6 @@ div.table div.actions .update {
   }
   .overlay .date-fltr {
     gap: 10px;
-  }
-  div.table div.actions i {
-    font-size: 16px;
   }
 }
 @media (max-width: 850px) {
@@ -600,9 +517,7 @@ div.table div.actions .update {
   .delete-all i {
     font-size: 13px;
   }
-  div.table div.actions i {
-    font-size: 15px;
-  }
+
   table th select {
     font-size: 13px;
   }
@@ -623,16 +538,7 @@ div.table div.actions .update {
   table i.photo {
     font-size: 10px;
   }
-  div.table tbody td div.options > div,
-  div.table tbody td div.options > a {
-    gap: 6px !important;
-    padding: 4px !important;
-    font-size: 13px !important;
-  }
-  div.table tbody td div.options > div i,
-  div.table tbody td div.options > a i {
-    font-size: 13px !important;
-  }
+
   .pagination h3 {
     width: 25px;
     height: 25px;
@@ -655,17 +561,9 @@ div.table div.actions .update {
   .delete-all i {
     font-size: 11px;
   }
-  div.table div.actions i {
-    font-size: 13px;
-  }
+
   table th select {
     font-size: 11px;
-  }
-  div.table tbody td div.options {
-    left: calc(-100% - 145px);
-  }
-  body.arabic div.table tbody td div.options {
-    right: calc(-100% - 145px);
   }
 }
 

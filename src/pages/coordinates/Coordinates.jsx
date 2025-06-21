@@ -204,7 +204,7 @@ const Coordinates = () => {
               }}
               className="flex delete"
             >
-              <i className="fa-solid fa-trash"></i>{" "}
+              <i className="fa-solid fa-trash"></i>
               {language?.coordinates?.delete}
             </div>
             <Link
@@ -215,7 +215,7 @@ const Coordinates = () => {
               {language?.coordinates?.update}
             </Link>
             <Link to={`/dashboard/coordinate/${e._id}`} className="flex visit">
-              <i className="fa-solid fa-eye"> </i>{" "}
+              <i className="fa-solid fa-eye"> </i>
               {language?.coordinates?.details}
             </Link>
           </div>

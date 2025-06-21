@@ -1,4 +1,46 @@
-const TabelHeader = ({ selectable, allData, setSelectedItems, header }) => {
+import { useCallback, useMemo } from "react";
+
+const TabelHeader = ({
+  selectable,
+  allData,
+  setSelectedItems,
+  column,
+  setSort,
+}) => {
+  const updateSortStatus = useCallback(
+    (column) => {
+      setSort((prev) => {
+        return {
+          ...prev,
+          [column.name]: `${prev[column.name]?.startsWith("-") ? "" : "-"}${
+            column.name
+          }`,
+        };
+      });
+    },
+    [setSort]
+  );
+  const header = useMemo(
+    () =>
+      column.map(
+        (th) =>
+          !th.hidden && (
+            <th key={th.headerName}>
+              {th.headerName}
+              {th.sort && (
+                <i
+                  className="fa-solid fa-chevron-down sort"
+                  onClick={(e) => {
+                    e.target.parentElement.classList.toggle("sort");
+                    updateSortStatus(th);
+                  }}
+                ></i>
+              )}
+            </th>
+          )
+      ),
+    [column, updateSortStatus]
+  );
   const checkAll = (e) => {
     const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
     const allSelectors = document.querySelectorAll("td .checkbox");

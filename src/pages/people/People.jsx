@@ -6,18 +6,8 @@ import { Link } from "react-router-dom";
 import "./profile.css";
 import MediaComponent from "../../components/MediaComponent";
 import useLanguage from "../../hooks/useLanguage";
-const openOptions = (e) => {
-  e.stopPropagation();
-  const div = document.querySelectorAll("div.table tbody td i.options");
-  div.forEach((ele) => {
-    if (ele !== e.target) {
-      ele.classList.remove("active-div");
-    }
-  });
-  e.target.classList.toggle("active-div");
-};
+
 const columns = [
-  { name: "_id", headerName: "_id", hidden: false },
   {
     name: "image",
     headerName: "profile",
@@ -37,7 +27,7 @@ const columns = [
     ),
   },
   {
-    name: "name",
+    name: "firstName",
     headerName: "name",
     className: "name",
     sort: true,
@@ -84,6 +74,7 @@ const columns = [
   {
     name: "email",
     headerName: "email",
+    hidden: true,
   },
   {
     name: "createdAt",
@@ -92,29 +83,50 @@ const columns = [
     getCell: (row) => date(row.createdAt),
   },
   {
+    name: "updatedAt",
+    headerName: "updatedAt",
+    sort: true,
+    getCell: (row) => date(row.updatedAt),
+    hidden: true,
+  },
+  {
     name: "options",
     headerName: "options",
-    className: "visible",
-    getCell: (e) => (
+    type: "actions",
+    getCell: (e, setOverlay, setSelectedItems, role) => (
       <>
-        <i onClick={openOptions} className="options fa-solid fa-ellipsis"></i>
-        <div className="options has-visit">
-          <Link
-            to={`/dashboard/update_person/${e._id}`}
-            className="flex update"
-          >
-            <i className="fa-regular fa-pen-to-square"></i>
-            language?.table?.update
-          </Link>
+        <div className="options center">
+          {role && (
+            <>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((el) => el.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="flex delete"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </div>
+              <Link
+                to={`/dashboard/update_person/${e._id}`}
+                className="flex update"
+              >
+                <i className="fa-regular fa-pen-to-square"></i>
+              </Link>
+            </>
+          )}
           <Link to={`${e._id}`} className="flex visit">
             <i className="fa-solid fa-circle-user"></i>
-            language?.table?.visit
           </Link>
         </div>
       </>
     ),
   },
 ];
+
 const People = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
@@ -126,6 +138,7 @@ const People = () => {
   const token = context.userDetails.token;
   const limit = context?.limit;
   const { language } = useLanguage();
+  const [sort, setSort] = useState({});
 
   const [filters, setFilters] = useState({
     gender: "",
@@ -144,7 +157,7 @@ const People = () => {
 
   useEffect(() => {
     if (!search) getData();
-  }, [page, filters, search, limit]);
+  }, [page, filters, search, limit, sort]);
 
   const getData = async () => {
     setLoading(true);
@@ -152,11 +165,16 @@ const People = () => {
     setSelectedItems([]);
 
     document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/people?active=true&limit=${limit}&page=${page}`;
+
     const params = new URLSearchParams();
 
-    context.userDetails.role === "user" &&
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+
+    if (context.userDetails.role === "user") {
       params.append("sectionId", context.userDetails.sectionId);
+    }
 
     Object.keys(filters).forEach((key) => {
       if (key !== "date" && filters[key]) {
@@ -167,23 +185,25 @@ const People = () => {
       }
     });
 
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-    url += `&${params.toString()}`;
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
 
     try {
-      const data = await axios.get(url, {
+      const { data } = await axios.get(`${baseURL}/people`, {
         headers: { Authorization: `Bearer ${token}` },
+        params,
       });
-      dataLength.current = data.data.numberOfActivePeople;
 
-      allPeople.current = data.data.people.map((e) => e._id);
-      setData(data.data.people);
+      dataLength.current = data.numberOfActivePeople;
+      allPeople.current = data.people.map((e) => e._id);
+      setData(data.people);
     } catch (error) {
       console.log(error);
     } finally {
@@ -262,6 +282,7 @@ const People = () => {
         deleteUrl="people"
         dataLength={dataLength.current}
         tabelData={data}
+        setSort={setSort}
       />
     </>
   );

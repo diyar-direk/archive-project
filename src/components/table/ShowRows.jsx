@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 document.addEventListener("click", () => {
   document.querySelector(".show-rows > article.active") &&
@@ -7,6 +7,7 @@ document.addEventListener("click", () => {
       .classList.remove("active");
 });
 const ShowRows = ({ columns, setColumns }) => {
+  const [search, setSearch] = useState("");
   const updateRows = useCallback(
     (column) => {
       const updated = columns.map((col) =>
@@ -19,19 +20,37 @@ const ShowRows = ({ columns, setColumns }) => {
 
   const inputs = useMemo(
     () =>
-      columns.map((column) => (
-        <div key={column.name}>
-          <input
-            type="checkbox"
-            id={column.name}
-            checked={!column.hidden}
-            onChange={() => updateRows(column)}
-          />
-          <label htmlFor={column.name}>{column.headerName}</label>
-        </div>
-      )),
-    [columns, updateRows]
+      columns.map((column) =>
+        !search ? (
+          <div key={column.name}>
+            <input
+              type="checkbox"
+              className="c-pointer"
+              id={column.name}
+              checked={!column.hidden}
+              onChange={() => updateRows(column)}
+            />
+            <label htmlFor={column.name}>{column.headerName}</label>
+          </div>
+        ) : (
+          (column.name.includes(search) ||
+            column.headerName.includes(search)) && (
+            <div key={column.name}>
+              <input
+                type="checkbox"
+                className="c-pointer"
+                id={column.name}
+                checked={!column.hidden}
+                onChange={() => updateRows(column)}
+              />
+              <label htmlFor={column.name}>{column.headerName}</label>
+            </div>
+          )
+        )
+      ),
+    [columns, updateRows, search]
   );
+
   return (
     <div className="show-rows relative">
       <i
@@ -43,7 +62,19 @@ const ShowRows = ({ columns, setColumns }) => {
             .classList.toggle("active");
         }}
       />
-      <article onClick={(e) => e.stopPropagation()}>{inputs}</article>
+      <article onClick={(e) => e.stopPropagation()}>
+        <input
+          type="text"
+          className="search"
+          placeholder="search for rows"
+          value={search}
+          onChange={(e) => setSearch(e.target.value.toLowerCase())}
+        />
+        {inputs}
+        <h4>
+          columns avibel: <span> {inputs.length}</span>
+        </h4>
+      </article>
     </div>
   );
 };

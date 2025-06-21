@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
@@ -25,78 +25,13 @@ const Table = ({
   deleteUrl,
   getData,
   getSearchData,
+  setSort,
   ...props
 }) => {
   const [overlay, setOverlay] = useState(false);
   const [columnsState, setColumnsState] = useState(columns);
-
-  const header = useMemo(
-    () =>
-      columnsState.map(
-        (th) =>
-          !th.hidden && (
-            <th key={th.headerName}>
-              {th.headerName}
-              {th.sort && (
-                <i
-                  className="fa-solid fa-chevron-down sort"
-                  onClick={(e) =>
-                    e.target.parentElement.classList.toggle("sort")
-                  }
-                ></i>
-              )}
-            </th>
-          )
-      ),
-    [columnsState]
-  );
-
-  const checkOne = useCallback(
-    (elementId) => {
-      if (!selectedItems.some((id) => id === elementId)) {
-        setSelectedItems((prevSelected) => [...prevSelected, elementId]);
-      } else {
-        setSelectedItems((prevSelected) =>
-          prevSelected.filter((item) => item !== elementId)
-        );
-      }
-    },
-    [setSelectedItems, selectedItems]
-  );
-
-  const rows = useMemo(
-    () =>
-      tabelData.map((row) => (
-        <tr key={row._id}>
-          {columnsState.map((column, i) =>
-            i === 0 && selectable ? (
-              <>
-                <td key={i}>
-                  <div
-                    onClick={() => checkOne(row._id)}
-                    className={`checkbox ${
-                      selectedItems.some((id) => id === row._id) ? "active" : ""
-                    }`}
-                  ></div>
-                </td>
-                <td key={column.name} className={column.className}>
-                  {column.getCell ? column.getCell(row) : row[column.name]}
-                </td>
-              </>
-            ) : (
-              !column.hidden && (
-                <td key={column.name} className={column.className}>
-                  {column.getCell ? column.getCell(row) : row[column.name]}
-                </td>
-              )
-            )
-          )}
-        </tr>
-      )),
-    [tabelData, columnsState, selectable, checkOne, selectedItems]
-  );
-
   const context = useContext(Context);
+
   const token = context.userDetails.token;
   const [hasFltr, setHasFltr] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
@@ -295,9 +230,18 @@ const Table = ({
             selectable={selectable}
             allData={allData}
             setSelectedItems={setSelectedItems}
-            header={header}
+            column={columnsState}
+            setSort={setSort}
           />
-          <TabelBody loading={loading} rows={rows} />
+          <TabelBody
+            loading={loading}
+            column={columnsState}
+            tabelData={tabelData}
+            selectable={selectable}
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+            setOverlay={setOverlay}
+          />
         </table>
       </div>
 
