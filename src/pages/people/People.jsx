@@ -1,11 +1,12 @@
 import axios from "axios";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css";
 import MediaComponent from "../../components/MediaComponent";
 import useLanguage from "../../hooks/useLanguage";
+import TabelFilters from "./TabelFilters";
 
 const columns = [
   {
@@ -139,6 +140,8 @@ const People = () => {
   const limit = context?.limit;
   const { language } = useLanguage();
   const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
 
   const [filters, setFilters] = useState({
     gender: "",
@@ -155,11 +158,7 @@ const People = () => {
 
   const [search, setSearch] = useState("");
 
-  useEffect(() => {
-    if (!search) getData();
-  }, [page, filters, search, limit, sort]);
-
-  const getData = async () => {
+  const getData = useCallback(async () => {
     setLoading(true);
     setData([]);
     setSelectedItems([]);
@@ -194,82 +193,46 @@ const People = () => {
         .join(",");
       params.append("sort", sortParams);
     }
+    if (search) params.append("search", search);
 
     try {
       const { data } = await axios.get(`${baseURL}/people`, {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
-
-      dataLength.current = data.numberOfActivePeople;
-      allPeople.current = data.people.map((e) => e._id);
-      setData(data.people);
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActivePeople"];
+      allPeople.current = data[search ? "data" : "people"]?.map((e) => e._id);
+      setData(data[search ? "data" : "people"]);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, filters, search, limit, sort]);
 
   useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, filters, search, limit]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/people/search?active=true&limit=${limit}&page=${page}`;
-    context.userDetails.role === "user" &&
-      (url += `&sectionId=${context.userDetails.sectionId}`);
-    const keys = Object.keys(filters);
-
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    if (!search) getData();
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
     }
-  };
+  }, [page, filters, search, limit, sort, getData]);
 
   return (
     <>
       <h1 className="title"> {language?.header?.people} </h1>
+      {openFiltersDiv && (
+        <TabelFilters
+          setFilter={setFilters}
+          filter={filters}
+          setIsopen={setOpenFiltersDiv}
+          setPage={setPage}
+        />
+      )}
       <Table
         columns={columns}
-        selectable
+        selectable={role === "admin"}
         loading={loading}
         currentPage={page}
         setPage={setPage}
@@ -278,11 +241,14 @@ const People = () => {
         setSelectedItems={setSelectedItems}
         filters={{ filters, setFilters, search, setSearch }}
         getData={getData}
-        getSearchData={getSearchData}
         deleteUrl="people"
         dataLength={dataLength.current}
         tabelData={data}
         setSort={setSort}
+        search={search}
+        setSearch={setSearch}
+        openFiltersDiv={openFiltersDiv}
+        setOpenFiltersDiv={setOpenFiltersDiv}
       />
     </>
   );

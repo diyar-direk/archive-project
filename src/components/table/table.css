@@ -65,20 +65,36 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   gap: 20px;
   align-items: flex-start;
 }
-.overlay .filters .select div {
+.overlay .filters .select div,
+.overlay .filters .tabel-filters .selecte .inp {
   padding: 5px;
   background-color: var(--body-color);
   border-radius: 4px;
   cursor: pointer;
   text-transform: capitalize;
   color: var(--font-color);
+  text-align: center;
+}
+.overlay .filters .tabel-filters .selecte .inp::after {
+  content: "\f078";
+  font-weight: 900;
+  font-family: "Font Awesome 6 Free";
+  font-size: 60%;
+  pointer-events: none;
+  margin: 0 5px;
+}
+.overlay .filters .tabel-filters .selecte .inp::before {
+  display: none;
 }
 .overlay .filters .select div i {
   font-size: 13px;
 }
-.overlay .filters .select div.active + article {
+
+.overlay .filters .select.active article,
+.overlay .filters .tabel-filters .selecte .inp + article {
   max-height: 200px;
   overflow: auto;
+  padding: 0;
 }
 
 .overlay .filters .select article {
@@ -87,25 +103,26 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   overflow: hidden;
   margin-top: 2px;
 }
-.overlay .filters .select article h2 {
+.overlay .filters .tabel-filters .selecte .inp + article {
+  background: var(--section-color);
+}
+.overlay .filters .select article h2,
+.overlay .filters .tabel-filters .selecte .inp + article h2 {
   cursor: pointer;
   padding: 5px;
   font-size: 16px;
   color: var(--font-color);
   text-align: center;
   text-transform: capitalize;
+  margin-bottom: 0;
 }
-.overlay .filters .select article p {
-  padding: 5px;
-  font-size: 16px;
-  color: var(--font-color);
-  text-transform: capitalize;
-  text-align: center;
-}
-.overlay .filters .select article h2:not(:last-of-type) {
+
+.overlay .filters .select article h2:not(:last-of-type),
+.overlay .filters .tabel-filters .selecte .inp + article h2 {
   border-bottom: solid 1px var(--body-color);
 }
-.overlay .filters .select article h2:hover {
+.overlay .filters .select article h2:hover,
+.overlay .filters .tabel-filters .selecte .inp + article h2:hover {
   background-color: var(--body-color);
 }
 .overlay div.filters-setting > span {
@@ -119,7 +136,7 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   opacity: 0.8;
 }
 
-input.fltr-search {
+.overlay .filters .tabel-filters .selecte .inp + article input {
   width: 100%;
   font-size: 15px;
   padding: 5px;

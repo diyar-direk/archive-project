@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Context } from "../context/context";
 
 const useLanguage = () => {
@@ -10,7 +10,11 @@ const useLanguage = () => {
       icon: "fa-solid fa-user-group",
       children: [
         { title: language?.header?.users, path: "users", role: ["admin"] },
-        { title: language?.header?.add_users, path: "add_user", role: ["admin"] },
+        {
+          title: language?.header?.add_users,
+          path: "add_user",
+          role: ["admin"],
+        },
       ],
       title: language?.header?.users,
       role: ["admin"],
@@ -18,7 +22,11 @@ const useLanguage = () => {
     {
       icon: "fa-solid fa-people-group",
       children: [
-        { title: language?.header?.people, path: "people", role: ["admin", "user"] },
+        {
+          title: language?.header?.people,
+          path: "people",
+          role: ["admin", "user"],
+        },
         {
           title: language?.header?.add_person,
           path: "add_person",
@@ -53,16 +61,28 @@ const useLanguage = () => {
           path: "governments",
           role: ["admin", "user"],
         },
-        { title:language?.header?.cities, path: "cities", role: ["admin", "user"] },
+        {
+          title: language?.header?.cities,
+          path: "cities",
+          role: ["admin", "user"],
+        },
         {
           title: language?.header?.villages,
           path: "villages",
           role: ["admin", "user"],
         },
-        { title: language?.header?.streets, path: "streets", role: ["admin", "user"] },
-        { title: language?.header?.regions, path: "regions", role: ["admin", "user"] },
+        {
+          title: language?.header?.streets,
+          path: "streets",
+          role: ["admin", "user"],
+        },
+        {
+          title: language?.header?.regions,
+          path: "regions",
+          role: ["admin", "user"],
+        },
       ],
-      title: language?.header?.adress ,
+      title: language?.header?.adress,
       role: ["admin", "user"],
     },
 
@@ -74,9 +94,21 @@ const useLanguage = () => {
           path: "sections",
           role: ["admin", "user"],
         },
-        { title: language?.header?.sources, path: "sources", role: ["admin", "user"] },
-        { title: language?.header?.events, path: "event", role: ["admin", "user"] },
-        { title: language?.header?.parties, path: "party", role: ["admin", "user"] },
+        {
+          title: language?.header?.sources,
+          path: "sources",
+          role: ["admin", "user"],
+        },
+        {
+          title: language?.header?.events,
+          path: "event",
+          role: ["admin", "user"],
+        },
+        {
+          title: language?.header?.parties,
+          path: "party",
+          role: ["admin", "user"],
+        },
       ],
       title: language?.header?.categories,
       role: ["admin", "user"],
@@ -90,7 +122,7 @@ const useLanguage = () => {
           role: ["admin", "user"],
         },
         {
-          title:language?.header?.add_information,
+          title: language?.header?.add_information,
           path: "add_information",
           role: ["admin", "user"],
         },

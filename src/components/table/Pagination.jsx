@@ -40,7 +40,7 @@ const Pagination = ({ dataLength, currentPage, loading, setPage }) => {
     <div>
       <div className="between table-pagination">
         <h2>
-          all data length: <span> {dataLength} </span>
+          all data length: <span> {dataLength || 0} </span>
         </h2>
 
         <h2>

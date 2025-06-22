@@ -8,6 +8,7 @@ import FormSelect from "../../components/form/FormSelect";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getCountriesApi } from "../addresses/api";
+import { getPeopleApi } from "../people/api";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -195,6 +196,15 @@ const AddUser = () => {
               onChange={(option) => setForm({ ...form, role: option?._id })}
               value={form.role}
               onIgnore={() => setForm({ ...form, role: "" })}
+            />
+            <SelectInputApi
+              fetchData={getPeopleApi}
+              selectLabel={"people"}
+              label={"choose people"}
+              optionLabel={(option) => option?.firstName}
+              onChange={(option) => setForm({ ...form, role: option?._id })}
+              value={form.people}
+              onIgnore={() => setForm({ ...form, people: "" })}
             />
 
             <div className="flex flex-direction">

@@ -237,6 +237,7 @@ const Coordinates = () => {
         filters={{ filters, setFilters, search, setSearch }}
         overlay={{ overlay: overlay, setOverlay }}
         delete={{ getData, url: "Coordinates", getSearchData }}
+        
       />
     </>
   );

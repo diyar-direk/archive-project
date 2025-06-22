@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
-import { baseURL, placeholder } from "../../context/context";
+import { baseURL } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";

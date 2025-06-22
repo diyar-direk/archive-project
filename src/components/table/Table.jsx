@@ -3,7 +3,6 @@ import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
-import Filters from "./Filters";
 import { useLocation } from "react-router-dom";
 import Loading from "../loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
@@ -11,29 +10,55 @@ import TabelHeader from "./TabelHeader";
 import TabelBody from "./TabelBody";
 import Pagination from "./Pagination";
 import ShowRows from "./ShowRows";
+/**
+ * @typedef {Object} Utils
+ * @property {Array<any>} tabelData - البيانات المعروضة في الجدول.
+ * @property {Array<any>} allData - جميع البيانات (قد تكون كاملة أو غير مفلترة).
+ * @property {React.Dispatch<React.SetStateAction<any[]>>} setSelectedItems - دالة لتحديث العناصر المحددة.
+ * @property {Array<any>} selectedItems - العناصر المحددة حاليًا.
+ * @property {boolean} selectable - هل يمكن تحديد الصفوف أم لا.
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setOpenFiltersDiv
+ * @property {boolean} openFiltersDiv
+ * @property {Array<any>} columns - أعمدة الجدول.
+ * @property {number} dataLength - عدد البيانات الكلي.
+ * @property {boolean} loading - حالة التحميل.
+ * @property {number} currentPage - الصفحة الحالية.
+ * @property {React.Dispatch<React.SetStateAction<number>>} setPage - دالة لتغيير الصفحة الحالية.
+ * @property {React.Dispatch<React.SetStateAction<object>>} setSort - دالة لتغيير الترتيب.
+ * @property {string} deleteUrl - رابط حذف البيانات.
+ * @property {string} search - القيمة التي يتم البحث عنها.
+ * @property {React.Dispatch<React.SetStateAction<string>>} setSearch - دالة لتحديث قيمة البحث
+ * @property {() => void} getData - دالة جلب البيانات.
+ */
+
+/**
+ * @param {React.TableHTMLAttributes<HTMLTableElement> & Utils} props
+ */
+
 const Table = ({
-  tabelData,
-  allData,
+  tabelData = [],
+  allData = [],
   setSelectedItems,
-  selectedItems,
-  selectable,
+  selectedItems = [],
+  selectable = false,
   columns = [],
-  dataLength,
+  dataLength = 0,
   loading = true,
-  currentPage,
+  currentPage = 1,
   setPage,
   deleteUrl,
   getData,
-  getSearchData,
   setSort,
+  search,
+  setSearch,
+  openFiltersDiv,
+  setOpenFiltersDiv,
   ...props
 }) => {
   const [overlay, setOverlay] = useState(false);
   const [columnsState, setColumnsState] = useState(columns);
   const context = useContext(Context);
-
   const token = context.userDetails.token;
-  const [hasFltr, setHasFltr] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const location = useLocation();
   const { language } = useLanguage();
@@ -53,7 +78,7 @@ const Table = ({
         setOverlay(false);
         if (selectedItems.length < 2) setSelectedItems([]);
       }
-      hasFltr && setHasFltr(false);
+      openFiltersDiv && setOpenFiltersDiv(false);
       const optionDiv = document.querySelector(
         "div.table tbody td i.options.active-div"
       );
@@ -64,7 +89,7 @@ const Table = ({
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  }, [overlay, hasFltr, selectedItems]);
+  }, [overlay, openFiltersDiv, selectedItems, setSelectedItems]);
 
   const deleteData = async () => {
     setOverlay(false);
@@ -87,7 +112,7 @@ const Table = ({
             currentPage !== 1
           ) {
             setPage(1);
-          } else props.filters.search ? getSearchData() : getData();
+          } else getData();
         }
       } else {
         const data = await axios.patch(
@@ -102,7 +127,7 @@ const Table = ({
             currentPage !== 1
           ) {
             setPage(1);
-          } else props.filters.search ? getSearchData() : getData();
+          } else getData();
         }
       }
     } catch (error) {
@@ -113,49 +138,9 @@ const Table = ({
     }
   };
 
-  const [beforSubmit, setBeforeSubmit] = useState("");
-
-  const [data, setData] = useState({
-    data: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-    searchData: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-    dataWithProps: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-  });
-
   return (
     <>
       {dataLoading && <Loading />}
-      {hasFltr && (
-        <Filters
-          fltr={{
-            fltr: props.filters?.filters,
-            setFilters: props.filters?.setFilters,
-          }}
-          dataArray={{ data, setData }}
-          hasFltr={{ hasFltr, setHasFltr }}
-          page={{ setPage }}
-        />
-      )}
 
       {overlay && (
         <div className="overlay">
@@ -182,41 +167,22 @@ const Table = ({
         </div>
       )}
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          props.filters.setSearch(beforSubmit);
-          setPage(1);
-        }}
-        className="flex align-center justify-end gap-10 table-search"
-      >
+      <form className="flex align-center justify-end gap-10 table-search">
         {!location.pathname.includes("/backup") && (
-          <>
-            <input
-              type="text"
-              placeholder={`${
-                props.searchInpPlacecholder
-                  ? props.searchInpPlacecholder
-                  : language?.table?.serach_by_name
-              }`}
-              value={beforSubmit}
-              onInput={(e) => {
-                e.target.value === "" && props.filters.setSearch("");
-                setBeforeSubmit(e.target.value);
-              }}
-              required
-            />
-
-            <button className="btn center gap-10">
-              <span>{language?.table?.search_btn}</span>
-              <i className="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </>
+          <input
+            type="text"
+            placeholder={`${language?.table?.serach_by_name}`}
+            value={search}
+            onInput={(e) => {
+              currentPage !== 1 && setPage(1);
+              setSearch(e.target.value.toLowerCase());
+            }}
+          />
         )}
         <i
           title="filters"
           onClick={(e) => {
-            setHasFltr(true);
+            setOpenFiltersDiv(true);
             e.stopPropagation();
           }}
           className="fa-solid fa-sliders filter"
@@ -225,7 +191,7 @@ const Table = ({
       </form>
 
       <div className="table">
-        <table className={loading || tabelData ? "loading" : ""}>
+        <table {...props} className={loading || tabelData ? "loading" : ""}>
           <TabelHeader
             selectable={selectable}
             allData={allData}

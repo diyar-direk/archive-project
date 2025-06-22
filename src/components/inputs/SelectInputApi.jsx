@@ -1,15 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useLanguage from "../../hooks/useLanguage";
+
 /**
  * @typedef {Object} Utils
- * @property {() => Promise<any[]>} fetchData
+ * @property {({ page: number, search: string }) => Promise<any[]>} fetchData
  * @property {string} label
  * @property {string} selectLabel
  * @property {(option: any) => string} optionLabel
  * @property {(option: any) => void} onChange
  * @property {() => void} onIgnore
  * @property {any} value
- * @param {Utils} props
+ * @param {Utils & React.HtmlHTMLAttributes<HTMLDivElement>} props
  */
 const SelectInputApi = ({
   fetchData,
@@ -19,47 +20,57 @@ const SelectInputApi = ({
   onChange,
   onIgnore,
   value,
+  ...props
 }) => {
-  const [data, setData] = useState({});
-
+  const [items, setItems] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setloading] = useState(true);
-  const { language } = useLanguage();
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
+  const { language } = useLanguage();
+  const observer = useRef(null);
+
   const handleClick = useCallback((e) => {
     e.stopPropagation();
     const divs = document.querySelectorAll("div.form .selecte .inp.active");
     divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
     e.target.classList.toggle("active");
-    e.target.classList.contains("active") ? setIsOpen(true) : setIsOpen(false);
+    setIsOpen(e.target.classList.contains("active"));
   }, []);
 
   useEffect(() => {
     if (!isOpen) return;
+
     const loadData = async () => {
-      setloading(true);
+      setLoading(true);
       try {
-        const result = await fetchData({ page: data.page || 1 });
-        setData(() => {
-          const existingIds = new Set(
-            (data.data || []).map((item) => item._id)
-          );
+        const result = await fetchData({ page, search });
 
-          const newData = result.data.filter(
-            (item) => !existingIds.has(item._id)
-          );
-          return {
-            ...result,
-            data: [...(data?.data || []), ...newData],
-          };
+        setItems((prev) => {
+          const combined = [...prev, ...(result.data || [])];
+          const uniqueMap = new Map();
+          for (const item of combined) {
+            uniqueMap.set(String(item._id), item); // cast to string for consistency
+          }
+          return Array.from(uniqueMap.values());
         });
-      } catch {}
-      setloading(false);
-    };
-    loadData();
-  }, [fetchData, search, isOpen, data.page]);
 
-  const observer = useRef(null);
+        setHasMore(result.hasMore);
+      } catch (error) {
+        console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (search) loadData();
+    else {
+      const timeOut = setTimeout(() => loadData(), 500);
+      return () => clearTimeout(timeOut);
+    }
+  }, [page, search, isOpen]);
+
   const lastElement = useCallback(
     (node) => {
       if (loading) return;
@@ -67,21 +78,19 @@ const SelectInputApi = ({
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver((entries) => {
-        const firstEntry = entries[0];
-        if (firstEntry?.isIntersecting && data.hasMore && !loading) {
-          setData((prev) => ({ ...prev, page: (prev.page || 1) + 1 }));
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
         }
       });
 
       if (node) observer.current.observe(node);
     },
-    [loading, data.hasMore]
+    [loading, hasMore]
   );
 
   return (
-    <div className="flex flex-direction">
-      <label>{label}</label>
-
+    <div className="flex flex-direction" {...props}>
+      {label && <label>{label}</label>}
       <div className="selecte relative">
         <div onClick={handleClick} className="inp">
           {selectLabel}
@@ -89,23 +98,27 @@ const SelectInputApi = ({
         <article>
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setItems([]);
+              setPage(1);
+              setHasMore(true);
+              setSearch(e.target.value.toLowerCase());
+            }}
             onClick={(e) => e.stopPropagation()}
-            placeholder={`${language?.table?.search_for} role`}
+            placeholder={`${language?.table?.search_for}...`}
           />
-
-          {data?.data?.map((itm, i) => (
+          {items.map((itm, i) => (
             <h2
               key={itm._id}
               onClick={() => onChange(itm)}
-              ref={i === data?.data?.length - 1 ? lastElement : null}
+              ref={i === items.length - 1 ? lastElement : null}
             >
               {optionLabel(itm)}
             </h2>
           ))}
           {loading && <p>{language?.table?.loading}</p>}
         </article>
-        {value && <span onClick={onIgnore}> {value} </span>}
+        {value && <span onClick={onIgnore}>{value}</span>}
       </div>
     </div>
   );
