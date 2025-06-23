@@ -3,9 +3,9 @@ import { baseURL } from "../../context/context";
 
 const token = document.cookie.split("archive_cookie=")[1];
 
-export const getCountriesApi = async ({ page = 1, search }) => {
+export const getAddressesApi = async ({ page = 1, search, url }) => {
   try {
-    const { data } = await axios.get(`${baseURL}/Countries`, {
+    const { data } = await axios.get(`${baseURL}/${url}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

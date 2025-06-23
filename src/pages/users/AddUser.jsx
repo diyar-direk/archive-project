@@ -7,7 +7,6 @@ import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getCountriesApi } from "../addresses/api";
 import { getPeopleApi } from "../people/api";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
@@ -188,15 +187,6 @@ const AddUser = () => {
               />
             )}
 
-            <SelectInputApi
-              fetchData={getCountriesApi}
-              selectLabel={"role"}
-              label={"choose role"}
-              optionLabel={(option) => option?.name}
-              onChange={(option) => setForm({ ...form, role: option?._id })}
-              value={form.role}
-              onIgnore={() => setForm({ ...form, role: "" })}
-            />
             <SelectInputApi
               fetchData={getPeopleApi}
               selectLabel={"people"}

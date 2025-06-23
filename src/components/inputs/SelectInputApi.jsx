@@ -10,6 +10,8 @@ import useLanguage from "../../hooks/useLanguage";
  * @property {(option: any) => void} onChange
  * @property {() => void} onIgnore
  * @property {any} value
+ * @property {boolean} isTabelsFilter
+ * @property {string} url
  * @param {Utils & React.HtmlHTMLAttributes<HTMLDivElement>} props
  */
 const SelectInputApi = ({
@@ -20,6 +22,8 @@ const SelectInputApi = ({
   onChange,
   onIgnore,
   value,
+  isTabelsFilter,
+  url,
   ...props
 }) => {
   const [items, setItems] = useState([]);
@@ -34,7 +38,7 @@ const SelectInputApi = ({
   const handleClick = useCallback((e) => {
     e.stopPropagation();
     const divs = document.querySelectorAll("div.form .selecte .inp.active");
-    divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
+    divs?.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
     e.target.classList.toggle("active");
     setIsOpen(e.target.classList.contains("active"));
   }, []);
@@ -44,18 +48,17 @@ const SelectInputApi = ({
 
     const loadData = async () => {
       setLoading(true);
+      const params = url ? { page, search, url } : { page, search };
       try {
-        const result = await fetchData({ page, search });
-
+        const result = await fetchData(params);
         setItems((prev) => {
           const combined = [...prev, ...(result.data || [])];
           const uniqueMap = new Map();
           for (const item of combined) {
-            uniqueMap.set(String(item._id), item); // cast to string for consistency
+            uniqueMap.set(String(item._id), item);
           }
           return Array.from(uniqueMap.values());
         });
-
         setHasMore(result.hasMore);
       } catch (error) {
         console.error("Fetch error:", error);
@@ -89,9 +92,9 @@ const SelectInputApi = ({
   );
 
   return (
-    <div className="flex flex-direction" {...props}>
+    <div className="flex flex-direction">
       {label && <label>{label}</label>}
-      <div className="selecte relative">
+      <div className="selecte relative" {...props}>
         <div onClick={handleClick} className="inp">
           {selectLabel}
         </div>
@@ -117,8 +120,9 @@ const SelectInputApi = ({
             </h2>
           ))}
           {loading && <p>{language?.table?.loading}</p>}
+          {!hasMore && <p>no more data</p>}
         </article>
-        {value && <span onClick={onIgnore}>{value}</span>}
+        {!isTabelsFilter && value && <span onClick={onIgnore}>{value}</span>}
       </div>
     </div>
   );

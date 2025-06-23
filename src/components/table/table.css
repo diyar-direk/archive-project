@@ -65,8 +65,7 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   gap: 20px;
   align-items: flex-start;
 }
-.overlay .filters .select div,
-.overlay .filters .tabel-filters .selecte .inp {
+.overlay .filters .tabel-filter-select div {
   padding: 5px;
   background-color: var(--body-color);
   border-radius: 4px;
@@ -75,7 +74,7 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   color: var(--font-color);
   text-align: center;
 }
-.overlay .filters .tabel-filters .selecte .inp::after {
+.overlay .filters .tabel-filter-select .inp::after {
   content: "\f078";
   font-weight: 900;
   font-family: "Font Awesome 6 Free";
@@ -83,31 +82,26 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   pointer-events: none;
   margin: 0 5px;
 }
-.overlay .filters .tabel-filters .selecte .inp::before {
-  display: none;
-}
-.overlay .filters .select div i {
+
+.overlay .filters .tabel-filter-select div i {
   font-size: 13px;
 }
 
-.overlay .filters .select.active article,
-.overlay .filters .tabel-filters .selecte .inp + article {
+.overlay .filters .tabel-filter-select .active + article {
   max-height: 200px;
   overflow: auto;
   padding: 0;
 }
 
-.overlay .filters .select article {
+.overlay .filters .tabel-filter-select article {
   background: var(--section-color);
   max-height: 0px;
   overflow: hidden;
-  margin-top: 2px;
 }
-.overlay .filters .tabel-filters .selecte .inp + article {
+.overlay .filters .tabel-filter-select .inp + article {
   background: var(--section-color);
 }
-.overlay .filters .select article h2,
-.overlay .filters .tabel-filters .selecte .inp + article h2 {
+.overlay .filters .tabel-filter-select article h2 {
   cursor: pointer;
   padding: 5px;
   font-size: 16px;
@@ -117,12 +111,10 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   margin-bottom: 0;
 }
 
-.overlay .filters .select article h2:not(:last-of-type),
-.overlay .filters .tabel-filters .selecte .inp + article h2 {
+.overlay .filters .tabel-filter-select article h2:not(:last-of-type) {
   border-bottom: solid 1px var(--body-color);
 }
-.overlay .filters .select article h2:hover,
-.overlay .filters .tabel-filters .selecte .inp + article h2:hover {
+.overlay .filters .tabel-filter-select article h2:hover {
   background-color: var(--body-color);
 }
 .overlay div.filters-setting > span {
@@ -136,7 +128,7 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   opacity: 0.8;
 }
 
-.overlay .filters .tabel-filters .selecte .inp + article input {
+.overlay .filters .tabel-filter-select .inp + article input {
   width: 100%;
   font-size: 15px;
   padding: 5px;
@@ -146,6 +138,10 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   position: sticky;
   color: var(--font-color);
   top: 0;
+}
+.overlay .filters .tabel-filter-select p {
+  background-color: var(--body-color);
+  text-align: center;
 }
 
 div.table {

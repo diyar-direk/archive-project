@@ -1,14 +1,26 @@
 import DatePicker from "react-datepicker";
 import useLanguage from "../../hooks/useLanguage";
+import { useCallback } from "react";
 
 const DateFilter = ({ setFilter, filter }) => {
   const { language } = useLanguage();
+
+  const RefreshData = useCallback(() => {
+    setFilter((prev) => {
+      const refreshedFilters = { ...prev };
+      for (const key in refreshedFilters) {
+        refreshedFilters[key] = key === "date" ? { from: "", to: "" } : "";
+      }
+      return refreshedFilters;
+    });
+  }, [setFilter]);
+
   return (
     <div className="center wrap date-fltr gap-20">
       <div className="relative flex-1 center gap-10">
         <span>{language?.table?.from}</span>
         <DatePicker
-          selected={filter?.date?.from}
+          selected={filter?.date?.from || null}
           showIcon
           showMonthDropdown
           showYearDropdown
@@ -24,14 +36,14 @@ const DateFilter = ({ setFilter, filter }) => {
         <span>{language?.table?.to}</span>
         <DatePicker
           placeholderText={language?.coordinates?.date_to}
-          selected={filter?.date?.to}
+          selected={filter?.date?.to || null}
           showIcon
           showMonthDropdown
           showYearDropdown
           scrollableYearDropdown
           yearDropdownItemNumber={90}
           maxDate={new Date()}
-          minDate={filter.date.from}
+          minDate={filter.date.from || null}
           onChange={(e) =>
             setFilter({ ...filter, date: { ...filter?.date, to: e } })
           }
@@ -39,7 +51,7 @@ const DateFilter = ({ setFilter, filter }) => {
       </div>
       <i
         title="refresh data"
-        onClick={() => setFilter({ ...filter })}
+        onClick={RefreshData}
         className="fa-solid fa-rotate-right"
       ></i>
     </div>
