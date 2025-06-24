@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import "../../components/form/form.css";
-import { baseURL, Context, placeholder } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import FormSelect from "../../components/form/FormSelect";
 import useLanguage from "../../hooks/useLanguage";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getPeopleApi } from "../people/api";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -123,7 +125,10 @@ const AddUser = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`person`} response={response.current} />
+        <SendData
+          data={language?.users?.username}
+          response={response.current}
+        />
       )}
       {loading && <Loading />}
       <h1 className="title">{language?.header?.add_users}</h1>
@@ -181,6 +186,16 @@ const AddUser = () => {
                 form={{ form, setForm }}
               />
             )}
+
+            <SelectInputApi
+              fetchData={getPeopleApi}
+              selectLabel={"people"}
+              label={"choose people"}
+              optionLabel={(option) => option?.firstName}
+              onChange={(option) => setForm({ ...form, role: option?._id })}
+              value={form.people}
+              onIgnore={() => setForm({ ...form, people: "" })}
+            />
 
             <div className="flex flex-direction">
               <label htmlFor="password">{language?.users?.password}</label>

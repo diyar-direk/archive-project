@@ -8,6 +8,7 @@ import { baseURL, Context } from "../../context/context";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import useLanguage from "../../hooks/useLanguage";
+import { formatCoordinates } from "./AddCoordinates";
 
 const UpdateCoordinates = () => {
   const context = useContext(Context);
@@ -24,6 +25,8 @@ const UpdateCoordinates = () => {
       ? (response.current = true)
       : complete === "reapeted data"
       ? (response.current = 400)
+      : complete === "Invalid coordinates"
+      ? (response.current = "Invalid coordinates")
       : (response.current = false);
     setResponseOverlay(true);
     window.onclick = () => {
@@ -97,9 +100,9 @@ const UpdateCoordinates = () => {
       });
     } catch (error) {
       console.log(error);
-      (error.status === 500 || error.status === 404) &&
+      if (error.status === 500 || error.status === 404)
         nav(`/dashboard/error-404`);
-      error.status === 403 && nav(`/dashboard/error-403`);
+      else responseFun("Invalid coordinates");
     } finally {
       setDataLoading(false);
     }
@@ -107,9 +110,15 @@ const UpdateCoordinates = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const coordinants = `${coordinates.firstNumber}${coordinates.firstLetter} ${
+      coordinates.secondLetter
+    } ${formatCoordinates(coordinates.secondNumber)} ${formatCoordinates(
+      coordinates.thirdNumber
+    )}`;
+
     const formData = {
       ...form,
-      coordinates: `${coordinates.firstNumber}${coordinates.firstLetter} ${coordinates.secondLetter} ${coordinates.secondNumber} ${coordinates.thirdNumber}`,
+      coordinates: coordinants,
     };
 
     if (!form.countryId) setError(language?.error?.select_country);
@@ -201,7 +210,10 @@ const UpdateCoordinates = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`person`} response={response.current} />
+        <SendData
+          data={language?.header?.coordinates}
+          response={response.current}
+        />
       )}
       {loading && <Loading />}
       {dataLoading ? (

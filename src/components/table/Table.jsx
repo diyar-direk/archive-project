@@ -1,63 +1,84 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
-import Filters from "./Filters";
 import { useLocation } from "react-router-dom";
 import Loading from "../loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
-const Table = (props) => {
-  const header = props.header.map((th, i) => <th key={i}> {th} </th>);
+import TabelHeader from "./TabelHeader";
+import TabelBody from "./TabelBody";
+import Pagination from "./Pagination";
+import ShowRows from "./ShowRows";
+/**
+ * @typedef {Object} Utils
+ * @property {Array<any>} tabelData - البيانات المعروضة في الجدول.
+ * @property {Array<any>} allData - جميع البيانات (قد تكون كاملة أو غير مفلترة).
+ * @property {React.Dispatch<React.SetStateAction<any[]>>} setSelectedItems - دالة لتحديث العناصر المحددة.
+ * @property {Array<any>} selectedItems - العناصر المحددة حاليًا.
+ * @property {boolean} selectable - هل يمكن تحديد الصفوف أم لا.
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setOpenFiltersDiv
+ * @property {boolean} openFiltersDiv
+ * @property {Array<any>} columns - أعمدة الجدول.
+ * @property {number} dataLength - عدد البيانات الكلي.
+ * @property {boolean} loading - حالة التحميل.
+ * @property {number} currentPage - الصفحة الحالية.
+ * @property {React.Dispatch<React.SetStateAction<number>>} setPage - دالة لتغيير الصفحة الحالية.
+ * @property {React.Dispatch<React.SetStateAction<object>>} setSort - دالة لتغيير الترتيب.
+ * @property {string} deleteUrl - رابط حذف البيانات.
+ * @property {string} search - القيمة التي يتم البحث عنها.
+ * @property {React.Dispatch<React.SetStateAction<string>>} setSearch - دالة لتحديث قيمة البحث
+ * @property {() => void} getData - دالة جلب البيانات.
+ */
+
+/**
+ * @param {React.TableHTMLAttributes<HTMLTableElement> & Utils} props
+ */
+
+const Table = ({
+  tabelData = [],
+  allData = [],
+  setSelectedItems,
+  selectedItems = [],
+  selectable = false,
+  columns = [],
+  dataLength = 0,
+  loading = true,
+  currentPage = 1,
+  setPage,
+  deleteUrl,
+  getData,
+  setSort,
+  search,
+  setSearch,
+  openFiltersDiv,
+  setOpenFiltersDiv,
+  ...props
+}) => {
+  const [overlay, setOverlay] = useState(false);
+  const [columnsState, setColumnsState] = useState(columns);
   const context = useContext(Context);
-  const limit = context?.limit;
   const token = context.userDetails.token;
-  const [hasFltr, setHasFltr] = useState(false);
   const [dataLoading, setDataLoading] = useState(false);
   const location = useLocation();
   const { language } = useLanguage();
-  const createPags = (limit, dataLength) => {
-    const pages = Math.ceil(dataLength / limit);
-    if (pages <= 1) return;
-    let h3Pages = [];
-    for (let i = 0; i < pages; i++) {
-      h3Pages.push(
-        <h3
-          onClick={(e) => !props.loading && updateData(e)}
-          data-page={i + 1}
-          key={i}
-          className={`${i === 0 ? "active" : ""}`}
-        >
-          {i + 1}
-        </h3>
-      );
-    }
-    return h3Pages;
-  };
-
-  function updateData(e) {
-    if (props.page.page !== +e.target.dataset.page) {
-      props.page.setPage(+e.target.dataset.page);
-    }
-  }
 
   useEffect(() => {
     const pages = document.querySelectorAll(".pagination h3");
     if (pages) {
       pages.forEach((e) => e.classList.remove("active"));
 
-      pages[props.page.page - 1]?.classList.add("active");
+      pages[currentPage - 1]?.classList.add("active");
     }
-  }, [props.page.page]);
+  }, [currentPage]);
 
   useEffect(() => {
     const handleClick = () => {
-      if (props?.overlay?.overlay) {
-        props.overlay.setOverlay(false);
-        if (props.items.slectedItems.length < 2)
-          props.items.setSelectedItems([]);
+      if (overlay) {
+        setOverlay(false);
+        if (selectedItems.length < 2) setSelectedItems([]);
       }
-      hasFltr && setHasFltr(false);
+      openFiltersDiv && setOpenFiltersDiv(false);
       const optionDiv = document.querySelector(
         "div.table tbody td i.options.active-div"
       );
@@ -68,57 +89,16 @@ const Table = (props) => {
     return () => {
       window.removeEventListener("click", handleClick);
     };
-  }, [props?.overlay, hasFltr, props.items]);
-
-  const checkAll = (e) => {
-    const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
-    const allSelectors = document.querySelectorAll("td .checkbox");
-
-    if (
-      allActiveSelectors.length >= 0 &&
-      allActiveSelectors.length !== allSelectors.length
-    ) {
-      allSelectors.forEach((e) => e.classList.add("active"));
-      e.target.classList.add("active");
-      !props?.workSpace?.workSpace
-        ? props.items.setSelectedItems(props.data.allData)
-        : props.workSpace.infoForm.setForm({
-            ...props.workSpace.infoForm.form,
-            people: [
-              ...props.workSpace.infoForm.form.people,
-              ...props.data.allData.filter(
-                (item) =>
-                  !props.workSpace.infoForm.form.people.some(
-                    (person) => person._id === item._id
-                  )
-              ),
-            ],
-          });
-    } else {
-      allSelectors.forEach((e) => e.classList.remove("active"));
-      e.target.classList.remove("active");
-      !props?.workSpace?.workSpace
-        ? props.items.setSelectedItems([])
-        : props.workSpace.infoForm.setForm({
-            ...props.workSpace.infoForm.form,
-            people: props.workSpace.infoForm.form.people.filter(
-              (item) =>
-                !props.data.allData.some(
-                  (dataItem) => dataItem._id === item._id
-                )
-            ),
-          });
-    }
-  };
+  }, [overlay, openFiltersDiv, selectedItems, setSelectedItems]);
 
   const deleteData = async () => {
-    props.overlay.setOverlay(false);
+    setOverlay(false);
     setDataLoading(true);
     try {
-      if (props.items.slectedItems.length > 1) {
+      if (selectedItems.length > 1) {
         const data = await axios.patch(
-          `${baseURL}/${props.delete.url}/deActivate-many`,
-          { ids: props.items.slectedItems },
+          `${baseURL}/${deleteUrl}/deActivate-many`,
+          { ids: selectedItems },
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -126,34 +106,28 @@ const Table = (props) => {
           }
         );
         if (data.status === 200) {
-          props?.overlay?.setOverlay(false);
+          setOverlay(false);
           if (
-            props.data.allData.length - props.items.slectedItems.length === 0 &&
-            props.page.page !== 1
+            allData.length - selectedItems.length === 0 &&
+            currentPage !== 1
           ) {
-            props.page.setPage(1);
-          } else
-            props.filters.search
-              ? props.delete.getSearchData()
-              : props.delete.getData();
+            setPage(1);
+          } else getData();
         }
       } else {
         const data = await axios.patch(
-          `${baseURL}/${props.delete.url}/deActivate/${props.items.slectedItems[0]}`,
+          `${baseURL}/${deleteUrl}/deActivate/${selectedItems[0]}`,
           [],
           { headers: { Authorization: "Bearer " + token } }
         );
         if (data.status === 200) {
-          props?.overlay?.setOverlay(false);
+          setOverlay(false);
           if (
-            props.data.allData.length - props.items.slectedItems.length === 0 &&
-            props.page.page !== 1
+            allData.length - selectedItems.length === 0 &&
+            currentPage !== 1
           ) {
-            props.page.setPage(1);
-          } else
-            props.filters.search
-              ? props.delete.getSearchData()
-              : props.delete.getData();
+            setPage(1);
+          } else getData();
         }
       }
     } catch (error) {
@@ -163,62 +137,17 @@ const Table = (props) => {
       setDataLoading(false);
     }
   };
-  const updateLimit = (e) => {
-    if (parseInt(e.target.value) !== limit) {
-      context?.setLimit(parseInt(e.target.value));
-      props.page.setPage(1);
-    }
-  };
-  const [beforSubmit, setBeforeSubmit] = useState("");
-
-  const [data, setData] = useState({
-    data: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-    searchData: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-    dataWithProps: {
-      Countries: [],
-      Cities: [],
-      Governments: [],
-      Villages: [],
-      Regions: [],
-      Streets: [],
-    },
-  });
 
   return (
     <>
       {dataLoading && <Loading />}
-      {hasFltr && (
-        <Filters
-          fltr={{
-            fltr: props.filters?.filters,
-            setFilters: props.filters?.setFilters,
-          }}
-          dataArray={{ data, setData }}
-          hasFltr={{ hasFltr, setHasFltr }}
-          page={{ setPage: props.page.setPage }}
-        />
-      )}
 
-      {props.overlay?.overlay && (
+      {overlay && (
         <div className="overlay">
           <div onClick={(e) => e.stopPropagation()}>
             <h1>
-              {language?.table?.are_you_sure_delete}(
-              {props.items.slectedItems.length}){language?.table?.items}
+              {language?.table?.are_you_sure_delete}({selectedItems.length})
+              {language?.table?.items}
             </h1>
             <div className="flex gap-10 wrap">
               <div onClick={deleteData} className="delete-all overlay-btn">
@@ -226,9 +155,8 @@ const Table = (props) => {
               </div>
               <div
                 onClick={() => {
-                  props.items.slectedItems.length === 1 &&
-                    props.items.setSelectedItems([]);
-                  props.overlay.setOverlay(false);
+                  selectedItems.length === 1 && setSelectedItems([]);
+                  setOverlay(false);
                 }}
                 className="delete-all cencel overlay-btn"
               >
@@ -239,108 +167,68 @@ const Table = (props) => {
         </div>
       )}
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          props.filters.setSearch(beforSubmit);
-          props.page.setPage(1);
-        }}
-        className="flex align-center justify-end gap-10 table-search"
-      >
+      <form className="flex align-center justify-end gap-10 table-search">
         {!location.pathname.includes("/backup") && (
-          <>
-            <input
-              type="text"
-              placeholder={`${
-                props.searchInpPlacecholder
-                  ? props.searchInpPlacecholder
-                  : language?.table?.serach_by_name
-              }`}
-              value={beforSubmit}
-              onInput={(e) => {
-                e.target.value === "" && props.filters.setSearch("");
-                setBeforeSubmit(e.target.value);
-              }}
-              required
-            />
-
-            <button className="btn center gap-10">
-              <span>{language?.table?.search_btn}</span>
-              <i className="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </>
-        )}
-        {!props?.workSpace?.workSpace && (
-          <i
-            title="filters"
-            onClick={(e) => {
-              setHasFltr(true);
-              e.stopPropagation();
+          <input
+            type="text"
+            placeholder={`${language?.table?.serach_by_name}`}
+            value={search}
+            onInput={(e) => {
+              currentPage !== 1 && setPage(1);
+              setSearch(e.target.value.toLowerCase());
             }}
-            className="fa-solid fa-sliders filter"
-          ></i>
+          />
         )}
+        <i
+          title="filters"
+          onClick={(e) => {
+            setOpenFiltersDiv(true);
+            e.stopPropagation();
+          }}
+          className="fa-solid fa-sliders filter"
+        ></i>
+        <ShowRows columns={columnsState} setColumns={setColumnsState} />
       </form>
+
       <div className="table">
-        <table className={props.loading || props.data?.data ? "loading" : ""}>
-          <thead>
-            <tr>
-              {!props.hideActionForUser && (
-                <th>
-                  {props.data.allData.length > 0 && (
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        checkAll(e);
-                      }}
-                      className="checkbox select-all"
-                    ></div>
-                  )}
-                </th>
-              )}
-              {header}
-              <th>
-                <select onChange={updateLimit} value={limit}>
-                  <option value="10">10</option>
-                  <option value="15">15</option>
-                  <option value="20">20</option>
-                </select>
-              </th>
-            </tr>
-          </thead>
-          <tbody
-            className={props.loading || props.data?.data ? "relative" : ""}
-          >
-            {props.loading ? (
-              <div className="table-loading"> {language?.table?.loading}</div>
-            ) : props.data?.data?.length > 0 ? (
-              props.data.data
-            ) : (
-              <div className="table-loading">
-                {" "}
-                {language?.table?.no_results}
-              </div>
-            )}
-          </tbody>
+        <table {...props} className={loading || tabelData ? "loading" : ""}>
+          <TabelHeader
+            selectable={selectable}
+            allData={allData}
+            setSelectedItems={setSelectedItems}
+            column={columnsState}
+            setSort={setSort}
+          />
+          <TabelBody
+            loading={loading}
+            column={columnsState}
+            tabelData={tabelData}
+            selectable={selectable}
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+            setOverlay={setOverlay}
+          />
         </table>
       </div>
 
-      {!props?.workSpace?.workSpace &&
-        props.items?.slectedItems?.length > 0 && (
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              props?.overlay?.setOverlay(true);
-            }}
-            className="gap-10 delete-all"
-          >
-            <i className="fa-solid fa-trash"></i> {language?.table?.delete} (
-            {props.items.slectedItems.length}){language?.table?.items}
-          </div>
-        )}
-      <div className="pagination flex">
-        {createPags(limit, props.page.dataLength)}
-      </div>
+      {selectedItems?.length > 0 && (
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setOverlay(true);
+          }}
+          className="gap-10 delete-all"
+        >
+          <i className="fa-solid fa-trash"></i> {language?.table?.delete} (
+          {selectedItems.length}){language?.table?.items}
+        </div>
+      )}
+      <Pagination
+        dataLength={dataLength}
+        currentPage={currentPage}
+        loading={loading}
+        setPage={setPage}
+      />
     </>
   );
 };

@@ -245,7 +245,7 @@ const Party = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={language?.header?.party} response={response.current} />
       )}
       {formLoading && <Loading />}
       <h1 className="title">{language?.header?.parties}</h1>

@@ -13,6 +13,7 @@ import Skeleton from "react-loading-skeleton";
 import MediaComponent from "../../components/MediaComponent";
 import useInfitFetch from "../../hooks/useInfitFetch";
 import useLanguage from "../../hooks/useLanguage";
+import MapTiles from "./Map";
 const CoordPage = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -168,6 +169,7 @@ const CoordPage = () => {
                 <h2>{language?.information?.coordinates}</h2>
                 <p>{data?.coordinates}</p>
               </div>
+              <MapTiles coords={data?.coordinates} />
 
               <div className="flex">
                 <h2>{language?.information?.country}</h2>

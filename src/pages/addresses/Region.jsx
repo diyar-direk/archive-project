@@ -189,7 +189,7 @@ const Region = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={language?.header?.region} response={response.current} />
       )}
       {formLoading && <Loading />}
       <h1 className="title">{language?.header?.regions}</h1>

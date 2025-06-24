@@ -170,7 +170,7 @@ const Countries = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={language?.header?.country} response={response.current} />
       )}
       {formLoading && <Loading />}
 

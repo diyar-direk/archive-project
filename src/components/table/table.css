@@ -1,7 +1,7 @@
 .table-search {
   margin-bottom: 15px;
 }
-.table-search input {
+.table-search > input {
   flex: 1 1;
   padding: 8px;
   background: var(--body-color);
@@ -65,47 +65,56 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   gap: 20px;
   align-items: flex-start;
 }
-.overlay .filters .select div {
+.overlay .filters .tabel-filter-select div {
   padding: 5px;
   background-color: var(--body-color);
   border-radius: 4px;
   cursor: pointer;
   text-transform: capitalize;
   color: var(--font-color);
+  text-align: center;
 }
-.overlay .filters .select div i {
-  font-size: 13px;
-}
-.overlay .filters .select div.active + article {
-  max-height: 200px;
-  overflow: auto;
+.overlay .filters .tabel-filter-select .inp::after {
+  content: "\f078";
+  font-weight: 900;
+  font-family: "Font Awesome 6 Free";
+  font-size: 60%;
+  pointer-events: none;
+  margin: 0 5px;
 }
 
-.overlay .filters .select article {
+.overlay .filters .tabel-filter-select div i {
+  font-size: 13px;
+}
+
+.overlay .filters .tabel-filter-select .active + article {
+  max-height: 200px;
+  overflow: auto;
+  padding: 0;
+}
+
+.overlay .filters .tabel-filter-select article {
   background: var(--section-color);
   max-height: 0px;
   overflow: hidden;
-  margin-top: 2px;
 }
-.overlay .filters .select article h2 {
+.overlay .filters .tabel-filter-select .inp + article {
+  background: var(--section-color);
+}
+.overlay .filters .tabel-filter-select article h2 {
   cursor: pointer;
   padding: 5px;
   font-size: 16px;
   color: var(--font-color);
   text-align: center;
   text-transform: capitalize;
+  margin-bottom: 0;
 }
-.overlay .filters .select article p {
-  padding: 5px;
-  font-size: 16px;
-  color: var(--font-color);
-  text-transform: capitalize;
-  text-align: center;
-}
-.overlay .filters .select article h2:not(:last-of-type) {
+
+.overlay .filters .tabel-filter-select article h2:not(:last-of-type) {
   border-bottom: solid 1px var(--body-color);
 }
-.overlay .filters .select article h2:hover {
+.overlay .filters .tabel-filter-select article h2:hover {
   background-color: var(--body-color);
 }
 .overlay div.filters-setting > span {
@@ -119,7 +128,7 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   opacity: 0.8;
 }
 
-input.fltr-search {
+.overlay .filters .tabel-filter-select .inp + article input {
   width: 100%;
   font-size: 15px;
   padding: 5px;
@@ -129,6 +138,10 @@ input.fltr-search {
   position: sticky;
   color: var(--font-color);
   top: 0;
+}
+.overlay .filters .tabel-filter-select p {
+  background-color: var(--body-color);
+  text-align: center;
 }
 
 div.table {
@@ -158,6 +171,14 @@ div.table thead th {
   font-size: 19px;
   color: white;
   padding: 10px;
+}
+div.table thead th.sort .sort {
+  rotate: 180deg;
+}
+div.table thead th .sort {
+  font-size: 12px;
+  cursor: pointer;
+  margin: 0 3px;
 }
 
 table .checkbox {
@@ -295,88 +316,25 @@ table a.name {
 table a.name:hover {
   text-decoration: underline;
 }
-div.table tbody td i.options {
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  display: block;
-}
 
 div.table tbody td div.options {
-  position: absolute;
-  display: flex;
-  background: var(--body-color);
-  box-shadow: var(--box-shadow);
-  left: calc(-100% - 200px);
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 8px;
-  opacity: 0;
-  z-index: 1;
-  pointer-events: none;
+  gap: 10px;
 }
-body.arabic div.table tbody td div.options {
-  left: auto;
-  right: calc(-100% - 200px);
+div.table tbody td div.options .visit i,
+div.table tbody td div.options div.delete i,
+div.table tbody td div.options .update i {
+  font-size: 17px;
+  cursor: pointer;
 }
 
-div.table tbody td i.options.active-div + div {
-  top: 80%;
-  z-index: 1;
-  opacity: 1;
-  pointer-events: all;
-}
-
-div.table tbody td div.options div.delete {
-  gap: 10px;
-  color: var(--font-color);
-  padding: 10px;
-  text-transform: capitalize;
-  cursor: pointer;
-  align-items: center;
-  font-weight: 500;
-  font-size: 16px;
-}
-div.table tbody td div.options .update {
-  font-weight: 500;
-  gap: 10px;
-  color: var(--font-color);
-  padding: 10px;
-  text-transform: capitalize;
-  cursor: pointer;
-  align-items: center;
-  font-size: 16px;
-}
-div.table tbody td div.options .visit {
-  font-weight: 500;
-  gap: 10px;
-  color: var(--font-color);
-  padding: 10px;
-  text-transform: capitalize;
-  cursor: pointer;
-  align-items: center;
-  font-size: 16px;
-}
-div.table tbody td div.options div.delete:hover {
-  background-color: #ce06061c;
-}
-div.table tbody td div.options .update:hover {
-  background-color: #0011ff1f;
-}
-div.table tbody td div.options .visit:hover {
-  background-color: #0e9e3225;
-}
 div.table tbody td div.options div.delete i {
   color: #ce0606;
-  font-size: 16px;
 }
 div.table tbody td div.options .update i {
   color: #4400ff;
-  font-size: 16px;
 }
 div.table tbody td div.options .visit i {
   color: #0e9e32;
-  font-size: 16px;
 }
 .delete-all {
   background-color: #ce0606;
@@ -393,16 +351,89 @@ div.table tbody td div.options .visit i {
   font-size: 14px;
 }
 
-div.table div.actions i {
+.show-rows i {
+  color: var(--font-color);
+  font-size: 19px;
   cursor: pointer;
-  font-size: 18px;
 }
-div.table div.actions .delete {
-  color: #ce0606;
+.show-rows > article {
+  background-color: var(--body-color);
+  position: absolute;
+  width: 200px;
+  left: -200px;
+  padding: 10px;
+  z-index: 1;
+  border-radius: 4px;
+  top: 50px;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 250px;
+  overflow-y: auto;
 }
-div.table div.actions .update {
-  color: #4400ff;
+.show-rows > article div {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
 }
+.show-rows > article input.search {
+  width: 100%;
+  background: var(--section-color);
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-bottom: 4px;
+  color: var(--font-color);
+}
+
+.show-rows > article div label {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--font-color);
+  text-transform: capitalize;
+  flex: 1;
+  cursor: pointer;
+}
+.show-rows > article h4 {
+  color: var(--font-color);
+  & span {
+    color: var(--main-color);
+  }
+}
+
+.show-rows > article.active {
+  top: 100%;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.table-pagination h2 {
+  background-color: var(--body-color);
+  padding: 10px;
+  margin-top: 10px;
+  color: var(--font-color);
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 4px;
+}
+.table-pagination h2 span {
+  color: var(--main-color);
+  font-weight: bold;
+}
+.table-pagination h2 select {
+  background-color: transparent;
+  border: none;
+  color: var(--main-color);
+  font-weight: bold;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+}
+
 @media (max-width: 1050px) {
   div.table thead th {
     padding: 8px;
@@ -420,22 +451,6 @@ div.table div.actions .update {
     width: 32px;
     height: 32px;
   }
-  div.table tbody td div.options > div,
-  div.table tbody td div.options > a {
-    gap: 8px !important;
-    padding: 8px !important;
-    font-size: 15px !important;
-  }
-  div.table tbody td div.options > div i,
-  div.table tbody td div.options > a i {
-    font-size: 14px !important;
-  }
-  div.table tbody td div.options {
-    left: calc(-100% - 180px);
-  }
-  body.arabic div.table tbody td div.options {
-    right: calc(-100% - 180px);
-  }
   .pagination h3 {
     width: 30px;
     height: 30px;
@@ -452,9 +467,6 @@ div.table div.actions .update {
   }
   .overlay .date-fltr {
     gap: 10px;
-  }
-  div.table div.actions i {
-    font-size: 16px;
   }
 }
 @media (max-width: 850px) {
@@ -518,9 +530,7 @@ div.table div.actions .update {
   .delete-all i {
     font-size: 13px;
   }
-  div.table div.actions i {
-    font-size: 15px;
-  }
+
   table th select {
     font-size: 13px;
   }
@@ -541,16 +551,7 @@ div.table div.actions .update {
   table i.photo {
     font-size: 10px;
   }
-  div.table tbody td div.options > div,
-  div.table tbody td div.options > a {
-    gap: 6px !important;
-    padding: 4px !important;
-    font-size: 13px !important;
-  }
-  div.table tbody td div.options > div i,
-  div.table tbody td div.options > a i {
-    font-size: 13px !important;
-  }
+
   .pagination h3 {
     width: 25px;
     height: 25px;
@@ -573,17 +574,9 @@ div.table div.actions .update {
   .delete-all i {
     font-size: 11px;
   }
-  div.table div.actions i {
-    font-size: 13px;
-  }
+
   table th select {
     font-size: 11px;
-  }
-  div.table tbody td div.options {
-    left: calc(-100% - 145px);
-  }
-  body.arabic div.table tbody td div.options {
-    right: calc(-100% - 145px);
   }
 }
 

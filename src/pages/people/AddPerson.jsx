@@ -157,7 +157,7 @@ const AddPerson = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`person`} response={response.current} />
+        <SendData data={language?.header?.person} response={response.current} />
       )}
       {loading && <Loading />}
       <h1 className="title">{language?.header?.add_person}</h1>

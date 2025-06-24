@@ -180,7 +180,7 @@ const Government = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={language?.header?.government} response={response.current} />
       )}
       {formLoading && <Loading />}
       <h1 className="title">{language?.header?.governments}</h1>

@@ -259,7 +259,7 @@ const Sources = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`country`} response={response.current} />
+        <SendData data={language?.header?.source} response={response.current} />
       )}
       {formLoading && <Loading />}
       <h1 className="title">{language?.header?.sources}</h1>

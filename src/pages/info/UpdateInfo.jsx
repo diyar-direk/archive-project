@@ -251,7 +251,7 @@ const UpdateInfo = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={`person`} response={response.current} />
+        <SendData data={language?.header?.information}  response={response.current} />
       )}
       {loading && <Loading />}
       {dataLoading ? (
