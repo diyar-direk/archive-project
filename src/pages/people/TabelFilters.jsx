@@ -3,17 +3,67 @@ import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getAddressesApi } from "../addresses/api";
+
 const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});
+
   const openDives = useCallback((e) => {
     e.target.classList.toggle("active");
   }, []);
+
   const updateFilters = useCallback(
     (name, value) => {
       setBeforeFiltering({ ...beforeFiltering, [name]: value });
     },
-    [setBeforeFiltering, beforeFiltering]
+    [beforeFiltering]
+  );
+
+  const handleParentChange = useCallback(
+    (name, option) => {
+      const updated = { ...beforeFiltering };
+
+      if (name === "countryId") {
+        if (updated.countyId?.country !== option._id) updated.countyId = "";
+        if (updated.governorateId?.country !== option._id)
+          updated.governorateId = "";
+        if (updated.cityId?.country !== option._id) updated.cityId = "";
+        updated.streetId = "";
+        updated.regionId = "";
+        updated.villageId = "";
+      }
+
+      if (name === "countyId") {
+        if (updated.cityId?.county !== option._id) updated.cityId = "";
+        updated.streetId = "";
+        updated.regionId = "";
+        updated.villageId = "";
+        updated.countryId = option.country;
+      }
+
+      if (name === "governorateId") {
+        if (updated.cityId?.governorate !== option._id) updated.cityId = "";
+        updated.streetId = "";
+        updated.regionId = "";
+        updated.villageId = "";
+        updated.countryId = option.country;
+      }
+
+      if (name === "cityId") {
+        if (updated.streetId?.city !== option._id) updated.streetId = "";
+        if (updated.regionId?.city !== option._id) updated.regionId = "";
+        if (updated.villageId?.city !== option._id) updated.villageId = "";
+        const parentDataUpdate =
+          option.parent === "Governorate"
+            ? { governorateId: option.parentId, countyId: "" }
+            : { countyId: option.parentId, governorateId: "" };
+        Object.assign(updated, parentDataUpdate);
+      }
+
+      updated[name] = option;
+      setBeforeFiltering(updated);
+    },
+    [beforeFiltering]
   );
 
   const staticFilters = useMemo(() => {
@@ -23,8 +73,8 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         ifemptyLabel: language?.table?.all_genders,
         values: [
           { value: "", label: language?.table?.all_genders },
-          { value: "female", label: language?.table?.female },
-          { value: "male", label: language?.table?.male },
+          { value: "Female", label: language?.table?.female },
+          { value: "Male", label: language?.table?.male },
         ],
       },
       {
@@ -32,13 +82,13 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         ifemptyLabel: language?.people?.all_marital_status,
         values: [
           { value: "", label: language?.people?.all_marital_status },
-          { value: "married", label: language?.table?.married },
-          { value: "single", label: language?.table?.single },
-          { value: "other", label: language?.table?.other },
+          { value: "Married", label: language?.table?.married },
+          { value: "Single", label: language?.table?.single },
+          { value: "Other", label: language?.table?.other },
         ],
       },
     ];
-    const items = staticFilter.map((itm) => (
+    return staticFilter.map((itm) => (
       <div className="tabel-filter-select select relative" key={itm.name}>
         <div onClick={openDives} className="center gap-10 w-100">
           <span className="pointer-none">
@@ -58,67 +108,35 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         </article>
       </div>
     ));
-    return items;
   }, [language, openDives, updateFilters, beforeFiltering]);
-  const updateCitiesChildren = useCallback(
-    (option, name) =>
-      setBeforeFiltering(() => {
-        const cityId = option.city._id;
-        const updatedData = beforeFiltering.streetId.city._id !== cityId?"":"";
-        return { ...beforeFiltering, [name]: option };
-      }),
-    [setBeforeFiltering, beforeFiltering]
-  );
 
   const apisSelcteFilter = useMemo(() => {
     const arrayOfApis = [
       {
         name: "countryId",
         selectLabel: beforeFiltering?.countryId?.name,
-        onChange: (option) =>
-          setBeforeFiltering({ ...beforeFiltering, countryId: option }),
+        onChange: (option) => handleParentChange("countryId", option),
         tabelFilterIgnoreText: "any country",
         url: "Countries",
       },
       {
         name: "countyId",
         selectLabel: beforeFiltering?.countyId?.name,
-        onChange: (option) =>
-          setBeforeFiltering({
-            ...beforeFiltering,
-            countyId: option,
-            countryId: option.country,
-          }),
+        onChange: (option) => handleParentChange("countyId", option),
         tabelFilterIgnoreText: "any county",
         url: "Counties",
       },
       {
         name: "governorateId",
         selectLabel: beforeFiltering?.governorateId?.name,
-        onChange: (option) =>
-          setBeforeFiltering({
-            ...beforeFiltering,
-            governorateId: option,
-            countryId: option.country,
-          }),
-        tabelFilterIgnoreText: "any governorateId",
+        onChange: (option) => handleParentChange("governorateId", option),
+        tabelFilterIgnoreText: "any governorate",
         url: "Governorates",
       },
       {
         name: "cityId",
         selectLabel: beforeFiltering?.cityId?.name,
-        onChange: (option) =>
-          setBeforeFiltering(() => {
-            const parentDataUpdate =
-              option.parent === "Governorate"
-                ? { governorateId: option.parentId, countyId: "" }
-                : { countyId: option.parentId, governorateId: "" };
-            return {
-              ...beforeFiltering,
-              cityId: option,
-              ...parentDataUpdate,
-            };
-          }),
+        onChange: (option) => handleParentChange("cityId", option),
         tabelFilterIgnoreText: "any city",
         url: "Cities",
       },
@@ -126,23 +144,32 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         name: "streetId",
         selectLabel: beforeFiltering?.streetId?.name,
         onChange: (option) =>
-          setBeforeFiltering({ ...beforeFiltering, streetId: option }),
-        tabelFilterIgnoreText: "any Streets",
+          setBeforeFiltering((prev) => ({
+            ...prev,
+            streetId: option,
+          })),
+        tabelFilterIgnoreText: "any street",
         url: "Streets",
       },
       {
         name: "regionId",
         selectLabel: beforeFiltering?.regionId?.name,
         onChange: (option) =>
-          setBeforeFiltering({ ...beforeFiltering, regionId: option }),
-        tabelFilterIgnoreText: "any Regions",
+          setBeforeFiltering((prev) => ({
+            ...prev,
+            regionId: option,
+          })),
+        tabelFilterIgnoreText: "any region",
         url: "Regions",
       },
       {
         name: "villageId",
         selectLabel: beforeFiltering?.villageId?.name,
         onChange: (option) =>
-          setBeforeFiltering({ ...beforeFiltering, villageId: option }),
+          setBeforeFiltering((prev) => ({
+            ...prev,
+            villageId: option,
+          })),
         tabelFilterIgnoreText: "any village",
         url: "Villages",
       },
@@ -151,11 +178,12 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         selectLabel: beforeFiltering?.sources?.source_name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, sources: option }),
-        tabelFilterIgnoreText: "any sources",
+        tabelFilterIgnoreText: "any source",
         optionLabel: (option) => option?.source_name,
         url: "Sources",
       },
     ];
+
     return arrayOfApis.map((input) => (
       <SelectInputApi
         key={input.name}
@@ -174,7 +202,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         url={input.url}
       />
     ));
-  }, [setBeforeFiltering, beforeFiltering]);
+  }, [beforeFiltering, handleParentChange]);
 
   return (
     <TabelFilterDiv

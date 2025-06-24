@@ -124,8 +124,8 @@ const SelectInputApi = ({
               {optionLabel(itm)}
             </h2>
           ))}
-          {loading && <p>{language?.table?.loading}</p>}
-          {!hasMore && <p>no more data</p>}
+          {loading && <p className="font-color">{language?.table?.loading}</p>}
+          {!hasMore && <p className="font-color">no more data</p>}
         </article>
         {!isTabelsFilter && value && <span onClick={onIgnore}>{value}</span>}
       </div>
