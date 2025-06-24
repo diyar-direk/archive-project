@@ -17,6 +17,7 @@ const Refresh = () => {
       const profile = await axios.get(`${baseURL}/Users/profile`, {
         headers: { Authorization: "Bearer " + cookie.archive_cookie },
       });
+
       if (profile.data.user.active) {
         const user = {
           role: profile.data.user.role,

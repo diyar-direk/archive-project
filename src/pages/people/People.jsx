@@ -57,6 +57,17 @@ const columns = [
     getCell: (e) => e.countryId?.name,
   },
   {
+    name: "county",
+    headerName: "county",
+    getCell: (e) => e.countyId?.name,
+  },
+  {
+    name: "governorate",
+    headerName: "governorate",
+    getCell: (e) => e.governorateId?.name,
+    hidden: true,
+  },
+  {
     name: "city",
     headerName: "city",
     getCell: (e) => e.cityId?.name,
@@ -69,12 +80,36 @@ const columns = [
     hidden: true,
   },
   {
+    name: "street",
+    headerName: "street",
+    getCell: (e) => e.streetId?.name,
+    hidden: true,
+  },
+  {
+    name: "region",
+    headerName: "region",
+    getCell: (e) => e.regionId?.name,
+    hidden: true,
+  },
+  {
+    name: "village",
+    headerName: "village",
+    getCell: (e) => e.villageId?.name,
+    hidden: true,
+  },
+  {
     name: "phone",
     headerName: "phone",
   },
   {
     name: "email",
     headerName: "email",
+    hidden: true,
+  },
+  {
+    name: "sources",
+    headerName: "sources",
+    getCell: (e) => e.sources?.source_name,
     hidden: true,
   },
   {
@@ -146,10 +181,14 @@ const People = () => {
   const [filters, setFilters] = useState({
     gender: "",
     maritalStatus: "",
-    country: "",
-    government: "",
-    city: "",
-    villag: "",
+    countryId: "",
+    cityId: "",
+    villageId: "",
+    regionId: "",
+    streetId: "",
+    sources: "",
+    countyId: "",
+    governorateId: "",
     date: {
       from: "",
       to: "",
@@ -177,10 +216,7 @@ const People = () => {
 
     Object.keys(filters).forEach((key) => {
       if (key !== "date" && filters[key]) {
-        params.append(
-          filters[key]._id ? `${key}Id` : key,
-          filters[key]._id || filters[key]
-        );
+        params.append(key, filters[key]._id || filters[key]);
       }
     });
 

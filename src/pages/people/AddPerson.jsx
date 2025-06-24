@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react";
 import "../../components/form/form.css";
-import { baseURL, Context, placeholder } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
@@ -262,7 +262,7 @@ const AddPerson = () => {
               <label>{language?.people?.marital_status}</label>
               <div className="selecte relative">
                 <div onClick={handleClick} className="inp">
-                {language?.people?.select_marital_status}
+                  {language?.people?.select_marital_status}
                 </div>
                 <article>
                   <h2
@@ -296,7 +296,10 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="motherName"> {language?.people?.motherName}</label>
+              <label htmlFor="motherName">
+                {" "}
+                {language?.people?.motherName}
+              </label>
               <input
                 value={form.motherName}
                 onChange={handleForm}
@@ -309,7 +312,9 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="birthDate">{language?.people?.date_of_birth}</label>
+              <label htmlFor="birthDate">
+                {language?.people?.date_of_birth}
+              </label>
               <input
                 value={form.birthDate}
                 onChange={handleForm}
@@ -321,7 +326,9 @@ const AddPerson = () => {
             </div>
 
             <div className="flex flex-direction">
-              <label htmlFor="placeOfBirth">{language?.people?.place_of_birth}</label>
+              <label htmlFor="placeOfBirth">
+                {language?.people?.place_of_birth}
+              </label>
               <input
                 required
                 value={form.placeOfBirth}
@@ -385,7 +392,9 @@ const AddPerson = () => {
             />
 
             <div className="flex flex-direction">
-              <label htmlFor="addressDetails">{language?.people?.extra_adress_details}</label>
+              <label htmlFor="addressDetails">
+                {language?.people?.extra_adress_details}
+              </label>
               <textarea
                 value={form.addressDetails}
                 onChange={handleForm}

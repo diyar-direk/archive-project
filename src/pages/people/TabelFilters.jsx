@@ -60,6 +60,121 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     ));
     return items;
   }, [language, openDives, updateFilters, beforeFiltering]);
+  const updateCitiesChildren = useCallback(
+    (option, name) =>
+      setBeforeFiltering(() => {
+        const cityId = option.city._id;
+        const updatedData = beforeFiltering.streetId.city._id !== cityId?"":"";
+        return { ...beforeFiltering, [name]: option };
+      }),
+    [setBeforeFiltering, beforeFiltering]
+  );
+
+  const apisSelcteFilter = useMemo(() => {
+    const arrayOfApis = [
+      {
+        name: "countryId",
+        selectLabel: beforeFiltering?.countryId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, countryId: option }),
+        tabelFilterIgnoreText: "any country",
+        url: "Countries",
+      },
+      {
+        name: "countyId",
+        selectLabel: beforeFiltering?.countyId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({
+            ...beforeFiltering,
+            countyId: option,
+            countryId: option.country,
+          }),
+        tabelFilterIgnoreText: "any county",
+        url: "Counties",
+      },
+      {
+        name: "governorateId",
+        selectLabel: beforeFiltering?.governorateId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({
+            ...beforeFiltering,
+            governorateId: option,
+            countryId: option.country,
+          }),
+        tabelFilterIgnoreText: "any governorateId",
+        url: "Governorates",
+      },
+      {
+        name: "cityId",
+        selectLabel: beforeFiltering?.cityId?.name,
+        onChange: (option) =>
+          setBeforeFiltering(() => {
+            const parentDataUpdate =
+              option.parent === "Governorate"
+                ? { governorateId: option.parentId, countyId: "" }
+                : { countyId: option.parentId, governorateId: "" };
+            return {
+              ...beforeFiltering,
+              cityId: option,
+              ...parentDataUpdate,
+            };
+          }),
+        tabelFilterIgnoreText: "any city",
+        url: "Cities",
+      },
+      {
+        name: "streetId",
+        selectLabel: beforeFiltering?.streetId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, streetId: option }),
+        tabelFilterIgnoreText: "any Streets",
+        url: "Streets",
+      },
+      {
+        name: "regionId",
+        selectLabel: beforeFiltering?.regionId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, regionId: option }),
+        tabelFilterIgnoreText: "any Regions",
+        url: "Regions",
+      },
+      {
+        name: "villageId",
+        selectLabel: beforeFiltering?.villageId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, villageId: option }),
+        tabelFilterIgnoreText: "any village",
+        url: "Villages",
+      },
+      {
+        name: "sources",
+        selectLabel: beforeFiltering?.sources?.source_name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, sources: option }),
+        tabelFilterIgnoreText: "any sources",
+        optionLabel: (option) => option?.source_name,
+        url: "Sources",
+      },
+    ];
+    return arrayOfApis.map((input) => (
+      <SelectInputApi
+        key={input.name}
+        className="tabel-filter-select"
+        isTabelsFilter
+        fetchData={getAddressesApi}
+        selectLabel={input.selectLabel}
+        optionLabel={
+          input.optionLabel ? input.optionLabel : (option) => option?.name
+        }
+        onChange={input.onChange}
+        tabelFilterIgnoreText={input.tabelFilterIgnoreText}
+        onIgnore={() =>
+          setBeforeFiltering({ ...beforeFiltering, [input.name]: "" })
+        }
+        url={input.url}
+      />
+    ));
+  }, [setBeforeFiltering, beforeFiltering]);
 
   return (
     <TabelFilterDiv
@@ -70,15 +185,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       setBeforeFiltering={setBeforeFiltering}
     >
       {staticFilters}
-      <SelectInputApi
-        className="tabel-filter-select"
-        isTabelsFilter
-        fetchData={getAddressesApi}
-        selectLabel={"people"}
-        optionLabel={(option) => option?.name}
-        onChange={(option) => setFilter({ ...filter, role: option?.name })}
-        url="Cities"
-      />
+      {apisSelcteFilter}
     </TabelFilterDiv>
   );
 };

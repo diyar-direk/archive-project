@@ -12,6 +12,7 @@ import useLanguage from "../../hooks/useLanguage";
  * @property {any} value
  * @property {boolean} isTabelsFilter
  * @property {string} url
+ * @property {string} tabelFilterIgnoreText
  * @param {Utils & React.HtmlHTMLAttributes<HTMLDivElement>} props
  */
 const SelectInputApi = ({
@@ -24,6 +25,7 @@ const SelectInputApi = ({
   value,
   isTabelsFilter,
   url,
+  tabelFilterIgnoreText,
   ...props
 }) => {
   const [items, setItems] = useState([]);
@@ -96,7 +98,7 @@ const SelectInputApi = ({
       {label && <label>{label}</label>}
       <div className="selecte relative" {...props}>
         <div onClick={handleClick} className="inp">
-          {selectLabel}
+          {selectLabel ? selectLabel : tabelFilterIgnoreText || ""}
         </div>
         <article>
           <input
@@ -110,6 +112,9 @@ const SelectInputApi = ({
             onClick={(e) => e.stopPropagation()}
             placeholder={`${language?.table?.search_for}...`}
           />
+          {isTabelsFilter && (
+            <h2 onClick={onIgnore}> {tabelFilterIgnoreText} </h2>
+          )}
           {items.map((itm, i) => (
             <h2
               key={itm._id}
