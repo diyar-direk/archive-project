@@ -41,7 +41,7 @@ const columns = [
   { name: "gender", headerName: "gender" },
   { name: "motherName", headerName: "motherName" },
   { name: "maritalStatus", headerName: "maritalStatus" },
-  { name: "occupation", headerName: "occupation" },
+  { name: "occupation", headerName: "occupation", sort: true },
   {
     name: "birthDate",
     headerName: "birthDate",
@@ -177,7 +177,6 @@ const People = () => {
   const [sort, setSort] = useState({});
   const { role } = context.userDetails;
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
-
   const [filters, setFilters] = useState({
     gender: "",
     maritalStatus: "",
@@ -194,7 +193,6 @@ const People = () => {
       to: "",
     },
   });
-
   const [search, setSearch] = useState("");
 
   const getData = useCallback(async () => {
@@ -275,7 +273,6 @@ const People = () => {
         allData={allPeople.current}
         selectedItems={slectedItems}
         setSelectedItems={setSelectedItems}
-        filters={{ filters, setFilters, search, setSearch }}
         getData={getData}
         deleteUrl="people"
         dataLength={dataLength.current}

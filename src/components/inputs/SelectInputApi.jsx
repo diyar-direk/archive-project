@@ -36,6 +36,14 @@ const SelectInputApi = ({
   const [search, setSearch] = useState("");
   const { language } = useLanguage();
   const observer = useRef(null);
+  const closeDiv = useCallback((e) => {
+    const article = e.currentTarget.closest("article");
+    if (!article) return;
+    const wrapperDiv = article.closest(".tabel-filter-select");
+    if (wrapperDiv?.children[0]) {
+      wrapperDiv?.children[0].classList.remove("active");
+    }
+  }, []);
 
   const handleClick = useCallback((e) => {
     e.stopPropagation();
@@ -118,7 +126,10 @@ const SelectInputApi = ({
           {items.map((itm, i) => (
             <h2
               key={itm._id}
-              onClick={() => onChange(itm)}
+              onClick={(e) => {
+                onChange(itm);
+                if (isTabelsFilter) closeDiv(e);
+              }}
               ref={i === items.length - 1 ? lastElement : null}
             >
               {optionLabel(itm)}

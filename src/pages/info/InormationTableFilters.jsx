@@ -3,8 +3,9 @@ import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getAddressesApi } from "../addresses/api";
+import { getPeopleApi } from "../people/api";
 
-const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
+const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});
 
@@ -80,19 +81,17 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         name: "gender",
         ifemptyLabel: language?.table?.all_genders,
         values: [
-          { value: "", label: language?.table?.all_genders },
           { value: "Female", label: language?.table?.female },
           { value: "Male", label: language?.table?.male },
         ],
       },
       {
-        name: "maritalStatus",
-        ifemptyLabel: language?.people?.all_marital_status,
+        name: "credibility",
+        ifemptyLabel: "any credibility",
         values: [
-          { value: "", label: language?.people?.all_marital_status },
-          { value: "Married", label: language?.table?.married },
-          { value: "Single", label: language?.table?.single },
-          { value: "Other", label: language?.table?.other },
+          { value: "Low", label: "Low" },
+          { value: "Medium", label: "Medium" },
+          { value: "High", label: "High" },
         ],
       },
     ];
@@ -105,6 +104,14 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           <i className="fa-solid fa-sort-down pointer-none" />
         </div>
         <article>
+          <h2
+            onClick={(e) => {
+              updateFilters(itm.name, "");
+              closeDiv(e);
+            }}
+          >
+            {itm.ifemptyLabel}
+          </h2>
           {itm.values.map((value) => (
             <h2
               key={value.value}
@@ -124,8 +131,20 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const apisSelcteFilter = useMemo(() => {
     const arrayOfApis = [
       {
+        name: "people",
+        selectLabel: beforeFiltering?.people
+          ? `${beforeFiltering?.people?.firstName} ${beforeFiltering?.people?.fatherName} ${beforeFiltering?.people?.surName}`
+          : "",
+        optionLabel: (option) => {
+          return `${option?.firstName} ${option?.fatherName} ${option?.surName}`;
+        },
+        onChange: (option) => handleParentChange("people", option),
+        tabelFilterIgnoreText: "any people",
+        fetchData: getPeopleApi,
+      },
+      {
         name: "countryId",
-        selectLabel: beforeFiltering?.countryId?.name,
+        selectLabel: beforeFiltering?.countryId?.firstName,
         onChange: (option) => handleParentChange("countryId", option),
         tabelFilterIgnoreText: "any country",
         url: "Countries",
@@ -193,6 +212,22 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         optionLabel: (option) => option?.source_name,
         url: "Sources",
       },
+      {
+        name: "parties",
+        selectLabel: beforeFiltering?.parties?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, parties: option }),
+        tabelFilterIgnoreText: "any parties",
+        url: "Parties",
+      },
+      {
+        name: "events",
+        selectLabel: beforeFiltering?.events?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, events: option }),
+        tabelFilterIgnoreText: "any events",
+        url: "Events",
+      },
     ];
 
     return arrayOfApis.map((input) => (
@@ -200,7 +235,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         key={input.name}
         className="tabel-filter-select"
         isTabelsFilter
-        fetchData={getAddressesApi}
+        fetchData={input.fetchData ? input.fetchData : getAddressesApi}
         selectLabel={input.selectLabel}
         optionLabel={
           input.optionLabel ? input.optionLabel : (option) => option?.name
@@ -229,4 +264,4 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   );
 };
 
-export default TabelFilters;
+export default InormationTableFilters;
