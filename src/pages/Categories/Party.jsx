@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -7,18 +7,74 @@ import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
+import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+const columns = [
+  { name: "name", headerName: "name", sort: true },
+  {
+    name: "createdAt",
+    headerName: "createdAt",
+    sort: true,
+    getCell: (row) => date(row.createdAt),
+  },
+  {
+    name: "updatedAt",
+    headerName: "updatedAt",
+    sort: true,
+    getCell: (row) => date(row.updatedAt),
+    hidden: true,
+  },
+  {
+    name: "options",
+    headerName: "options",
+    type: "actions",
+    getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
+      <>
+        <div className="options center">
+          {role && (
+            <>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((el) => el.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="flex delete"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </div>
+              <div className="flex update">
+                <i
+                  className="fa-regular fa-pen-to-square"
+                  onClick={() => setUpdate(e)}
+                ></i>
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    ),
+  },
+];
 const Party = () => {
+  const response = useRef(true);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+  const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
   const allPeople = useRef([]);
   const [slectedItems, setSelectedItems] = useState([]);
-  const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
-  const response = useRef(true);
   const context = useContext(Context);
-  const { language } = useLanguage();
+  const token = context.userDetails.token;
   const limit = context?.limit;
+  const { language } = useLanguage();
+  const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
     date: {
       from: "",
@@ -26,9 +82,46 @@ const Party = () => {
     },
   });
   const [search, setSearch] = useState("");
-  const [responseOverlay, setResponseOverlay] = useState(false);
-  const ref = useRef(null);
-  const [formLoading, setFormLoading] = useState(false);
+  const getData = useCallback(async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    const params = new URLSearchParams();
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
+    if (search) params.append("search", search);
+    try {
+      const { data } = await axios.get(`${baseURL}/Parties`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActiveParties"];
+      allPeople.current = data.data?.map((e) => e._id);
+      setData(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filters, search, limit, sort]);
+  useEffect(() => {
+    if (!search) getData();
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
+    }
+  }, [page, filters, search, limit, sort, getData]);
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -43,178 +136,27 @@ const Party = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-  window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .select .inp.active");
-    div && div.classList.remove("active");
-  });
-  const token = context.userDetails.token;
-  const header = [language?.party?.name, language?.party?.created_at];
-  const [form, setForm] = useState({ name: "" });
+  const [name, setName] = useState("");
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     if (update) {
       ref.current.focus();
-      setForm(update);
+      setName(update.name);
     } else {
-      setForm({ name: "" });
+      setName("");
     }
   }, [update]);
-
-  useEffect(() => {
-    if (!search) getData();
-  }, [page, limit, search, filters]);
-
-  const getData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Parties?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-    try {
-      const data = await axios.get(url, {
-        headers: { Authorization: "Bearer " + token },
-      });
-
-      dataLength.current = data.data.numberOfActiveParties;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, filters, search, limit]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Parties/search?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const checkOne = (e, element) => {
-    e.target.classList.toggle("active");
-    if (e.target.classList.contains("active")) {
-      setSelectedItems((prevSelected) => [...prevSelected, element]);
-      const allActiveSelectors = document.querySelectorAll(
-        "td .checkbox.active"
-      );
-      const allSelectors = document.querySelectorAll("td .checkbox");
-      if (allSelectors.length === allActiveSelectors.length)
-        document.querySelector("th .checkbox").classList.add("active");
-    } else {
-      setSelectedItems((prevSelected) =>
-        prevSelected.filter((item) => item !== element)
-      );
-      document.querySelector("th .checkbox").classList.remove("active");
-    }
-  };
-
-  const tableData = data?.map((e) => (
-    <tr key={e._id}>
-      {context.userDetails.isAdmin && (
-        <td>
-          <div
-            onClick={(target) => {
-              target.stopPropagation();
-              checkOne(target, e._id);
-            }}
-            className="checkbox"
-          ></div>
-        </td>
-      )}
-      <td>{e.name}</td>
-      <td>{date(e.createdAt)}</td>
-      <td>
-        {context.userDetails.isAdmin && (
-          <div className="center gap-10 actions">
-            <i
-              onClick={(event) => {
-                event.stopPropagation();
-                setOverlay(true);
-                const allSelectors = document.querySelectorAll(".checkbox");
-                allSelectors.forEach((e) => e.classList.remove("active"));
-                setSelectedItems([e._id]);
-              }}
-              className="delete fa-solid fa-trash"
-            ></i>
-            <i
-              onClick={() => {
-                setUpdate(e);
-              }}
-              className="update fa-regular fa-pen-to-square"
-            ></i>
-          </div>
-        )}
-      </td>
-    </tr>
-  ));
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormLoading(true);
     try {
-      const formData = { ...form };
-
       if (update) {
         const data = await axios.patch(
           `${baseURL}/Parties/${update._id}`,
-          formData,
+          {
+            name,
+          },
           { headers: { Authorization: "Bearer " + token } }
         );
 
@@ -223,15 +165,17 @@ const Party = () => {
         }
         setUpdate(false);
       } else {
-        const data = await axios.post(`${baseURL}/Parties`, formData, {
-          headers: { Authorization: "Bearer " + token },
-        });
+        const data = await axios.post(
+          `${baseURL}/Parties`,
+          { name: name },
+          { headers: { Authorization: "Bearer " + token } }
+        );
         if (data.status === 201) {
           responseFun(true);
         }
       }
 
-      setForm({ name: "" });
+      setName("");
       getData();
     } catch (error) {
       console.log(error);
@@ -241,7 +185,9 @@ const Party = () => {
       setFormLoading(false);
     }
   };
-
+  const [beforeFiltering, setBeforeFiltering] = useState({
+    date: { from: "", to: "" },
+  });
   return (
     <>
       {responseOverlay && (
@@ -263,12 +209,11 @@ const Party = () => {
               className="inp"
               required
               placeholder={language?.party?.party_name_placeholder}
-              value={form.name}
+              value={name}
               type="text"
-              onInput={(e) => setForm({ ...form, name: e.target.value })}
+              onInput={(e) => setName(e.target.value)}
               id="name"
             />
-
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
                 {update ? language?.party?.save : language?.party?.add_btn}
@@ -285,16 +230,34 @@ const Party = () => {
           </form>
         )}
         <div className="flex-1">
+          {openFiltersDiv && (
+            <TabelFilterDiv
+              beforeFiltering={beforeFiltering}
+              setBeforeFiltering={setBeforeFiltering}
+              setFilter={setFilters}
+              setPage={setPage}
+              setIsopen={setOpenFiltersDiv}
+            />
+          )}
           <Table
-            hideActionForUser={!context.userDetails.isAdmin}
-            header={header}
+            columns={columns}
+            selectable={role === "admin"}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength.current }}
-            data={{ data: tableData, allData: allPeople.current }}
-            items={{ slectedItems: slectedItems, setSelectedItems }}
-            overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Parties", getData, getSearchData }}
-            filters={{ search, setSearch, filters, setFilters }}
+            currentPage={page}
+            setPage={setPage}
+            allData={allPeople.current}
+            selectedItems={slectedItems}
+            setSelectedItems={setSelectedItems}
+            getData={getData}
+            deleteUrl="people"
+            dataLength={dataLength.current}
+            tabelData={data}
+            setSort={setSort}
+            search={search}
+            setSearch={setSearch}
+            openFiltersDiv={openFiltersDiv}
+            setOpenFiltersDiv={setOpenFiltersDiv}
+            setUpdate={setUpdate}
           />
         </div>
       </div>

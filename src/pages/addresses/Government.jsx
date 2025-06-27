@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -180,7 +180,10 @@ const Government = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={language?.header?.government} response={response.current} />
+        <SendData
+          data={language?.header?.government}
+          response={response.current}
+        />
       )}
       {formLoading && <Loading />}
       <h1 className="title">{language?.header?.governments}</h1>

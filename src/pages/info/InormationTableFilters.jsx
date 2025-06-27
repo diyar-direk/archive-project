@@ -2,8 +2,8 @@ import { useCallback, useMemo, useState } from "react";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getAddressesApi } from "../addresses/api";
 import { getPeopleApi } from "../people/api";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 
 const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();
@@ -15,9 +15,12 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const closeDiv = useCallback((e) => {
     const article = e.currentTarget.closest("article");
     if (!article) return;
+
     const wrapperDiv = article.closest(".tabel-filter-select");
-    if (wrapperDiv?.children[0]) {
-      wrapperDiv?.children[0].classList.remove("active");
+    const firstDiv = wrapperDiv?.querySelector("div");
+
+    if (firstDiv?.classList.contains("active")) {
+      firstDiv.classList.remove("active");
     }
   }, []);
 
@@ -79,6 +82,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const staticFilter = [
       {
         name: "gender",
+        label: "gender",
         ifemptyLabel: language?.table?.all_genders,
         values: [
           { value: "Female", label: language?.table?.female },
@@ -87,6 +91,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "credibility",
+        label: "credibility",
         ifemptyLabel: "any credibility",
         values: [
           { value: "Low", label: "Low" },
@@ -97,6 +102,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     ];
     return staticFilter.map((itm) => (
       <div className="tabel-filter-select select relative" key={itm.name}>
+        <label> {itm.label} </label>
         <div onClick={openDives} className="center gap-10 w-100">
           <span className="pointer-none">
             {beforeFiltering[itm.name] || itm.ifemptyLabel}
@@ -132,6 +138,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const arrayOfApis = [
       {
         name: "people",
+        label: "person",
         selectLabel: beforeFiltering?.people
           ? `${beforeFiltering?.people?.firstName} ${beforeFiltering?.people?.fatherName} ${beforeFiltering?.people?.surName}`
           : "",
@@ -139,11 +146,12 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           return `${option?.firstName} ${option?.fatherName} ${option?.surName}`;
         },
         onChange: (option) => handleParentChange("people", option),
-        tabelFilterIgnoreText: "any people",
+        tabelFilterIgnoreText: "any person",
         fetchData: getPeopleApi,
       },
       {
         name: "countryId",
+        label: "country",
         selectLabel: beforeFiltering?.countryId?.firstName,
         onChange: (option) => handleParentChange("countryId", option),
         tabelFilterIgnoreText: "any country",
@@ -151,6 +159,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "countyId",
+        label: "county",
         selectLabel: beforeFiltering?.countyId?.name,
         onChange: (option) => handleParentChange("countyId", option),
         tabelFilterIgnoreText: "any county",
@@ -158,6 +167,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "governorateId",
+        label: "governorateId",
         selectLabel: beforeFiltering?.governorateId?.name,
         onChange: (option) => handleParentChange("governorateId", option),
         tabelFilterIgnoreText: "any governorate",
@@ -165,6 +175,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "cityId",
+        label: "city",
         selectLabel: beforeFiltering?.cityId?.name,
         onChange: (option) => handleParentChange("cityId", option),
         tabelFilterIgnoreText: "any city",
@@ -172,6 +183,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "streetId",
+        label: "street",
         selectLabel: beforeFiltering?.streetId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
@@ -183,6 +195,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "regionId",
+        label: "region",
         selectLabel: beforeFiltering?.regionId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
@@ -194,6 +207,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "villageId",
+        label: "village",
         selectLabel: beforeFiltering?.villageId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
@@ -205,6 +219,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "sources",
+        label: "source",
         selectLabel: beforeFiltering?.sources?.source_name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, sources: option }),
@@ -214,6 +229,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "parties",
+        label: "party",
         selectLabel: beforeFiltering?.parties?.name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, parties: option }),
@@ -222,6 +238,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "events",
+        label: "event",
         selectLabel: beforeFiltering?.events?.name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, events: option }),
@@ -233,9 +250,10 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     return arrayOfApis.map((input) => (
       <SelectInputApi
         key={input.name}
+        label={input.label}
         className="tabel-filter-select"
         isTabelsFilter
-        fetchData={input.fetchData ? input.fetchData : getAddressesApi}
+        fetchData={input.fetchData ? input.fetchData : getInfinityFeatchApis}
         selectLabel={input.selectLabel}
         optionLabel={
           input.optionLabel ? input.optionLabel : (option) => option?.name

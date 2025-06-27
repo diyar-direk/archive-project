@@ -278,7 +278,21 @@ form.addresses .select .inp.active + article {
   opacity: 1;
   pointer-events: all;
 }
-
+form.addresses .selecte span {
+  background: var(--section-color);
+  display: block;
+  margin-top: 6px;
+  padding: 6px;
+  border-radius: 6px;
+  text-align: center;
+  text-transform: capitalize;
+  color: var(--font-color);
+  cursor: pointer;
+}
+form.addresses .selecte span:hover {
+  background-color: var(--main-color);
+  color: white;
+}
 form.addresses .select > article h2 {
   border-bottom: 1px solid var(--body-color);
   background-color: var(--aside-color);

@@ -33,6 +33,7 @@ import PageNotFound from "./components/response/PageNotFound";
 import CoordPage from "./pages/coordinates/CoordPage";
 import AccessDenied from "./components/response/AccessDenied";
 import ImageSearch from "./pages/people/ImageSearch";
+import Field from "./pages/Categories/Field";
 
 function App() {
   const location = useLocation();
@@ -66,6 +67,7 @@ function App() {
               <Route path="regions" element={<Region />} />
               <Route path="streets" element={<Street />} />
               <Route path="sections" element={<Sections />} />
+              <Route path="fields" element={<Field />} />
               <Route path="sources" element={<Sources />} />
               <Route path="event" element={<Event />} />
               <Route path="party" element={<Party />} />

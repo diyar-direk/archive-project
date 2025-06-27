@@ -1,191 +1,175 @@
 import axios from "axios";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { baseURL, Context, date } from "../../context/context";
 import Table from "./../../components/table/Table";
 import useLanguage from "../../hooks/useLanguage";
+import UsersTabelFilters from "./UsersTabelFilters";
+const columns = [
+  {
+    name: "username",
+    headerName: "username",
+    getCell: (e, currentUser, language) => {
+      return `${e.username} ${
+        currentUser === e._id ? language?.users?.you : ""
+      }`;
+    },
+    type: "usersPage",
+    sort: true,
+  },
+  {
+    name: "role",
+    headerName: "role",
+  },
+  {
+    name: "sectionId",
+    headerName: "sectionId",
+    getCell: (e) => e.sectionId?.name || "all sections",
+  },
+  {
+    name: "createdAt",
+    headerName: "createdAt",
+    getCell: (e) => date(e.createdAt),
+    sort: true,
+  },
+  {
+    name: "updatedAt",
+    headerName: "updatedAt",
+    getCell: (e) => date(e.createdAt),
+    sort: true,
+    hidden: true,
+  },
+  {
+    name: "option",
+    headerName: "option",
+    getCell: (e, setOverlay, setSelectedItems) => (
+      <div className="center gap-10 options">
+        <div
+          onClick={(event) => {
+            event.stopPropagation();
+            setOverlay(true);
+            const allSelectors = document.querySelectorAll(".checkbox");
+            allSelectors.forEach((el) => el.classList.remove("active"));
+            setSelectedItems([e._id]);
+          }}
+          className="flex delete"
+        >
+          <i className="fa-solid fa-trash"></i>
+        </div>
+      </div>
+    ),
+    hideColumnIf: (e, currentUser) => e._id === currentUser,
+    type: "actions",
+  },
+];
 const Users = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
   const allPeople = useRef([]);
   const [slectedItems, setSelectedItems] = useState([]);
-  const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
+  const token = context.userDetails.token;
   const limit = context?.limit;
+  const { language } = useLanguage();
+  const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
     role: "",
+    sectionId: "",
     date: {
       from: "",
       to: "",
     },
   });
-  const { language } = useLanguage();
-
   const [search, setSearch] = useState("");
 
-  const header = [
-    language?.users?.username,
-    language?.users?.role,
-    language?.users?.section,
-    language?.users?.created_at,
-  ];
-  const token = context.userDetails.token;
+  const getData = useCallback(async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+
+    document.querySelector("th .checkbox")?.classList.remove("active");
+
+    const params = new URLSearchParams();
+
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+
+    Object.keys(filters).forEach((key) => {
+      if (key !== "date" && filters[key]) {
+        params.append(key, filters[key]._id || filters[key]);
+      }
+    });
+
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
+    if (search) params.append("search", search);
+
+    try {
+      const { data } = await axios.get(`${baseURL}/Users`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActiveUsers"];
+      allPeople.current = data[search ? "data" : "users"]?.filter(
+        (e) => e._id !== context.userDetails._id
+      );
+      setData(data[search ? "data" : "users"]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filters, search, limit, sort, context.userDetails._id]);
 
   useEffect(() => {
     if (!search) getData();
-  }, [page, filters, search, limit]);
-
-  const getData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Users?active=true&limit=${limit}&page=${page}`;
-
-    filters.role && (url += `&role=${filters.role}`);
-
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-    try {
-      const data = await axios.get(url, {
-        headers: { Authorization: "Bearer " + token },
-      });
-      dataLength.current = data.data.numberOfActiveUsers;
-      allPeople.current = data.data.users.filter(
-        (e) => context.userDetails._id !== e._id
-      );
-      setData(data.data.users);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
     }
-  };
-
-  useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, filters, search, limit]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Users/search?active=true&limit=${limit}&page=${page}`;
-
-    filters.role && (url += `&role=${filters.role}`);
-
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        { headers: { Authorization: "Bearer " + token } }
-      );
-
-      dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.filter(
-        (e) => context.userDetails._id !== e._id
-      );
-
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const checkOne = (e, element) => {
-    e.target.classList.toggle("active");
-    if (e.target.classList.contains("active")) {
-      setSelectedItems((prevSelected) => [...prevSelected, element]);
-      const allActiveSelectors = document.querySelectorAll(
-        "td .checkbox.active"
-      );
-      const allSelectors = document.querySelectorAll("td .checkbox");
-      if (allSelectors.length === allActiveSelectors.length)
-        document.querySelector("th .checkbox").classList.add("active");
-    } else {
-      setSelectedItems((prevSelected) =>
-        prevSelected.filter((item) => item !== element)
-      );
-      document.querySelector("th .checkbox").classList.remove("active");
-    }
-  };
-
-  const tableData = data?.map((e) => {
-    return (
-      <tr key={e._id}>
-        <td>
-          {context.userDetails._id !== e._id && (
-            <div
-              onClick={(target) => {
-                target.stopPropagation();
-                checkOne(target, e._id);
-              }}
-              className="checkbox"
-            ></div>
-          )}
-        </td>
-        <td>
-          {e.username}{" "}
-          {context.userDetails._id === e._id && language?.users?.you}
-        </td>
-
-        <td> {e.role} </td>
-
-        <td>{e.sectionId?.name || "all sections"}</td>
-        <td>{date(e.createdAt)}</td>
-        <td>
-          <div className="center gap-10 actions">
-            {context.userDetails._id !== e._id && (
-              <i
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setOverlay(true);
-                  const allSelectors = document.querySelectorAll(".checkbox");
-                  allSelectors.forEach((e) => e.classList.remove("active"));
-                  setSelectedItems([e._id]);
-                }}
-                className="delete fa-solid fa-trash"
-              ></i>
-            )}
-          </div>
-        </td>
-      </tr>
-    );
-  });
+  }, [page, filters, search, limit, sort, getData]);
 
   return (
     <>
       <h1 className="title"> {language?.header?.users} </h1>
+      {openFiltersDiv && (
+        <UsersTabelFilters
+          setFilter={setFilters}
+          filter={filters}
+          setIsopen={setOpenFiltersDiv}
+          setPage={setPage}
+        />
+      )}
       <Table
-        header={header}
+        columns={columns}
+        selectable={role === "admin"}
         loading={loading}
-        page={{ page: page, setPage, dataLength: dataLength.current }}
-        data={{ data: tableData, allData: allPeople.current }}
-        items={{ slectedItems: slectedItems, setSelectedItems }}
-        filters={{ filters, setFilters, search, setSearch }}
-        overlay={{ overlay: overlay, setOverlay }}
-        delete={{ getData, url: "Users", getSearchData }}
+        currentPage={page}
+        setPage={setPage}
+        allData={allPeople.current}
+        selectedItems={slectedItems}
+        setSelectedItems={setSelectedItems}
+        getData={getData}
+        deleteUrl="people"
+        dataLength={dataLength.current}
+        tabelData={data}
+        setSort={setSort}
+        search={search}
+        setSearch={setSearch}
+        openFiltersDiv={openFiltersDiv}
+        setOpenFiltersDiv={setOpenFiltersDiv}
       />
     </>
   );

@@ -95,6 +95,11 @@ const useLanguage = () => {
           role: ["admin", "user"],
         },
         {
+          title: "Fields",
+          path: "fields",
+          role: ["admin", "user"],
+        },
+        {
           title: language?.header?.sources,
           path: "sources",
           role: ["admin", "user"],

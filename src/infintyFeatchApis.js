@@ -1,9 +1,9 @@
 import axios from "axios";
-import { baseURL } from "../../context/context";
+import { baseURL } from "./context/context";
 
 const token = document.cookie.split("archive_cookie=")[1];
 
-export const getAddressesApi = async ({ page = 1, search, url }) => {
+export const getInfinityFeatchApis = async ({ page = 1, search, url }) => {
   try {
     const { data } = await axios.get(`${baseURL}/${url}`, {
       headers: {

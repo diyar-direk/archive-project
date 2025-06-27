@@ -1,5 +1,6 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
 import useLanguage from "../../hooks/useLanguage";
+import { Context } from "../../context/context";
 
 const TabelBody = ({
   loading,
@@ -9,7 +10,11 @@ const TabelBody = ({
   selectedItems,
   setSelectedItems,
   setOverlay,
+  setUpdate,
 }) => {
+  const context = useContext(Context);
+  const { language } = useLanguage();
+
   const checkOne = useCallback(
     (elementId) => {
       if (!selectedItems.some((id) => id === elementId)) {
@@ -22,34 +27,52 @@ const TabelBody = ({
     },
     [setSelectedItems, selectedItems]
   );
+  const renderCell = useCallback(
+    (column, row) => {
+      if (column.getCell) {
+        switch (column.type) {
+          case "actions":
+            return column.getCell(
+              row,
+              setOverlay,
+              setSelectedItems,
+              selectable,
+              setUpdate
+            );
+          case "usersPage":
+            return column.getCell(row, context.userDetails._id, language);
+          default:
+            return column.getCell(row);
+        }
+      }
+      return row[column.name];
+    },
+    [language, context, selectedItems, setOverlay, setSelectedItems, selectable]
+  );
+
   const rows = useMemo(
     () =>
       tabelData.map((row) => (
         <tr key={row._id}>
           {selectable && (
             <td>
-              <div
-                onClick={() => checkOne(row._id)}
-                className={`checkbox ${
-                  selectedItems.some((id) => id === row._id) ? "active" : ""
-                }`}
-              ></div>
+              {context.userDetails._id !== row._id && (
+                <div
+                  onClick={() => checkOne(row._id)}
+                  className={`checkbox ${
+                    selectedItems.includes(row._id) ? "active" : ""
+                  }`}
+                ></div>
+              )}
             </td>
           )}
           {column.map(
             (column) =>
               !column.hidden && (
                 <td key={column.name} className={column.className}>
-                  {column.getCell
-                    ? column.type === "actions"
-                      ? column.getCell(
-                          row,
-                          setOverlay,
-                          setSelectedItems,
-                          selectable
-                        )
-                      : column.getCell(row)
-                    : row[column.name]}
+                  {(column.hideColumnIf
+                    ? !column.hideColumnIf(row, context.userDetails._id)
+                    : true) && renderCell(column, row)}
                 </td>
               )
           )}
@@ -58,14 +81,14 @@ const TabelBody = ({
     [
       tabelData,
       column,
-      selectable,
       checkOne,
+      renderCell,
+      selectable,
       selectedItems,
-      setOverlay,
-      setSelectedItems,
+      context.userDetails._id,
     ]
   );
-  const { language } = useLanguage();
+
   return (
     <tbody className={loading || rows ? "relative" : ""}>
       {loading ? (

@@ -24,7 +24,8 @@ import ShowRows from "./ShowRows";
  * @property {boolean} loading - حالة التحميل.
  * @property {number} currentPage - الصفحة الحالية.
  * @property {React.Dispatch<React.SetStateAction<number>>} setPage - دالة لتغيير الصفحة الحالية.
- * @property {React.Dispatch<React.SetStateAction<object>>} setSort - دالة لتغيير الترتيب.
+ * @property {React.Dispatch<React.SetStateAction<number>>} setPage - دالة
+ * @property {React.Dispatch<React.SetStateAction<object>>} setUpdate - تستخدم في الصفحات التي تكون فيها جدول وحقل ادخال بنفس الصفحة
  * @property {string} deleteUrl - رابط حذف البيانات.
  * @property {string} search - القيمة التي يتم البحث عنها.
  * @property {React.Dispatch<React.SetStateAction<string>>} setSearch - دالة لتحديث قيمة البحث
@@ -53,6 +54,7 @@ const Table = ({
   setSearch,
   openFiltersDiv,
   setOpenFiltersDiv,
+  setUpdate,
   ...props
 }) => {
   const [overlay, setOverlay] = useState(false);
@@ -207,6 +209,7 @@ const Table = ({
             selectedItems={selectedItems}
             setSelectedItems={setSelectedItems}
             setOverlay={setOverlay}
+            setUpdate={setUpdate}
           />
         </table>
       </div>

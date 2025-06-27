@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -7,31 +7,87 @@ import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
-
+import SourcesTabelFilters from "./SourcesTabelFilters";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+const columns = [
+  { name: "source_name", headerName: "source_name", sort: true },
+  { name: "source_credibility", headerName: "source_credibility" },
+  {
+    name: "createdAt",
+    headerName: "createdAt",
+    sort: true,
+    getCell: (row) => date(row.createdAt),
+  },
+  {
+    name: "updatedAt",
+    headerName: "updatedAt",
+    sort: true,
+    getCell: (row) => date(row.updatedAt),
+    hidden: true,
+  },
+  {
+    name: "options",
+    headerName: "options",
+    type: "actions",
+    getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
+      <>
+        <div className="options center">
+          {role && (
+            <>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((el) => el.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="flex delete"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </div>
+              <div className="flex update">
+                <i
+                  className="fa-regular fa-pen-to-square"
+                  onClick={() => setUpdate(e)}
+                ></i>
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    ),
+  },
+];
 const Sources = () => {
+  const response = useRef(true);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+  const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
   const allPeople = useRef([]);
   const [slectedItems, setSelectedItems] = useState([]);
-  const [overlay, setOverlay] = useState(false);
   const [loading, setLoading] = useState(true);
-  const response = useRef(true);
-  const { language } = useLanguage();
-  const [responseOverlay, setResponseOverlay] = useState(false);
-  const ref = useRef(null);
-  const [formLoading, setFormLoading] = useState(false);
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const limit = context?.limit;
+  const { language } = useLanguage();
+  const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
+  const [error, setError] = useState(false);
   const [filters, setFilters] = useState({
+    field: "",
+    source_credibility: "",
     date: {
       from: "",
       to: "",
     },
-    source_credibility: "",
   });
   const [search, setSearch] = useState("");
-  const limit = context?.limit;
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -46,19 +102,13 @@ const Sources = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-
   window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .select .inp.active");
+    const div = document.querySelector("form.addresses .selecte .inp.active");
     div && div.classList.remove("active");
   });
-
-  const header = [
-    language?.source?.source_name,
-    language?.source?.created_at,
-    language?.source?.source_credibility,
-  ];
   const [form, setForm] = useState({
     source_name: "",
+    field: "",
     source_credibility: "High",
   });
   const [update, setUpdate] = useState(false);
@@ -72,159 +122,61 @@ const Sources = () => {
     }
   }, [update]);
 
+  const getData = useCallback(async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    const params = new URLSearchParams();
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+    Object.keys(filters).forEach((key) => {
+      if (key !== "date" && filters[key]) {
+        params.append(key, filters[key]._id || filters[key]);
+      }
+    });
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
+    if (search) params.append("search", search);
+    try {
+      const { data } = await axios.get(`${baseURL}/Sources`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActiveSources"];
+      allPeople.current = data.data?.map((e) => e._id);
+      setData(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filters, search, limit, sort]);
+
   useEffect(() => {
     if (!search) getData();
-  }, [page, limit, search, filters]);
-
-  const getData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Sources?active=true&limit=${limit}&page=${page}`;
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-    try {
-      const data = await axios.get(url, {
-        headers: { Authorization: "Bearer " + token },
-      });
-
-      dataLength.current = data.data.numberOfActiveSources;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
     }
-  };
-
-  const checkOne = (e, element) => {
-    e.target.classList.toggle("active");
-    if (e.target.classList.contains("active")) {
-      setSelectedItems((prevSelected) => [...prevSelected, element]);
-      const allActiveSelectors = document.querySelectorAll(
-        "td .checkbox.active"
-      );
-      const allSelectors = document.querySelectorAll("td .checkbox");
-      if (allSelectors.length === allActiveSelectors.length)
-        document.querySelector("th .checkbox").classList.add("active");
-    } else {
-      setSelectedItems((prevSelected) =>
-        prevSelected.filter((item) => item !== element)
-      );
-      document.querySelector("th .checkbox").classList.remove("active");
-    }
-  };
-  useEffect(() => {
-    if (!search) return;
-    const timeOut = setTimeout(() => getSearchData(), 500);
-    return () => clearTimeout(timeOut);
-  }, [page, search, filters, limit]);
-
-  const getSearchData = async () => {
-    setLoading(true);
-    setData([]);
-    setSelectedItems([]);
-    document.querySelector("th .checkbox")?.classList.remove("active");
-    let url = `${baseURL}/Sources/search?active=true&limit=${limit}&page=${page}`;
-
-    const keys = Object.keys(filters);
-    keys.forEach(
-      (key) =>
-        key !== "date" &&
-        filters[key] &&
-        (url += `&${filters[key]._id ? key + "Id" : key}=${
-          filters[key]._id ? filters[key]._id : filters[key]
-        }`)
-    );
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
-
-    try {
-      const data = await axios.post(
-        url,
-        {
-          search: search,
-        },
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      dataLength.current = data.data.numberOfActiveResults;
-      allPeople.current = data.data.data.map((e) => e._id);
-      setData(data.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const tableData = data?.map((e) => (
-    <tr key={e._id}>
-      {context.userDetails.isAdmin && (
-        <td>
-          <div
-            onClick={(target) => {
-              target.stopPropagation();
-              checkOne(target, e._id);
-            }}
-            className="checkbox"
-          ></div>
-        </td>
-      )}
-      <td>{e.source_name}</td>
-      <td>{date(e.createdAt)}</td>
-      <td>{e.source_credibility}</td>
-      <td>
-        {context.userDetails.isAdmin && (
-          <div className="center gap-10 actions">
-            <i
-              onClick={(event) => {
-                event.stopPropagation();
-                setOverlay(true);
-                const allSelectors = document.querySelectorAll(".checkbox");
-                allSelectors.forEach((e) => e.classList.remove("active"));
-                setSelectedItems([e._id]);
-              }}
-              className="delete fa-solid fa-trash"
-            ></i>
-            <i
-              onClick={() => {
-                setUpdate(e);
-              }}
-              className="update fa-regular fa-pen-to-square"
-            ></i>
-          </div>
-        )}
-      </td>
-    </tr>
-  ));
+  }, [page, filters, search, limit, sort, getData]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.field) {
+      return setError("please select field");
+    }
     setFormLoading(true);
     try {
       const formData = { ...form };
-
       if (update) {
         const data = await axios.patch(
           `${baseURL}/Sources/${update._id}`,
@@ -245,7 +197,7 @@ const Sources = () => {
         }
       }
 
-      setForm({ source_name: "", source_credibility: "High" });
+      setForm({ source_name: "", source_credibility: "High", field: "" });
       getData();
     } catch (error) {
       console.log(error);
@@ -271,7 +223,7 @@ const Sources = () => {
                 ? language?.source?.update_source
                 : language?.source?.add_new_source}
             </h1>
-            <label htmlFor="source_name">{language?.source?.source_name}</label>
+            <label htmlFor="name">{language?.source?.source_name}</label>
             <input
               ref={ref}
               className="inp"
@@ -280,25 +232,31 @@ const Sources = () => {
               value={form.source_name}
               type="text"
               onInput={(e) => setForm({ ...form, source_name: e.target.value })}
-              id="source_name"
+              id="name"
             />
-
-            <label htmlFor="source_credibility">
-              {language?.source?.source_credibility}
-            </label>
-              <select
-                className="inp center gap-10 w-100"
-                id="source_credibility"
-                value={form.source_credibility}
-                onChange={(e) =>
-                  setForm({ ...form, source_credibility: e.target.value })
-                }
-              >
-                <option value="High">{language?.source?.high}</option>
-                <option value="Medium">{language?.source?.medium}</option>
-                <option value="Low">{language?.source?.low}</option>
-              </select>
-
+            <label> source credibility </label>
+            <select
+              className="inp"
+              value={form.source_credibility}
+              onChange={(e) =>
+                setForm({ ...form, source_credibility: e.target.value })
+              }
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel="select field"
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, field: option })}
+              onIgnore={() => setForm({ ...form, field: "" })}
+              url="Fields"
+              label="field"
+              value={form?.field?.name}
+            />
+            {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
                 {update ? language?.source?.save : language?.source?.add_btn}
@@ -315,16 +273,33 @@ const Sources = () => {
           </form>
         )}
         <div className="flex-1">
+          {openFiltersDiv && (
+            <SourcesTabelFilters
+              setFilter={setFilters}
+              filter={filters}
+              setIsopen={setOpenFiltersDiv}
+              setPage={setPage}
+            />
+          )}
           <Table
-            hideActionForUser={!context.userDetails.isAdmin}
-            header={header}
+            columns={columns}
+            selectable={role === "admin"}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength.current }}
-            data={{ data: tableData, allData: allPeople.current }}
-            items={{ slectedItems: slectedItems, setSelectedItems }}
-            overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Sources", getData, getSearchData }}
-            filters={{ search, setSearch, filters, setFilters }}
+            currentPage={page}
+            setPage={setPage}
+            allData={allPeople.current}
+            selectedItems={slectedItems}
+            setSelectedItems={setSelectedItems}
+            getData={getData}
+            deleteUrl="people"
+            dataLength={dataLength.current}
+            tabelData={data}
+            setSort={setSort}
+            search={search}
+            setSearch={setSearch}
+            openFiltersDiv={openFiltersDiv}
+            setOpenFiltersDiv={setOpenFiltersDiv}
+            setUpdate={setUpdate}
           />
         </div>
       </div>

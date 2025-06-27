@@ -28,6 +28,7 @@
   padding: 40px 20px;
   max-height: 90%;
   overflow: auto;
+  min-height: 350px;
 }
 
 .overlay .date-fltr {
@@ -66,6 +67,16 @@ body.arabic .overlay .date-fltr .react-datepicker-wrapper input {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
   align-items: flex-start;
+}
+.overlay .filters:has(.tabel-filter-select) label {
+  text-transform: capitalize;
+  margin-bottom: 3px;
+  display: block;
+  color: var(--font-color);
+  cursor: text;
+}
+.overlay .filters:has(.tabel-filter-select) label::after {
+  content: ":";
 }
 .overlay .filters .tabel-filter-select div {
   padding: 5px;
@@ -164,7 +175,7 @@ div.table table.loading {
 }
 
 div.table thead {
-  background-color: #12264f;
+  background-color: var(--main-color);
 }
 div.table thead th {
   font-weight: 600;

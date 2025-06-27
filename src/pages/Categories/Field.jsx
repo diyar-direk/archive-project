@@ -3,9 +3,8 @@ import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
-import SendData from "./../../components/response/SendData";
+import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
-import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 const columns = [
   { name: "name", headerName: "name", sort: true },
@@ -56,7 +55,7 @@ const columns = [
     ),
   },
 ];
-const Sections = () => {
+const Field = () => {
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -70,7 +69,6 @@ const Sections = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const limit = context?.limit;
-  const { language } = useLanguage();
   const [sort, setSort] = useState({});
   const { role } = context.userDetails;
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
@@ -100,12 +98,13 @@ const Sections = () => {
     }
     if (search) params.append("search", search);
     try {
-      const { data } = await axios.get(`${baseURL}/Sections`, {
+      const { data } = await axios.get(`${baseURL}/Fields`, {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
+      console.log(data);
       dataLength.current =
-        data[search ? "numberOfActiveResults" : "numberOfActiveSections"];
+        data[search ? "numberOfActiveResults" : "numberOfActiveFields"];
       allPeople.current = data.data?.map((e) => e._id);
       setData(data.data);
     } catch (error) {
@@ -152,7 +151,7 @@ const Sections = () => {
     try {
       if (update) {
         const data = await axios.patch(
-          `${baseURL}/Sections/${update._id}`,
+          `${baseURL}/Fields/${update._id}`,
           {
             name,
           },
@@ -165,7 +164,7 @@ const Sections = () => {
         setUpdate(false);
       } else {
         const data = await axios.post(
-          `${baseURL}/Sections`,
+          `${baseURL}/Fields`,
           { name: name },
           { headers: { Authorization: "Bearer " + token } }
         );
@@ -190,27 +189,20 @@ const Sections = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData
-          data={language?.header?.section}
-          response={response.current}
-        />
+        <SendData data="Fields" response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">{language?.header?.sections}</h1>
+      <h1 className="title">Fields</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>
-              {update
-                ? language?.section?.update_section
-                : language?.section?.add_new_section}
-            </h1>
-            <label htmlFor="name">{language?.section?.section_name}</label>
+            <h1>{update ? "update_Fields" : "add_new_Fields"}</h1>
+            <label htmlFor="name">Fields_name</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder={language?.section?.section_name_placeholder}
+              placeholder="Fields_name_placeholder"
               value={name}
               type="text"
               onInput={(e) => setName(e.target.value)}
@@ -218,14 +210,14 @@ const Sections = () => {
             />
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? language?.section?.save : language?.section?.add_btn}
+                {update ? "save" : "add_btn"}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  {language?.section?.cancel}
+                  cancel
                 </button>
               )}
             </div>
@@ -267,4 +259,4 @@ const Sections = () => {
   );
 };
 
-export default Sections;
+export default Field;

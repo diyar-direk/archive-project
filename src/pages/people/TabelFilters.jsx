@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getAddressesApi } from "../addresses/api";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 
 const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();
@@ -14,9 +14,12 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const closeDiv = useCallback((e) => {
     const article = e.currentTarget.closest("article");
     if (!article) return;
+
     const wrapperDiv = article.closest(".tabel-filter-select");
-    if (wrapperDiv?.children[0]) {
-      wrapperDiv?.children[0].classList.remove("active");
+    const firstDiv = wrapperDiv?.querySelector("div");
+
+    if (firstDiv?.classList.contains("active")) {
+      firstDiv.classList.remove("active");
     }
   }, []);
 
@@ -79,17 +82,17 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       {
         name: "gender",
         ifemptyLabel: language?.table?.all_genders,
+        label: "gender",
         values: [
-          { value: "", label: language?.table?.all_genders },
           { value: "Female", label: language?.table?.female },
           { value: "Male", label: language?.table?.male },
         ],
       },
       {
         name: "maritalStatus",
+        label: "maritalStatus",
         ifemptyLabel: language?.people?.all_marital_status,
         values: [
-          { value: "", label: language?.people?.all_marital_status },
           { value: "Married", label: language?.table?.married },
           { value: "Single", label: language?.table?.single },
           { value: "Other", label: language?.table?.other },
@@ -98,6 +101,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     ];
     return staticFilter.map((itm) => (
       <div className="tabel-filter-select select relative" key={itm.name}>
+        <label> {itm.label} </label>
         <div onClick={openDives} className="center gap-10 w-100">
           <span className="pointer-none">
             {beforeFiltering[itm.name] || itm.ifemptyLabel}
@@ -105,6 +109,14 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           <i className="fa-solid fa-sort-down pointer-none" />
         </div>
         <article>
+          <h2
+            onClick={(e) => {
+              updateFilters(itm.name, "");
+              closeDiv(e);
+            }}
+          >
+            {itm.ifemptyLabel}
+          </h2>
           {itm.values.map((value) => (
             <h2
               key={value.value}
@@ -125,6 +137,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const arrayOfApis = [
       {
         name: "countryId",
+        label: "country",
         selectLabel: beforeFiltering?.countryId?.name,
         onChange: (option) => handleParentChange("countryId", option),
         tabelFilterIgnoreText: "any country",
@@ -132,12 +145,14 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "countyId",
+        label: "county",
         selectLabel: beforeFiltering?.countyId?.name,
         onChange: (option) => handleParentChange("countyId", option),
         tabelFilterIgnoreText: "any county",
         url: "Counties",
       },
       {
+        label: "Government",
         name: "governorateId",
         selectLabel: beforeFiltering?.governorateId?.name,
         onChange: (option) => handleParentChange("governorateId", option),
@@ -146,6 +161,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "cityId",
+        label: "city",
         selectLabel: beforeFiltering?.cityId?.name,
         onChange: (option) => handleParentChange("cityId", option),
         tabelFilterIgnoreText: "any city",
@@ -153,6 +169,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "streetId",
+        label: "street",
         selectLabel: beforeFiltering?.streetId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
@@ -164,6 +181,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "regionId",
+        label: "region",
         selectLabel: beforeFiltering?.regionId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
@@ -175,6 +193,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "villageId",
+        label: "village",
         selectLabel: beforeFiltering?.villageId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
@@ -186,6 +205,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       },
       {
         name: "sources",
+        label: "sources",
         selectLabel: beforeFiltering?.sources?.source_name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, sources: option }),
@@ -200,7 +220,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         key={input.name}
         className="tabel-filter-select"
         isTabelsFilter
-        fetchData={getAddressesApi}
+        fetchData={getInfinityFeatchApis}
         selectLabel={input.selectLabel}
         optionLabel={
           input.optionLabel ? input.optionLabel : (option) => option?.name
@@ -211,6 +231,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           setBeforeFiltering({ ...beforeFiltering, [input.name]: "" })
         }
         url={input.url}
+        label={input.label}
       />
     ));
   }, [beforeFiltering, handleParentChange]);

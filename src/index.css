@@ -213,6 +213,7 @@ body {
   overflow-x: hidden;
 }
 body.dark {
+  --main-color: #4569b2;
   --border-color: #1c1c1c;
   --body-color: #141419;
   --section-color: #181a1e;
