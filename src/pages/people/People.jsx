@@ -74,12 +74,6 @@ const columns = [
     hidden: true,
   },
   {
-    name: "government",
-    headerName: "government",
-    getCell: (e) => e.governmentId?.name,
-    hidden: true,
-  },
-  {
     name: "street",
     headerName: "street",
     getCell: (e) => e.streetId?.name,

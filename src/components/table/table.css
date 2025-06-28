@@ -185,8 +185,11 @@ div.table thead th {
   color: white;
   padding: 10px;
 }
-div.table thead th.sort .sort {
-  rotate: 180deg;
+div.table thead th.a-z .sort {
+  rotate: -90deg;
+}
+div.table thead th.z-a .sort {
+  rotate: 90deg;
 }
 div.table thead th .sort {
   font-size: 12px;

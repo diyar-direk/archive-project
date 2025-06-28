@@ -11,6 +11,7 @@ const TabelBody = ({
   setSelectedItems,
   setOverlay,
   setUpdate,
+  setBackupOverlay,
 }) => {
   const context = useContext(Context);
   const { language } = useLanguage();
@@ -39,6 +40,8 @@ const TabelBody = ({
               selectable,
               setUpdate
             );
+          case "backup":
+            return column.getCell(row, setBackupOverlay);
           case "usersPage":
             return column.getCell(row, context.userDetails._id, language);
           default:

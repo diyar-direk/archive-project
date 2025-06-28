@@ -8,13 +8,13 @@ const TabelHeader = ({
   setSort,
 }) => {
   const updateSortStatus = useCallback(
-    (column) => {
+    (column, e) => {
       setSort((prev) => {
+        const prevStatus = prev[column.name]?.startsWith("-");
+        e.target.parentElement.className = prevStatus ? "a-z" : "z-a";
         return {
           ...prev,
-          [column.name]: `${prev[column.name]?.startsWith("-") ? "" : "-"}${
-            column.name
-          }`,
+          [column.name]: `${prevStatus ? "" : "-"}${column.name}`,
         };
       });
     },
@@ -29,10 +29,9 @@ const TabelHeader = ({
               {th.headerName}
               {th.sort && (
                 <i
-                  className="fa-solid fa-chevron-down sort"
+                  className="fa-solid fa-chevron-right sort"
                   onClick={(e) => {
-                    e.target.parentElement.classList.toggle("sort");
-                    updateSortStatus(th);
+                    updateSortStatus(th, e);
                   }}
                 ></i>
               )}
@@ -58,6 +57,7 @@ const TabelHeader = ({
       setSelectedItems([]);
     }
   };
+
   return (
     <thead>
       <tr>

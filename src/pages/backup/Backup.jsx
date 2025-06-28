@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -6,22 +6,44 @@ import { date } from "../../context/context";
 import "./backup.css";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
+import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+const columns = [
+  { name: "root", headerName: "root" },
+  {
+    name: "createdAt",
+    headerName: "createdAt",
+    sort: true,
+    getCell: (e) => date(e.createdAt),
+  },
+  {
+    name: "useBackup",
+    headerName: "use this Backup",
+    getCell: (e, setOverlay) => (
+      <p
+        onClick={() => {
+          setOverlay({ isActive: true, root: e });
+        }}
+        style={{ color: "#27c12d", fontWeight: "500" }}
+        className="c-pointer text-capitalize"
+      >
+        use_this_backup
+      </p>
+    ),
+    type: "backup",
+  },
+];
 const Backup = () => {
   const [data, setData] = useState([]);
   const dataLength = useRef(0);
   const [page, setPage] = useState(1);
+  const allPeople = useRef([]);
   const [loading, setLoading] = useState(true);
-  const [dataLoading, setDataLoading] = useState(false);
   const context = useContext(Context);
-  const { language } = useLanguage();
-  const [form, setForm] = useState({
-    username: context.userDetails.username,
-    password: "",
-  });
-
-  const limit = context?.limit;
   const token = context.userDetails.token;
-  const [overlay, setOverlay] = useState({});
+  const limit = context?.limit;
+  const { language } = useLanguage();
+  const [sort, setSort] = useState({});
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
     date: {
       from: "",
@@ -29,54 +51,46 @@ const Backup = () => {
     },
   });
 
-  const header = [language?.backUps?.root, language?.backUps?.created_at];
-
-  useEffect(() => {
-    getData();
-  }, [page, limit, filters]);
-
-  const getData = async () => {
+  const getData = useCallback(async () => {
     setLoading(true);
     setData([]);
-    let url = `${baseURL}/backup/roots?limit=${limit}&page=${page}&sort=-createdAt`;
-    filters.date.from && filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}&createdAt[lte]=${filters.date.to}`)
-      : filters.date.from && !filters.date.to
-      ? (url += `&createdAt[gte]=${filters.date.from}`)
-      : !filters.date.from &&
-        filters.date.to &&
-        (url += `&createdAt[lte]=${filters.date.to}`);
+    const params = new URLSearchParams();
+    params.append("limit", limit);
+    params.append("page", page);
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
     try {
-      const data = await axios.get(url, {
-        headers: { Authorization: "Bearer " + token },
+      const { data } = await axios.get(`${baseURL}/backup/roots`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
       });
-      dataLength.current = data.data.numberOfroots;
-
-      setData(data.data.data);
+      dataLength.current = data.numberOfroots;
+      allPeople.current = data.data?.map((e) => e._id);
+      setData(data.data);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, filters, limit, sort]);
 
-  const countryData = data?.map((e) => (
-    <tr key={e._id}>
-      <td>{e.root}</td>
-      <td>{date(e.createdAt)}</td>
-      <td>
-        <p
-          onClick={() => {
-            setOverlay({ isActive: true, root: e });
-          }}
-          style={{ color: "#27c12d", fontWeight: "500" }}
-          className="c-pointer text-capitalize"
-        >
-          {language?.backUps?.use_this_backup}
-        </p>
-      </td>
-    </tr>
-  ));
+  useEffect(() => {
+    getData();
+  }, [page, filters, limit, sort, getData]);
+
+  const [dataLoading, setDataLoading] = useState(false);
+  const [form, setForm] = useState({
+    username: context.userDetails.username,
+    password: "",
+  });
+
+  const [overlay, setOverlay] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -200,6 +214,9 @@ const Backup = () => {
       getData();
     }
   };
+  const [beforeFiltering, setBeforeFiltering] = useState({
+    date: { from: "", to: "" },
+  });
 
   return (
     <>
@@ -268,7 +285,7 @@ const Backup = () => {
               <div className="flex warning center flex-direction gap-10 wrap">
                 <i className="fa-solid fa-triangle-exclamation"></i>
                 <h1>
-                  <span>{language?.backUps?.warning}</span>{" "}
+                  <span>{language?.backUps?.warning}</span>
                   {language?.backUps?.about_deleting_database}
                 </h1>
                 <div className="flex w-100 center gap-20">
@@ -276,7 +293,7 @@ const Backup = () => {
                     onClick={handleYes}
                     className="save delete-all overlay-btn"
                   >
-                    <i className="fa-solid fa-check"></i>{" "}
+                    <i className="fa-solid fa-check"></i>
                     {language?.backUps?.accept}
                   </div>
                   <div
@@ -285,7 +302,7 @@ const Backup = () => {
                     }}
                     className="delete-all overlay-btn"
                   >
-                    <i className="fa-solid fa-ban"></i>{" "}
+                    <i className="fa-solid fa-ban"></i>
                     {language?.backUps?.cancel}
                   </div>
                 </div>
@@ -303,13 +320,28 @@ const Backup = () => {
         <i className="fa-solid fa-plus"></i>
       </button>
       <div className="flex-1">
+        {openFiltersDiv && (
+          <TabelFilterDiv
+            setFilter={setFilters}
+            setIsopen={setOpenFiltersDiv}
+            setPage={setPage}
+            beforeFiltering={beforeFiltering}
+            setBeforeFiltering={setBeforeFiltering}
+          />
+        )}
         <Table
-          hideActionForUser={true}
-          header={header}
+          columns={columns}
           loading={loading}
-          page={{ page: page, setPage, dataLength: dataLength.current }}
-          data={{ data: countryData }}
-          filters={{ filters, setFilters }}
+          currentPage={page}
+          setPage={setPage}
+          allData={allPeople.current}
+          getData={getData}
+          dataLength={dataLength.current}
+          tabelData={data}
+          setSort={setSort}
+          openFiltersDiv={openFiltersDiv}
+          setOpenFiltersDiv={setOpenFiltersDiv}
+          setBackupOverlay={setOverlay}
         />
       </div>
     </>

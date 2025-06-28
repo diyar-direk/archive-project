@@ -29,6 +29,7 @@ import ShowRows from "./ShowRows";
  * @property {string} deleteUrl - رابط حذف البيانات.
  * @property {string} search - القيمة التي يتم البحث عنها.
  * @property {React.Dispatch<React.SetStateAction<string>>} setSearch - دالة لتحديث قيمة البحث
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setBackupOverlay - لعرض خصائص النسخ الاحتياطي
  * @property {() => void} getData - دالة جلب البيانات.
  */
 
@@ -55,6 +56,7 @@ const Table = ({
   openFiltersDiv,
   setOpenFiltersDiv,
   setUpdate,
+  setBackupOverlay,
   ...props
 }) => {
   const [overlay, setOverlay] = useState(false);
@@ -210,6 +212,9 @@ const Table = ({
             setSelectedItems={setSelectedItems}
             setOverlay={setOverlay}
             setUpdate={setUpdate}
+            setBackupOverlay={
+              location.pathname.includes("/backup") ? setBackupOverlay : null
+            }
           />
         </table>
       </div>
