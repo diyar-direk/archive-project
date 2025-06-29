@@ -310,6 +310,23 @@ tbody tr:hover {
   gap: 10px;
   margin-bottom: 20px;
 }
+.pagination .pagination-arrows {
+  cursor: pointer;
+  color: var(--font-color);
+  background: var(--body-color);
+  padding: 10px;
+  border-radius: 4px;
+  border: none;
+  font-weight: bold;
+}
+.pagination span {
+  color: var(--font-color);
+}
+.pagination .pagination-arrows:disabled {
+  background-color: var(--border-color);
+  cursor: no-drop;
+}
+
 .pagination h3 {
   width: 35px;
   height: 35px;
@@ -430,7 +447,6 @@ div.table tbody td div.options .visit i {
 .table-pagination h2 {
   background-color: var(--body-color);
   padding: 10px;
-  margin-top: 10px;
   color: var(--font-color);
   font-size: 20px;
   font-weight: 600;
