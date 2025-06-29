@@ -256,7 +256,7 @@ const Event = () => {
             selectedItems={slectedItems}
             setSelectedItems={setSelectedItems}
             getData={getData}
-            deleteUrl="people"
+            deleteUrl="Events"
             dataLength={dataLength.current}
             tabelData={data}
             setSort={setSort}

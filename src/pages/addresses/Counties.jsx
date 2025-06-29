@@ -3,11 +3,20 @@ import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
-import SendData from "../../components/response/SendData";
+import SendData from "./../../components/response/SendData";
+import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+
 const columns = [
   { name: "name", headerName: "name", sort: true },
+  {
+    name: "country",
+    headerName: "country",
+    getCell: (row) => row?.country?.name,
+  },
   {
     name: "createdAt",
     headerName: "createdAt",
@@ -55,7 +64,8 @@ const columns = [
     ),
   },
 ];
-const Field = () => {
+
+const Counties = () => {
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -73,6 +83,7 @@ const Field = () => {
   const { role } = context.userDetails;
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
+    country: "",
     date: {
       from: "",
       to: "",
@@ -88,6 +99,7 @@ const Field = () => {
     params.append("active", true);
     params.append("limit", limit);
     params.append("page", page);
+    if (filters.country._id) params.append("country", filters.country._id);
     if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
     if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
     if (Object.keys(sort).length) {
@@ -98,13 +110,13 @@ const Field = () => {
     }
     if (search) params.append("search", search);
     try {
-      const { data } = await axios.get(`${baseURL}/Fields`, {
+      const { data } = await axios.get(`${baseURL}/Counties`, {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
-      console.log(data);
+
       dataLength.current =
-        data[search ? "numberOfActiveResults" : "numberOfActiveFields"];
+        data[search ? "numberOfActiveResults" : "numberOfActiveConties"];
       allPeople.current = data.data?.map((e) => e._id);
       setData(data.data);
     } catch (error) {
@@ -134,27 +146,27 @@ const Field = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-  const [name, setName] = useState("");
+  const [form, setForm] = useState({ name: "", country: "" });
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     if (update) {
       ref.current.focus();
-      setName(update.name);
+      setForm(update);
     } else {
-      setName("");
+      setForm({ name: "", country: "" });
     }
   }, [update]);
+  const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
+    if (!form.country) return setError("please select country");
     e.preventDefault();
     setFormLoading(true);
     try {
       if (update) {
         const data = await axios.patch(
-          `${baseURL}/Fields/${update._id}`,
-          {
-            name,
-          },
+          `${baseURL}/Counties/${update._id}`,
+          form,
           { headers: { Authorization: "Bearer " + token } }
         );
 
@@ -163,17 +175,15 @@ const Field = () => {
         }
         setUpdate(false);
       } else {
-        const data = await axios.post(
-          `${baseURL}/Fields`,
-          { name: name },
-          { headers: { Authorization: "Bearer " + token } }
-        );
+        const data = await axios.post(`${baseURL}/Counties`, form, {
+          headers: { Authorization: "Bearer " + token },
+        });
         if (data.status === 201) {
           responseFun(true);
         }
       }
 
-      setName("");
+      setForm({ name: "", country: "" });
       getData();
     } catch (error) {
       console.log(error);
@@ -184,40 +194,61 @@ const Field = () => {
     }
   };
   const [beforeFiltering, setBeforeFiltering] = useState({
-    date: { from: "", to: "" },
+    date: { from: "", to: "", country: "" },
   });
+
   return (
     <>
       {responseOverlay && (
-        <SendData data="Fields" response={response.current} />
+        <SendData
+          data={"language?.header?.Counties"}
+          response={response.current}
+        />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Fields</h1>
+      <h1 className="title">{"language?.header?.Countiess"}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update_Fields" : "add_new_Fields"}</h1>
-            <label htmlFor="name">Fields_name</label>
+            <h1>
+              {update
+                ? "language?.Counties?.update_Counties"
+                : "language?.Counties?.add_new_Counties"}
+            </h1>
+            <label htmlFor="name">{"language?.Counties?.Counties_name"}</label>
             <input
               ref={ref}
               className="inp"
               required
-              placeholder="Fields_name_placeholder"
-              value={name}
+              placeholder={"language?.Counties?.Counties_name_placeholder"}
+              value={form.name}
               type="text"
-              onInput={(e) => setName(e.target.value)}
+              onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
             />
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel="select country"
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, country: option })}
+              onIgnore={() => setForm({ ...form, country: "" })}
+              url="Countries"
+              label="country"
+              value={form?.country?.name}
+            />
+            {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add_btn"}
+                {update
+                  ? "language?.Counties?.save"
+                  : "language?.Counties?.add_btn"}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cancel
+                  {"language?.Counties?.cancel"}
                 </button>
               )}
             </div>
@@ -231,7 +262,24 @@ const Field = () => {
               setFilter={setFilters}
               setPage={setPage}
               setIsopen={setOpenFiltersDiv}
-            />
+            >
+              <SelectInputApi
+                className="tabel-filter-select"
+                isTabelsFilter
+                fetchData={getInfinityFeatchApis}
+                selectLabel={beforeFiltering?.country?.name}
+                optionLabel={(option) => option?.name}
+                onChange={(option) =>
+                  setBeforeFiltering({ ...beforeFiltering, country: option })
+                }
+                tabelFilterIgnoreText="any country"
+                onIgnore={() =>
+                  setBeforeFiltering({ ...beforeFiltering, country: "" })
+                }
+                url="Countries"
+                label="country"
+              />
+            </TabelFilterDiv>
           )}
           <Table
             columns={columns}
@@ -243,7 +291,7 @@ const Field = () => {
             selectedItems={slectedItems}
             setSelectedItems={setSelectedItems}
             getData={getData}
-            deleteUrl="Fields"
+            deleteUrl="Counties"
             dataLength={dataLength.current}
             tabelData={data}
             setSort={setSort}
@@ -258,5 +306,9 @@ const Field = () => {
     </>
   );
 };
+window.addEventListener("click", () => {
+  const div = document.querySelector("form.addresses .selecte .inp.active");
+  div && div.classList.remove("active");
+});
 
-export default Field;
+export default Counties;

@@ -58,7 +58,12 @@ const useLanguage = () => {
         },
         {
           title: language?.header?.governments,
-          path: "governments",
+          path: "governorates",
+          role: ["admin", "user"],
+        },
+        {
+          title: "lang.Counties",
+          path: "counties",
           role: ["admin", "user"],
         },
         {

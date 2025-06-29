@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -7,8 +13,74 @@ import SendData from "./../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import useFeatchData from "../../hooks/useFeatchData";
 import useLanguage from "../../hooks/useLanguage";
-
+import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+const columns = [
+  { name: "name", headerName: "name", sort: true },
+  {
+    name: "createdAt",
+    headerName: "createdAt",
+    sort: true,
+    getCell: (row) => date(row.createdAt),
+  },
+  {
+    name: "updatedAt",
+    headerName: "updatedAt",
+    sort: true,
+    getCell: (row) => date(row.updatedAt),
+    hidden: true,
+  },
+  {
+    name: "options",
+    headerName: "options",
+    type: "actions",
+    getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
+      <>
+        <div className="options center">
+          {role && (
+            <>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((el) => el.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="flex delete"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </div>
+              <div className="flex update">
+                <i
+                  className="fa-regular fa-pen-to-square"
+                  onClick={() => setUpdate(e)}
+                ></i>
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    ),
+  },
+];
 const Countries = () => {
+  const response = useRef(true);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+  const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const dataLength = useRef(0);
+  const [page, setPage] = useState(1);
+  const allPeople = useRef([]);
+  const [slectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const context = useContext(Context);
+  const token = context.userDetails.token;
+  const limit = context?.limit;
+  const { language } = useLanguage();
+  const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
     date: {
       from: "",
@@ -16,31 +88,46 @@ const Countries = () => {
     },
   });
   const [search, setSearch] = useState("");
-  const { language } = useLanguage();
-  const {
-    data,
-    dataLength,
-    allPeople,
-    getData,
-    page,
-    setPage,
-    slectedItems,
-    setSelectedItems,
-    loading,
-  } = useFeatchData({
-    URL: "Countries",
-    filters,
-    search,
-    numberOf: "numberOfActiveCountries",
-  });
-
-  const [overlay, setOverlay] = useState(false);
-  const response = useRef(true);
-  const [responseOverlay, setResponseOverlay] = useState(false);
-  const ref = useRef(null);
-  const [formLoading, setFormLoading] = useState(false);
-  const context = useContext(Context);
-
+  const getData = useCallback(async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    const params = new URLSearchParams();
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
+    if (search) params.append("search", search);
+    try {
+      const { data } = await axios.get(`${baseURL}/Countries`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActiveCountries"];
+      allPeople.current = data.data?.map((e) => e._id);
+      setData(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filters, search, limit, sort]);
+  useEffect(() => {
+    if (!search) getData();
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
+    }
+  }, [page, filters, search, limit, sort, getData]);
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -55,9 +142,6 @@ const Countries = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-  const token = context.userDetails.token;
-
-  const header = [language?.country?.country_name, language?.country?.created_at];
   const [name, setName] = useState("");
   const [update, setUpdate] = useState(false);
 
@@ -69,65 +153,6 @@ const Countries = () => {
       setName("");
     }
   }, [update]);
-
-  const checkOne = (e, element) => {
-    e.target.classList.toggle("active");
-    if (e.target.classList.contains("active")) {
-      setSelectedItems((prevSelected) => [...prevSelected, element]);
-      const allActiveSelectors = document.querySelectorAll(
-        "td .checkbox.active"
-      );
-      const allSelectors = document.querySelectorAll("td .checkbox");
-      if (allSelectors?.length === allActiveSelectors?.length)
-        document.querySelector("th .checkbox").classList.add("active");
-    } else {
-      setSelectedItems((prevSelected) =>
-        prevSelected.filter((item) => item !== element)
-      );
-      document.querySelector("th .checkbox").classList.remove("active");
-    }
-  };
-
-  const countryData = data?.map((e) => (
-    <tr key={e._id}>
-      {context.userDetails.isAdmin && (
-        <td>
-          <div
-            onClick={(target) => {
-              target.stopPropagation();
-              checkOne(target, e._id);
-            }}
-            className="checkbox"
-          ></div>
-        </td>
-      )}
-      <td>{e.name}</td>
-      <td>{date(e.createdAt)}</td>
-      <td>
-        {context.userDetails.isAdmin && (
-          <div className="center gap-10 actions">
-            <i
-              onClick={(event) => {
-                event.stopPropagation();
-                setOverlay(true);
-                const allSelectors = document.querySelectorAll(".checkbox");
-                allSelectors.forEach((e) => e.classList.remove("active"));
-                setSelectedItems([e._id]);
-              }}
-              className="delete fa-solid fa-trash"
-            ></i>
-            <i
-              onClick={() => {
-                setUpdate(e);
-              }}
-              className="update fa-regular fa-pen-to-square"
-            ></i>
-          </div>
-        )}
-      </td>
-    </tr>
-  ));
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormLoading(true);
@@ -166,20 +191,28 @@ const Countries = () => {
       setFormLoading(false);
     }
   };
-
+  const [beforeFiltering, setBeforeFiltering] = useState({
+    date: { from: "", to: "" },
+  });
   return (
     <>
       {responseOverlay && (
-        <SendData data={language?.header?.country} response={response.current} />
+        <SendData
+          data={language?.header?.country}
+          response={response.current}
+        />
       )}
       {formLoading && <Loading />}
-
       <h1 className="title">{language?.header?.countries}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? language?.country?.update_country : language?.country?.add_new_country}</h1>
-            <label htmlFor="name">{language?.country?.country_name} </label>
+            <h1>
+              {update
+                ? language?.country?.update_country
+                : language?.country?.add_new_country}
+            </h1>
+            <label htmlFor="name">{language?.country?.country_name}</label>
             <input
               ref={ref}
               className="inp"
@@ -192,12 +225,12 @@ const Countries = () => {
             />
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? language?.country?.add_btn : language?.country?.save}
+                {update ? language?.country?.save : language?.country?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
-                  className="btn flex-1 cencel"
+                  className="btn flex-1 cencel "
                 >
                   {language?.country?.cancel}
                 </button>
@@ -206,16 +239,34 @@ const Countries = () => {
           </form>
         )}
         <div className="flex-1">
+          {openFiltersDiv && (
+            <TabelFilterDiv
+              beforeFiltering={beforeFiltering}
+              setBeforeFiltering={setBeforeFiltering}
+              setFilter={setFilters}
+              setPage={setPage}
+              setIsopen={setOpenFiltersDiv}
+            />
+          )}
           <Table
-            hideActionForUser={!context.userDetails.isAdmin}
-            header={header}
+            columns={columns}
+            selectable={role === "admin"}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength }}
-            data={{ data: countryData, allData: allPeople }}
-            items={{ slectedItems: slectedItems, setSelectedItems }}
-            overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Countries", getData }}
-            filters={{ search, setSearch, filters, setFilters }}
+            currentPage={page}
+            setPage={setPage}
+            allData={allPeople.current}
+            selectedItems={slectedItems}
+            setSelectedItems={setSelectedItems}
+            getData={getData}
+            deleteUrl="Countries"
+            dataLength={dataLength.current}
+            tabelData={data}
+            setSort={setSort}
+            search={search}
+            setSearch={setSearch}
+            openFiltersDiv={openFiltersDiv}
+            setOpenFiltersDiv={setOpenFiltersDiv}
+            setUpdate={setUpdate}
           />
         </div>
       </div>

@@ -162,7 +162,7 @@ const Users = () => {
         selectedItems={slectedItems}
         setSelectedItems={setSelectedItems}
         getData={getData}
-        deleteUrl="people"
+        deleteUrl="Users"
         dataLength={dataLength.current}
         tabelData={data}
         setSort={setSort}

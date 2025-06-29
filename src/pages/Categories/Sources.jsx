@@ -291,7 +291,7 @@ const Sources = () => {
             selectedItems={slectedItems}
             setSelectedItems={setSelectedItems}
             getData={getData}
-            deleteUrl="people"
+            deleteUrl="Sources"
             dataLength={dataLength.current}
             tabelData={data}
             setSort={setSort}

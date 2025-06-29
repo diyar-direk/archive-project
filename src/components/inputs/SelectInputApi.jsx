@@ -11,6 +11,8 @@ import useLanguage from "../../hooks/useLanguage";
  * @property {() => void} onIgnore
  * @property {any} value
  * @property {boolean} isTabelsFilter
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setReset
+ * @property {boolean} reset
  * @property {string} url
  * @property {string} tabelFilterIgnoreText
  * @param {Utils & React.HtmlHTMLAttributes<HTMLDivElement>} props
@@ -26,6 +28,8 @@ const SelectInputApi = ({
   isTabelsFilter,
   url,
   tabelFilterIgnoreText,
+  reset,
+  setReset,
   ...props
 }) => {
   const [items, setItems] = useState([]);
@@ -55,7 +59,6 @@ const SelectInputApi = ({
 
   useEffect(() => {
     if (!isOpen) return;
-
     const loadData = async () => {
       setLoading(true);
       const params = url ? { page, search, url } : { page, search };
@@ -100,6 +103,13 @@ const SelectInputApi = ({
     },
     [loading, hasMore]
   );
+  useEffect(() => {
+    if (reset) {
+      setPage(1);
+      setItems([]);
+      setReset(false);
+    }
+  }, [reset, setReset]);
 
   return (
     <div className="flex flex-direction">

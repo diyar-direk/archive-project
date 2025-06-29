@@ -249,7 +249,7 @@ const Party = () => {
             selectedItems={slectedItems}
             setSelectedItems={setSelectedItems}
             getData={getData}
-            deleteUrl="people"
+            deleteUrl="Parties"
             dataLength={dataLength.current}
             tabelData={data}
             setSort={setSort}

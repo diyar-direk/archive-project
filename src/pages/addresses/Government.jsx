@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -6,40 +6,133 @@ import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
-import FormSelect from "../../components/form/FormSelect";
-import useFeatchData from "../../hooks/useFeatchData";
+import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import useLanguage from "../../hooks/useLanguage";
+
+const columns = [
+  { name: "name", headerName: "name", sort: true },
+  {
+    name: "country",
+    headerName: "country",
+    getCell: (row) => row?.country?.name,
+  },
+  {
+    name: "createdAt",
+    headerName: "createdAt",
+    sort: true,
+    getCell: (row) => date(row.createdAt),
+  },
+  {
+    name: "updatedAt",
+    headerName: "updatedAt",
+    sort: true,
+    getCell: (row) => date(row.updatedAt),
+    hidden: true,
+  },
+  {
+    name: "options",
+    headerName: "options",
+    type: "actions",
+    getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
+      <>
+        <div className="options center">
+          {role && (
+            <>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((el) => el.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="flex delete"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </div>
+              <div className="flex update">
+                <i
+                  className="fa-regular fa-pen-to-square"
+                  onClick={() => setUpdate(e)}
+                ></i>
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    ),
+  },
+];
+
 const Government = () => {
-  const [overlay, setOverlay] = useState(false);
   const response = useRef(true);
-  const [error, setError] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  const [filters, setFilters] = useState({
-    country: "",
-    date: { from: "", to: "" },
-  });
-  const [search, setSearch] = useState("");
-  const {
-    data,
-    dataLength,
-    allPeople,
-    getData,
-    page,
-    setPage,
-    slectedItems,
-    setSelectedItems,
-    loading,
-  } = useFeatchData({
-    URL: "Governments",
-    filters,
-    search,
-    numberOf: "numberOfActiveGovernments",
-  });
-  const { language } = useLanguage();
-  const context = useContext(Context);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const dataLength = useRef(0);
+  const [page, setPage] = useState(1);
+  const allPeople = useRef([]);
+  const [slectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const context = useContext(Context);
   const token = context.userDetails.token;
+  const limit = context?.limit;
+  const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
+  const [filters, setFilters] = useState({
+    country: "",
+    date: {
+      from: "",
+      to: "",
+    },
+  });
+  const [search, setSearch] = useState("");
+  const getData = useCallback(async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    const params = new URLSearchParams();
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+    if (filters.country._id) params.append("country", filters.country._id);
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
+    if (search) params.append("search", search);
+    try {
+      const { data } = await axios.get(`${baseURL}/Governorates`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
+
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActiveGovernorates"];
+      allPeople.current = data.data?.map((e) => e._id);
+      setData(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filters, search, limit, sort]);
+  useEffect(() => {
+    if (!search) getData();
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
+    }
+  }, [page, filters, search, limit, sort, getData]);
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -54,17 +147,7 @@ const Government = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-  window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .selecte .inp.active");
-    div && div.classList.remove("active");
-  });
-
-  const header = [
-    language?.government?.government_name,
-    language?.government?.country,
-    language?.government?.created_at,
-  ];
-  const [form, setForm] = useState({ name: "", countryId: "" });
+  const [form, setForm] = useState({ name: "", country: "" });
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
@@ -72,110 +155,49 @@ const Government = () => {
       ref.current.focus();
       setForm(update);
     } else {
-      setForm({ name: "", countryId: "" });
+      setForm({ name: "", country: "" });
     }
-    error && setError(false);
   }, [update]);
-
-  const checkOne = (e, element) => {
-    e.target.classList.toggle("active");
-    if (e.target.classList.contains("active")) {
-      setSelectedItems((prevSelected) => [...prevSelected, element]);
-      const allActiveSelectors = document.querySelectorAll(
-        "td .checkbox.active"
-      );
-      const allSelectors = document.querySelectorAll("td .checkbox");
-      if (allSelectors.length === allActiveSelectors.length)
-        document.querySelector("th .checkbox").classList.add("active");
-    } else {
-      setSelectedItems((prevSelected) =>
-        prevSelected.filter((item) => item !== element)
-      );
-      document.querySelector("th .checkbox").classList.remove("active");
-    }
-  };
-
-  const tableData = data?.map((e) => (
-    <tr key={e._id}>
-      {context.userDetails.isAdmin && (
-        <td>
-          <div
-            onClick={(target) => {
-              target.stopPropagation();
-              checkOne(target, e._id);
-            }}
-            className="checkbox"
-          ></div>
-        </td>
-      )}
-      <td>{e.name}</td>
-      <td>{e.country?.name}</td>
-      <td>{date(e.createdAt)}</td>
-      <td>
-        {context.userDetails.isAdmin && (
-          <div className="center gap-10 actions">
-            <i
-              onClick={(event) => {
-                event.stopPropagation();
-                setOverlay(true);
-                const allSelectors = document.querySelectorAll(".checkbox");
-                allSelectors.forEach((e) => e.classList.remove("active"));
-                setSelectedItems([e._id]);
-              }}
-              className="delete fa-solid fa-trash"
-            ></i>
-            <i
-              onClick={() => {
-                setUpdate({ name: e.name, countryId: e.country, _id: e._id });
-              }}
-              className="update fa-regular fa-pen-to-square"
-            ></i>
-          </div>
-        )}
-      </td>
-    </tr>
-  ));
-
+  const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.countryId) {
-      setError(language?.error?.please_selecet_country);
-    } else {
-      setFormLoading(true);
-      try {
-        const formData = { name: form.name, country: form.countryId._id };
+    if (!form.country) return setError("please select country");
+    setFormLoading(true);
+    try {
+      if (update) {
+        const data = await axios.patch(
+          `${baseURL}/Governorates/${update._id}`,
+          form,
+          { headers: { Authorization: "Bearer " + token } }
+        );
 
-        if (update) {
-          const data = await axios.patch(
-            `${baseURL}/Governments/${update._id}`,
-            formData,
-            { headers: { Authorization: "Bearer " + token } }
-          );
-
-          if (data.status === 200) {
-            responseFun(true);
-          }
-          setUpdate(false);
-        } else {
-          const data = await axios.post(`${baseURL}/Governments`, formData, {
-            headers: { Authorization: "Bearer " + token },
-          });
-          if (data.status === 201) {
-            responseFun(true);
-          }
+        if (data.status === 200) {
+          responseFun(true);
         }
-
-        setForm({ name: "", countryId: "" });
-        getData();
-      } catch (error) {
-        console.log(error);
-        if (error.status === 400) responseFun("reapeted data");
-        else responseFun(false);
-      } finally {
-        setFormLoading(false);
+        setUpdate(false);
+      } else {
+        const data = await axios.post(`${baseURL}/Governorates`, form, {
+          headers: { Authorization: "Bearer " + token },
+        });
+        if (data.status === 201) {
+          responseFun(true);
+        }
       }
+
+      setForm({ name: "", country: "" });
+      getData();
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) responseFun("reapeted data");
+      else responseFun(false);
+    } finally {
+      setFormLoading(false);
     }
   };
+  const [beforeFiltering, setBeforeFiltering] = useState({
+    date: { from: "", to: "", country: "" },
+  });
+  const { language } = useLanguage();
 
   return (
     <>
@@ -186,7 +208,7 @@ const Government = () => {
         />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">{language?.header?.governments}</h1>
+      <h1 className="title">{language?.header?.government}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
@@ -208,13 +230,16 @@ const Government = () => {
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
             />
-
-            <FormSelect
-              formKey="country"
-              error={{ error, setError }}
-              form={{ form, setForm }}
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel="select country"
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, country: option })}
+              onIgnore={() => setForm({ ...form, country: "" })}
+              url="Countries"
+              label="country"
+              value={form?.country?.name}
             />
-
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
@@ -234,21 +259,60 @@ const Government = () => {
           </form>
         )}
         <div className="flex-1">
+          {openFiltersDiv && (
+            <TabelFilterDiv
+              beforeFiltering={beforeFiltering}
+              setBeforeFiltering={setBeforeFiltering}
+              setFilter={setFilters}
+              setPage={setPage}
+              setIsopen={setOpenFiltersDiv}
+            >
+              <SelectInputApi
+                className="tabel-filter-select"
+                isTabelsFilter
+                fetchData={getInfinityFeatchApis}
+                selectLabel={beforeFiltering?.country?.name}
+                optionLabel={(option) => option?.name}
+                onChange={(option) =>
+                  setBeforeFiltering({ ...beforeFiltering, country: option })
+                }
+                tabelFilterIgnoreText="any country"
+                onIgnore={() =>
+                  setBeforeFiltering({ ...beforeFiltering, country: "" })
+                }
+                url="Countries"
+                label="country"
+              />
+            </TabelFilterDiv>
+          )}
           <Table
-            hideActionForUser={!context.userDetails.isAdmin}
-            header={header}
+            columns={columns}
+            selectable={role === "admin"}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength }}
-            data={{ data: tableData, allData: allPeople }}
-            items={{ slectedItems: slectedItems, setSelectedItems }}
-            overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Governments", getData }}
-            filters={{ filters, setFilters, search, setSearch }}
+            currentPage={page}
+            setPage={setPage}
+            allData={allPeople.current}
+            selectedItems={slectedItems}
+            setSelectedItems={setSelectedItems}
+            getData={getData}
+            deleteUrl="Governorates"
+            dataLength={dataLength.current}
+            tabelData={data}
+            setSort={setSort}
+            search={search}
+            setSearch={setSearch}
+            openFiltersDiv={openFiltersDiv}
+            setOpenFiltersDiv={setOpenFiltersDiv}
+            setUpdate={setUpdate}
           />
         </div>
       </div>
     </>
   );
 };
+window.addEventListener("click", () => {
+  const div = document.querySelector("form.addresses .selecte .inp.active");
+  div && div.classList.remove("active");
+});
 
 export default Government;

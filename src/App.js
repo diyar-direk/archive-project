@@ -34,6 +34,7 @@ import CoordPage from "./pages/coordinates/CoordPage";
 import AccessDenied from "./components/response/AccessDenied";
 import ImageSearch from "./pages/people/ImageSearch";
 import Field from "./pages/Categories/Field";
+import Counties from "./pages/addresses/Counties";
 
 function App() {
   const location = useLocation();
@@ -61,7 +62,8 @@ function App() {
               <Route path="add_person" element={<AddPerson />} />
               <Route path="update_person/:id" element={<UpdatePerson />} />
               <Route path="countries" element={<Countries />} />
-              <Route path="governments" element={<Government />} />
+              <Route path="governorates" element={<Government />} />
+              <Route path="counties" element={<Counties />} />
               <Route path="cities" element={<City />} />
               <Route path="villages" element={<Village />} />
               <Route path="regions" element={<Region />} />

@@ -251,7 +251,7 @@ const Sections = () => {
             selectedItems={slectedItems}
             setSelectedItems={setSelectedItems}
             getData={getData}
-            deleteUrl="people"
+            deleteUrl="Sections"
             dataLength={dataLength.current}
             tabelData={data}
             setSort={setSort}

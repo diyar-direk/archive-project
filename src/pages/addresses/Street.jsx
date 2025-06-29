@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -6,15 +6,83 @@ import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
-import FormSelect from "../../components/form/FormSelect";
-import useFeatchData from "../../hooks/useFeatchData";
+import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import useLanguage from "../../hooks/useLanguage";
+
+const columns = [
+  { name: "name", headerName: "name", sort: true },
+  {
+    name: "city",
+    headerName: "city",
+    getCell: (row) => row?.city?.name,
+  },
+  {
+    name: "createdAt",
+    headerName: "createdAt",
+    sort: true,
+    getCell: (row) => date(row.createdAt),
+  },
+  {
+    name: "updatedAt",
+    headerName: "updatedAt",
+    sort: true,
+    getCell: (row) => date(row.updatedAt),
+    hidden: true,
+  },
+  {
+    name: "options",
+    headerName: "options",
+    type: "actions",
+    getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
+      <>
+        <div className="options center">
+          {role && (
+            <>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((el) => el.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="flex delete"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </div>
+              <div className="flex update">
+                <i
+                  className="fa-regular fa-pen-to-square"
+                  onClick={() => setUpdate(e)}
+                ></i>
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    ),
+  },
+];
+
 const Street = () => {
-  const [overlay, setOverlay] = useState(false);
   const response = useRef(true);
-  const [error, setError] = useState(false);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+  const ref = useRef(null);
   const [formLoading, setFormLoading] = useState(false);
-  const { language } = useLanguage();
+  const [data, setData] = useState([]);
+  const dataLength = useRef(0);
+  const [page, setPage] = useState(1);
+  const allPeople = useRef([]);
+  const [slectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const context = useContext(Context);
+  const token = context.userDetails.token;
+  const limit = context?.limit;
+  const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
     city: "",
     date: {
@@ -23,29 +91,48 @@ const Street = () => {
     },
   });
   const [search, setSearch] = useState("");
+  const getData = useCallback(async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    const params = new URLSearchParams();
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+    if (filters.city._id) params.append("city", filters.city._id);
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
+    if (search) params.append("search", search);
+    try {
+      const { data } = await axios.get(`${baseURL}/Streets`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
 
-  const {
-    data,
-    dataLength,
-    allPeople,
-    getData,
-    page,
-    setPage,
-    slectedItems,
-    setSelectedItems,
-    loading,
-  } = useFeatchData({
-    URL: "Streets",
-    filters,
-    search,
-    numberOf: "numberOfActiveStreets",
-  });
-  const context = useContext(Context);
-  const token = context.userDetails.token;
-
-  const [responseOverlay, setResponseOverlay] = useState(false);
-  const ref = useRef(null);
-
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActiveStreets"];
+      allPeople.current = data.data?.map((e) => e._id);
+      setData(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filters, search, limit, sort]);
+  useEffect(() => {
+    if (!search) getData();
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
+    }
+  }, [page, filters, search, limit, sort, getData]);
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -60,16 +147,6 @@ const Street = () => {
       setResponseOverlay(false);
     }, 3000);
   };
-  window.addEventListener("click", () => {
-    const div = document.querySelector("form.addresses .selecte .inp.active");
-    div && div.classList.remove("active");
-  });
-
-  const header = [
-    language?.street?.name,
-    language?.street?.city,
-    language?.street?.created_at,
-  ];
   const [form, setForm] = useState({ name: "", city: "" });
   const [update, setUpdate] = useState(false);
 
@@ -80,108 +157,47 @@ const Street = () => {
     } else {
       setForm({ name: "", city: "" });
     }
-    error && setError(false);
   }, [update]);
-
-  const checkOne = (e, element) => {
-    e.target.classList.toggle("active");
-    if (e.target.classList.contains("active")) {
-      setSelectedItems((prevSelected) => [...prevSelected, element]);
-      const allActiveSelectors = document.querySelectorAll(
-        "td .checkbox.active"
-      );
-      const allSelectors = document.querySelectorAll("td .checkbox");
-      if (allSelectors.length === allActiveSelectors.length)
-        document.querySelector("th .checkbox").classList.add("active");
-    } else {
-      setSelectedItems((prevSelected) =>
-        prevSelected.filter((item) => item !== element)
-      );
-      document.querySelector("th .checkbox").classList.remove("active");
-    }
-  };
-
-  const tableData = data?.map((e) => (
-    <tr key={e._id}>
-      {context.userDetails.isAdmin && (
-        <td>
-          <div
-            onClick={(target) => {
-              target.stopPropagation();
-              checkOne(target, e._id);
-            }}
-            className="checkbox"
-          ></div>
-        </td>
-      )}
-      <td>{e.name}</td>
-      <td>{e.city?.name}</td>
-      <td>{date(e.createdAt)}</td>
-      <td>
-        {context.userDetails.isAdmin && (
-          <div className="center gap-10 actions">
-            <i
-              onClick={(event) => {
-                event.stopPropagation();
-                setOverlay(true);
-                const allSelectors = document.querySelectorAll(".checkbox");
-                allSelectors.forEach((e) => e.classList.remove("active"));
-                setSelectedItems([e._id]);
-              }}
-              className="delete fa-solid fa-trash"
-            ></i>
-            <i
-              onClick={() => {
-                setUpdate(e);
-              }}
-              className="update fa-regular fa-pen-to-square"
-            ></i>
-          </div>
-        )}
-      </td>
-    </tr>
-  ));
-
+  const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.city) {
-      setError(language?.error?.please_selecet_city);
-    } else {
-      setFormLoading(true);
-      try {
-        const formData = { ...form, city: form.city._id };
+    if (!form.city) return setError("please select city");
+    setFormLoading(true);
+    try {
+      if (update) {
+        const data = await axios.patch(
+          `${baseURL}/Streets/${update._id}`,
+          form,
+          { headers: { Authorization: "Bearer " + token } }
+        );
 
-        if (update) {
-          const data = await axios.patch(
-            `${baseURL}/Streets/${update._id}`,
-            formData,
-            { headers: { Authorization: "Bearer " + token } }
-          );
-
-          if (data.status === 200) {
-            responseFun(true);
-          }
-          setUpdate(false);
-        } else {
-          const data = await axios.post(`${baseURL}/Streets`, formData, {
-            headers: { Authorization: "Bearer " + token },
-          });
-          if (data.status === 201) {
-            responseFun(true);
-          }
+        if (data.status === 200) {
+          responseFun(true);
         }
-
-        setForm({ name: "", city: "" });
-        getData();
-      } catch (error) {
-        console.log(error);
-        if (error.status === 400) responseFun("reapeted data");
-        else responseFun(false);
-      } finally {
-        setFormLoading(false);
+        setUpdate(false);
+      } else {
+        const data = await axios.post(`${baseURL}/Streets`, form, {
+          headers: { Authorization: "Bearer " + token },
+        });
+        if (data.status === 201) {
+          responseFun(true);
+        }
       }
+
+      setForm({ name: "", city: "" });
+      getData();
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) responseFun("reapeted data");
+      else responseFun(false);
+    } finally {
+      setFormLoading(false);
     }
   };
+  const [beforeFiltering, setBeforeFiltering] = useState({
+    date: { from: "", to: "", city: "" },
+  });
+  const { language } = useLanguage();
 
   return (
     <>
@@ -189,7 +205,7 @@ const Street = () => {
         <SendData data={language?.header?.street} response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">{language?.header?.streets}</h1>
+      <h1 className="title">{language?.header?.street}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
@@ -209,11 +225,15 @@ const Street = () => {
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
             />
-
-            <FormSelect
-              formKey="allCity"
-              error={{ error, setError }}
-              form={{ form, setForm }}
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel="select city"
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, city: option })}
+              onIgnore={() => setForm({ ...form, city: "" })}
+              url="Cities"
+              label="city"
+              value={form?.city?.name}
             />
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
@@ -232,21 +252,60 @@ const Street = () => {
           </form>
         )}
         <div className="flex-1">
+          {openFiltersDiv && (
+            <TabelFilterDiv
+              beforeFiltering={beforeFiltering}
+              setBeforeFiltering={setBeforeFiltering}
+              setFilter={setFilters}
+              setPage={setPage}
+              setIsopen={setOpenFiltersDiv}
+            >
+              <SelectInputApi
+                className="tabel-filter-select"
+                isTabelsFilter
+                fetchData={getInfinityFeatchApis}
+                selectLabel={beforeFiltering?.city?.name}
+                optionLabel={(option) => option?.name}
+                onChange={(option) =>
+                  setBeforeFiltering({ ...beforeFiltering, city: option })
+                }
+                tabelFilterIgnoreText="any city"
+                onIgnore={() =>
+                  setBeforeFiltering({ ...beforeFiltering, city: "" })
+                }
+                url="Cities"
+                label="city"
+              />
+            </TabelFilterDiv>
+          )}
           <Table
-            hideActionForUser={!context.userDetails.isAdmin}
-            header={header}
+            columns={columns}
+            selectable={role === "admin"}
             loading={loading}
-            page={{ page: page, setPage, dataLength: dataLength }}
-            data={{ data: tableData, allData: allPeople }}
-            items={{ slectedItems: slectedItems, setSelectedItems }}
-            overlay={{ overlay: overlay, setOverlay }}
-            delete={{ url: "Streets", getData }}
-            filters={{ search, setSearch, filters, setFilters }}
+            currentPage={page}
+            setPage={setPage}
+            allData={allPeople.current}
+            selectedItems={slectedItems}
+            setSelectedItems={setSelectedItems}
+            getData={getData}
+            deleteUrl="Streets"
+            dataLength={dataLength.current}
+            tabelData={data}
+            setSort={setSort}
+            search={search}
+            setSearch={setSearch}
+            openFiltersDiv={openFiltersDiv}
+            setOpenFiltersDiv={setOpenFiltersDiv}
+            setUpdate={setUpdate}
           />
         </div>
       </div>
     </>
   );
 };
+window.addEventListener("click", () => {
+  const div = document.querySelector("form.addresses .selecte .inp.active");
+  div && div.classList.remove("active");
+});
 
 export default Street;
