@@ -3,7 +3,7 @@ import "./table.css";
 import axios from "axios";
 import { baseURL } from "../../context/context";
 import { Context } from "./../../context/context";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Loading from "../loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import TabelHeader from "./TabelHeader";
@@ -27,6 +27,8 @@ import ShowRows from "./ShowRows";
  * @property {React.Dispatch<React.SetStateAction<number>>} setPage - دالة
  * @property {React.Dispatch<React.SetStateAction<object>>} setUpdate - تستخدم في الصفحات التي تكون فيها جدول وحقل ادخال بنفس الصفحة
  * @property {string} deleteUrl - رابط حذف البيانات.
+ * @property {string} addPageUrl - رابط صفحة اضافة البيانات.
+ * @property {boolean} hideAddBtn - اخفاء زر اضافة البيانات
  * @property {string} search - القيمة التي يتم البحث عنها.
  * @property {React.Dispatch<React.SetStateAction<string>>} setSearch - دالة لتحديث قيمة البحث
  * @property {React.Dispatch<React.SetStateAction<boolean>>} setBackupOverlay - لعرض خصائص النسخ الاحتياطي
@@ -57,6 +59,8 @@ const Table = ({
   setOpenFiltersDiv,
   setUpdate,
   setBackupOverlay,
+  addPageUrl,
+  hideAddBtn,
   ...props
 }) => {
   const [overlay, setOverlay] = useState(false);
@@ -183,14 +187,27 @@ const Table = ({
             }}
           />
         )}
-        <i
+        {!hideAddBtn && addPageUrl && (
+          <Link
+            to={`/dashboard/${addPageUrl}`}
+            title="add data"
+            className="table-form-icons"
+          >
+            <i className="fa-solid fa-plus" />
+            add data
+          </Link>
+        )}
+        <div
           title="filters"
           onClick={(e) => {
             setOpenFiltersDiv(true);
             e.stopPropagation();
           }}
-          className="fa-solid fa-sliders filter"
-        ></i>
+          className="table-form-icons"
+        >
+          <i className="fa-solid fa-sliders filter" />
+          <span>filters</span>
+        </div>
         <ShowRows columns={columnsState} setColumns={setColumnsState} />
       </form>
 

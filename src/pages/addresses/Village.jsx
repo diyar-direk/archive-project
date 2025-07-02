@@ -10,6 +10,7 @@ import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import useLanguage from "../../hooks/useLanguage";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 
 const columns = [
   { name: "name", headerName: "name", sort: true },
@@ -195,7 +196,8 @@ const Village = () => {
     }
   };
   const [beforeFiltering, setBeforeFiltering] = useState({
-    date: { from: "", to: "", city: "" },
+    date: { from: "", to: "" },
+    city: "",
   });
   const { language } = useLanguage();
 
@@ -217,17 +219,17 @@ const Village = () => {
                 ? language?.village?.update_village
                 : language?.village?.add_new_village}
             </h1>
-            <label htmlFor="name">{language?.village?.village_name}</label>
-            <input
+
+            <InputWithLabel
+              label={language?.village?.village_name}
               ref={ref}
-              className="inp"
               required
               placeholder={language?.village?.village_name_placeholder}
               value={form.name}
-              type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
             />
+
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
               selectLabel="select city"
@@ -306,9 +308,5 @@ const Village = () => {
     </>
   );
 };
-window.addEventListener("click", () => {
-  const div = document.querySelector("form.addresses .selecte .inp.active");
-  div && div.classList.remove("active");
-});
 
 export default Village;

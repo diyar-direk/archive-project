@@ -13,12 +13,20 @@
   caret-color: var(--main-color);
 }
 
-.table-search .filter {
-  color: var(--font-color);
-  font-size: 17px;
+.table-search .table-form-icons {
+  padding: 8px;
+  background: var(--body-color);
+  border-radius: 4px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: capitalize;
 }
-
+.table-search .table-form-icons:hover {
+  background-color: var(--main-color);
+  color: white;
+}
 .overlay > .table-fltr {
   width: 70%;
   display: flex;
@@ -384,16 +392,11 @@ div.table tbody td div.options .visit i {
   font-size: 14px;
 }
 
-.show-rows i {
-  color: var(--font-color);
-  font-size: 19px;
-  cursor: pointer;
-}
 .show-rows > article {
   background-color: var(--body-color);
   position: absolute;
   width: 200px;
-  left: -200px;
+  left: -100px;
   padding: 10px;
   z-index: 1;
   border-radius: 4px;
@@ -439,7 +442,7 @@ div.table tbody td div.options .visit i {
 }
 
 .show-rows > article.active {
-  top: 100%;
+  top: 110%;
   opacity: 1;
   pointer-events: all;
 }

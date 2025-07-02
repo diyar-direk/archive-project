@@ -259,6 +259,7 @@ const People = () => {
         />
       )}
       <Table
+        addPageUrl="add_person"
         columns={columns}
         selectable={role === "admin"}
         loading={loading}

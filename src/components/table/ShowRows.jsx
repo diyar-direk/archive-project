@@ -53,15 +53,18 @@ const ShowRows = ({ columns, setColumns }) => {
 
   return (
     <div className="show-rows relative">
-      <i
-        className="fa-solid fa-ellipsis-vertical"
+      <div
         onClick={(e) => {
           e.stopPropagation();
           document
             .querySelector(".show-rows > article")
             .classList.toggle("active");
         }}
-      />
+        className="table-form-icons"
+      >
+        <i className="fa-solid fa-ellipsis" />
+        <span>columns</span>
+      </div>
       <article onClick={(e) => e.stopPropagation()}>
         <input
           type="text"

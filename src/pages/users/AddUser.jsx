@@ -8,6 +8,7 @@ import FormSelect from "../../components/form/FormSelect";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getPeopleApi } from "../people/api";
+import { getInfinityFeatchApis } from "./../../infintyFeatchApis";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {
@@ -34,7 +35,7 @@ const AddUser = () => {
   useEffect(() => {
     if (form.role === "admin")
       form.sectionId && setForm({ ...form, sectionId: "" });
-  }, [form.role]);
+  }, [form, setForm]);
   const [passwordCon, setPasswordCon] = useState("");
 
   const ignoreSelect = (e) => {
@@ -180,22 +181,17 @@ const AddUser = () => {
               )}
             </div>
             {form.role === "user" && (
-              <FormSelect
-                formKey="section"
-                error={{ error, setError }}
-                form={{ form, setForm }}
+              <SelectInputApi
+                fetchData={getInfinityFeatchApis}
+                selectLabel="section id"
+                label="select section"
+                optionLabel={(option) => option?.name}
+                onChange={(option) => setForm({ ...form, sectionId: option })}
+                value={form.sectionId.name}
+                onIgnore={() => setForm({ ...form, sectionId: "" })}
+                url="Sections"
               />
             )}
-
-            <SelectInputApi
-              fetchData={getPeopleApi}
-              selectLabel={"people"}
-              label={"choose people"}
-              optionLabel={(option) => option?.firstName}
-              onChange={(option) => setForm({ ...form, role: option?._id })}
-              value={form.people}
-              onIgnore={() => setForm({ ...form, people: "" })}
-            />
 
             <div className="flex flex-direction">
               <label htmlFor="password">{language?.users?.password}</label>

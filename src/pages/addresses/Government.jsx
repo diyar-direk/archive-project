@@ -10,6 +10,7 @@ import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import useLanguage from "../../hooks/useLanguage";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 
 const columns = [
   { name: "name", headerName: "name", sort: true },
@@ -186,6 +187,7 @@ const Government = () => {
 
       setForm({ name: "", country: "" });
       getData();
+      setError(false);
     } catch (error) {
       console.log(error);
       if (error.status === 400) responseFun("reapeted data");
@@ -195,7 +197,8 @@ const Government = () => {
     }
   };
   const [beforeFiltering, setBeforeFiltering] = useState({
-    date: { from: "", to: "", country: "" },
+    date: { from: "", to: "" },
+    country: "",
   });
   const { language } = useLanguage();
 
@@ -217,18 +220,14 @@ const Government = () => {
                 ? language?.government?.update_government
                 : language?.government?.add_new_government}
             </h1>
-            <label htmlFor="name">
-              {language?.government?.government_name}
-            </label>
-            <input
-              ref={ref}
-              className="inp"
+            <InputWithLabel
+              label={language?.government?.government_name}
               required
               placeholder={language?.government?.government_name_placeholder}
               value={form.name}
-              type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
+              ref={ref}
             />
             <SelectInputApi
               fetchData={getInfinityFeatchApis}

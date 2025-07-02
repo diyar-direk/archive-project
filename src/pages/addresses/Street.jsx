@@ -10,6 +10,7 @@ import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import useLanguage from "../../hooks/useLanguage";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 
 const columns = [
   { name: "name", headerName: "name", sort: true },
@@ -195,7 +196,8 @@ const Street = () => {
     }
   };
   const [beforeFiltering, setBeforeFiltering] = useState({
-    date: { from: "", to: "", city: "" },
+    date: { from: "", to: "" },
+    city: "",
   });
   const { language } = useLanguage();
 
@@ -214,17 +216,16 @@ const Street = () => {
                 ? language?.street?.update_street
                 : language?.street?.add_new_street}
             </h1>
-            <label htmlFor="name">{language?.street?.street_name}</label>
-            <input
+            <InputWithLabel
+              label={language?.street?.street_name}
               ref={ref}
-              className="inp"
               required
               placeholder={language?.street?.street_name_placeholder}
               value={form.name}
-              type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
             />
+
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
               selectLabel="select city"
@@ -303,9 +304,5 @@ const Street = () => {
     </>
   );
 };
-window.addEventListener("click", () => {
-  const div = document.querySelector("form.addresses .selecte .inp.active");
-  div && div.classList.remove("active");
-});
 
 export default Street;

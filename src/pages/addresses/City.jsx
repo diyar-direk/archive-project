@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -10,6 +17,8 @@ import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import CitiesFilters from "./CitiesFilters";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
+import SelectOptionInput from "../../components/inputs/SelectOptionInput";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   { name: "parent", headerName: "parent" },
@@ -112,7 +121,7 @@ const Cities = () => {
     div && div.classList.remove("active");
   });
   const [form, setForm] = useState({
-    parent: "Governorate",
+    parent: "",
     parentId: "",
     name: "",
   });
@@ -123,7 +132,7 @@ const Cities = () => {
       ref.current.focus();
       setForm(update);
     } else {
-      setForm({ parent: "Governorate", parentId: "", name: "" });
+      setForm({ parent: "", parentId: "", name: "" });
     }
   }, [update]);
 
@@ -176,7 +185,9 @@ const Cities = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.parentId) {
+    if (!form.parent) {
+      return setError(`please select parent`);
+    } else if (!form.parentId) {
       return setError(`please select ${form.parent}`);
     }
     setFormLoading(true);
@@ -218,6 +229,37 @@ const Cities = () => {
     setReset(true);
   }, [setReset, form.parent]);
 
+  const optionInputs = useMemo(() => {
+    const arrayOfOptionsInput = [
+      {
+        name: "parent",
+        label: "parent",
+        placeholder: "select parent",
+        options: [
+          {
+            onSelectOption: () =>
+              setForm({ ...form, parent: "Governorate", parentId: "" }),
+            text: "Governorate",
+          },
+          {
+            text: "County",
+            onSelectOption: () =>
+              setForm({ ...form, parent: "County", parentId: "" }),
+          },
+        ],
+      },
+    ];
+    return arrayOfOptionsInput.map((input) => (
+      <SelectOptionInput
+        key={input.name}
+        label={input.label}
+        placeholder={input.placeholder}
+        value={form[input.name]}
+        onIgnore={() => setForm({ ...form, [input.name]: "" })}
+        options={input.options}
+      />
+    ));
+  }, [language, form]);
   return (
     <>
       {responseOverlay && (
@@ -233,40 +275,34 @@ const Cities = () => {
                 ? language?.city?.update_city
                 : language?.city?.add_new_city}
             </h1>
-            <label htmlFor="name">{language?.city?.city_name}</label>
-            <input
+            <InputWithLabel
+              label={language?.city?.city_name}
               ref={ref}
-              className="inp"
               required
               placeholder={language?.city?.city_name_placeholder}
               value={form.name}
-              type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
             />
-            <label> parent </label>
-            <select
-              className="inp"
-              value={form.parent}
-              onChange={(e) =>
-                setForm({ ...form, parent: e.target.value, parentId: "" })
-              }
-            >
-              <option value="Governorate">Governorate</option>
-              <option value="County">County</option>
-            </select>
-            <SelectInputApi
-              fetchData={getInfinityFeatchApis}
-              selectLabel={`select ${form.parent}`}
-              optionLabel={(option) => option?.name}
-              onChange={(option) => setForm({ ...form, parentId: option })}
-              onIgnore={() => setForm({ ...form, parentId: "" })}
-              url={form.parent === "Governorate" ? "Governorates" : "Counties"}
-              label={form.parent}
-              value={form?.parentId?.name}
-              reset={reset}
-              setReset={setReset}
-            />
+
+            {optionInputs}
+
+            {form.parent && (
+              <SelectInputApi
+                fetchData={getInfinityFeatchApis}
+                selectLabel={`select ${form.parent}`}
+                optionLabel={(option) => option?.name}
+                onChange={(option) => setForm({ ...form, parentId: option })}
+                onIgnore={() => setForm({ ...form, parentId: "" })}
+                url={
+                  form.parent === "Governorate" ? "Governorates" : "Counties"
+                }
+                label={form.parent}
+                value={form?.parentId?.name}
+                reset={reset}
+                setReset={setReset}
+              />
+            )}
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>

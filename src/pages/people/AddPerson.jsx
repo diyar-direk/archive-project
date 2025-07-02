@@ -1,25 +1,21 @@
-import React, { useContext, useRef, useState } from "react";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import "../../components/form/form.css";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
-import FormSelect from "../../components/form/FormSelect";
 import useLanguage from "../../hooks/useLanguage";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
+import SelectOptionInput from "../../components/inputs/SelectOptionInput";
+
 const AddPerson = () => {
   const [loading, setLoading] = useState(false);
-  const handleClick = (e) => {
-    e.stopPropagation();
-    const divs = document.querySelectorAll("div.form .selecte .inp.active");
-    divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
-    e.target.classList.toggle("active");
-  };
+
   const context = useContext(Context);
   const token = context.userDetails.token;
-  window.addEventListener("click", () => {
-    const selectDiv = document.querySelector("div.form .selecte .inp.active");
-    selectDiv && selectDiv.classList.remove("active");
-  });
+
   const { language } = useLanguage();
 
   const [error, setError] = useState(false);
@@ -37,7 +33,8 @@ const AddPerson = () => {
     placeOfBirth: "",
     occupation: "",
     countryId: "",
-    governmentId: "",
+    governorateId: "",
+    countyId: "",
     cityId: "",
     villageId: "",
     regionId: "",
@@ -50,16 +47,8 @@ const AddPerson = () => {
     sources: "",
   });
 
-  const ignoreSelect = (e) => {
-    setForm({ ...form, [e.target.title]: "" });
-  };
-
   const handleForm = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
-    error && setError(false);
-  };
-  const handleFormSelect = (e, itm) => {
-    setForm({ ...form, [e.target.id]: itm });
     error && setError(false);
   };
 
@@ -87,9 +76,6 @@ const AddPerson = () => {
       setError(language?.error?.please_selecet_maritalStatus);
     else if (!form.gender) setError(language?.error?.please_selecet_gender);
     else if (!form.countryId) setError(language?.error?.please_selecet_country);
-    else if (!form.governmentId)
-      setError(language?.error?.please_selecet_government);
-    else if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
     else if (!form.sources) setError(language?.error?.please_selecet_source);
     else {
@@ -131,7 +117,8 @@ const AddPerson = () => {
             placeOfBirth: "",
             occupation: "",
             countryId: "",
-            governmentId: "",
+            governorateId: "",
+            countyId: "",
             cityId: "",
             villageId: "",
             regionId: "",
@@ -153,6 +140,177 @@ const AddPerson = () => {
       }
     }
   };
+
+  const handleParentChange = useCallback(
+    (name, option) => {
+      const updated = { ...form };
+
+      if (name === "countryId") {
+        if (updated.countyId?.country !== option._id) updated.countyId = "";
+        if (updated.governorateId?.country !== option._id)
+          updated.governorateId = "";
+        if (updated.cityId?.country !== option._id) updated.cityId = "";
+        updated.streetId = "";
+        updated.regionId = "";
+        updated.villageId = "";
+      }
+
+      if (name === "countyId") {
+        if (updated.cityId?.county !== option._id) updated.cityId = "";
+        updated.streetId = "";
+        updated.regionId = "";
+        updated.villageId = "";
+        updated.countryId = option.country;
+      }
+
+      if (name === "governorateId") {
+        if (updated.cityId?.governorate !== option._id) updated.cityId = "";
+        updated.streetId = "";
+        updated.regionId = "";
+        updated.villageId = "";
+        updated.countryId = option.country;
+      }
+
+      if (name === "cityId") {
+        if (updated.streetId?.city !== option._id) updated.streetId = "";
+        if (updated.regionId?.city !== option._id) updated.regionId = "";
+        if (updated.villageId?.city !== option._id) updated.villageId = "";
+        const parentDataUpdate =
+          option.parent === "Governorate"
+            ? { governorateId: option.parentId, countyId: "" }
+            : { countyId: option.parentId, governorateId: "" };
+        Object.assign(updated, parentDataUpdate);
+      }
+
+      updated[name] = option;
+      setForm(updated);
+    },
+    [form]
+  );
+
+  const addressesFApisForm = useMemo(() => {
+    const arrayOfApis = [
+      {
+        name: "countryId",
+        label: "country",
+        onChange: (option) => handleParentChange("countryId", option),
+        url: "Countries",
+      },
+      {
+        name: "countyId",
+        label: "county",
+        onChange: (option) => handleParentChange("countyId", option),
+        url: "Counties",
+      },
+      {
+        label: "Government",
+        name: "governorateId",
+        onChange: (option) => handleParentChange("governorateId", option),
+        url: "Governorates",
+      },
+      {
+        name: "cityId",
+        label: "city",
+        onChange: (option) => handleParentChange("cityId", option),
+        url: "Cities",
+      },
+      {
+        name: "streetId",
+        label: "street",
+        onChange: (option) =>
+          setForm((prev) => ({
+            ...prev,
+            streetId: option,
+          })),
+        url: "Streets",
+      },
+      {
+        name: "regionId",
+        label: "region",
+        onChange: (option) =>
+          setForm((prev) => ({
+            ...prev,
+            regionId: option,
+          })),
+        url: "Regions",
+      },
+      {
+        name: "villageId",
+        label: "village",
+        onChange: (option) =>
+          setForm((prev) => ({
+            ...prev,
+            villageId: option,
+          })),
+        url: "Villages",
+      },
+    ];
+
+    return arrayOfApis.map((input) => (
+      <SelectInputApi
+        key={input.name}
+        fetchData={getInfinityFeatchApis}
+        selectLabel={`select ${input.label}`}
+        label={input.label}
+        optionLabel={(option) => option?.name}
+        onChange={input.onChange}
+        value={form[input.name]?.name}
+        onIgnore={() => setForm({ ...form, [input.name]: "" })}
+        url={input.url}
+      />
+    ));
+  }, [form, handleParentChange]);
+
+  const optionInputs = useMemo(() => {
+    const arrayOfOptionsInput = [
+      {
+        name: "gender",
+        label: language?.people?.gender,
+        placeholder: language?.people?.select_gender,
+        options: [
+          {
+            onSelectOption: () => setForm({ ...form, gender: "Male" }),
+            text: language?.people?.male,
+          },
+          {
+            text: language?.people?.female,
+            onSelectOption: () => setForm({ ...form, gender: "Female" }),
+          },
+        ],
+      },
+      {
+        name: "maritalStatus",
+        label: language?.people?.marital_status,
+        placeholder: language?.people?.select_marital_status,
+        options: [
+          {
+            onSelectOption: () =>
+              setForm({ ...form, maritalStatus: "Married" }),
+            text: language?.people?.married,
+          },
+          {
+            text: language?.people?.single,
+            onSelectOption: () => setForm({ ...form, maritalStatus: "Single" }),
+          },
+          {
+            text: language?.people?.other,
+            onSelectOption: () => setForm({ ...form, maritalStatus: "Other" }),
+          },
+        ],
+      },
+    ];
+
+    return arrayOfOptionsInput.map((input) => (
+      <SelectOptionInput
+        key={input.name}
+        label={input.label}
+        placeholder={input.placeholder}
+        value={form[input.name]}
+        onIgnore={() => setForm({ ...form, [input.name]: "" })}
+        options={input.options}
+      />
+    ));
+  }, [language, form]);
 
   return (
     <>
@@ -187,252 +345,103 @@ const AddPerson = () => {
         <div className="form">
           <h1>{language?.people?.personal_information}</h1>
           <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="firstName">{language?.people?.first_name}</label>
-              <input
-                required
-                type="text"
-                id="firstName"
-                className="inp"
-                value={form.firstName}
-                onChange={handleForm}
-                placeholder={language?.people?.first_name_placeholder}
-              />
-            </div>
+            <InputWithLabel
+              label={language?.people?.first_name}
+              placeholder={language?.people?.first_name_placeholder}
+              required
+              id="firstName"
+              value={form.firstName}
+              onChange={handleForm}
+            />
+            <InputWithLabel
+              label={language?.people?.father_name}
+              required
+              value={form.fatherName}
+              onChange={handleForm}
+              id="fatherName"
+              placeholder={language?.people?.father_name_placeholder}
+            />
+            <InputWithLabel
+              label={language?.people?.last_name}
+              value={form.surName}
+              onChange={handleForm}
+              required
+              id="surName"
+              placeholder={language?.people?.last_name_placeholder}
+            />
 
-            <div className="flex flex-direction">
-              <label htmlFor="fatherName">
-                {language?.people?.father_name}
-              </label>
-              <input
-                required
-                value={form.fatherName}
-                onChange={handleForm}
-                type="text"
-                id="fatherName"
-                className="inp"
-                placeholder={language?.people?.father_name_placeholder}
-              />
-            </div>
+            {optionInputs}
 
-            <div className="flex flex-direction">
-              <label htmlFor="surName">{language?.people?.last_name}</label>
-              <input
-                value={form.surName}
-                onChange={handleForm}
-                required
-                type="text"
-                id="surName"
-                className="inp"
-                placeholder={language?.people?.last_name_placeholder}
-              />
-            </div>
-
-            <div className="flex flex-direction">
-              <label>{language?.people?.gender}</label>
-              <div className="selecte relative">
-                <div onClick={handleClick} className="inp">
-                  {language?.people?.select_gender}
-                </div>
-                <article>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="gender"
-                    title="Male"
-                  >
-                    {language?.people?.male}
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="gender"
-                    title="Female"
-                  >
-                    {language?.people?.female}
-                  </h2>
-                </article>
-              </div>
-              {form.gender && (
-                <span title="gender" onClick={ignoreSelect}>
-                  {form.gender}
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-direction">
-              <label>{language?.people?.marital_status}</label>
-              <div className="selecte relative">
-                <div onClick={handleClick} className="inp">
-                  {language?.people?.select_marital_status}
-                </div>
-                <article>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="maritalStatus"
-                    title="Married"
-                  >
-                    {language?.people?.married}
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="maritalStatus"
-                    title="Single"
-                  >
-                    {language?.people?.single}
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="maritalStatus"
-                    title="Other"
-                  >
-                    {language?.people?.other}
-                  </h2>
-                </article>
-              </div>
-              {form.maritalStatus && (
-                <span title="maritalStatus" onClick={ignoreSelect}>
-                  {form.maritalStatus}
-                </span>
-              )}
-            </div>
-
-            <div className="flex flex-direction">
-              <label htmlFor="motherName">
-                {" "}
-                {language?.people?.motherName}
-              </label>
-              <input
-                value={form.motherName}
-                onChange={handleForm}
-                required
-                type="text"
-                id="motherName"
-                className="inp"
-                placeholder={language?.people?.motherName_placeholder}
-              />
-            </div>
-
-            <div className="flex flex-direction">
-              <label htmlFor="birthDate">
-                {language?.people?.date_of_birth}
-              </label>
-              <input
-                value={form.birthDate}
-                onChange={handleForm}
-                required
-                type="date"
-                id="birthDate"
-                className="inp"
-              />
-            </div>
-
-            <div className="flex flex-direction">
-              <label htmlFor="placeOfBirth">
-                {language?.people?.place_of_birth}
-              </label>
-              <input
-                required
-                value={form.placeOfBirth}
-                onChange={handleForm}
-                type="text"
-                id="placeOfBirth"
-                className="inp"
-                placeholder={language?.people?.place_of_birth_placeholder}
-              />
-            </div>
-
-            <div className="flex flex-direction">
-              <label htmlFor="occupation">{language?.people?.occupation}</label>
-              <input
-                value={form.occupation}
-                onChange={handleForm}
-                required
-                type="text"
-                id="occupation"
-                className="inp"
-                placeholder={language?.people?.occupation_placeholder}
-              />
-            </div>
+            <InputWithLabel
+              label={language?.people?.motherName}
+              value={form.motherName}
+              onChange={handleForm}
+              required
+              id="motherName"
+              placeholder={language?.people?.motherName_placeholder}
+            />
+            <InputWithLabel
+              label={language?.people?.date_of_birth}
+              value={form.birthDate}
+              onChange={handleForm}
+              required
+              type="date"
+              id="birthDate"
+            />
+            <InputWithLabel
+              label={language?.people?.place_of_birth}
+              required
+              value={form.placeOfBirth}
+              onChange={handleForm}
+              id="placeOfBirth"
+              placeholder={language?.people?.place_of_birth_placeholder}
+            />
+            <InputWithLabel
+              label={language?.people?.occupation}
+              value={form.occupation}
+              onChange={handleForm}
+              required
+              id="occupation"
+              placeholder={language?.people?.occupation_placeholder}
+            />
           </div>
         </div>
 
         <div className="form">
           <h1>{language?.people?.adress_information}</h1>
           <div className="flex wrap">
-            <FormSelect
-              formKey="country"
-              error={{ error, setError }}
-              form={{ form, setForm }}
+            {addressesFApisForm}
+            <InputWithLabel
+              label={language?.people?.extra_adress_details}
+              value={form.addressDetails}
+              onChange={handleForm}
+              placeholder={language?.people?.extra_adress_details_placeholder}
+              id="addressDetails"
+              rows={4}
+              writebelType="textarea"
             />
-            <FormSelect
-              formKey="city"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="government"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="village"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-            <FormSelect
-              formKey="region"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-            <FormSelect
-              formKey="street"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <div className="flex flex-direction">
-              <label htmlFor="addressDetails">
-                {language?.people?.extra_adress_details}
-              </label>
-              <textarea
-                value={form.addressDetails}
-                onChange={handleForm}
-                className="inp"
-                placeholder={language?.people?.extra_adress_details_placeholder}
-                id="addressDetails"
-                rows={4}
-              ></textarea>
-            </div>
           </div>
         </div>
 
         <div className="form">
           <h1>contact informations</h1>
           <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="phone">{language?.people?.phone}</label>
-              <input
-                required
-                value={form.phone}
-                onChange={handleForm}
-                type="text"
-                id="phone"
-                className="inp"
-                placeholder={language?.people?.phone_placeholder}
-              />
-            </div>
-            <div className="flex flex-direction">
-              <label htmlFor="email">{language?.people?.email}</label>
-              <input
-                value={form.email}
-                onChange={handleForm}
-                type="email"
-                id="email"
-                className="inp"
-                placeholder={language?.people?.email_placeholder}
-              />
-            </div>
+            <InputWithLabel
+              label={language?.people?.phone}
+              required
+              value={form.phone}
+              onChange={handleForm}
+              id="phone"
+              placeholder={language?.people?.phone_placeholder}
+            />
+            <InputWithLabel
+              label={language?.people?.email}
+              value={form.email}
+              onChange={handleForm}
+              type="email"
+              id="email"
+              placeholder={language?.people?.email_placeholder}
+            />
           </div>
         </div>
 
@@ -440,16 +449,26 @@ const AddPerson = () => {
           <h1>{language?.people?.more_information}</h1>
           <div className="flex wrap">
             {context.userDetails.isAdmin && (
-              <FormSelect
-                formKey="section"
-                error={{ error, setError }}
-                form={{ form, setForm }}
+              <SelectInputApi
+                fetchData={getInfinityFeatchApis}
+                selectLabel="section"
+                label="section"
+                optionLabel={(option) => option?.name}
+                onChange={(option) => setForm({ ...form, sectionId: option })}
+                value={form.sectionId.name}
+                onIgnore={() => setForm({ ...form, sectionId: "" })}
+                url="Sections"
               />
             )}
-            <FormSelect
-              formKey="sources"
-              error={{ error, setError }}
-              form={{ form, setForm }}
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel="select source"
+              label="source"
+              optionLabel={(option) => option?.source_name}
+              onChange={(option) => setForm({ ...form, sources: option })}
+              value={form.sources.source_name}
+              onIgnore={() => setForm({ ...form, sources: "" })}
+              url="Sources"
             />
           </div>
         </div>

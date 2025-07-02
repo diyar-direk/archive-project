@@ -9,6 +9,7 @@ import Loading from "../../components/loading/Loading";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 
 const columns = [
   { name: "name", headerName: "name", sort: true },
@@ -159,8 +160,8 @@ const Counties = () => {
   }, [update]);
   const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
-    if (!form.country) return setError("please select country");
     e.preventDefault();
+    if (!form.country) return setError("please select country");
     setFormLoading(true);
     try {
       if (update) {
@@ -185,6 +186,7 @@ const Counties = () => {
 
       setForm({ name: "", country: "" });
       getData();
+      setError(false);
     } catch (error) {
       console.log(error);
       if (error.status === 400) responseFun("reapeted data");
@@ -194,7 +196,8 @@ const Counties = () => {
     }
   };
   const [beforeFiltering, setBeforeFiltering] = useState({
-    date: { from: "", to: "", country: "" },
+    date: { from: "", to: "" },
+    country: "",
   });
 
   return (
@@ -215,17 +218,17 @@ const Counties = () => {
                 ? "language?.Counties?.update_Counties"
                 : "language?.Counties?.add_new_Counties"}
             </h1>
-            <label htmlFor="name">{"language?.Counties?.Counties_name"}</label>
-            <input
+
+            <InputWithLabel
+              label={"language?.Counties?.Counties_name"}
               ref={ref}
-              className="inp"
               required
               placeholder={"language?.Counties?.Counties_name_placeholder"}
               value={form.name}
-              type="text"
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
             />
+
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
               selectLabel="select country"

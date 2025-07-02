@@ -1,19 +1,13 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
-import useFeatchData from "../../hooks/useFeatchData";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   {
@@ -212,17 +206,17 @@ const Countries = () => {
                 ? language?.country?.update_country
                 : language?.country?.add_new_country}
             </h1>
-            <label htmlFor="name">{language?.country?.country_name}</label>
-            <input
+
+            <InputWithLabel
               ref={ref}
-              className="inp"
+              label={language?.country?.country_name}
               required
               placeholder={language?.country?.country_name_placeholder}
               value={name}
-              type="text"
               onInput={(e) => setName(e.target.value)}
               id="name"
             />
+
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
                 {update ? language?.country?.save : language?.country?.add_btn}
