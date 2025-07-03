@@ -75,7 +75,7 @@ const AddPerson = () => {
     if (!form.maritalStatus)
       setError(language?.error?.please_selecet_maritalStatus);
     else if (!form.gender) setError(language?.error?.please_selecet_gender);
-    else if (!form.countryId) setError(language?.error?.please_selecet_country);
+    else if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
     else if (!form.sources) setError(language?.error?.please_selecet_source);
     else {
@@ -144,44 +144,19 @@ const AddPerson = () => {
   const handleParentChange = useCallback(
     (name, option) => {
       const updated = { ...form };
-
-      if (name === "countryId") {
-        if (updated.countyId?.country !== option._id) updated.countyId = "";
-        if (updated.governorateId?.country !== option._id)
-          updated.governorateId = "";
-        if (updated.cityId?.country !== option._id) updated.cityId = "";
-        updated.streetId = "";
-        updated.regionId = "";
-        updated.villageId = "";
-      }
-
-      if (name === "countyId") {
-        if (updated.cityId?.county !== option._id) updated.cityId = "";
-        updated.streetId = "";
-        updated.regionId = "";
-        updated.villageId = "";
-        updated.countryId = option.country;
-      }
-
-      if (name === "governorateId") {
-        if (updated.cityId?.governorate !== option._id) updated.cityId = "";
-        updated.streetId = "";
-        updated.regionId = "";
-        updated.villageId = "";
-        updated.countryId = option.country;
-      }
-
       if (name === "cityId") {
-        if (updated.streetId?.city !== option._id) updated.streetId = "";
-        if (updated.regionId?.city !== option._id) updated.regionId = "";
-        if (updated.villageId?.city !== option._id) updated.villageId = "";
+        if (updated.streetId?.city?._id !== option._id) updated.streetId = "";
+        if (updated.regionId?.city?._id !== option._id) updated.regionId = "";
+        if (updated.villageId?.city?._id !== option._id) updated.villageId = "";
         const parentDataUpdate =
           option.parent === "Governorate"
             ? { governorateId: option.parentId, countyId: "" }
             : { countyId: option.parentId, governorateId: "" };
         Object.assign(updated, parentDataUpdate);
       }
-
+      if (name !== "cityId") {
+        updated.cityId = option.city;
+      }
       updated[name] = option;
       setForm(updated);
     },
@@ -191,57 +166,23 @@ const AddPerson = () => {
   const addressesFApisForm = useMemo(() => {
     const arrayOfApis = [
       {
-        name: "countryId",
-        label: "country",
-        onChange: (option) => handleParentChange("countryId", option),
-        url: "Countries",
-      },
-      {
-        name: "countyId",
-        label: "county",
-        onChange: (option) => handleParentChange("countyId", option),
-        url: "Counties",
-      },
-      {
-        label: "Government",
-        name: "governorateId",
-        onChange: (option) => handleParentChange("governorateId", option),
-        url: "Governorates",
-      },
-      {
         name: "cityId",
         label: "city",
-        onChange: (option) => handleParentChange("cityId", option),
         url: "Cities",
       },
       {
         name: "streetId",
         label: "street",
-        onChange: (option) =>
-          setForm((prev) => ({
-            ...prev,
-            streetId: option,
-          })),
         url: "Streets",
       },
       {
         name: "regionId",
         label: "region",
-        onChange: (option) =>
-          setForm((prev) => ({
-            ...prev,
-            regionId: option,
-          })),
         url: "Regions",
       },
       {
         name: "villageId",
         label: "village",
-        onChange: (option) =>
-          setForm((prev) => ({
-            ...prev,
-            villageId: option,
-          })),
         url: "Villages",
       },
     ];
@@ -253,7 +194,7 @@ const AddPerson = () => {
         selectLabel={`select ${input.label}`}
         label={input.label}
         optionLabel={(option) => option?.name}
-        onChange={input.onChange}
+        onChange={(option) => handleParentChange(input.name, option)}
         value={form[input.name]?.name}
         onIgnore={() => setForm({ ...form, [input.name]: "" })}
         url={input.url}
