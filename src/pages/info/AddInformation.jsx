@@ -1,25 +1,23 @@
-import React, { useContext, useRef, useState } from "react";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import "../../components/form/form.css";
 import "./information.css";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
-import People from "./../people/People";
-import { Link } from "react-router-dom";
 import FormSelect from "../../components/form/FormSelect";
 import DocumentsShow from "./DocumentsShow";
 import useLanguage from "../../hooks/useLanguage";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getPeopleApi } from "../people/api";
+import SelectOptionInput from "../../components/inputs/SelectOptionInput";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 const AddInformation = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const [loading, setLoading] = useState(false);
   const { language } = useLanguage();
-
-  window.addEventListener("click", () => {
-    const selectDiv = document.querySelector("div.form .selecte .inp.active");
-    selectDiv && selectDiv.classList.remove("active");
-  });
 
   const [error, setError] = useState(false);
 
@@ -44,10 +42,7 @@ const AddInformation = () => {
     events: [],
     parties: [],
   });
-  const handleFormSelect = (e, itm) => {
-    setForm({ ...form, [e.target.id]: itm });
-    error && setError(false);
-  };
+
   const handleForm = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
     error && setError(false);
@@ -225,20 +220,6 @@ const AddInformation = () => {
     }
   };
 
-  const deSelect = (id) => {
-    setForm({ ...form, people: form.people.filter((e) => e._id !== id._id) });
-  };
-
-  const handleClick = (e) => {
-    e.stopPropagation();
-    const divs = document.querySelectorAll("div.form .selecte .inp.active");
-    divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
-    e.target.classList.toggle("active");
-  };
-  const ignoreSelect = (e) => {
-    setForm({ ...form, [e.target.title]: "" });
-  };
-
   const removeDuplicates = (filesArray) => {
     const fileMap = new Map();
     filesArray.forEach((file) => {
@@ -272,65 +253,151 @@ const AddInformation = () => {
     }));
   };
 
+  const multiSelectInput = useCallback(
+    (itm, name) => {
+      const oldItems = form[name] || [];
+      const alreadyExists = oldItems.some((oldItm) => oldItm._id === itm._id);
+      if (alreadyExists) return;
+      setForm({ ...form, [name]: [...oldItems, itm] });
+    },
+    [form]
+  );
+  const ignoreMultiSelectInput = useCallback(
+    (itm, name) => {
+      const oldItems = form[name] || [];
+      console.log(itm);
+
+      const updatedItems = oldItems.filter(
+        (element) => element._id !== itm._id
+      );
+      setForm({ ...form, [name]: updatedItems });
+    },
+    [form]
+  );
+
+  const credibilityOptions = useMemo(() => {
+    const arrayOfOptionsInput = [
+      {
+        name: "source_credibility",
+        label: language?.information?.credibility,
+        placeholder: `select ${language?.information?.select_credibility}`,
+        options: [
+          {
+            onSelectOption: () =>
+              setForm({ ...form, source_credibility: "High" }),
+            text: language?.information?.high,
+          },
+          {
+            text: language?.information?.medium,
+            onSelectOption: () =>
+              setForm({ ...form, source_credibility: "Medium" }),
+          },
+          {
+            text: language?.information?.low,
+            onSelectOption: () =>
+              setForm({ ...form, source_credibility: "Low" }),
+          },
+        ],
+      },
+    ];
+
+    return arrayOfOptionsInput.map((input) => (
+      <SelectOptionInput
+        key={input.name}
+        label={input.label}
+        placeholder={input.placeholder}
+        value={form[input.name]}
+        onIgnore={() => setForm({ ...form, [input.name]: "" })}
+        options={input.options}
+      />
+    ));
+  }, [language, form]);
+
+  const multiSelectInputs = useMemo(() => {
+    const arrayOfApis = [
+      {
+        name: "people",
+        label: "people",
+        selectLabel: "select people",
+        optionLabel: (option) => {
+          return `${option?.firstName} ${option?.surName}`;
+        },
+        fetchData: getPeopleApi,
+      },
+      {
+        name: "events",
+        label: "event",
+        selectLabel: "select events",
+        url: "Events",
+      },
+      {
+        name: "sources",
+        label: "source",
+        selectLabel: "select sources",
+        url: "Sources",
+        optionLabel: (option) => option.source_name,
+      },
+      {
+        name: "parties",
+        label: "party",
+        selectLabel: "select parties",
+        url: "Parties",
+      },
+    ];
+
+    return arrayOfApis.map((input) => (
+      <SelectInputApi
+        key={input.name}
+        label={input.label}
+        fetchData={input.fetchData ? input.fetchData : getInfinityFeatchApis}
+        selectLabel={input.selectLabel}
+        optionLabel={
+          input.optionLabel ? input.optionLabel : (option) => option?.name
+        }
+        onChange={(option) => multiSelectInput(option, input.name)}
+        onIgnore={(option) => ignoreMultiSelectInput(option, input.name)}
+        url={input.url}
+        isArray
+        value={form[input.name]}
+      />
+    ));
+  }, [form, multiSelectInput, ignoreMultiSelectInput]);
+
   return (
     <>
       {responseOverlay && (
-        <SendData data={language?.header?.information}  response={response.current} />
+        <SendData
+          data={language?.header?.information}
+          response={response.current}
+        />
       )}
       {loading && <Loading />}
       <h1 className="title"> {language?.header?.add_information}</h1>
-      <h2 className="text-capitalize font-color mb-10">
-        {language?.information?.select_people}
-      </h2>
-      <People workSpace="add_info align-center" people={{ setForm, form }} />
-      <div className="selected-people flex wrap gap-10">
-        <h2 className="text-capitalize font-color">{`${
-          language?.information?.people_selected
-        } : ${
-          form.people.length <= 0 ? language?.information?.no_one : ""
-        }`}</h2>
-        {form.people.length > 0 &&
-          form.people.map((e) => (
-            <div key={e._id} className="center gap-10">
-              <Link
-                to={`/dashboard/people/${e._id}`}
-                className="center text-capitalize font-color"
-              >
-                {e.firstName} {e.surName}
-              </Link>
-              <i onClick={() => deSelect(e)} className="fa-solid fa-xmark"></i>
-            </div>
-          ))}
-      </div>
 
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form">
           <h1>{language?.information?.information} </h1>
           <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="subject">{language?.information?.subject}</label>
-              <textarea
-                required
-                value={form.subject}
-                onChange={handleForm}
-                className="inp"
-                placeholder={language?.information?.subject_placeholder}
-                id="subject"
-                rows={5}
-              ></textarea>
-            </div>
-            <div className="flex flex-direction">
-              <label htmlFor="note">{language?.information?.notes}</label>
-              <textarea
-                value={form.note}
-                onChange={handleForm}
-                required
-                className="inp"
-                placeholder={language?.information?.notes_placeholder}
-                id="note"
-                rows={5}
-              ></textarea>
-            </div>
+            <InputWithLabel
+              label={language?.information?.subject}
+              required
+              value={form.subject}
+              onChange={handleForm}
+              placeholder={language?.information?.subject_placeholder}
+              id="subject"
+              rows={5}
+              writebelType="textarea"
+            />
+            <InputWithLabel
+              label={language?.information?.notes}
+              value={form.note}
+              onChange={handleForm}
+              required
+              placeholder={language?.information?.notes_placeholder}
+              id="note"
+              rows={5}
+              writebelType="textarea"
+            />
           </div>
         </div>
 
@@ -380,21 +447,17 @@ const AddInformation = () => {
               form={{ form, setForm }}
             />
 
-            <div className="flex flex-direction">
-              <label htmlFor="addressDetails">
-                {language?.information?.extra_adress_details}
-              </label>
-              <textarea
-                value={form.addressDetails}
-                onChange={handleForm}
-                className="inp"
-                placeholder={
-                  language?.information?.extra_adress_details_placeholder
-                }
-                id="addressDetails"
-                rows={4}
-              ></textarea>
-            </div>
+            <InputWithLabel
+              label={language?.information?.extra_adress_details}
+              value={form.addressDetails}
+              onChange={handleForm}
+              placeholder={
+                language?.information?.extra_adress_details_placeholder
+              }
+              id="addressDetails"
+              rows={4}
+              writebelType="textarea"
+            />
           </div>
         </div>
 
@@ -402,69 +465,19 @@ const AddInformation = () => {
           <h1>{language?.information?.more_information}</h1>
           <div className="flex wrap">
             {context.userDetails.isAdmin && (
-              <FormSelect
-                formKey="section"
-                error={{ error, setError }}
-                form={{ form, setForm }}
+              <SelectInputApi
+                fetchData={getInfinityFeatchApis}
+                selectLabel="section"
+                label="section"
+                optionLabel={(option) => option?.name}
+                onChange={(option) => setForm({ ...form, sectionId: option })}
+                value={form.sectionId.name}
+                onIgnore={() => setForm({ ...form, sectionId: "" })}
+                url="Sections"
               />
             )}
-
-            <div className="flex flex-direction">
-              <label>{language?.information?.credibility}</label>
-              <div className="selecte relative">
-                <div onClick={handleClick} className="inp">
-                  {language?.information?.select_credibility}
-                </div>
-                <article>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="credibility"
-                    title="Low"
-                  >
-                    {language?.information?.low}
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="credibility"
-                    title="Medium"
-                  >
-                    {language?.information?.medium}
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="credibility"
-                    title="High"
-                  >
-                    {language?.information?.high}
-                  </h2>
-                </article>
-              </div>
-              {form.credibility && (
-                <span title="credibility" onClick={ignoreSelect}>
-                  {form.credibility}
-                </span>
-              )}
-            </div>
-
-            <FormSelect
-              formKey="events"
-              type="multi"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="parties"
-              type="multi"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-            <FormSelect
-              formKey="sources"
-              type="multi"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
+            {multiSelectInputs}
+            {credibilityOptions}
           </div>
         </div>
 
@@ -473,17 +486,15 @@ const AddInformation = () => {
             <label htmlFor="details">{language?.information?.details}</label>
           </h1>
           <div className="flex wrap">
-            <div className="flex flex-direction">
-              <textarea
-                value={form.details}
-                required
-                onChange={handleForm}
-                className="inp"
-                placeholder={language?.information?.details_placeholder}
-                id="details"
-                rows={6}
-              ></textarea>
-            </div>
+            <InputWithLabel
+              value={form.details}
+              required
+              onChange={handleForm}
+              placeholder={language?.information?.details_placeholder}
+              id="details"
+              rows={6}
+              writebelType="textarea"
+            />
           </div>
         </div>
 

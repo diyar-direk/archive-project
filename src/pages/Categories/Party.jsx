@@ -8,6 +8,7 @@ import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   {
@@ -203,17 +204,16 @@ const Party = () => {
                 ? language?.party?.update_party
                 : language?.party?.add_new_party}
             </h1>
-            <label htmlFor="name">{language?.party?.party_name}</label>
-            <input
+            <InputWithLabel
+              label={language?.party?.party_name}
               ref={ref}
-              className="inp"
               required
               placeholder={language?.party?.party_name_placeholder}
               value={name}
-              type="text"
               onInput={(e) => setName(e.target.value)}
               id="name"
             />
+
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
                 {update ? language?.party?.save : language?.party?.add_btn}

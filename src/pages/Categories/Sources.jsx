@@ -1,4 +1,11 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -10,6 +17,8 @@ import useLanguage from "../../hooks/useLanguage";
 import SourcesTabelFilters from "./SourcesTabelFilters";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
+import SelectOptionInput from "../../components/inputs/SelectOptionInput";
 const columns = [
   { name: "source_name", headerName: "source_name", sort: true },
   { name: "source_credibility", headerName: "source_credibility" },
@@ -171,7 +180,9 @@ const Sources = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.field) {
+    if (!form.source_credibility) {
+      return setError("please select source_credibility");
+    } else if (!form.field) {
       return setError("please select field");
     }
     setFormLoading(true);
@@ -198,6 +209,7 @@ const Sources = () => {
       }
 
       setForm({ source_name: "", source_credibility: "High", field: "" });
+      setError(false);
       getData();
     } catch (error) {
       console.log(error);
@@ -207,6 +219,44 @@ const Sources = () => {
       setFormLoading(false);
     }
   };
+
+  const sourceCredibilityOptions = useMemo(() => {
+    const arrayOfOptionsInput = [
+      {
+        name: "source_credibility",
+        label: language?.information?.credibility,
+        placeholder: `select ${language?.information?.select_credibility}`,
+        options: [
+          {
+            onSelectOption: () =>
+              setForm({ ...form, source_credibility: "High" }),
+            text: language?.information?.high,
+          },
+          {
+            text: language?.information?.medium,
+            onSelectOption: () =>
+              setForm({ ...form, source_credibility: "Medium" }),
+          },
+          {
+            text: language?.information?.low,
+            onSelectOption: () =>
+              setForm({ ...form, source_credibility: "Low" }),
+          },
+        ],
+      },
+    ];
+
+    return arrayOfOptionsInput.map((input) => (
+      <SelectOptionInput
+        key={input.name}
+        label={input.label}
+        placeholder={input.placeholder}
+        value={form[input.name]}
+        onIgnore={() => setForm({ ...form, [input.name]: "" })}
+        options={input.options}
+      />
+    ));
+  }, [language, form]);
 
   return (
     <>
@@ -223,29 +273,17 @@ const Sources = () => {
                 ? language?.source?.update_source
                 : language?.source?.add_new_source}
             </h1>
-            <label htmlFor="name">{language?.source?.source_name}</label>
-            <input
+            <InputWithLabel
+              label={language?.source?.source_name}
               ref={ref}
-              className="inp"
               required
               placeholder={language?.source?.source_name_placeholder}
               value={form.source_name}
-              type="text"
               onInput={(e) => setForm({ ...form, source_name: e.target.value })}
               id="name"
             />
-            <label> source credibility </label>
-            <select
-              className="inp"
-              value={form.source_credibility}
-              onChange={(e) =>
-                setForm({ ...form, source_credibility: e.target.value })
-              }
-            >
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
+
+            {sourceCredibilityOptions}
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
               selectLabel="select field"

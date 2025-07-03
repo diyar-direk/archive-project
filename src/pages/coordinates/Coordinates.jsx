@@ -212,6 +212,7 @@ const Coordinates = () => {
         />
       )}
       <Table
+        addPageUrl="add_coordinates"
         columns={columns}
         selectable={role === "admin"}
         loading={loading}

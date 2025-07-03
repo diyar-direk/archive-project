@@ -6,6 +6,7 @@ import { date } from "../../context/context";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   {
@@ -197,14 +198,12 @@ const Field = () => {
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
             <h1>{update ? "update_Fields" : "add_new_Fields"}</h1>
-            <label htmlFor="name">Fields_name</label>
-            <input
+            <InputWithLabel
+              label={"Fields_name"}
               ref={ref}
-              className="inp"
               required
               placeholder="Fields_name_placeholder"
               value={name}
-              type="text"
               onInput={(e) => setName(e.target.value)}
               id="name"
             />

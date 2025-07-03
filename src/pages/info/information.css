@@ -136,27 +136,6 @@ form .files .flex h4 {
 iframe {
   border: none;
 }
-.selected-people {
-  margin-bottom: 20px;
-}
-.selected-people a {
-  font-size: 20px;
-}
-.selected-people i {
-  background-color: #c70000;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: white;
-}
-.selected-people a:hover {
-  text-decoration: underline;
-}
 
 .people-cat {
   margin-bottom: 10px;
@@ -188,39 +167,11 @@ iframe {
 }
 
 @media (max-width: 1000px) {
-  .selected-people {
-    gap: 8px;
-  }
-  .selected-people h2 {
-    font-size: 20px;
-  }
-  .selected-people > div {
-    gap: 6px;
-  }
-  .selected-people a {
-    font-size: 17px;
-  }
-  .selected-people i {
-    font-size: 13px;
-    width: 18px;
-    height: 18px;
-  }
   form .grid-3 > div.docments {
     max-height: 310px;
   }
 }
 @media (max-width: 800px) {
-  .selected-people h2 {
-    font-size: 18px;
-    width: 100%;
-  }
-  .selected-people a {
-    font-size: 15px;
-  }
-  .selected-people i {
-    width: 17px;
-    height: 17px;
-  }
   form.dashboard-form > div.form > div .flex-direction label.document {
     min-height: 80px;
   }
@@ -251,16 +202,6 @@ iframe {
   }
 }
 @media (max-width: 550px) {
-  .selected-people h2 {
-    font-size: 17px;
-  }
-  .selected-people a {
-    font-size: 13px;
-  }
-  .selected-people i {
-    width: 16px;
-    height: 16px;
-  }
   form.dashboard-form > div.form > div .flex-direction label.document {
     min-height: 60px;
   }
@@ -285,17 +226,6 @@ iframe {
   }
 }
 @media (max-width: 450px) {
-  .selected-people h2 {
-    font-size: 16px;
-  }
-  .selected-people a {
-    font-size: 12px;
-  }
-  .selected-people i {
-    width: 14px;
-    height: 14px;
-    font-size: 11px;
-  }
   form .grid-3 > div.docments {
     max-height: 255px;
   }

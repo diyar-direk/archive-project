@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import "../../components/form/form.css";
 import FormSelect from "../../components/form/FormSelect";
 import Loading from "../../components/loading/Loading";
@@ -6,6 +6,9 @@ import SendData from "../../components/response/SendData";
 import axios from "axios";
 import { baseURL, Context } from "../../context/context";
 import useLanguage from "../../hooks/useLanguage";
+import SelectInputApi from "../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 
 const AddCoordinates = () => {
   const context = useContext(Context);
@@ -177,7 +180,10 @@ const AddCoordinates = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data={language?.header?.coordinates} response={response.current} />
+        <SendData
+          data={language?.header?.coordinates}
+          response={response.current}
+        />
       )}
       {loading && <Loading />}
       <form onSubmit={handleSubmit} className="dashboard-form">
@@ -282,36 +288,44 @@ const AddCoordinates = () => {
           </div>
         </div>
         <div className="form">
-          <h1>{language?.coordinates?.more_information}</h1>
+          <h1>{language?.people?.more_information}</h1>
           <div className="flex wrap">
             {context.userDetails.isAdmin && (
-              <FormSelect
-                formKey="section"
-                error={{ error, setError }}
-                form={{ form, setForm }}
+              <SelectInputApi
+                fetchData={getInfinityFeatchApis}
+                selectLabel="section"
+                label="section"
+                optionLabel={(option) => option?.name}
+                onChange={(option) => setForm({ ...form, sectionId: option })}
+                value={form.sectionId.name}
+                onIgnore={() => setForm({ ...form, sectionId: "" })}
+                url="Sections"
               />
             )}
-            <FormSelect
-              formKey="sources"
-              error={{ error, setError }}
-              form={{ form, setForm }}
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel="select source"
+              label="source"
+              optionLabel={(option) => option?.source_name}
+              onChange={(option) => setForm({ ...form, sources: option })}
+              value={form.sources.source_name}
+              onIgnore={() => setForm({ ...form, sources: "" })}
+              url="Sources"
             />
           </div>
         </div>
 
         <div className="form">
           <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="note">{language?.coordinates?.notes}</label>
-              <textarea
-                value={form.note}
-                onChange={(e) => setForm({ ...form, note: e.target.value })}
-                className="inp"
-                placeholder={language?.coordinates?.notes_placeholder}
-                id="note"
-                rows={5}
-              ></textarea>
-            </div>
+            <InputWithLabel
+              label={language?.coordinates?.notes}
+              value={form.note}
+              onChange={(e) => setForm({ ...form, note: e.target.value })}
+              placeholder={language?.coordinates?.notes_placeholder}
+              id="note"
+              rows={5}
+              writebelType="textarea"
+            />
           </div>
         </div>
         {error && <p className="error">{error}</p>}

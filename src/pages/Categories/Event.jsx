@@ -8,6 +8,7 @@ import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   {
@@ -210,17 +211,16 @@ const Event = () => {
                 ? language?.event?.update_event
                 : language?.event?.add_new_event}
             </h1>
-            <label htmlFor="name">{language?.event?.event_name}</label>
-            <input
+            <InputWithLabel
+              label={language?.event?.event_name}
               ref={ref}
-              className="inp"
               required
               placeholder={language?.event?.event_name_placeholder}
               value={name}
-              type="text"
               onInput={(e) => setName(e.target.value)}
               id="name"
             />
+
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
                 {update ? language?.event?.save : language?.event?.add_btn}

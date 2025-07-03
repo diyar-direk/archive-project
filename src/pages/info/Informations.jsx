@@ -261,6 +261,7 @@ const Informations = () => {
         />
       )}
       <Table
+        addPageUrl="add_information"
         columns={columns}
         selectable={role === "admin"}
         loading={loading}

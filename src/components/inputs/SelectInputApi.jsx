@@ -13,6 +13,7 @@ import useLanguage from "../../hooks/useLanguage";
  * @property {boolean} isTabelsFilter
  * @property {React.Dispatch<React.SetStateAction<boolean>>} setReset
  * @property {boolean} reset
+ * @property {boolean} isArray هل هناك اكثر من قيمة للادخال
  * @property {string} url
  * @property {string} tabelFilterIgnoreText
  * @param {Utils & React.HtmlHTMLAttributes<HTMLDivElement>} props
@@ -29,6 +30,7 @@ const SelectInputApi = ({
   url,
   tabelFilterIgnoreText,
   reset,
+  isArray,
   setReset,
   ...props
 }) => {
@@ -148,7 +150,19 @@ const SelectInputApi = ({
           {loading && <p className="font-color">{language?.table?.loading}</p>}
           {!hasMore && <p className="font-color">no more data</p>}
         </article>
-        {!isTabelsFilter && value && <span onClick={onIgnore}>{value}</span>}
+        {!isTabelsFilter && isArray && value.length > 0 ? (
+          <div className="flex selceted-itms">
+            {value.map((span) => (
+              <span onClick={() => onIgnore(span)} key={span._id}>
+                {optionLabel(span)}
+              </span>
+            ))}
+          </div>
+        ) : (
+          !isTabelsFilter &&
+          !isArray &&
+          value && <span onClick={onIgnore}>{value}</span>
+        )}
       </div>
     </div>
   );

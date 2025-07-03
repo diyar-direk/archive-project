@@ -7,6 +7,7 @@ import SendData from "./../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   {
@@ -205,14 +206,12 @@ const Sections = () => {
                 ? language?.section?.update_section
                 : language?.section?.add_new_section}
             </h1>
-            <label htmlFor="name">{language?.section?.section_name}</label>
-            <input
+            <InputWithLabel
+              label={language?.section?.section_name}
               ref={ref}
-              className="inp"
               required
               placeholder={language?.section?.section_name_placeholder}
               value={name}
-              type="text"
               onInput={(e) => setName(e.target.value)}
               id="name"
             />

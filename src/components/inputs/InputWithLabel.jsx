@@ -15,7 +15,7 @@ import { forwardRef } from "react";
 const InputWithLabel = ({ label, id, writebelType, ...props }, ref) => {
   return (
     <div className="flex flex-direction">
-      <label htmlFor={id}>{label}</label>
+      {label && <label htmlFor={id}>{label}</label>}
       {writebelType === "textarea" ? (
         <textarea
           {...props}
