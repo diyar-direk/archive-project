@@ -4,11 +4,9 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
-import FormSelect from "../../components/form/FormSelect";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getPeopleApi } from "../people/api";
-import { getInfinityFeatchApis } from "./../../infintyFeatchApis";
+import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
   const handleClick = (e) => {

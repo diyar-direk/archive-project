@@ -42,14 +42,21 @@ const SelectInputApi = ({
   const [search, setSearch] = useState("");
   const { language } = useLanguage();
   const observer = useRef(null);
-  const closeDiv = useCallback((e) => {
-    const article = e.currentTarget.closest("article");
-    if (!article) return;
-    const wrapperDiv = article.closest(".tabel-filter-select");
-    if (wrapperDiv?.children[0]) {
-      wrapperDiv?.children[0].classList.remove("active");
-    }
-  }, []);
+  const closeDiv = useCallback(
+    (e) => {
+      const article = e.currentTarget.closest("article");
+      if (!article) return;
+
+      const wrapperDiv = isTabelsFilter
+        ? article.closest(".tabel-filter-select")
+        : article.closest("div");
+
+      if (wrapperDiv?.children[0]) {
+        wrapperDiv?.children[0].classList.remove("active");
+      }
+    },
+    [isTabelsFilter]
+  );
 
   const handleClick = useCallback((e) => {
     e.stopPropagation();
@@ -140,7 +147,8 @@ const SelectInputApi = ({
               key={itm._id}
               onClick={(e) => {
                 onChange(itm);
-                if (isTabelsFilter) closeDiv(e);
+
+                closeDiv(e);
               }}
               ref={i === items.length - 1 ? lastElement : null}
             >
@@ -169,3 +177,7 @@ const SelectInputApi = ({
 };
 
 export default SelectInputApi;
+window.addEventListener("click", () => {
+  const selectDiv = document.querySelector("div.form .selecte .inp.active");
+  selectDiv && selectDiv.classList.remove("active");
+});

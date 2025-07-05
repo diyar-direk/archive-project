@@ -86,20 +86,3 @@ export default Provider;
 
 export const placeholder = `pleace write`;
 export const searchPlaceholder = `search for`;
-
-export const date = (dat) => {
-  const time = new Date(dat);
-  const birthDate = `${time.getFullYear()}-${
-    time.getMonth() + 1
-  }-${time.getDate()}`;
-  return birthDate;
-};
-
-export function nextJoin(array, obj) {
-  let text = "";
-  for (let i = 0; i < array?.length; i++) {
-    if (array[i + 1]) text += array[i][obj] + " , ";
-    else text += array[i][obj];
-  }
-  return text;
-}

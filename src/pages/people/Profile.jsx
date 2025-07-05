@@ -1,18 +1,13 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "./profile.css";
 import axios from "axios";
-import { baseURL, Context, date } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import MediaComponent from "../../components/MediaComponent";
 import useInfitFetch from "../../hooks/useInfitFetch";
 import useLanguage from "../../hooks/useLanguage";
+import { dateFormatter } from "../../utils/dateFormatter";
 const Profile = () => {
   const { id } = useParams();
   const [data, setData] = useState("");
@@ -253,7 +248,8 @@ const Profile = () => {
             <div className="flex">
               <h2>{language?.people?.place_date_of_birth}</h2>
               <p>
-                {data?.placeOfBirth} {data?.birthDate && date(data?.birthDate)}
+                {data?.placeOfBirth}{" "}
+                {data?.birthDate && dateFormatter(data?.birthDate)}
               </p>
             </div>
             <div className="flex">

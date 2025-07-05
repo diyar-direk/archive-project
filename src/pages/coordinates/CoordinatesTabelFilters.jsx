@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 
 const CoordinatesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});

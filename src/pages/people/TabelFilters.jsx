@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 
 const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();

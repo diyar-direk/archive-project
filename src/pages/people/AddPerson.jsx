@@ -6,9 +6,9 @@ import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import SelectOptionInput from "../../components/inputs/SelectOptionInput";
+import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 
 const AddPerson = () => {
   const [loading, setLoading] = useState(false);
@@ -144,19 +144,38 @@ const AddPerson = () => {
   const handleParentChange = useCallback(
     (name, option) => {
       const updated = { ...form };
+
       if (name === "cityId") {
         if (updated.streetId?.city?._id !== option._id) updated.streetId = "";
         if (updated.regionId?.city?._id !== option._id) updated.regionId = "";
         if (updated.villageId?.city?._id !== option._id) updated.villageId = "";
+
         const parentDataUpdate =
           option.parent === "Governorate"
             ? { governorateId: option.parentId, countyId: "" }
             : { countyId: option.parentId, governorateId: "" };
+
+        updated.countryId = option.parentId?.country;
+        Object.assign(updated, parentDataUpdate);
+      } else {
+        updated.cityId = option.city;
+
+        if (updated.streetId?.city?._id !== option.city._id)
+          updated.streetId = "";
+        if (updated.regionId?.city?._id !== option.city._id)
+          updated.regionId = "";
+        if (updated.villageId?.city?._id !== option.city._id)
+          updated.villageId = "";
+
+        const parentDataUpdate =
+          option.city.parent === "Governorate"
+            ? { governorateId: option.city.parentId, countyId: "" }
+            : { countyId: option.city.parentId, governorateId: "" };
+
+        updated.countryId = option.city.parentId.country;
         Object.assign(updated, parentDataUpdate);
       }
-      if (name !== "cityId") {
-        updated.cityId = option.city;
-      }
+
       updated[name] = option;
       setForm(updated);
     },

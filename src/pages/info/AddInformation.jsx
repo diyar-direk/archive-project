@@ -5,14 +5,13 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
-import FormSelect from "../../components/form/FormSelect";
 import DocumentsShow from "./DocumentsShow";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getPeopleApi } from "../people/api";
 import SelectOptionInput from "../../components/inputs/SelectOptionInput";
-import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
+import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 const AddInformation = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
@@ -78,9 +77,7 @@ const AddInformation = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.countryId) setError(language?.error?.select_country);
-    else if (!form.governmentId) setError(language?.error?.select_government);
-    else if (!form.cityId) setError(language?.error?.please_selecet_city);
+    if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
     else if (form.sources.length < 1)
       setError(language?.error?.please_selecet_source);
@@ -265,7 +262,6 @@ const AddInformation = () => {
   const ignoreMultiSelectInput = useCallback(
     (itm, name) => {
       const oldItems = form[name] || [];
-      console.log(itm);
 
       const updatedItems = oldItems.filter(
         (element) => element._id !== itm._id
@@ -278,24 +274,21 @@ const AddInformation = () => {
   const credibilityOptions = useMemo(() => {
     const arrayOfOptionsInput = [
       {
-        name: "source_credibility",
+        name: "credibility",
         label: language?.information?.credibility,
         placeholder: `select ${language?.information?.select_credibility}`,
         options: [
           {
-            onSelectOption: () =>
-              setForm({ ...form, source_credibility: "High" }),
+            onSelectOption: () => setForm({ ...form, credibility: "High" }),
             text: language?.information?.high,
           },
           {
             text: language?.information?.medium,
-            onSelectOption: () =>
-              setForm({ ...form, source_credibility: "Medium" }),
+            onSelectOption: () => setForm({ ...form, credibility: "Medium" }),
           },
           {
             text: language?.information?.low,
-            onSelectOption: () =>
-              setForm({ ...form, source_credibility: "Low" }),
+            onSelectOption: () => setForm({ ...form, credibility: "Low" }),
           },
         ],
       },
@@ -363,6 +356,86 @@ const AddInformation = () => {
     ));
   }, [form, multiSelectInput, ignoreMultiSelectInput]);
 
+  const handleParentChange = useCallback(
+    (name, option) => {
+      const updated = { ...form };
+
+      if (name === "cityId") {
+        if (updated.streetId?.city?._id !== option._id) updated.streetId = "";
+        if (updated.regionId?.city?._id !== option._id) updated.regionId = "";
+        if (updated.villageId?.city?._id !== option._id) updated.villageId = "";
+
+        const parentDataUpdate =
+          option.parent === "Governorate"
+            ? { governorateId: option.parentId, countyId: "" }
+            : { countyId: option.parentId, governorateId: "" };
+
+        updated.countryId = option.parentId?.country;
+        Object.assign(updated, parentDataUpdate);
+      } else {
+        updated.cityId = option.city;
+
+        if (updated.streetId?.city?._id !== option.city._id)
+          updated.streetId = "";
+        if (updated.regionId?.city?._id !== option.city._id)
+          updated.regionId = "";
+        if (updated.villageId?.city?._id !== option.city._id)
+          updated.villageId = "";
+
+        const parentDataUpdate =
+          option.city.parent === "Governorate"
+            ? { governorateId: option.city.parentId, countyId: "" }
+            : { countyId: option.city.parentId, governorateId: "" };
+
+        updated.countryId = option.city.parentId.country;
+        Object.assign(updated, parentDataUpdate);
+      }
+
+      updated[name] = option;
+      setForm(updated);
+    },
+    [form]
+  );
+
+  const addressesFApisForm = useMemo(() => {
+    const arrayOfApis = [
+      {
+        name: "cityId",
+        label: "city",
+        url: "Cities",
+      },
+      {
+        name: "streetId",
+        label: "street",
+        url: "Streets",
+      },
+      {
+        name: "regionId",
+        label: "region",
+        url: "Regions",
+      },
+      {
+        name: "villageId",
+        label: "village",
+        url: "Villages",
+      },
+    ];
+
+    return arrayOfApis.map((input) => (
+      <SelectInputApi
+        key={input.name}
+        fetchData={getInfinityFeatchApis}
+        selectLabel={`select ${input.label}`}
+        label={input.label}
+        optionLabel={(option) => option?.name}
+        onChange={(option) => handleParentChange(input.name, option)}
+        value={form[input.name]?.name}
+        onIgnore={() => setForm({ ...form, [input.name]: "" })}
+        url={input.url}
+      />
+    ));
+  }, [form, handleParentChange]);
+
   return (
     <>
       {responseOverlay && (
@@ -404,48 +477,7 @@ const AddInformation = () => {
         <div className="form">
           <h1>{language?.information?.adress}</h1>
           <div className="flex wrap">
-            <FormSelect
-              formKey="country"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="government"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="city"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="village"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="region"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="street"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
-
-            <FormSelect
-              formKey="coordinates"
-              type="multi"
-              error={{ error, setError }}
-              form={{ form, setForm }}
-            />
+            {addressesFApisForm}
 
             <InputWithLabel
               label={language?.information?.extra_adress_details}

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { baseURL } from "./context/context";
+import { baseURL } from "../context/context";
 
 const token = document.cookie.split("archive_cookie=")[1];
 

@@ -1,12 +1,13 @@
 import axios from "axios";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, date } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import Table from "./../../components/table/Table";
 import { Link } from "react-router-dom";
 import "./profile.css";
 import MediaComponent from "../../components/MediaComponent";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilters from "./TabelFilters";
+import { dateFormatter } from "../../utils/dateFormatter";
 
 const columns = [
   {
@@ -45,7 +46,7 @@ const columns = [
   {
     name: "birthDate",
     headerName: "birthDate",
-    getCell: (e) => date(e.birthDate),
+    getCell: (e) => dateFormatter(e.birthDate),
   },
   {
     name: "placeOfBirth",
@@ -110,13 +111,13 @@ const columns = [
     name: "createdAt",
     headerName: "createdAt",
     sort: true,
-    getCell: (row) => date(row.createdAt),
+    getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
     headerName: "updatedAt",
     sort: true,
-    getCell: (row) => date(row.updatedAt),
+    getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {

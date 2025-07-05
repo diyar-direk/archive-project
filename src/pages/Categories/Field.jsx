@@ -2,24 +2,24 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
-import { date } from "../../context/context";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
+import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   {
     name: "createdAt",
     headerName: "createdAt",
     sort: true,
-    getCell: (row) => date(row.createdAt),
+    getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
     headerName: "updatedAt",
     sort: true,
-    getCell: (row) => date(row.updatedAt),
+    getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {

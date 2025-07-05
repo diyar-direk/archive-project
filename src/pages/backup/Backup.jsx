@@ -2,18 +2,18 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
-import { date } from "../../context/context";
 import "./backup.css";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import { dateFormatter } from "./../../utils/dateFormatter";
 const columns = [
   { name: "root", headerName: "root" },
   {
     name: "createdAt",
     headerName: "createdAt",
     sort: true,
-    getCell: (e) => date(e.createdAt),
+    getCell: (e) => dateFormatter(e.createdAt),
   },
   {
     name: "useBackup",

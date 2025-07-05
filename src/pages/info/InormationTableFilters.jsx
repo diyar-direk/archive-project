@@ -3,7 +3,7 @@ import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getPeopleApi } from "../people/api";
-import { getInfinityFeatchApis } from "../../infintyFeatchApis";
+import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 
 const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();

@@ -9,16 +9,16 @@ import {
 import Table from "../../components/table/Table";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
-import { date } from "../../context/context";
 import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
 import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getInfinityFeatchApis } from "../../infintyFeatchApis";
 import CitiesFilters from "./CitiesFilters";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import SelectOptionInput from "../../components/inputs/SelectOptionInput";
+import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
+import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   { name: "name", headerName: "name", sort: true },
   { name: "parent", headerName: "parent" },
@@ -31,13 +31,13 @@ const columns = [
     name: "createdAt",
     headerName: "createdAt",
     sort: true,
-    getCell: (row) => date(row.createdAt),
+    getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
     headerName: "updatedAt",
     sort: true,
-    getCell: (row) => date(row.updatedAt),
+    getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
@@ -215,6 +215,7 @@ const Cities = () => {
 
       setForm({ ...form, parentId: "", name: "" });
       getData();
+      setError(false);
     } catch (error) {
       console.log(error);
       if (error.response?.status === 400) responseFun("reapeted data");

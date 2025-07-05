@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, date, nextJoin } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import Table from "./../../components/table/Table";
 import useLanguage from "../../hooks/useLanguage";
 import { Link } from "react-router-dom";
 import InormationTableFilters from "./InormationTableFilters";
+import { nextJoin } from "./../../utils/obejctJoin";
+import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {
     name: "subject",
@@ -118,13 +120,13 @@ const columns = [
     name: "createdAt",
     headerName: "createdAt",
     sort: true,
-    getCell: (row) => date(row.createdAt),
+    getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
     headerName: "updatedAt",
     sort: true,
-    getCell: (row) => date(row.updatedAt),
+    getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
@@ -149,7 +151,7 @@ const columns = [
                 <i className="fa-solid fa-trash"></i>
               </div>
               <Link
-                to={`/dashboard/update_person/${e._id}`}
+                to={`/dashboard/update_info/${e._id}`}
                 className="flex update"
               >
                 <i className="fa-regular fa-pen-to-square"></i>

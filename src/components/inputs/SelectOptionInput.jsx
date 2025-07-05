@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 /**
  * @typedef utils
@@ -22,10 +22,28 @@ const SelectOptionInput = ({
     divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
     e.target.classList.toggle("active");
   };
+  const closeDiv = useCallback((e) => {
+    const article = e.currentTarget.closest("article");
+    if (!article) return;
+
+    const wrapperDiv = article.closest("div");
+
+    if (wrapperDiv?.children[0]) {
+      wrapperDiv?.children[0].classList.remove("active");
+    }
+  }, []);
   const option = useMemo(
     () =>
       options?.map((opt) => (
-        <h2 onClick={opt.onSelectOption}> {opt?.text} </h2>
+        <h2
+          key={opt.text}
+          onClick={(e) => {
+            opt.onSelectOption();
+            closeDiv(e);
+          }}
+        >
+          {opt?.text}
+        </h2>
       )),
     [options]
   );
@@ -48,3 +66,7 @@ const SelectOptionInput = ({
 };
 
 export default SelectOptionInput;
+window.addEventListener("click", () => {
+  const selectDiv = document.querySelector("div.form .selecte .inp.active");
+  selectDiv && selectDiv.classList.remove("active");
+});

@@ -1,9 +1,10 @@
 import axios from "axios";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context, date } from "../../context/context";
+import { baseURL, Context } from "../../context/context";
 import Table from "./../../components/table/Table";
 import useLanguage from "../../hooks/useLanguage";
 import UsersTabelFilters from "./UsersTabelFilters";
+import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {
     name: "username",
@@ -28,13 +29,13 @@ const columns = [
   {
     name: "createdAt",
     headerName: "createdAt",
-    getCell: (e) => date(e.createdAt),
+    getCell: (e) => dateFormatter(e.createdAt),
     sort: true,
   },
   {
     name: "updatedAt",
     headerName: "updatedAt",
-    getCell: (e) => date(e.createdAt),
+    getCell: (e) => dateFormatter(e.createdAt),
     sort: true,
     hidden: true,
   },
