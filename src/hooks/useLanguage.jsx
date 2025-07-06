@@ -1,11 +1,22 @@
 import { useContext } from "react";
 import { Context } from "../context/context";
-
 const useLanguage = () => {
   const context = useContext(Context);
   const language = context?.selectedLang;
 
   const links = [
+    {
+      icon: "fa-solid fa-chart-column",
+      children: [
+        {
+          title: "status",
+          path: "status",
+          role: ["admin", "user"],
+        },
+      ],
+      title: "status",
+      role: ["admin", "user"],
+    },
     {
       icon: "fa-solid fa-user-group",
       children: [

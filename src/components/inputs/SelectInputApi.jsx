@@ -73,6 +73,7 @@ const SelectInputApi = ({
       const params = url ? { page, search, url } : { page, search };
       try {
         const result = await fetchData(params);
+        console.log(result);
         setItems((prev) => {
           const combined = [...prev, ...(result.data || [])];
           const uniqueMap = new Map();

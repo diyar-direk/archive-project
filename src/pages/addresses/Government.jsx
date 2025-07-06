@@ -4,6 +4,7 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "./../../components/response/SendData";
 import "../../components/form/form.css";
+import "../../components/form/form-select.css";
 import Loading from "../../components/loading/Loading";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";

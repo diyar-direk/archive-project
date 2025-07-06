@@ -194,7 +194,7 @@ const Table = ({
             className="table-form-icons"
           >
             <i className="fa-solid fa-plus" />
-            add data
+            <span>add data</span>
           </Link>
         )}
         <div

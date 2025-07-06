@@ -315,9 +315,7 @@ tbody tr:hover {
 }
 
 .pagination {
-  margin-top: 10px;
   gap: 10px;
-  margin-bottom: 20px;
 }
 .pagination .pagination-arrows {
   cursor: pointer;
@@ -365,7 +363,7 @@ div.table tbody td div.options {
 div.table tbody td div.options .visit i,
 div.table tbody td div.options div.delete i,
 div.table tbody td div.options .update i {
-  font-size: 17px;
+  font-size: 16px;
   cursor: pointer;
 }
 
@@ -407,6 +405,10 @@ div.table tbody td div.options .visit i {
   max-height: 250px;
   overflow-y: auto;
 }
+body.arabic .show-rows > article {
+  left: auto;
+  right: -100px;
+}
 .show-rows > article div {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -447,12 +449,17 @@ div.table tbody td div.options .visit i {
   opacity: 1;
   pointer-events: all;
 }
+.table-pagination {
+  white-space: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+}
 
 .table-pagination h2 {
   background-color: var(--body-color);
   padding: 10px;
   color: var(--font-color);
-  font-size: 20px;
+  font-size: 19px;
   font-weight: 600;
   border-radius: 4px;
 }
@@ -471,6 +478,18 @@ div.table tbody td div.options .visit i {
 }
 
 @media (max-width: 1050px) {
+  .show-rows > article {
+    left: -120px;
+  }
+  body.arabic .show-rows > article {
+    right: -120px;
+  }
+  .show-rows > article div label {
+    font-size: 16px;
+  }
+  .show-rows > article h4 {
+    font-size: 15px;
+  }
   div.table thead th {
     padding: 8px;
     font-size: 17px;
@@ -504,8 +523,44 @@ div.table tbody td div.options .visit i {
   .overlay .date-fltr {
     gap: 10px;
   }
+  div.table tbody td div.options .visit i,
+  div.table tbody td div.options div.delete i,
+  div.table tbody td div.options .update i {
+    font-size: 14px;
+  }
+  .table-pagination h2 {
+    font-size: 17px;
+  }
+  .pagination .pagination-arrows,
+  .table-pagination h2 {
+    padding: 8px;
+  }
+  .table-pagination h2 select,
+  .table-pagination h2 span {
+    font-size: 90%;
+  }
+  .table-search {
+    gap: 5px;
+  }
+  .table-search .table-form-icons {
+    padding: 4px;
+    font-size: 15px;
+    height: 40px;
+  }
+  .table-search .table-form-icons i {
+    font-size: 13px;
+  }
 }
 @media (max-width: 850px) {
+  .show-rows > article div label {
+    font-size: 15px;
+  }
+  .show-rows > article div input[type="checkbox"] {
+    height: 12px;
+  }
+  .show-rows > article h4 {
+    font-size: 14px;
+  }
   div.table thead th {
     font-size: 15px;
   }
@@ -570,6 +625,30 @@ div.table tbody td div.options .visit i {
   table th select {
     font-size: 13px;
   }
+  div.table thead th .sort {
+    font-size: 9px;
+  }
+  .table-pagination h2 {
+    font-size: 15px;
+  }
+  .pagination .pagination-arrows,
+  .table-pagination h2 {
+    padding: 7px;
+  }
+  div.table tbody td div.options .visit i,
+  div.table tbody td div.options div.delete i,
+  div.table tbody td div.options .update i {
+    font-size: 13px;
+  }
+  .pagination .pagination-arrows {
+    font-size: 12px;
+  }
+  .pagination {
+    gap: 5px;
+  }
+  .table-search .table-form-icons {
+    font-size: 14px;
+  }
 }
 @media (max-width: 650px) {
   div.table thead th {
@@ -613,6 +692,47 @@ div.table tbody td div.options .visit i {
 
   table th select {
     font-size: 11px;
+  }
+  .pagination .pagination-arrows,
+  .table-pagination h2 {
+    padding: 5px;
+  }
+  .pagination .pagination-arrows {
+    font-size: 11px;
+  }
+  .table-pagination h2 {
+    font-size: 14px;
+  }
+  .table-search .table-form-icons {
+    height: 33px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & span {
+      display: none;
+    }
+  }
+  .show-rows > article div {
+    gap: 5px;
+  }
+  .show-rows > article {
+    left: -145px;
+    width: 180px;
+    padding: 8px;
+    max-height: 200px;
+  }
+  body.arabic .show-rows > article {
+    right: -145px;
+  }
+  .show-rows > article input.search {
+    font-size: 12px;
+  }
+  .show-rows > article div label {
+    font-size: 13px;
+  }
+  .show-rows > article h4 {
+    font-size: 13px;
   }
 }
 
@@ -663,5 +783,28 @@ div.table tbody td div.options .visit i {
   }
   .delete-all i {
     font-size: 10px;
+  }
+  .table-pagination h2 {
+    font-size: 12px;
+  }
+  form.table-search > input {
+    font-size: 12px;
+  }
+  div.table tbody td div.options .visit i,
+  div.table tbody td div.options div.delete i,
+  div.table tbody td div.options .update i {
+    font-size: 12px;
+  }
+  div.table thead th .sort {
+    font-size: 8px;
+  }
+  .table-search .table-form-icons {
+    height: 29px;
+    width: 25px;
+    justify-content: center;
+  }
+  form.table-search .btn,
+  form.table-search > input {
+    height: 32px;
   }
 }

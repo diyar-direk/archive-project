@@ -35,6 +35,7 @@ import AccessDenied from "./components/response/AccessDenied";
 import ImageSearch from "./pages/people/ImageSearch";
 import Field from "./pages/Categories/Field";
 import Counties from "./pages/addresses/Counties";
+import BarChart from "./pages/status/InformationChart";
 
 function App() {
   const location = useLocation();
@@ -56,6 +57,8 @@ function App() {
                 <Route path="add_user" element={<AddUser />} />
                 <Route path="backup" element={<Backup />} />
               </Route>
+
+              <Route path="status" element={<BarChart />} />
               <Route path="people" element={<People />} />
               <Route path="people/:id" element={<Profile />} />
               <Route path="search_by_image" element={<ImageSearch />} />
