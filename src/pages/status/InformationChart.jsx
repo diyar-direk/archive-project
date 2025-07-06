@@ -1,51 +1,23 @@
 import axios from "axios";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { useContext, useEffect, useMemo, useState } from "react";
-
-import { Doughnut } from "react-chartjs-2";
+import "./status.css";
 import { baseURL, Context } from "../../context/context";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-const data = {
-  labels: ["أحمر", "أزرق", "أصفر"],
-  datasets: [
-    {
-      label: "النسبة المئوية",
-      data: [30, 40, 30],
-      backgroundColor: ["#f87171", "#60a5fa", "#facc15"],
-      borderColor: ["#fff", "#fff", "#fff"],
-      borderWidth: 2,
-    },
-  ],
-};
-
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: "bottom",
-    },
-  },
-};
+import DoughnutChart from "./DoughnutChart";
+import useLanguage from "./../../hooks/useLanguage";
+import Skeleton from "react-loading-skeleton";
+import StatusCountShow from "./StatusCountShow";
+import BarChart from "./BarChart";
 
 const DashboardCharts = () => {
   const [loading, setLoading] = useState(false);
   const context = useContext(Context);
   const token = context?.userDetails?.token;
-  const addressesEnum = {
-    countryCount: "country",
-    governorateCount: "governorate",
-    countyCount: "county",
-    cityCount: "city",
-    streetCount: "street",
-    regionCount: "region",
-    villageCount: "village",
-  };
+
   const [dataCount, setDataCount] = useState(null);
 
   useEffect(() => {
     const fetchDataCount = async () => {
+      setLoading(true);
       try {
         const { data } = await axios.get(
           `${baseURL}/Statistics/countDocuments`,
@@ -56,19 +28,60 @@ const DashboardCharts = () => {
         setDataCount(data.data);
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchDataCount();
   }, [token]);
 
-  return (
-    <div className="grid-2">
-      <div>
-        <h1>address</h1>
-        <Doughnut data={data} options={options} />
+  const { language } = useLanguage();
+  const dataEnum = useMemo(() => {
+    const addressesEnum = {
+      countryCount: "country",
+      governorateCount: "governorate",
+      countyCount: "county",
+      cityCount: "city",
+      streetCount: "street",
+      regionCount: "region",
+      villageCount: "village",
+    };
+    const categoriesEnum = {
+      sectionCount: "sections",
+      fieldCount: "fields",
+      sourceCount: "sources",
+      eventCount: "event",
+      partyCount: "parties",
+    };
+    return { addressesEnum, categoriesEnum };
+  }, [language]);
+
+  if (loading)
+    return (
+      <div className="grid-2">
+        <Skeleton height={"400px"} width={"100%"} />
+        <Skeleton height={"400px"} width={"100%"} />
       </div>
-    </div>
+    );
+  if (!dataCount) return <h1 className="error">error fetching data</h1>;
+
+  return (
+    <>
+      <StatusCountShow allData={dataCount} />
+      <div className="chart-card-container">
+        <BarChart
+          slices={dataEnum.categoriesEnum}
+          dataCount={dataCount}
+          title="categories"
+        />
+        <DoughnutChart
+          title="addresses"
+          slices={dataEnum.addressesEnum}
+          dataCount={dataCount}
+        />
+      </div>
+    </>
   );
 };
 export default DashboardCharts;

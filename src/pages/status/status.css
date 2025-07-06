@@ -1,0 +1,54 @@
+.status-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+
+  & div {
+    background: var(--body-color);
+    padding: 30px 20px;
+    border-radius: 4px;
+    box-shadow: var(--box-shadow);
+    border-bottom: solid 2px;
+    & i {
+      font-size: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    & h1 {
+      color: var(--font-color);
+      text-transform: capitalize;
+    }
+  }
+}
+.chart-card-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  & .bar {
+    flex: 40%;
+  }
+  & .doughnut {
+    flex: 20%;
+  }
+}
+.chart-container {
+  box-shadow: var(--box-shadow);
+  background: var(--body-color);
+  padding: 20px;
+  border-radius: 4px;
+  max-height: 550px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  & h1 {
+    text-transform: capitalize;
+    margin-top: 20px;
+    color: var(--font-color);
+  }
+}
