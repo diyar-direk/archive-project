@@ -7,6 +7,8 @@ import useLanguage from "./../../hooks/useLanguage";
 import Skeleton from "react-loading-skeleton";
 import StatusCountShow from "./StatusCountShow";
 import BarChart from "./BarChart";
+import LineChart from "./LineChart";
+import InformationStatisticsEnum from "./InfromationStatisticsEnum";
 
 const DashboardCharts = () => {
   const [loading, setLoading] = useState(false);
@@ -80,6 +82,7 @@ const DashboardCharts = () => {
           slices={dataEnum.addressesEnum}
           dataCount={dataCount}
         />
+        <InformationStatisticsEnum categoryType="source" chartType="bar" />
       </div>
     </>
   );

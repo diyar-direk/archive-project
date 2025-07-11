@@ -14,9 +14,10 @@ import { Bar } from "react-chartjs-2";
  * @property {string} title - النص الذي سيُعرض كـ label
  * @property {Array} slices - القطع التي ستظهر
  * @property {object} dataCount - جميع البيانات
+ * @property {Array} labels - تسميات القطع
+ * @property {Array} dataArray - بيانات القطع
  * @property {boolean} hideTotalCount
  */
-
 /**
  * @param {Utils} props
  */
@@ -27,17 +28,25 @@ const options = {
   responsive: true,
 };
 
-const BarChart = ({ slices, title, dataCount, hideTotalCount }) => {
+const BarChart = ({
+  slices,
+  title,
+  dataCount,
+  hideTotalCount,
+  labels,
+  dataArray,
+}) => {
   const borderColor = getComputedStyle(document.body)
     .getPropertyValue("--body-color")
     .trim();
 
   const data = {
-    labels: Object.entries(slices).map(([, label]) => label),
+    labels: labels || Object.entries(slices).map(([, label]) => label),
     datasets: [
       {
         label: "count",
-        data: Object.entries(slices)?.map(([key]) => dataCount[key]),
+        data:
+          dataArray || Object.entries(slices)?.map(([key]) => dataCount[key]),
         backgroundColor: [
           "rgba(255, 99, 132, 0.6)",
           "rgba(255, 159, 64, 0.6)",
