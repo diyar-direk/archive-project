@@ -9,6 +9,7 @@ import { Doughnut } from "react-chartjs-2";
  * @property {Array} labels - تسميات القطع
  * @property {Array} dataArray - بيانات القطع
  * @property {boolean} hideTotalCount
+ * @property {ReactNode} children - أي محتوى إضافي يمكن تمريره
  */
 
 /**
@@ -31,6 +32,7 @@ const DoughnutChart = ({
   hideTotalCount,
   labels,
   dataArray,
+  children,
 }) => {
   const borderColor = getComputedStyle(document.body)
     .getPropertyValue("--body-color")
@@ -51,6 +53,9 @@ const DoughnutChart = ({
           "rgba(54, 162, 235, 0.9)",
           "rgba(153, 102, 255,0.9)",
           "rgba(201, 203, 207,0.9)",
+          "rgba(5, 49, 75, 0.79)",
+          "rgba(214, 10, 10, 0.78)",
+          "rgba(48, 179, 59, 0.66)",
         ],
         borderColor: [borderColor],
         borderWidth: 2,
@@ -75,6 +80,7 @@ const DoughnutChart = ({
         </h1>
       )}
       <Doughnut data={data} options={options} />
+      {children}
     </div>
   );
 };

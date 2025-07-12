@@ -7,7 +7,6 @@ import useLanguage from "./../../hooks/useLanguage";
 import Skeleton from "react-loading-skeleton";
 import StatusCountShow from "./StatusCountShow";
 import BarChart from "./BarChart";
-import LineChart from "./LineChart";
 import InformationStatisticsEnum from "./InfromationStatisticsEnum";
 
 const DashboardCharts = () => {
@@ -59,30 +58,50 @@ const DashboardCharts = () => {
     return { addressesEnum, categoriesEnum };
   }, [language]);
 
-  if (loading)
-    return (
-      <div className="grid-2">
-        <Skeleton height={"400px"} width={"100%"} />
-        <Skeleton height={"400px"} width={"100%"} />
-      </div>
-    );
-  if (!dataCount) return <h1 className="error">error fetching data</h1>;
-
   return (
     <>
-      <StatusCountShow allData={dataCount} />
+      {!loading && dataCount && <StatusCountShow allData={dataCount} />}
       <div className="chart-card-container">
-        <BarChart
-          slices={dataEnum.categoriesEnum}
-          dataCount={dataCount}
-          title="categories"
+        {loading ? (
+          <div className="doughnut">
+            <Skeleton height={"400px"} width={"100%"} />
+          </div>
+        ) : (
+          dataCount && (
+            <>
+              <BarChart
+                slices={dataEnum.categoriesEnum}
+                dataCount={dataCount}
+                title="categories"
+              />
+              <DoughnutChart
+                title="addresses"
+                slices={dataEnum.addressesEnum}
+                dataCount={dataCount}
+              />
+            </>
+          )
+        )}
+        <InformationStatisticsEnum
+          categoryType="section"
+          chartType="doughnut"
+          title="information on section"
         />
-        <DoughnutChart
-          title="addresses"
-          slices={dataEnum.addressesEnum}
-          dataCount={dataCount}
+        <InformationStatisticsEnum
+          categoryType="source"
+          chartType="bar"
+          title="information on source"
         />
-        <InformationStatisticsEnum categoryType="source" chartType="bar" />
+        <InformationStatisticsEnum
+          categoryType="event"
+          chartType="bar"
+          title="information on event"
+        />
+        <InformationStatisticsEnum
+          categoryType="party"
+          chartType="doughnut"
+          title="information on party"
+        />
       </div>
     </>
   );

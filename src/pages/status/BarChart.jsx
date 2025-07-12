@@ -17,6 +17,7 @@ import { Bar } from "react-chartjs-2";
  * @property {Array} labels - تسميات القطع
  * @property {Array} dataArray - بيانات القطع
  * @property {boolean} hideTotalCount
+ * @property {ReactNode} children - أي محتوى إضافي يمكن تمريره
  */
 /**
  * @param {Utils} props
@@ -35,6 +36,7 @@ const BarChart = ({
   hideTotalCount,
   labels,
   dataArray,
+  children,
 }) => {
   const borderColor = getComputedStyle(document.body)
     .getPropertyValue("--body-color")
@@ -48,13 +50,16 @@ const BarChart = ({
         data:
           dataArray || Object.entries(slices)?.map(([key]) => dataCount[key]),
         backgroundColor: [
-          "rgba(255, 99, 132, 0.6)",
-          "rgba(255, 159, 64, 0.6)",
-          "rgba(255, 205, 86, 0.6)",
-          "rgba(75, 192, 192, 0.6)",
-          "rgba(54, 162, 235, 0.6)",
-          "rgba(153, 102, 255, 0.6)",
-          "rgba(201, 203, 207, 0.6)",
+          "rgba(255, 99, 132, 0.7)",
+          "rgba(255, 159, 64, 0.7)",
+          "rgba(255, 205, 86, 0.7)",
+          "rgba(75, 192, 192, 0.7)",
+          "rgba(54, 162, 235, 0.7)",
+          "rgba(153, 102, 255,0.7)",
+          "rgba(201, 203, 207,0.7)",
+          "rgba(5, 49, 75, 0.79)",
+          "rgba(214, 10, 10, 0.78)",
+          "rgba(48, 179, 59, 0.66)",
         ],
         borderColor: borderColor,
         borderWidth: 2,
@@ -79,6 +84,7 @@ const BarChart = ({
         </h1>
       )}
       <Bar data={data} options={options} />
+      {children}
     </div>
   );
 };

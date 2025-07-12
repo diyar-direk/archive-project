@@ -39,6 +39,7 @@
 .chart-container {
   box-shadow: var(--box-shadow);
   background: var(--body-color);
+  position: relative;
   padding: 20px;
   border-radius: 4px;
   max-height: 550px;
@@ -51,4 +52,41 @@
     margin-top: 20px;
     color: var(--font-color);
   }
+  .chart-pagination {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    & button {
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      background: var(--aside-color);
+      color: var(--font-color);
+      opacity: 0.9;
+      border: none;
+    }
+    & button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    & button:hover {
+      background: var(--main-color);
+      color: white;
+      opacity: 1;
+    }
+  }
+  & .no-data {
+    color: var(--font-color);
+    text-transform: capitalize;
+    position: absolute;
+  }
+}
+.chart-container:hover .chart-pagination {
+  opacity: 1;
 }
