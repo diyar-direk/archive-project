@@ -1,16 +1,31 @@
 .table-search {
   margin-bottom: 15px;
 }
-.table-search > input {
+.table-search label.search-container {
   flex: 1 1;
   padding: 8px;
   background: var(--body-color);
   border: solid 1px var(--border-color);
   border-radius: 4px;
-  font-size: 15px;
   box-shadow: var(--box-shadow);
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  & i {
+    position: absolute;
+    top: 50%;
+    opacity: 0.7;
+    transform: translateY(-50%);
+    color: var(--font-color);
+  }
+}
+.table-search label.search-container > input {
   color: var(--font-color);
+  border: none;
+  font-size: 15px;
   caret-color: var(--main-color);
+  flex: 1;
+  background: transparent;
 }
 
 .table-search .table-form-icons {
@@ -514,7 +529,7 @@ body.arabic .show-rows > article {
     gap: 5px;
   }
   form.table-search .btn,
-  form.table-search > input {
+  .table-search label.search-container {
     height: 40px;
   }
   .overlay .filters {
@@ -547,6 +562,7 @@ body.arabic .show-rows > article {
     font-size: 15px;
     height: 40px;
   }
+
   .table-search .table-form-icons i {
     font-size: 13px;
   }
@@ -673,7 +689,7 @@ body.arabic .show-rows > article {
     font-size: 15px;
   }
   form.table-search .btn,
-  form.table-search > input {
+  .table-search label.search-container {
     height: 35px;
   }
   form.table-search .btn span {
@@ -787,7 +803,8 @@ body.arabic .show-rows > article {
   .table-pagination h2 {
     font-size: 12px;
   }
-  form.table-search > input {
+  .table-search label.search-container,
+  .table-search label.search-container > input {
     font-size: 12px;
   }
   div.table tbody td div.options .visit i,
@@ -804,7 +821,7 @@ body.arabic .show-rows > article {
     justify-content: center;
   }
   form.table-search .btn,
-  form.table-search > input {
+  .table-search label.search-container {
     height: 32px;
   }
 }

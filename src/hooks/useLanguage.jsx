@@ -48,18 +48,6 @@ const useLanguage = () => {
       role: ["admin", "user"],
     },
     {
-      icon: "fa-solid fa-magnifying-glass",
-      children: [
-        {
-          title: language?.header?.serach_by_image,
-          path: "search_by_image",
-          role: ["admin", "user"],
-        },
-      ],
-      title: language?.header?.search,
-      role: ["admin", "user"],
-    },
-    {
       icon: "fa-solid fa-map-location-dot",
       children: [
         {

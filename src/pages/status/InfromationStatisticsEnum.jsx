@@ -10,28 +10,39 @@ import Skeleton from "react-loading-skeleton";
  * @property {"section" | "source" | "event" | "party"} CategoryType
  * @property {"bar" | "doughnut"} ChartType
  *@property {string} title
+ *@property {object} dateFilter
  *@param {InformationStatisticsEnumProps} props
  */
 
-const InformationStatisticsEnum = ({ categoryType, chartType, title }) => {
+const InformationStatisticsEnum = ({
+  categoryType,
+  chartType,
+  title,
+  dateFilter,
+}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const context = useContext(Context);
   const token = context?.userDetails?.token;
   const getData = useCallback(async () => {
+    const params = new URLSearchParams();
+
+    params.append("limit", 10);
+    params.append("page", page);
+    params.append("categoryStatistics", categoryType);
+    if (dateFilter.from) params.append("createdAt[gte]", dateFilter.from);
+    if (dateFilter.to) params.append("createdAt[lte]", dateFilter.to);
+
     data && setData(null);
+
     setLoading(true);
     try {
       const { data } = await axios.get(
         `${baseURL}/Statistics/countInformation`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          params: {
-            page,
-            limit: 10,
-            categoryStatistics: categoryType,
-          },
+          params,
         }
       );
 
@@ -40,10 +51,14 @@ const InformationStatisticsEnum = ({ categoryType, chartType, title }) => {
       console.log(error);
     }
     setLoading(false);
-  }, [setData, setLoading, page, token, categoryType]);
+  }, [page, token, categoryType, dateFilter]);
   useEffect(() => {
-    getData();
-  }, [getData]);
+    if (!dateFilter?.from && !dateFilter?.to) getData();
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
+    }
+  }, [getData, dateFilter]);
 
   const chartPagination = useMemo(
     () => (

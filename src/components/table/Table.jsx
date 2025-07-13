@@ -177,15 +177,30 @@ const Table = ({
 
       <form className="flex align-center justify-end gap-10 table-search">
         {!location.pathname.includes("/backup") && (
-          <input
-            type="text"
-            placeholder={`${language?.table?.serach_by_name}`}
-            value={search}
-            onInput={(e) => {
-              currentPage !== 1 && setPage(1);
-              setSearch(e.target.value.toLowerCase());
-            }}
-          />
+          <label className="search-container" htmlFor="search">
+            <input
+              type="text"
+              id="search"
+              placeholder={`${language?.table?.serach_by_name}`}
+              value={search}
+              onInput={(e) => {
+                currentPage !== 1 && setPage(1);
+                setSearch(e.target.value.toLowerCase());
+              }}
+            />
+            <i className="fa-solid fa-magnifying-glass" />
+          </label>
+        )}
+        {(location.pathname.includes("/dashboard/people") ||
+          location.pathname.includes("/dashboard/informations")) && (
+          <Link
+            to="/dashboard/search_by_image"
+            title={language?.header?.serach_by_image}
+            className="table-form-icons"
+          >
+            <i className="fa-solid fa-id-card" />
+            <span>{language?.header?.serach_by_image}</span>
+          </Link>
         )}
         {!hideAddBtn && addPageUrl && (
           <Link
