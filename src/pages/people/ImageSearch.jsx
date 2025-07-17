@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import "./images-search.css";
 import Loading from "../../components/loading/Loading";
 import axios from "axios";
 import { baseURL, Context } from "../../context/context";
 import Virtual from "../../components/Virtual";
 import MediaComponent from "../../components/MediaComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useLanguage from "../../hooks/useLanguage";
 const ImageSearch = () => {
   const [image, setImage] = useState(false);
@@ -110,6 +110,7 @@ const ImageSearch = () => {
       </Virtual>
     );
   });
+  const nav = useNavigate();
 
   return (
     <>
@@ -126,6 +127,13 @@ const ImageSearch = () => {
           </article>
         </div>
       )}
+      <div className="arrow-back-page">
+        <i
+          className="fa-solid fa-share"
+          onClick={() => nav(-1)}
+          title="page back"
+        />
+      </div>
 
       <form
         onSubmit={handleSubmit}

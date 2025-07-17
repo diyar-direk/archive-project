@@ -443,6 +443,9 @@ body.arabic .show-rows > article {
   margin-bottom: 4px;
   color: var(--font-color);
 }
+.show-rows > article div input[type="checkbox"] {
+  accent-color: var(--main-color);
+}
 
 .show-rows > article div label {
   font-size: 17px;

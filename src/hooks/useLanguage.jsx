@@ -3,7 +3,6 @@ import { Context } from "../context/context";
 const useLanguage = () => {
   const context = useContext(Context);
   const language = context?.selectedLang;
-
   const links = [
     {
       icon: "fa-solid fa-chart-column",
@@ -11,12 +10,13 @@ const useLanguage = () => {
         {
           title: "status",
           path: "status",
-          role: ["admin", "user"],
+          role: ["admin"],
         },
       ],
       title: "status",
-      role: ["admin", "user"],
+      role: ["admin"],
     },
+
     {
       icon: "fa-solid fa-user-group",
       children: [
@@ -155,6 +155,18 @@ const useLanguage = () => {
       ],
       title: language?.header?.coordinates,
       role: ["admin", "user"],
+    },
+    {
+      icon: "fa-solid fa-file-import",
+      children: [
+        {
+          title: "exports",
+          path: "exports",
+          role: ["admin"],
+        },
+      ],
+      title: "Outgoing & incoming",
+      role: ["admin"],
     },
 
     {

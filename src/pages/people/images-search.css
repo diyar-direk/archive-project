@@ -143,7 +143,23 @@ div.grid-3:has(div.image-card) {
     }
   }
 }
-
+.arrow-back-page {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  & i {
+    background-color: var(--body-color);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--box-shadow);
+    color: var(--font-color);
+  }
+}
+.arrow-back-page i:hover {
+  background-color: var(--main-color);
+  color: white;
+}
 body.arabic {
   & form.search-image {
     & > i {
