@@ -164,6 +164,11 @@ const useLanguage = () => {
           path: "exports",
           role: ["admin"],
         },
+        {
+          title: "add export",
+          path: "add_export",
+          role: ["admin"],
+        },
       ],
       title: "Outgoing & incoming",
       role: ["admin"],

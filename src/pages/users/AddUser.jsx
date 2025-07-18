@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import "../../components/form/form.css";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
@@ -7,19 +7,11 @@ import Loading from "../../components/loading/Loading";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
+import SelectOptionInput from "../../components/inputs/SelectOptionInput";
 const AddUser = () => {
   const [loading, setLoading] = useState(false);
-  const handleClick = (e) => {
-    e.stopPropagation();
-    const divs = document.querySelectorAll("div.form .selecte .inp.active");
-    divs.forEach((ele) => ele !== e.target && ele.classList.remove("active"));
-    e.target.classList.toggle("active");
-  };
 
-  window.addEventListener("click", () => {
-    const selectDiv = document.querySelector("div.form .selecte .inp.active");
-    selectDiv && selectDiv.classList.remove("active");
-  });
   const { language } = useLanguage();
 
   const [error, setError] = useState(false);
@@ -36,10 +28,6 @@ const AddUser = () => {
   }, [form, setForm]);
   const [passwordCon, setPasswordCon] = useState("");
 
-  const ignoreSelect = (e) => {
-    setForm({ ...form, [e.target.title]: "" });
-  };
-
   const handleForm = (e) => {
     const { id, value } = e.target;
 
@@ -55,10 +43,6 @@ const AddUser = () => {
     }
   };
 
-  const handleFormSelect = (e, itm) => {
-    setForm({ ...form, [e.target.id]: itm });
-    error && setError(false);
-  };
   const context = useContext(Context);
   const token = context.userDetails.token;
   const response = useRef(true);
@@ -121,6 +105,33 @@ const AddUser = () => {
     }
   };
 
+  const roleOptions = useMemo(() => {
+    const arrayOfOptionsInput = [
+      {
+        options: [
+          {
+            onSelectOption: () => setForm({ ...form, role: "user" }),
+            text: language?.users?.user,
+          },
+          {
+            text: language?.users?.admin,
+            onSelectOption: () => setForm({ ...form, role: "admin" }),
+          },
+        ],
+      },
+    ];
+    return arrayOfOptionsInput.map((input) => (
+      <SelectOptionInput
+        key="role"
+        label={language?.users?.select_role}
+        placeholder={language?.users?.select_role}
+        value={form.role}
+        onIgnore={() => setForm({ ...form, role: "" })}
+        options={input.options}
+      />
+    ));
+  }, [language, form]);
+
   return (
     <>
       {responseOverlay && (
@@ -134,50 +145,18 @@ const AddUser = () => {
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form">
           <div className="flex wrap">
-            <div className="flex flex-direction">
-              <label htmlFor="username">{language?.users?.user_name}</label>
-              <input
-                required
-                type="text"
-                minLength={3}
-                maxLength={50}
-                id="username"
-                className="inp"
-                value={form.username}
-                onChange={handleForm}
-                placeholder={language?.users?.user_name_placeHolder}
-              />
-            </div>
+            <InputWithLabel
+              label={language?.users?.user_name}
+              required
+              minLength={3}
+              maxLength={50}
+              id="username"
+              value={form.username}
+              onChange={handleForm}
+              placeholder={language?.users?.user_name_placeHolder}
+            />
 
-            <div className="flex flex-direction">
-              <label>{language?.users?.select_role}</label>
-              <div className="selecte relative">
-                <div onClick={handleClick} className="inp">
-                  {language?.users?.select_role}
-                </div>
-                <article>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="role"
-                    title="user"
-                  >
-                    {language?.users?.user}
-                  </h2>
-                  <h2
-                    onClick={(e) => handleFormSelect(e, e.target.title)}
-                    id="role"
-                    title="admin"
-                  >
-                    {language?.users?.admin}
-                  </h2>
-                </article>
-              </div>
-              {form.role && (
-                <span title="role" onClick={ignoreSelect}>
-                  {form.role}
-                </span>
-              )}
-            </div>
+            {roleOptions}
             {form.role === "user" && (
               <SelectInputApi
                 fetchData={getInfinityFeatchApis}
@@ -191,33 +170,26 @@ const AddUser = () => {
               />
             )}
 
-            <div className="flex flex-direction">
-              <label htmlFor="password">{language?.users?.password}</label>
-              <input
-                value={form.password}
-                onChange={handleForm}
-                required
-                type="password"
-                minLength={6}
-                id="password"
-                className="inp"
-                placeholder={language?.users?.password_placeHolder}
-              />
-            </div>
-            <div className="flex flex-direction">
-              <label htmlFor="passwordConf">
-                {language?.users?.password_confirmation}
-              </label>
-              <input
-                value={passwordCon}
-                onChange={(e) => setPasswordCon(e.target.value)}
-                required
-                type="password"
-                id="passwordConf"
-                className="inp"
-                placeholder={language?.users?.password_confirmation_placeholder}
-              />
-            </div>
+            <InputWithLabel
+              label={language?.users?.password}
+              value={form.password}
+              onChange={handleForm}
+              required
+              type="password"
+              minLength={6}
+              id="password"
+              placeholder={language?.users?.password_placeHolder}
+            />
+            <InputWithLabel
+              label={language?.users?.password_confirmation}
+              value={passwordCon}
+              onChange={(e) => setPasswordCon(e.target.value)}
+              required
+              type="password"
+              id="passwordConf"
+              className="inp"
+              placeholder={language?.users?.password_confirmation_placeholder}
+            />
           </div>
         </div>
 

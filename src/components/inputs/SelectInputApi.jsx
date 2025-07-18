@@ -73,7 +73,6 @@ const SelectInputApi = ({
       const params = url ? { page, search, url } : { page, search };
       try {
         const result = await fetchData(params);
-        console.log(result);
         setItems((prev) => {
           const combined = [...prev, ...(result.data || [])];
           const uniqueMap = new Map();
@@ -121,6 +120,8 @@ const SelectInputApi = ({
     }
   }, [reset, setReset]);
 
+  const [selectedData, setSelectedData] = useState({});
+
   return (
     <div className="flex flex-direction">
       {label && <label>{label}</label>}
@@ -148,7 +149,7 @@ const SelectInputApi = ({
               key={itm._id}
               onClick={(e) => {
                 onChange(itm);
-
+                setSelectedData(itm);
                 closeDiv(e);
               }}
               ref={i === items.length - 1 ? lastElement : null}
@@ -170,7 +171,16 @@ const SelectInputApi = ({
         ) : (
           !isTabelsFilter &&
           !isArray &&
-          value && <span onClick={onIgnore}>{value}</span>
+          value && (
+            <span
+              onClick={() => {
+                onIgnore();
+                setSelectedData({});
+              }}
+            >
+              {typeof value === "function" ? value(selectedData) : value}
+            </span>
+          )
         )}
       </div>
     </div>

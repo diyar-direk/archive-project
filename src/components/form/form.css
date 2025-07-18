@@ -8,7 +8,7 @@ form.dashboard-form > div.form {
 form.dashboard-form > div.form h1 {
   color: var(--font-color);
   text-transform: capitalize;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   font-size: 27px;
 }
 form.dashboard-form > div.form > div {
@@ -36,6 +36,9 @@ form.dashboard-form > div.form > div span {
   white-space: nowrap;
   text-wrap: nowrap;
   text-overflow: ellipsis;
+}
+form.dashboard-form > div.form > div span:empty {
+  display: none;
 }
 form.dashboard-form > div.form > div span:hover {
   color: white;

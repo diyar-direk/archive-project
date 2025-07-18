@@ -308,13 +308,13 @@ table .table-loading {
   letter-spacing: 1px;
   color: var(--font-color);
 }
-tbody tr:nth-child(odd) {
+div.table tbody tr:nth-child(odd) {
   background-color: var(--body-color);
 }
-tbody tr:nth-child(even) {
+div.table tbody tr:nth-child(even) {
   background-color: var(--border-color);
 }
-tbody td {
+div.table tbody td {
   padding: 10px;
   max-width: 220px;
   overflow: hidden;
@@ -325,7 +325,7 @@ tbody td {
   font-size: 18px;
   position: relative;
 }
-tbody tr:hover {
+div.table tbody tr:hover {
   background-color: #10378511;
 }
 

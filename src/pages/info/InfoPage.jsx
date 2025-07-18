@@ -1,6 +1,6 @@
 import axios from "axios";
 import "../people/profile.css";
-import React, { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";

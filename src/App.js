@@ -36,7 +36,9 @@ import ImageSearch from "./pages/people/ImageSearch";
 import Field from "./pages/Categories/Field";
 import Counties from "./pages/addresses/Counties";
 import DashboardCharts from "./pages/status/InformationChart";
-import ExportsShowPage from "./pages/exports/ExportsShowPage";
+import ExportsDataShow from "./pages/exports/ExportsDataShow";
+import AddExport from "./pages/exports/AddExport";
+import UpdateExport from "./pages/exports/UpdateExport";
 
 function App() {
   const location = useLocation();
@@ -58,8 +60,10 @@ function App() {
                 <Route path="add_user" element={<AddUser />} />
                 <Route path="backup" element={<Backup />} />
                 <Route path="status" element={<DashboardCharts />} />
+                <Route path="exports" element={<ExportsDataShow />} />
+                <Route path="add_export" element={<AddExport />} />
+                <Route path="update_export/:id" element={<UpdateExport />} />
               </Route>
-              <Route path="exports" element={<ExportsShowPage />} />
 
               <Route path="people" element={<People />} />
               <Route path="people/:id" element={<Profile />} />
