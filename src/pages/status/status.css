@@ -1,3 +1,19 @@
+.export-as-word {
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  & i {
+    padding: 10px;
+    background: var(--body-color);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: var(--box-shadow);
+    color: var(--font-color);
+  }
+}
+.export-as-word i:hover {
+  color: white;
+  background-color: var(--main-color);
+}
 .statistic-date-fltr {
   width: 100%;
   margin-bottom: 10px;

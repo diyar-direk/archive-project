@@ -9,6 +9,7 @@ import StatusCountShow from "./StatusCountShow";
 import BarChart from "./BarChart";
 import InformationStatisticsEnum from "./InfromationStatisticsEnum";
 import StatitsticsDateFilter from "./StatitsticsDateFilter";
+import WordExporter from "./WordExporter";
 
 const DashboardCharts = () => {
   const [loading, setLoading] = useState(false);
@@ -69,8 +70,23 @@ const DashboardCharts = () => {
     return { addressesEnum, categoriesEnum };
   }, [language]);
 
+  const [dataWhitPageinations, setDataWithPaginations] = useState({
+    section: [],
+    source: [],
+    event: [],
+    party: [],
+  });
+
   return (
     <>
+      {dataCount && (
+        <WordExporter
+          date={dateFilter}
+          dataCount={dataCount}
+          dataEnum={dataEnum}
+          dataWhitPageinations={dataWhitPageinations}
+        />
+      )}
       {dataCount && (
         <StatitsticsDateFilter
           dateFilter={dateFilter}
@@ -104,24 +120,28 @@ const DashboardCharts = () => {
           chartType="doughnut"
           title="information on section"
           dateFilter={dateFilter}
+          setDataWithPaginations={setDataWithPaginations}
         />
         <InformationStatisticsEnum
           categoryType="source"
           chartType="bar"
           title="information on source"
           dateFilter={dateFilter}
+          setDataWithPaginations={setDataWithPaginations}
         />
         <InformationStatisticsEnum
           categoryType="event"
           chartType="bar"
           title="information on event"
           dateFilter={dateFilter}
+          setDataWithPaginations={setDataWithPaginations}
         />
         <InformationStatisticsEnum
           categoryType="party"
           chartType="doughnut"
           title="information on party"
           dateFilter={dateFilter}
+          setDataWithPaginations={setDataWithPaginations}
         />
       </div>
     </>

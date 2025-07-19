@@ -19,6 +19,7 @@ const InformationStatisticsEnum = ({
   chartType,
   title,
   dateFilter,
+  setDataWithPaginations,
 }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,6 @@ const InformationStatisticsEnum = ({
   const token = context?.userDetails?.token;
   const getData = useCallback(async () => {
     const params = new URLSearchParams();
-
     params.append("limit", 10);
     params.append("page", page);
     params.append("categoryStatistics", categoryType);
@@ -35,8 +35,8 @@ const InformationStatisticsEnum = ({
     if (dateFilter.to) params.append("createdAt[lte]", dateFilter.to);
 
     data && setData(null);
-
     setLoading(true);
+
     try {
       const { data } = await axios.get(
         `${baseURL}/Statistics/countInformation`,
@@ -47,11 +47,18 @@ const InformationStatisticsEnum = ({
       );
 
       setData(data.data);
+
+      setDataWithPaginations((prev) => ({
+        ...prev,
+        [categoryType]: data.data,
+      }));
     } catch (error) {
       console.log(error);
     }
+
     setLoading(false);
   }, [page, token, categoryType, dateFilter]);
+
   useEffect(() => {
     if (!dateFilter?.from && !dateFilter?.to) getData();
     else {
