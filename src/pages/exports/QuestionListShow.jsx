@@ -94,26 +94,27 @@ const QuestionListShow = ({ questions, setQuestions }) => {
   const { token } = context.userDetails;
 
   const confirmDelete = useCallback(async () => {
-    if (typeof selectedItem._id === "number") {
-      setQuestions((prev) => {
-        return {
-          ...prev,
-          questions: prev.questions?.filter(
-            (question) => question._id !== selectedItem._id
-          ),
-        };
-      });
+    const id = selectedItem?._id;
+    if (!id) return;
+    const isTemporaryId = typeof id === "number";
+    if (isTemporaryId) {
+      setQuestions((prev) => ({
+        ...prev,
+        questions: prev.questions?.filter((q) => q._id !== id),
+      }));
       setOverlay(false);
       return;
     }
     try {
-      await axios.delete(`${baseURL}/questions/${selectedItem._id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      await axios.delete(`${baseURL}/questions/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
       });
+      setQuestions((prev) => ({
+        ...prev,
+        questions: prev.questions?.filter((q) => q._id !== id),
+      }));
     } catch (error) {
-      console.log(error);
+      console.error("Delete error:", error);
     } finally {
       setOverlay(false);
     }

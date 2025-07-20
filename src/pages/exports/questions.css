@@ -111,3 +111,81 @@ form.dashboard-form > div.form > div.question-btns {
     background-color: rgb(56, 56, 56);
   }
 }
+
+.answers {
+  align-items: center;
+}
+.answer-container {
+  & p:not(.answer-text) {
+    color: var(--main-color);
+    font-weight: bold;
+    cursor: pointer;
+  }
+  & .answer-text {
+    background: var(--section-color);
+    width: 100%;
+    border-radius: 4px;
+    padding: 8px;
+    position: relative;
+    & > i {
+      cursor: pointer;
+    }
+    & > div {
+      position: absolute;
+      background-color: var(--body-color);
+      display: none;
+      right: 10px;
+      top: 30px;
+      box-shadow: var(--box-shadow);
+      z-index: 2;
+      & article {
+        padding: 10px;
+        gap: 6px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        & span {
+          font-weight: bold;
+        }
+      }
+      & article.delete {
+        & i {
+          color: red;
+        }
+      }
+      & article.update {
+        & i {
+          color: blue;
+        }
+      }
+    }
+    > div.active {
+      display: block;
+    }
+  }
+  & .inp {
+    border: none;
+    padding: 10px;
+    font-size: 18px;
+    color: var(--font-color);
+    width: 100%;
+    border-radius: 4px;
+    background-color: var(--section-color);
+  }
+  & .btn {
+    font-size: 15px;
+    flex: 1;
+  }
+}
+.answer-container article.delete:hover {
+  background: #ff000021;
+  & span {
+    color: red;
+  }
+}
+.answer-container article.update:hover {
+  background: rgba(0, 0, 255, 13%);
+  & span {
+    color: blue;
+  }
+}

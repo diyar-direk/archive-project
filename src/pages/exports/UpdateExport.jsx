@@ -8,11 +8,13 @@ import useLanguage from "../../hooks/useLanguage";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import QuestionListShow from "./QuestionListShow";
 import { useNavigate, useParams } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const UpdateExport = () => {
   const { id } = useParams();
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({
     code: "",
     details: "",
@@ -21,6 +23,7 @@ const UpdateExport = () => {
   });
   const nav = useNavigate();
   const getData = useCallback(async () => {
+    setLoading(true);
     try {
       const { data } = await axios.get(`${baseURL}/exports/${id}`, {
         headers: {
@@ -36,19 +39,17 @@ const UpdateExport = () => {
     } catch (error) {
       console.error(error);
       nav("/dashboard/error-404");
+    } finally {
+      setLoading(false);
     }
   }, [token, id, nav]);
 
   useEffect(() => {
     getData();
   }, [getData]);
-
-  const [loading, setLoading] = useState(false);
-
+  const [formLoading, setFormLoading] = useState(false);
   const { language } = useLanguage();
-
   const [error, setError] = useState(false);
-
   const handleForm = useCallback(
     (e) => {
       const { id, value } = e.target;
@@ -56,10 +57,8 @@ const UpdateExport = () => {
     },
     [form]
   );
-
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
-
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -84,7 +83,7 @@ const UpdateExport = () => {
     if (inputDate <= today) return setError("Date must be in the future");
     if (form.questions.length === 0)
       return setError("you have to add one or more questions");
-    setLoading(true);
+    setFormLoading(true);
     try {
       const createdQuestions = await Promise.all(
         form.questions.map(async (question) => {
@@ -138,16 +137,17 @@ const UpdateExport = () => {
       if (error.status === 400) responseFun("reapeted data");
       else responseFun(false);
     } finally {
-      setLoading(false);
+      setFormLoading(false);
     }
   };
+  if (loading) return <Skeleton width="100%" height="400px" />;
 
   return (
     <>
       {responseOverlay && (
         <SendData data="export" response={response.current} />
       )}
-      {loading && <Loading />}
+      {formLoading && <Loading />}
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form">
           <div className="flex wrap">

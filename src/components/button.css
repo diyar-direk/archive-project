@@ -1,0 +1,22 @@
+.btn:has(article) {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  & article {
+    display: none;
+  }
+}
+button.sending:disabled {
+  opacity: 0.9;
+}
+
+.btn.sending:has(article) article {
+  width: 10px;
+  height: 10px;
+  display: block;
+  border: solid 3px;
+  border-color: white white white transparent;
+  border-radius: 50%;
+  animation: rotate 1s infinite linear;
+}

@@ -39,6 +39,7 @@ import DashboardCharts from "./pages/status/InformationChart";
 import ExportsDataShow from "./pages/exports/ExportsDataShow";
 import AddExport from "./pages/exports/AddExport";
 import UpdateExport from "./pages/exports/UpdateExport";
+import ExportViewPage from "./pages/exports/ExportViewPage";
 
 function App() {
   const location = useLocation();
@@ -62,6 +63,7 @@ function App() {
                 <Route path="status" element={<DashboardCharts />} />
                 <Route path="exports" element={<ExportsDataShow />} />
                 <Route path="add_export" element={<AddExport />} />
+                <Route path="exports/:id" element={<ExportViewPage />} />
                 <Route path="update_export/:id" element={<UpdateExport />} />
               </Route>
 
