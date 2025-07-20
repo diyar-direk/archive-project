@@ -118,7 +118,8 @@ const AddInformation = () => {
         const audioDoc = new FormData();
         const documentDoc = new FormData();
         if (documents.image.length > 0) {
-          imagesDoc.append("informationId", id);
+          imagesDoc.append("parentModel", "SecurityInformation");
+          imagesDoc.append("parentId", id);
           documents.image.forEach((item) => {
             imagesDoc.append(`images`, item);
           });
@@ -133,7 +134,8 @@ const AddInformation = () => {
         }
 
         if (documents.video.length > 0) {
-          videosDoc.append("informationId", id);
+          videosDoc.append("parentModel", "SecurityInformation");
+          videosDoc.append("parentId", id);
           documents.video.forEach((item) => {
             videosDoc.append(`videos`, item);
           });
@@ -148,7 +150,8 @@ const AddInformation = () => {
         }
 
         if (documents.audio.length > 0) {
-          audioDoc.append("informationId", id);
+          audioDoc.append("parentModel", "SecurityInformation");
+          audioDoc.append("parentId", id);
           documents.audio.forEach((item) => {
             audioDoc.append(`audios`, item);
           });
@@ -163,7 +166,8 @@ const AddInformation = () => {
         }
 
         if (uploadedFiles.list.length > 0) {
-          documentDoc.append("informationId", id);
+          documentDoc.append("parentModel", "SecurityInformation");
+          documentDoc.append("parentId", id);
           uploadedFiles.list.forEach((item) => {
             documentDoc.append(`documents`, item);
           });

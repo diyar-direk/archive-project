@@ -66,7 +66,8 @@ const MediaShow = (props) => {
       const keys = Object.keys(form);
       const formData = new FormData();
       const res = keys.filter((key) => form[key])[0];
-      formData.append("informationId", props.id);
+      formData.append("parentModel", "SecurityInformation");
+      formData.append("parentId", props.id);
       formData.append(res, form[res]);
       await axios.post(`${baseURL}/media/${res}`, formData, {
         headers: { Authorization: "Bearer " + token },

@@ -1,10 +1,10 @@
 import { useCallback, useContext, useMemo, useState } from "react";
-import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getInformations } from "./getInformations";
-import InputWithLabel from "../../components/inputs/InputWithLabel";
+import SelectInputApi from "../../../components/inputs/SelectInputApi";
+import InputWithLabel from "../../../components/inputs/InputWithLabel";
 import "./questions.css";
 import axios from "axios";
-import { baseURL, Context } from "../../context/context";
+import { baseURL, Context } from "../../../context/context";
+import { getInformations } from "../../info/getInformations";
 
 const QuestionListShow = ({ questions, setQuestions }) => {
   const context = useContext(Context);

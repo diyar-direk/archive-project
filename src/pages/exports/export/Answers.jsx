@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useCallback, useContext, useMemo, useState } from "react";
-import { baseURL, Context } from "../../context/context";
-import Button from "../../components/Button";
+import { baseURL, Context } from "../../../context/context";
+import Button from "../../../components/Button";
 
 const Answers = ({ question, refreshData }) => {
   const [showTextArea, setShowTextArea] = useState(false);

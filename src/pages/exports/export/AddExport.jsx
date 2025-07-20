@@ -1,11 +1,11 @@
 import { useCallback, useContext, useRef, useState } from "react";
-import "../../components/form/form.css";
-import { baseURL, Context } from "../../context/context";
+import "../../../components/form/form.css";
+import { baseURL, Context } from "../../../context/context";
 import axios from "axios";
-import SendData from "../../components/response/SendData";
-import Loading from "../../components/loading/Loading";
-import useLanguage from "../../hooks/useLanguage";
-import InputWithLabel from "../../components/inputs/InputWithLabel";
+import SendData from "../../../components/response/SendData";
+import Loading from "../../../components/loading/Loading";
+import useLanguage from "../../../hooks/useLanguage";
+import InputWithLabel from "../../../components/inputs/InputWithLabel";
 import QuestionListShow from "./QuestionListShow";
 
 const AddExport = () => {

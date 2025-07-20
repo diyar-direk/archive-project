@@ -173,6 +173,33 @@ const useLanguage = () => {
       title: "Outgoing & incoming",
       role: ["admin"],
     },
+    {
+      icon: "fa-solid fa-rectangle-list",
+      children: [
+        {
+          title: "reports",
+          path: "reports",
+          role: ["admin"],
+        },
+        {
+          title: "add report",
+          path: "add_report",
+          role: ["admin"],
+        },
+        {
+          title: "results",
+          path: "results",
+          role: ["admin"],
+        },
+        {
+          title: "add result",
+          path: "add_result",
+          role: ["admin"],
+        },
+      ],
+      title: "reports & results",
+      role: ["admin"],
+    },
 
     {
       icon: "fa-solid fa-folder-open",

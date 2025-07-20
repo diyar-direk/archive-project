@@ -152,7 +152,7 @@ const SelectInputApi = ({
                 setSelectedData(itm);
                 closeDiv(e);
               }}
-              ref={i === items.length - 1 ? lastElement : null}
+              ref={i === items?.length - 1 ? lastElement : null}
             >
               {optionLabel(itm)}
             </h2>
@@ -160,7 +160,7 @@ const SelectInputApi = ({
           {loading && <p className="font-color">{language?.table?.loading}</p>}
           {!hasMore && <p className="font-color">no more data</p>}
         </article>
-        {!isTabelsFilter && isArray && value.length > 0 ? (
+        {!isTabelsFilter && isArray && value?.length > 0 ? (
           <div className="flex selceted-itms">
             {value.map((span) => (
               <span onClick={() => onIgnore(span)} key={span._id}>

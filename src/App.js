@@ -36,10 +36,18 @@ import ImageSearch from "./pages/people/ImageSearch";
 import Field from "./pages/Categories/Field";
 import Counties from "./pages/addresses/Counties";
 import DashboardCharts from "./pages/status/InformationChart";
-import ExportsDataShow from "./pages/exports/ExportsDataShow";
-import AddExport from "./pages/exports/AddExport";
-import UpdateExport from "./pages/exports/UpdateExport";
-import ExportViewPage from "./pages/exports/ExportViewPage";
+import ExportsDataShow from "./pages/exports/export/ExportsDataShow";
+import AddExport from "./pages/exports/export/AddExport";
+import UpdateExport from "./pages/exports/export/UpdateExport";
+import ExportViewPage from "./pages/exports/export/ExportViewPage";
+import ReportListShow from "./pages/exports/report/ReportListShow";
+import AddReport from "./pages/exports/report/AddReport";
+import UpdateReport from "./pages/exports/report/UpdateReport";
+import ReportViewPage from "./pages/exports/report/ReportViewPage";
+import ResultListShow from "./pages/exports/result/ResultListShow";
+import AddResult from "./pages/exports/result/AddResut";
+import UpdateResult from "./pages/exports/result/UpdateResult";
+import ResultViewPage from "./pages/exports/result/ResultViewPage";
 
 function App() {
   const location = useLocation();
@@ -65,6 +73,14 @@ function App() {
                 <Route path="add_export" element={<AddExport />} />
                 <Route path="exports/:id" element={<ExportViewPage />} />
                 <Route path="update_export/:id" element={<UpdateExport />} />
+                <Route path="reports" element={<ReportListShow />} />
+                <Route path="add_report" element={<AddReport />} />
+                <Route path="update_report/:id" element={<UpdateReport />} />
+                <Route path="reports/:id" element={<ReportViewPage />} />
+                <Route path="results" element={<ResultListShow />} />
+                <Route path="add_result" element={<AddResult />} />
+                <Route path="update_result/:id" element={<UpdateResult />} />
+                <Route path="results/:id" element={<ResultViewPage />} />
               </Route>
 
               <Route path="people" element={<People />} />

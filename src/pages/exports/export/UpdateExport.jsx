@@ -1,14 +1,14 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import "../../components/form/form.css";
-import { baseURL, Context } from "../../context/context";
+import "../../../components/form/form.css";
+import { baseURL, Context } from "../../../context/context";
 import axios from "axios";
-import SendData from "../../components/response/SendData";
-import Loading from "../../components/loading/Loading";
-import useLanguage from "../../hooks/useLanguage";
-import InputWithLabel from "../../components/inputs/InputWithLabel";
 import QuestionListShow from "./QuestionListShow";
 import { useNavigate, useParams } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
+import useLanguage from "../../../hooks/useLanguage";
+import SendData from "../../../components/response/SendData";
+import Loading from "../../../components/loading/Loading";
+import InputWithLabel from "../../../components/inputs/InputWithLabel";
 
 const UpdateExport = () => {
   const { id } = useParams();

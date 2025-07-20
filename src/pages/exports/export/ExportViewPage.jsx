@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { baseURL, Context } from "../../context/context";
+import { baseURL, Context } from "../../../context/context";
 import Skeleton from "react-loading-skeleton";
-import { dateFormatter } from "../../utils/dateFormatter";
+import { dateFormatter } from "../../../utils/dateFormatter";
 import Answers from "./Answers";
 
 const ExportViewPage = () => {

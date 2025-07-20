@@ -1,10 +1,10 @@
 import axios from "axios";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { baseURL, Context } from "../../context/context";
-import Table from "../../components/table/Table";
+import { baseURL, Context } from "../../../context/context";
+import Table from "../../../components/table/Table";
 import { Link } from "react-router-dom";
-import { dateFormatter } from "../../utils/dateFormatter";
-import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import { dateFormatter } from "../../../utils/dateFormatter";
+import TabelFilterDiv from "../../../components/tabelFilterData/TabelFilterDiv";
 const columns = [
   {
     name: "code",
@@ -15,7 +15,6 @@ const columns = [
     name: "details",
     hidden: true,
     headerName: "details",
-    sort: true,
     getCell: (e) => (
       <Link to={`${e._id}`} className="name">
         {e.details}

@@ -262,6 +262,9 @@ aside > div > div > a h1 {
   text-transform: capitalize;
   letter-spacing: 1px;
   color: var(--font-color);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
   pointer-events: none;
 }
 aside.closed > div > div > .links > .center h1,
