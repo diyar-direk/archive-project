@@ -159,11 +159,11 @@ const QuestionListShow = ({ questions, setQuestions }) => {
             <article>{questionsData}</article>
           </section>
           <button
-            className="btn"
+            className="btn center"
             onClick={() => setShowQuestionForm(true)}
             type="button"
           >
-            <i className="fa-solid fa-plus" /> add questions
+            <i className="fa-solid fa-plus" /> <p> add questions</p>
           </button>
         </div>
       )}

@@ -134,8 +134,6 @@ const AddExport = () => {
               placeholder="please enter expiration date"
             />
           </div>
-        </div>
-        <div className="form">
           <div className="flex wrap">
             <InputWithLabel
               label="details"
@@ -148,6 +146,7 @@ const AddExport = () => {
             />
           </div>
         </div>
+
         <div className="form">
           <h1>questions</h1>
           <QuestionListShow questions={form.questions} setQuestions={setForm} />

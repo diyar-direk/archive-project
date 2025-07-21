@@ -56,7 +56,7 @@ const Answers = ({ question, refreshData }) => {
                   !isSending && setForm({ answer: e.target.value })
                 }
               />
-              <div className="flex gap-10">
+              <div className="flex gap-10 wrap">
                 <Button isSending={isSending}>submit answer</Button>
                 <Button
                   onClick={() => setShowTextArea(false)}
@@ -79,9 +79,7 @@ const Answers = ({ question, refreshData }) => {
             title="options"
             onClick={(e) => {
               e.stopPropagation();
-              document
-                .querySelector(".answer-text > div")
-                .classList.toggle("active");
+              e.target.nextSibling.classList.toggle("active");
             }}
           />
           <div>
@@ -179,5 +177,7 @@ const Answers = ({ question, refreshData }) => {
 export default Answers;
 window.addEventListener("click", () => {
   if (document.querySelector(".answer-text > div.active"))
-    document.querySelector(".answer-text > div").classList.remove("active");
+    document
+      .querySelector(".answer-text > div.active")
+      .classList.remove("active");
 });

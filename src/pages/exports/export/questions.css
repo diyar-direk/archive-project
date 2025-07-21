@@ -172,10 +172,15 @@ form.dashboard-form > div.form > div.question-btns {
     border-radius: 4px;
     background-color: var(--section-color);
   }
+
   & .btn {
     font-size: 15px;
     flex: 1;
   }
+}
+body.arabic .answer-container .answer-text > div {
+  right: auto;
+  left: 10px;
 }
 .answer-container article.delete:hover {
   background: #ff000021;
@@ -187,5 +192,114 @@ form.dashboard-form > div.form > div.question-btns {
   background: rgba(0, 0, 255, 13%);
   & span {
     color: blue;
+  }
+}
+@media (max-width: 700px) {
+  form.dashboard-form > div.form > div.question-list-container {
+    & button {
+      height: 35px;
+      & p {
+        display: none;
+      }
+    }
+  }
+  form .question-list {
+    max-height: 40px;
+    & > div {
+      font-size: 17px;
+      height: 40px;
+      & i {
+        font-size: 13px;
+      }
+    }
+    & article {
+      & > p {
+        font-size: 14px;
+      }
+      & table {
+        & thead th {
+          font-size: 14px;
+        }
+        & td {
+          max-width: 150px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+  form.dashboard-form > div.form > div.question-btns {
+    flex-wrap: wrap;
+    & button {
+      font-size: 14px;
+    }
+    & i {
+      font-size: 12px;
+    }
+  }
+  .gap-20:has(.answers) {
+    gap: 10px;
+  }
+  .answers {
+    gap: 10px;
+    & > h1 {
+      font-size: 25px;
+    }
+  }
+  .answer-container {
+    & .inp {
+      font-size: 16px;
+    }
+    & .btn {
+      font-size: 13px;
+    }
+  }
+}
+@media (max-width: 500px) {
+  form .question-list {
+    max-height: 35px;
+    & > div {
+      font-size: 15px;
+      height: 35px;
+      & i {
+        font-size: 12px;
+      }
+    }
+    & article {
+      & > p {
+        font-size: 12px;
+      }
+      & table {
+        & thead th {
+          font-size: 13px;
+        }
+        & td {
+          max-width: 100px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  form.dashboard-form > div.form > div.question-btns {
+    & button {
+      font-size: 11px;
+      & i {
+        font-size: 10px;
+      }
+    }
+  }
+  .answers {
+    gap: 5px;
+    & > h1 {
+      font-size: 20px;
+    }
+  }
+  .answer-container {
+    & .inp {
+      font-size: 14px;
+    }
+    & .btn {
+      font-size: 11px;
+    }
   }
 }

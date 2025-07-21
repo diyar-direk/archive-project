@@ -32,7 +32,14 @@ const ExportViewPage = () => {
   useEffect(() => {
     getData();
   }, [getData]);
-  if (loading) return <Skeleton width="100%" height="400px" />;
+  if (loading)
+    return (
+      <>
+        <Skeleton width="100%" height="400px" />
+        <Skeleton width="100%" height="100px" />
+        <Skeleton width="100%" height="100px" />
+      </>
+    );
 
   return (
     <div className="flex flex-direction gap-20">

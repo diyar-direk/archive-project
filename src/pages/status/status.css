@@ -73,10 +73,12 @@
   gap: 20px;
   flex-wrap: wrap;
   & .bar {
-    flex: 35%;
+    flex: 400px;
+    overflow: hidden;
   }
   & .doughnut {
-    flex: 20%;
+    overflow: hidden;
+    flex: 250px;
   }
 }
 .chart-container {
@@ -132,4 +134,130 @@
 }
 .chart-container:hover .chart-pagination {
   opacity: 1;
+}
+@media (max-width: 1000px) {
+  .export-as-word {
+    margin: 0;
+    & i {
+      padding: 8px;
+      font-size: 15px;
+    }
+  }
+  .statistic-date-fltr {
+    & article {
+      & label {
+        font-size: 17px;
+      }
+      & input {
+        font-size: 15px;
+      }
+    }
+  }
+
+  .status-section {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    & div {
+      padding: 20px;
+      & i {
+        font-size: 18px;
+        width: 50px;
+        height: 50px;
+      }
+      & h1 {
+        font-size: 21px;
+      }
+    }
+  }
+  .chart-container {
+    max-height: 450px;
+    & h1 {
+      margin-top: 0px;
+      font-size: 25px;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .statistic-date-fltr {
+    gap: 10px;
+    & article {
+      & input {
+        font-size: 14px;
+        padding: 8px;
+      }
+      & label {
+        font-size: 16px;
+      }
+    }
+  }
+  .status-section {
+    gap: 10px;
+    & div {
+      padding: 15px;
+      & i {
+        font-size: 14px;
+        width: 40px;
+        height: 40px;
+      }
+      & h1 {
+        font-size: 17px;
+      }
+    }
+  }
+  .chart-container {
+    max-height: 350px;
+    & h1 {
+      margin-top: 0px;
+      font-size: 20px;
+    }
+    & .chart-pagination {
+      & button {
+        width: 30px;
+        height: 30px;
+        font-size: 13px;
+      }
+    }
+  }
+  .chart-card-container {
+    gap: 10px;
+  }
+}
+@media (max-width: 500px) {
+  .export-as-word {
+    & i {
+      padding: 8px;
+      font-size: 13px;
+    }
+  }
+  .statistic-date-fltr {
+    & article {
+      & label {
+        font-size: 14px;
+      }
+      & input {
+        font-size: 12px;
+        padding: 7px;
+      }
+    }
+  }
+  .status-section {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    & div {
+      & h1 {
+        font-size: 16px;
+      }
+      & i {
+        font-size: 13px;
+        width: 35px;
+        height: 35px;
+      }
+    }
+  }
+  .chart-container {
+    padding: 10px;
+    & h1 {
+      margin-top: 0px;
+      font-size: 18px;
+    }
+  }
 }

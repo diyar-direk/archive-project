@@ -170,8 +170,6 @@ const UpdateExport = () => {
               placeholder="please enter expiration date"
             />
           </div>
-        </div>
-        <div className="form">
           <div className="flex wrap">
             <InputWithLabel
               label="details"

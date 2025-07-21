@@ -66,7 +66,7 @@ function App() {
               <Route path="error-403" element={<AccessDenied />} />
               <Route element={<AdminAuth />}>
                 <Route path="users" element={<Users />} />
-                <Route path="add_user" element={<AddUser />} />
+                <Route path="add_user" element={<AddUser />} /> 
                 <Route path="backup" element={<Backup />} />
                 <Route path="status" element={<DashboardCharts />} />
                 <Route path="exports" element={<ExportsDataShow />} />
