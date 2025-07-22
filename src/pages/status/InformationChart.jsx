@@ -2,14 +2,11 @@ import axios from "axios";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import "./status.css";
 import { baseURL, Context } from "../../context/context";
-import DoughnutChart from "./DoughnutChart";
-import useLanguage from "./../../hooks/useLanguage";
-import Skeleton from "react-loading-skeleton";
 import StatusCountShow from "./StatusCountShow";
-import BarChart from "./BarChart";
 import InformationStatisticsEnum from "./InfromationStatisticsEnum";
 import StatitsticsDateFilter from "./StatitsticsDateFilter";
 import WordExporter from "./WordExporter";
+const chartType = ["bar", "doughnut"];
 
 const DashboardCharts = () => {
   const [loading, setLoading] = useState(false);
@@ -49,8 +46,15 @@ const DashboardCharts = () => {
     fetchDataCount();
   }, [fetchDataCount, dateFilter]);
 
-  const { language } = useLanguage();
-  const dataEnum = useMemo(() => {
+  const [dataWhitPageinations, setDataWithPaginations] = useState({
+    section: [],
+    source: [],
+    event: [],
+    party: [],
+  });
+
+  const addressAndCategoriesCount = useMemo(() => {
+    if (!dataCount) return;
     const addressesEnum = {
       countryCount: "country",
       governorateCount: "governorate",
@@ -67,15 +71,83 @@ const DashboardCharts = () => {
       eventCount: "event",
       partyCount: "parties",
     };
-    return { addressesEnum, categoriesEnum };
-  }, [language]);
+    const addressCount = Object.entries(addressesEnum).reduce(
+      (total, [key]) => {
+        const count = dataCount[key] || 0;
+        return total + count;
+      },
+      0
+    );
+    const categoriesCount = Object.entries(categoriesEnum).reduce(
+      (total, [key]) => {
+        const count = dataCount[key] || 0;
+        return total + count;
+      },
+      0
+    );
+    return { addressCount, categoriesCount };
+  }, [dataCount]);
 
-  const [dataWhitPageinations, setDataWithPaginations] = useState({
-    section: [],
-    source: [],
-    event: [],
-    party: [],
-  });
+  const arrayOfchartes = useMemo(
+    () => [
+      {
+        categoryType: "country",
+        title: "information on country",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "governorate",
+        title: "information on governorate",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "county",
+        title: "information on county",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "city",
+        title: "information on city",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "region",
+        title: "information on region",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "street",
+        title: "information on street",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "village",
+        title: "information on village",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "section",
+        title: "information on section",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "source",
+        title: "information on source",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "event",
+        title: "information on event",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "party",
+        title: "information on party",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+    ],
+    []
+  );
 
   return (
     <>
@@ -83,8 +155,9 @@ const DashboardCharts = () => {
         <WordExporter
           date={dateFilter}
           dataCount={dataCount}
-          dataEnum={dataEnum}
           dataWhitPageinations={dataWhitPageinations}
+          totalCategoriesCount={addressAndCategoriesCount.categoriesCount}
+          totalAddressCount={addressAndCategoriesCount.addressCount}
         />
       )}
       {dataCount && (
@@ -93,56 +166,24 @@ const DashboardCharts = () => {
           setDateFilter={setDateFilter}
         />
       )}
-      {!loading && dataCount && <StatusCountShow allData={dataCount} />}
+      {!loading && dataCount && (
+        <StatusCountShow
+          allData={dataCount}
+          totalCategoriesCount={addressAndCategoriesCount.categoriesCount}
+          totalAddressCount={addressAndCategoriesCount.addressCount}
+        />
+      )}
       <div className="chart-card-container">
-        {loading ? (
-          <div className="doughnut">
-            <Skeleton height={"400px"} width={"100%"} />
-          </div>
-        ) : (
-          dataCount && (
-            <>
-              <BarChart
-                slices={dataEnum.categoriesEnum}
-                dataCount={dataCount}
-                title="categories"
-              />
-              <DoughnutChart
-                title="addresses"
-                slices={dataEnum.addressesEnum}
-                dataCount={dataCount}
-              />
-            </>
-          )
-        )}
-        <InformationStatisticsEnum
-          categoryType="section"
-          chartType="doughnut"
-          title="information on section"
-          dateFilter={dateFilter}
-          setDataWithPaginations={setDataWithPaginations}
-        />
-        <InformationStatisticsEnum
-          categoryType="source"
-          chartType="bar"
-          title="information on source"
-          dateFilter={dateFilter}
-          setDataWithPaginations={setDataWithPaginations}
-        />
-        <InformationStatisticsEnum
-          categoryType="event"
-          chartType="bar"
-          title="information on event"
-          dateFilter={dateFilter}
-          setDataWithPaginations={setDataWithPaginations}
-        />
-        <InformationStatisticsEnum
-          categoryType="party"
-          chartType="doughnut"
-          title="information on party"
-          dateFilter={dateFilter}
-          setDataWithPaginations={setDataWithPaginations}
-        />
+        {arrayOfchartes.map((chart) => (
+          <InformationStatisticsEnum
+            key={chart.categoryType}
+            categoryType={chart.categoryType}
+            chartType={chart.chartType}
+            title={chart.title}
+            dateFilter={dateFilter}
+            setDataWithPaginations={setDataWithPaginations}
+          />
+        ))}
       </div>
     </>
   );

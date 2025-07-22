@@ -7,11 +7,11 @@ import Skeleton from "react-loading-skeleton";
 
 /**
  * @typedef {object} InformationStatisticsEnumProps
- * @property {"section" | "source" | "event" | "party"} CategoryType
+ * @property {"country" | "section" | "source" | "event" | "party"} CategoryType
  * @property {"bar" | "doughnut"} ChartType
- *@property {string} title
- *@property {object} dateFilter
- *@param {InformationStatisticsEnumProps} props
+ * @property {string} title
+ * @property {object} dateFilter
+ * @param {InformationStatisticsEnumProps} props
  */
 
 const InformationStatisticsEnum = ({
@@ -36,7 +36,6 @@ const InformationStatisticsEnum = ({
 
     data && setData(null);
     setLoading(true);
-
     try {
       const { data } = await axios.get(
         `${baseURL}/Statistics/countInformation`,
@@ -45,9 +44,7 @@ const InformationStatisticsEnum = ({
           params,
         }
       );
-
       setData(data.data);
-
       setDataWithPaginations((prev) => ({
         ...prev,
         [categoryType]: data.data,
@@ -95,7 +92,6 @@ const InformationStatisticsEnum = ({
   return chartType === "bar" ? (
     <BarChart
       title={title}
-      hideTotalCount={true}
       labels={data?.map((item) => item.name)}
       dataArray={data?.map((item) => item.infoCount)}
     >
@@ -105,7 +101,6 @@ const InformationStatisticsEnum = ({
   ) : (
     <DoughnutChart
       title={title}
-      hideTotalCount={true}
       labels={data?.map((item) => item.name)}
       dataArray={data?.map((item) => item.infoCount)}
     >

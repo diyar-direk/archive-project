@@ -14,11 +14,8 @@ function MapTiles(props) {
 
       // Convert MGRS to latitude and longitude
       const latLon = toPoint(mgrsCoords);
-      console.log(latLon);
       lon = latLon[0];
       lat = latLon[1];
-
-      console.log(`Converted MGRS: ${mgrsCoords} -> Lat: ${lat}, Lon: ${lon}`);
     } catch (error) {
       console.error("Error converting MGRS to lat/lon:", error);
     }

@@ -1,4 +1,8 @@
-const StatusCountShow = ({ allData }) => {
+const StatusCountShow = ({
+  allData,
+  totalAddressCount,
+  totalCategoriesCount,
+}) => {
   return (
     <section className="status-section">
       <div
@@ -41,6 +45,36 @@ const StatusCountShow = ({ allData }) => {
           }}
         />
         <h1 className="flex-1">{allData.coordinateCount} coordinate </h1>
+      </div>
+      <div
+        className="center gap-10"
+        style={{
+          borderColor: "rgba(255, 159, 64, 1)",
+        }}
+      >
+        <i
+          className="fa-solid fa-map-location-dot"
+          style={{
+            background: "rgba(255, 159, 64, 0.3)",
+            color: "rgba(255, 159, 64,1)",
+          }}
+        />
+        <h1 className="flex-1">{totalAddressCount} address </h1>
+      </div>
+      <div
+        className="center gap-10"
+        style={{
+          borderColor: "rgba(54, 162, 235, 1)",
+        }}
+      >
+        <i
+          className="fa-solid fa-map-location-dot"
+          style={{
+            background: "rgba(54, 162, 235, 0.3)",
+            color: "rgba(54, 162, 235, 1)",
+          }}
+        />
+        <h1 className="flex-1">{totalCategoriesCount} address </h1>
       </div>
     </section>
   );

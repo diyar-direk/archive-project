@@ -1,14 +1,10 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
 /**
  * @typedef {Object} Utils
  * @property {string} title - النص الذي سيُعرض كـ label
- * @property {Array} slices - القطع التي ستظهر
- * @property {object} dataCount - جميع البيانات
  * @property {Array} labels - تسميات القطع
  * @property {Array} dataArray - بيانات القطع
- * @property {boolean} hideTotalCount
  * @property {ReactNode} children - أي محتوى إضافي يمكن تمريره
  */
 
@@ -25,26 +21,17 @@ const options = {
     },
   },
 };
-const DoughnutChart = ({
-  slices,
-  title,
-  dataCount,
-  hideTotalCount,
-  labels,
-  dataArray,
-  children,
-}) => {
+const DoughnutChart = ({ title, labels, dataArray, children }) => {
   const borderColor = getComputedStyle(document.body)
     .getPropertyValue("--body-color")
     .trim();
 
   const data = {
-    labels: labels || Object.entries(slices).map(([, label]) => label),
+    labels: labels,
     datasets: [
       {
         label: "count",
-        data:
-          dataArray || Object.entries(slices)?.map(([key]) => dataCount[key]),
+        data: dataArray,
         backgroundColor: [
           "rgba(255, 99, 132, 0.9)",
           "rgba(255, 159, 64, 0.9)",
@@ -63,22 +50,9 @@ const DoughnutChart = ({
     ],
   };
 
-  const totalDataCount = useMemo(() => {
-    if (hideTotalCount) return;
-    const totalCount = Object.entries(slices).reduce((total, [key]) => {
-      const count = dataCount[key] || 0;
-      return total + count;
-    }, 0);
-    return totalCount;
-  }, [slices, dataCount, hideTotalCount]);
-
   return (
     <div className="chart-container doughnut">
-      {title && (
-        <h1>
-          {!hideTotalCount && totalDataCount} {title}
-        </h1>
-      )}
+      {title && <h1>{title}</h1>}
       <Doughnut data={data} options={options} />
       {children}
     </div>

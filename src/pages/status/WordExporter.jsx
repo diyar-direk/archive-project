@@ -1,23 +1,16 @@
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { dateFormatter } from "../../utils/dateFormatter";
-import { useMemo } from "react";
 
 const today = dateFormatter(new Date());
 
-const WordExporter = ({ date, dataCount, dataEnum, dataWhitPageinations }) => {
-  const totalDataCount = useMemo(() => {
-    const totalAddressCount = Object.entries(dataEnum.addressesEnum).reduce(
-      (total, [key]) => total + (dataCount[key] || 0),
-      0
-    );
-    const totalCategoriesCount = Object.entries(dataEnum.categoriesEnum).reduce(
-      (total, [key]) => total + (dataCount[key] || 0),
-      0
-    );
-    return { totalAddressCount, totalCategoriesCount };
-  }, [dataEnum, dataCount]);
-
+const WordExporter = ({
+  date,
+  dataCount,
+  dataWhitPageinations,
+  totalCategoriesCount,
+  totalAddressCount,
+}) => {
   const generateDoc = async () => {
     const doc = new Document({
       sections: [
@@ -59,39 +52,22 @@ const WordExporter = ({ date, dataCount, dataEnum, dataWhitPageinations }) => {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `. ${totalDataCount.totalAddressCount} addresses:`,
+                  text: `. ${totalAddressCount} addresses:`,
                   bold: true,
                 }),
               ],
             }),
-            ...Object.entries(dataEnum.addressesEnum).map(
-              ([key, label]) =>
-                new Paragraph({
-                  children: [
-                    new TextRun({ text: `. ${dataCount[key] || 0} ${label}` }),
-                  ],
-                })
-            ),
 
             // Categories
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `. ${totalDataCount.totalCategoriesCount} categories:`,
+                  text: `. ${totalCategoriesCount} categories:`,
                   bold: true,
                 }),
               ],
             }),
-            ...Object.entries(dataEnum.categoriesEnum).map(
-              ([key, label]) =>
-                new Paragraph({
-                  children: [
-                    new TextRun({ text: `. ${dataCount[key] || 0} ${label}` }),
-                  ],
-                })
-            ),
 
-            // 👇 This is the NEW part to export section/source/event/party
             ...Object.entries(dataWhitPageinations).flatMap(([key, items]) => {
               if (!Array.isArray(items) || items.length === 0) return [];
 
