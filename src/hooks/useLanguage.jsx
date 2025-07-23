@@ -10,11 +10,11 @@ const useLanguage = () => {
         {
           title: "status",
           path: "status",
-          role: ["admin"],
+          role: ["admin", "user"],
         },
       ],
       title: "status",
-      role: ["admin"],
+      role: ["admin", "user"],
     },
 
     {

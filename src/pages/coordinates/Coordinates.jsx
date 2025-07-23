@@ -59,6 +59,12 @@ const columns = [
     hidden: true,
   },
   {
+    name: "section",
+    headerName: "section",
+    getCell: (e) => e.sectionId?.name,
+    onlyAdminCanSee: true,
+  },
+  {
     name: "sources",
     headerName: "sources",
     getCell: (e) => e.sources?.source_name,
@@ -129,6 +135,7 @@ const Coordinates = () => {
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
     countryId: "",
+    sectionId: "",
     cityId: "",
     villageId: "",
     regionId: "",
@@ -201,6 +208,7 @@ const Coordinates = () => {
       return () => clearTimeout(timeOut);
     }
   }, [page, filters, search, limit, sort, getData]);
+
   return (
     <>
       <h1 className="title"> {language?.header?.coordinates} </h1>

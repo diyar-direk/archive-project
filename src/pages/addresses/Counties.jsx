@@ -9,7 +9,7 @@ import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
-import { dateFormatter } from './../../utils/dateFormatter';
+import { dateFormatter } from "./../../utils/dateFormatter";
 
 const columns = [
   { name: "name", headerName: "name", sort: true },
@@ -35,6 +35,7 @@ const columns = [
     name: "options",
     headerName: "options",
     type: "actions",
+    onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
       <>
         <div className="options center">

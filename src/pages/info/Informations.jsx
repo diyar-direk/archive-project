@@ -99,6 +99,12 @@ const columns = [
       }),
   },
   {
+    name: "section",
+    headerName: "section",
+    getCell: (e) => e.sectionId?.name,
+    onlyAdminCanSee: true,
+  },
+  {
     name: "source",
     headerName: "source",
     getCell: (e) => nextJoin(e.sources, "source_name"),
@@ -192,6 +198,7 @@ const Informations = () => {
     people: "",
     parties: "",
     events: "",
+    sectionId: "",
     date: {
       from: "",
       to: "",

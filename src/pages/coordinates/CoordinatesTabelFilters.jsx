@@ -1,11 +1,13 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
+import { Context } from "../../context/context";
 
 const CoordinatesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});
-
+  const context = useContext(Context);
+  const { role } = context.userDetails;
   const handleParentChange = useCallback(
     (name, option) => {
       const updated = { ...beforeFiltering };
@@ -132,6 +134,16 @@ const CoordinatesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         tabelFilterIgnoreText: "any source",
         optionLabel: (option) => option?.source_name,
         url: "Sources",
+      },
+      {
+        name: "sectionId",
+        label: "section",
+        selectLabel: beforeFiltering?.sectionId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, sectionId: option }),
+        tabelFilterIgnoreText: "any section",
+        url: "Sections",
+        hideSelectoer: role !== "admin",
       },
     ];
 

@@ -26,6 +26,7 @@ const columns = [
     name: "options",
     headerName: "options",
     type: "actions",
+    onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
       <>
         <div className="options center">

@@ -14,6 +14,7 @@ const DashboardCharts = () => {
   const token = context?.userDetails?.token;
   const [dateFilter, setDateFilter] = useState({ from: "", to: "" });
   const [dataCount, setDataCount] = useState(null);
+  const { role } = context.userDetails;
   const fetchDataCount = useCallback(async () => {
     let utl = `${baseURL}/Statistics/countDocuments`;
     if (dateFilter.from && dateFilter.to) {
@@ -46,12 +47,7 @@ const DashboardCharts = () => {
     fetchDataCount();
   }, [fetchDataCount, dateFilter]);
 
-  const [dataWhitPageinations, setDataWithPaginations] = useState({
-    section: [],
-    source: [],
-    event: [],
-    party: [],
-  });
+  const [dataWhitPageinations, setDataWithPaginations] = useState({});
 
   const addressAndCategoriesCount = useMemo(() => {
     if (!dataCount) return;
@@ -129,6 +125,7 @@ const DashboardCharts = () => {
         categoryType: "section",
         title: "information on section",
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
+        hide: role !== "admin",
       },
       {
         categoryType: "source",
@@ -146,7 +143,7 @@ const DashboardCharts = () => {
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
     ],
-    []
+    [role]
   );
 
   return (
@@ -166,24 +163,28 @@ const DashboardCharts = () => {
           setDateFilter={setDateFilter}
         />
       )}
-      {!loading && dataCount && (
-        <StatusCountShow
-          allData={dataCount}
-          totalCategoriesCount={addressAndCategoriesCount.categoriesCount}
-          totalAddressCount={addressAndCategoriesCount.addressCount}
-        />
-      )}
+
+      <StatusCountShow
+        allData={dataCount}
+        totalCategoriesCount={addressAndCategoriesCount?.categoriesCount}
+        totalAddressCount={addressAndCategoriesCount?.addressCount}
+        loading={loading}
+      />
+
       <div className="chart-card-container">
-        {arrayOfchartes.map((chart) => (
-          <InformationStatisticsEnum
-            key={chart.categoryType}
-            categoryType={chart.categoryType}
-            chartType={chart.chartType}
-            title={chart.title}
-            dateFilter={dateFilter}
-            setDataWithPaginations={setDataWithPaginations}
-          />
-        ))}
+        {arrayOfchartes.map(
+          (chart) =>
+            !chart.hide && (
+              <InformationStatisticsEnum
+                key={chart.categoryType}
+                categoryType={chart.categoryType}
+                chartType={chart.chartType}
+                title={chart.title}
+                dateFilter={dateFilter}
+                setDataWithPaginations={setDataWithPaginations}
+              />
+            )
+        )}
       </div>
     </>
   );

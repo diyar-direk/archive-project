@@ -93,6 +93,12 @@ const columns = [
     hidden: true,
   },
   {
+    name: "section",
+    headerName: "section",
+    getCell: (e) => e.sectionId?.name,
+    onlyAdminCanSee: true,
+  },
+  {
     name: "phone",
     headerName: "phone",
   },
@@ -183,6 +189,7 @@ const People = () => {
     sources: "",
     countyId: "",
     governorateId: "",
+    sectionId: "",
     date: {
       from: "",
       to: "",

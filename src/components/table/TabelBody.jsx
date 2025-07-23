@@ -15,7 +15,7 @@ const TabelBody = ({
 }) => {
   const context = useContext(Context);
   const { language } = useLanguage();
-
+  const { role } = context.userDetails;
   const checkOne = useCallback(
     (elementId) => {
       if (!selectedItems.some((id) => id === elementId)) {
@@ -71,7 +71,8 @@ const TabelBody = ({
           )}
           {column.map(
             (column) =>
-              !column.hidden && (
+              !column.hidden &&
+              (!column.onlyAdminCanSee || role === "admin") && (
                 <td key={column.name} className={column.className}>
                   {(column.hideColumnIf
                     ? !column.hideColumnIf(row, context.userDetails._id)
@@ -89,6 +90,7 @@ const TabelBody = ({
       selectable,
       selectedItems,
       context.userDetails._id,
+      role,
     ]
   );
 

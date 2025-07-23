@@ -1,9 +1,9 @@
-import axios from "axios";
+import Cookies from "js-cookie";
 import { baseURL } from "../context/context";
-
-const token = document.cookie.split("archive_cookie=")[1];
+import axios from "axios";
 
 export const getInfinityFeatchApis = async ({ page = 1, search, url }) => {
+  const token = Cookies.get("archive_cookie");
   try {
     const { data } = await axios.get(`${baseURL}/${url}`, {
       headers: {

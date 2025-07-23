@@ -1,9 +1,9 @@
+import Cookies from "js-cookie";
 import axios from "axios";
 import { baseURL } from "../../context/context.jsx";
 
-const token = document.cookie.split("archive_cookie=")[1];
-
 export const getInformations = async ({ page = 1, search }) => {
+  const token = Cookies.get("archive_cookie");
   try {
     const { data } = await axios.get(`${baseURL}/Information`, {
       headers: {

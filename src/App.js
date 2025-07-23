@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
@@ -51,9 +51,11 @@ import ResultViewPage from "./pages/exports/result/ResultViewPage";
 
 function App() {
   const location = useLocation();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
   return (
     <div className="App">
       <Routes>
@@ -66,9 +68,9 @@ function App() {
               <Route path="error-403" element={<AccessDenied />} />
               <Route element={<AdminAuth />}>
                 <Route path="users" element={<Users />} />
-                <Route path="add_user" element={<AddUser />} /> 
+                <Route path="add_user" element={<AddUser />} />
                 <Route path="backup" element={<Backup />} />
-                <Route path="status" element={<DashboardCharts />} />
+                <Route path="sections" element={<Sections />} />
                 <Route path="exports" element={<ExportsDataShow />} />
                 <Route path="add_export" element={<AddExport />} />
                 <Route path="exports/:id" element={<ExportViewPage />} />
@@ -82,7 +84,7 @@ function App() {
                 <Route path="update_result/:id" element={<UpdateResult />} />
                 <Route path="results/:id" element={<ResultViewPage />} />
               </Route>
-
+              <Route path="status" element={<DashboardCharts />} />
               <Route path="people" element={<People />} />
               <Route path="people/:id" element={<Profile />} />
               <Route path="search_by_image" element={<ImageSearch />} />
@@ -95,7 +97,6 @@ function App() {
               <Route path="villages" element={<Village />} />
               <Route path="regions" element={<Region />} />
               <Route path="streets" element={<Street />} />
-              <Route path="sections" element={<Sections />} />
               <Route path="fields" element={<Field />} />
               <Route path="sources" element={<Sources />} />
               <Route path="event" element={<Event />} />

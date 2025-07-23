@@ -1,14 +1,16 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getPeopleApi } from "../people/api";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
+import { Context } from "../../context/context";
 
 const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});
-
+  const context = useContext(Context);
+  const { role } = context.userDetails;
   const openDives = useCallback((e) => {
     e.target.classList.toggle("active");
   }, []);
@@ -80,15 +82,6 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
 
   const staticFilters = useMemo(() => {
     const staticFilter = [
-      {
-        name: "gender",
-        label: "gender",
-        ifemptyLabel: language?.table?.all_genders,
-        values: [
-          { value: "Female", label: language?.table?.female },
-          { value: "Male", label: language?.table?.male },
-        ],
-      },
       {
         name: "credibility",
         label: "credibility",
@@ -216,6 +209,16 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           })),
         tabelFilterIgnoreText: "any village",
         url: "Villages",
+      },
+      {
+        name: "sectionId",
+        label: "section",
+        selectLabel: beforeFiltering?.sectionId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, sectionId: option }),
+        tabelFilterIgnoreText: "any section",
+        url: "Sections",
+        hideSelectoer: role !== "admin",
       },
       {
         name: "sources",

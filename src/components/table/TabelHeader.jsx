@@ -1,4 +1,5 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useContext, useMemo } from "react";
+import { Context } from "../../context/context";
 
 const TabelHeader = ({
   selectable,
@@ -20,11 +21,15 @@ const TabelHeader = ({
     },
     [setSort]
   );
+  const context = useContext(Context);
+  const { role } = context.userDetails;
+
   const header = useMemo(
     () =>
       column.map(
         (th) =>
-          !th.hidden && (
+          !th.hidden &&
+          (!th.onlyAdminCanSee || role === "admin") && (
             <th key={th.headerName}>
               {th.headerName}
               {th.sort && (
@@ -38,7 +43,7 @@ const TabelHeader = ({
             </th>
           )
       ),
-    [column, updateSortStatus]
+    [column, updateSortStatus, role]
   );
   const checkAll = (e) => {
     const allActiveSelectors = document.querySelectorAll("td .checkbox.active");

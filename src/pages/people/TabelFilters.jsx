@@ -1,12 +1,15 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
+import { Context } from "../../context/context";
 
 const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const { language } = useLanguage();
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});
+  const context = useContext(Context);
+  const { role } = context.userDetails;
 
   const openDives = useCallback((e) => {
     e.target.classList.toggle("active");
@@ -213,28 +216,41 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         optionLabel: (option) => option?.source_name,
         url: "Sources",
       },
+      {
+        name: "sectionId",
+        label: "section",
+        selectLabel: beforeFiltering?.sectionId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, sectionId: option }),
+        tabelFilterIgnoreText: "any section",
+        url: "Sections",
+        hideSelectoer: role !== "admin",
+      },
     ];
 
-    return arrayOfApis.map((input) => (
-      <SelectInputApi
-        key={input.name}
-        className="tabel-filter-select"
-        isTabelsFilter
-        fetchData={getInfinityFeatchApis}
-        selectLabel={input.selectLabel}
-        optionLabel={
-          input.optionLabel ? input.optionLabel : (option) => option?.name
-        }
-        onChange={input.onChange}
-        tabelFilterIgnoreText={input.tabelFilterIgnoreText}
-        onIgnore={() =>
-          setBeforeFiltering({ ...beforeFiltering, [input.name]: "" })
-        }
-        url={input.url}
-        label={input.label}
-      />
-    ));
-  }, [beforeFiltering, handleParentChange]);
+    return arrayOfApis.map(
+      (input) =>
+        !input.hideSelectoer && (
+          <SelectInputApi
+            key={input.name}
+            className="tabel-filter-select"
+            isTabelsFilter
+            fetchData={getInfinityFeatchApis}
+            selectLabel={input.selectLabel}
+            optionLabel={
+              input.optionLabel ? input.optionLabel : (option) => option?.name
+            }
+            onChange={input.onChange}
+            tabelFilterIgnoreText={input.tabelFilterIgnoreText}
+            onIgnore={() =>
+              setBeforeFiltering({ ...beforeFiltering, [input.name]: "" })
+            }
+            url={input.url}
+            label={input.label}
+          />
+        )
+    );
+  }, [beforeFiltering, handleParentChange, role]);
 
   return (
     <TabelFilterDiv

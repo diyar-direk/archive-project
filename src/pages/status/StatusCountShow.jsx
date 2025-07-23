@@ -1,8 +1,32 @@
+import Skeleton from "react-loading-skeleton";
+
 const StatusCountShow = ({
   allData,
   totalAddressCount,
   totalCategoriesCount,
+  loading,
 }) => {
+  if (loading)
+    return (
+      <section className="flex gap-20 mb-10">
+        <div className="flex-1" style={{ height: "140px", overflow: "hidden" }}>
+          <Skeleton />
+        </div>
+        <div className="flex-1" style={{ height: "140px", overflow: "hidden" }}>
+          <Skeleton />
+        </div>
+        <div className="flex-1" style={{ height: "140px", overflow: "hidden" }}>
+          <Skeleton />
+        </div>
+        <div className="flex-1" style={{ height: "140px", overflow: "hidden" }}>
+          <Skeleton />
+        </div>
+        <div className="flex-1" style={{ height: "140px", overflow: "hidden" }}>
+          <Skeleton />
+        </div>
+      </section>
+    );
+  if (!allData) return;
   return (
     <section className="status-section">
       <div
@@ -16,7 +40,7 @@ const StatusCountShow = ({
             color: "rgb(255, 99, 132)",
           }}
         />
-        <h1 className="flex-1">{allData.informationCount} information </h1>
+        <h1 className="flex-1">{allData?.informationCount} information </h1>
       </div>
       <div
         className="center gap-10"
@@ -29,7 +53,7 @@ const StatusCountShow = ({
             color: "rgb(75, 192, 192)",
           }}
         />
-        <h1 className="flex-1"> {allData.personCount} person </h1>
+        <h1 className="flex-1"> {allData?.personCount} person </h1>
       </div>
       <div
         className="center gap-10"
@@ -44,7 +68,7 @@ const StatusCountShow = ({
             color: "rgb(153, 102, 255)",
           }}
         />
-        <h1 className="flex-1">{allData.coordinateCount} coordinate </h1>
+        <h1 className="flex-1">{allData?.coordinateCount} coordinate </h1>
       </div>
       <div
         className="center gap-10"

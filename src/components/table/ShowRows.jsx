@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
+import { Context } from "./../../context/context";
 
 document.addEventListener("click", () => {
   document.querySelector(".show-rows > article.active") &&
@@ -8,6 +9,8 @@ document.addEventListener("click", () => {
 });
 const ShowRows = ({ columns, setColumns }) => {
   const [search, setSearch] = useState("");
+  const context = useContext(Context);
+  const { role } = context.userDetails;
   const updateRows = useCallback(
     (column) => {
       const updated = columns.map((col) =>
@@ -20,21 +23,10 @@ const ShowRows = ({ columns, setColumns }) => {
 
   const inputs = useMemo(
     () =>
-      columns.map((column) =>
-        !search ? (
-          <div key={column.name}>
-            <input
-              type="checkbox"
-              className="c-pointer"
-              id={column.name}
-              checked={!column.hidden}
-              onChange={() => updateRows(column)}
-            />
-            <label htmlFor={column.name}>{column.headerName}</label>
-          </div>
-        ) : (
-          (column.name.includes(search) ||
-            column.headerName.includes(search)) && (
+      columns.map(
+        (column) =>
+          (!column.onlyAdminCanSee || role === "admin") &&
+          (!search ? (
             <div key={column.name}>
               <input
                 type="checkbox"
@@ -45,10 +37,23 @@ const ShowRows = ({ columns, setColumns }) => {
               />
               <label htmlFor={column.name}>{column.headerName}</label>
             </div>
-          )
-        )
+          ) : (
+            (column.name.includes(search) ||
+              column.headerName.includes(search)) && (
+              <div key={column.name}>
+                <input
+                  type="checkbox"
+                  className="c-pointer"
+                  id={column.name}
+                  checked={!column.hidden}
+                  onChange={() => updateRows(column)}
+                />
+                <label htmlFor={column.name}>{column.headerName}</label>
+              </div>
+            )
+          ))
       ),
-    [columns, updateRows, search]
+    [columns, updateRows, search, role]
   );
 
   return (
