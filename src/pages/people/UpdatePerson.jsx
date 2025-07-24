@@ -43,7 +43,7 @@ const UpdatePerson = () => {
           context.userDetails.role === "user" &&
           context.userDetails.sectionId !== res.data.data.sectionId._id
         ) {
-          nav("/dashboard/not-found-404");
+          nav("/not-found-404");
           return;
         }
 
@@ -54,9 +54,8 @@ const UpdatePerson = () => {
       })
       .catch((err) => {
         console.log(err);
-        if (err.status === 500 || err.status === 404)
-          nav("/dashboard/error-404");
-        err.status === 403 && nav(`/dashboard/error-403`);
+        if (err.status === 500 || err.status === 404) nav("/error-404");
+        err.status === 403 && nav(`/error-403`);
       })
       .finally(() => setDataLoading(false));
   }, []);
@@ -124,7 +123,7 @@ const UpdatePerson = () => {
         const data = await axios.patch(`${baseURL}/people/${id}`, formData, {
           headers: { Authorization: "Bearer " + token },
         });
-        if (data.status === 200) nav("/dashboard/people");
+        if (data.status === 200) nav("/people");
       } catch (error) {
         console.log(error);
         responseFun(false);

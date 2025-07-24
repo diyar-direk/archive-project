@@ -1,6 +1,6 @@
 import axios from "axios";
 import "../people/profile.css";
-import  { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
@@ -30,13 +30,13 @@ const InfoPage = () => {
         context.userDetails.role === "user" &&
         context.userDetails.sectionId !== res.data.data.sectionId._id
       ) {
-        nav("/dashboard/not-found-404");
+        nav("/not-found-404");
         return;
       }
       setData(res.data.data);
     } catch (err) {
-      if (err.status === 500 || err.status === 404) nav("/dashboard/error-404");
-      err.status === 403 && nav(`/dashboard/error-403`);
+      if (err.status === 500 || err.status === 404) nav("/error-404");
+      err.status === 403 && nav(`/error-403`);
       console.log(err);
     } finally {
       setLoading(false);
@@ -98,7 +98,7 @@ const InfoPage = () => {
           className="fa-solid fa-download"
         ></i>
         <Link
-          to={`/dashboard/update_info/${id}`}
+          to={`/update_info/${id}`}
           title="update"
           className="fa-regular fa-pen-to-square"
         ></Link>

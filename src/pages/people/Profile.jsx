@@ -33,15 +33,14 @@ const Profile = () => {
         context.userDetails.role === "user" &&
         context.userDetails.sectionId !== data.data.data.sectionId._id
       ) {
-        nav("/dashboard/not-found-404");
+        nav("/not-found-404");
         return;
       }
       setData(data.data.data);
     } catch (error) {
       console.log(error);
-      (error.status === 500 || error.status === 404) &&
-        nav(`/dashboard/error-404`);
-      error.status === 403 && nav(`/dashboard/error-403`);
+      (error.status === 500 || error.status === 404) && nav(`/error-404`);
+      error.status === 403 && nav(`/error-403`);
     } finally {
       setLoading(false);
     }
@@ -114,10 +113,7 @@ const Profile = () => {
                   >
                     {e._id !== id && (
                       <>
-                        <Link
-                          to={`/dashboard/people/${e._id}`}
-                          className="profile-image"
-                        >
+                        <Link to={`/people/${e._id}`} className="profile-image">
                           {e.image ? (
                             <MediaComponent
                               src={e.image}
@@ -128,10 +124,7 @@ const Profile = () => {
                             <i className="fa-solid fa-user"></i>
                           )}
                         </Link>
-                        <Link
-                          to={`/dashboard/people/${e._id}`}
-                          className="name"
-                        >
+                        <Link to={`/people/${e._id}`} className="name">
                           {e.firstName} {e.surName}
                         </Link>
                       </>
@@ -143,7 +136,7 @@ const Profile = () => {
           ) : (
             <p>{language?.people?.no_related_people}</p>
           )}
-          <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
+          <Link to={`/informations/${e._id}`} className="flex btn">
             {language?.people?.show_details}
           </Link>
         </article>
@@ -236,7 +229,7 @@ const Profile = () => {
         ) : (
           <div className="info">
             <Link
-              to={`/dashboard/update_person/${id}`}
+              to={`/update_person/${id}`}
               className="fa-regular fa-pen-to-square"
             ></Link>
             <div className="flex">

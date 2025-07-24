@@ -38,7 +38,7 @@ const UpdateExport = () => {
       });
     } catch (error) {
       console.error(error);
-      nav("/dashboard/error-404");
+      nav("/error-404");
     } finally {
       setLoading(false);
     }
@@ -75,12 +75,7 @@ const UpdateExport = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const inputDate = new Date(form.expirationDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    inputDate.setHours(0, 0, 0, 0);
 
-    if (inputDate <= today) return setError("Date must be in the future");
     if (form.questions.length === 0)
       return setError("you have to add one or more questions");
     setFormLoading(true);

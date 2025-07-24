@@ -314,7 +314,7 @@ div.table tbody tr:nth-child(odd) {
 div.table tbody tr:nth-child(even) {
   background-color: var(--border-color);
 }
-div.table tbody td {
+tbody td {
   padding: 10px;
   max-width: 220px;
   overflow: hidden;

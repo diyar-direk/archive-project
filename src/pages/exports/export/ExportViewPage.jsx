@@ -24,7 +24,7 @@ const ExportViewPage = () => {
       setData(data.data);
     } catch (error) {
       console.error(error);
-      nav("/dashboard/error-404");
+      nav("/error-404");
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,7 @@ const ExportViewPage = () => {
       <div className="profile wrap flex">
         <div className="info">
           <Link
-            to={`/dashboard/update_export/${id}`}
+            to={`/update_export/${id}`}
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">

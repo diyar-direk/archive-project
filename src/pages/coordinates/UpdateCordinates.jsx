@@ -83,7 +83,7 @@ const UpdateCoordinates = () => {
         context.userDetails.role === "user" &&
         context.userDetails.sectionId !== data.data.data.sectionId._id
       ) {
-        nav("/dashboard/not-found-404");
+        nav("/not-found-404");
         return;
       }
       setForm(data.data.data);
@@ -109,8 +109,7 @@ const UpdateCoordinates = () => {
       });
     } catch (error) {
       console.log(error);
-      if (error.status === 500 || error.status === 404)
-        nav(`/dashboard/error-404`);
+      if (error.status === 500 || error.status === 404) nav(`/error-404`);
       else responseFun("Invalid coordinates");
     } finally {
       setDataLoading(false);
@@ -148,7 +147,7 @@ const UpdateCoordinates = () => {
         const res = await axios.patch(`${baseURL}/Coordinates/${id}`, data, {
           headers: { Authorization: "Bearer " + token },
         });
-        if (res.status === 200) nav("/dashboard/coordinates");
+        if (res.status === 200) nav("/coordinates");
       } catch (error) {
         console.log(error);
         if (error.status === 400) responseFun("reapeted data");

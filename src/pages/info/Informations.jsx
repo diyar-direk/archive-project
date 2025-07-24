@@ -84,11 +84,7 @@ const columns = [
         const arr = [];
         if (i < 3)
           arr.push(
-            <Link
-              className="name"
-              key={i}
-              to={`/dashboard/people/${person._id}`}
-            >
+            <Link className="name" key={i} to={`/people/${person._id}`}>
               {e.people[i + 1]
                 ? `${person.firstName} ${person.surName} , `
                 : `${person.firstName} ${person.surName}`}
@@ -156,10 +152,7 @@ const columns = [
               >
                 <i className="fa-solid fa-trash"></i>
               </div>
-              <Link
-                to={`/dashboard/update_info/${e._id}`}
-                className="flex update"
-              >
+              <Link to={`/update_info/${e._id}`} className="flex update">
                 <i className="fa-regular fa-pen-to-square"></i>
               </Link>
             </>

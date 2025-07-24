@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import "../people/profile.css";
 import axios from "axios";
@@ -34,16 +28,15 @@ const CoordPage = () => {
         context.userDetails.role === "user" &&
         context.userDetails.sectionId !== data.data.data.sectionId._id
       ) {
-        nav("/dashboard/not-found-404");
+        nav("/not-found-404");
         return;
       }
 
       setData(data.data.data);
     } catch (error) {
       console.log(error);
-      (error.status === 500 || error.status === 404) &&
-        nav(`/dashboard/error-404`);
-      error.status === 403 && nav(`/dashboard/error-403`);
+      (error.status === 500 || error.status === 404) && nav(`/error-404`);
+      error.status === 403 && nav(`/error-403`);
     } finally {
       setLoading(false);
     }
@@ -103,7 +96,7 @@ const CoordPage = () => {
                     {person._id !== id && (
                       <>
                         <Link
-                          to={`/dashboard/people/${person._id}`}
+                          to={`/people/${person._id}`}
                           className="profile-image"
                         >
                           {person.image ? (
@@ -116,10 +109,7 @@ const CoordPage = () => {
                             <i className="fa-solid fa-user"></i>
                           )}
                         </Link>
-                        <Link
-                          to={`/dashboard/people/${person._id}`}
-                          className="name"
-                        >
+                        <Link to={`/people/${person._id}`} className="name">
                           {person.firstName} {person.surName}
                         </Link>
                       </>
@@ -132,7 +122,7 @@ const CoordPage = () => {
             <p>{language?.information?.no_related_people}</p>
           )}
 
-          <Link to={`/dashboard/informations/${e._id}`} className="flex btn">
+          <Link to={`/informations/${e._id}`} className="flex btn">
             {language?.information?.show_details}
           </Link>
         </article>
@@ -162,7 +152,7 @@ const CoordPage = () => {
           <div className="profile wrap flex">
             <div className="info">
               <Link
-                to={`/dashboard/coordinates/${id}`}
+                to={`/coordinates/${id}`}
                 className="fa-regular fa-pen-to-square"
               ></Link>
               <div className="flex">

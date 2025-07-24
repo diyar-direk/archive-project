@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import MediaComponent from "../MediaComponent";
 import useLanguage from "../../hooks/useLanguage";
@@ -22,7 +21,7 @@ const CategoriesShow = (props) => {
               ) : (
                 <Link
                   style={{ display: "block" }}
-                  to={`/dashboard/coordinate/${e._id}`}
+                  to={`/coordinate/${e._id}`}
                   className="font-color people-cat"
                   key={e._id}
                 >
@@ -34,17 +33,14 @@ const CategoriesShow = (props) => {
               )
             ) : (
               <div className="flex align-center people-cat gap-10" key={e._id}>
-                <Link
-                  to={`/dashboard/people/${e._id}`}
-                  className="profile-image"
-                >
+                <Link to={`/people/${e._id}`} className="profile-image">
                   {e.image ? (
                     <MediaComponent src={e.image} type="image" showUserIcon />
                   ) : (
                     <i className="fa-solid fa-user"></i>
                   )}
                 </Link>
-                <Link to={`/dashboard/people/${e._id}`} className="name">
+                <Link to={`/people/${e._id}`} className="name">
                   {e.firstName} {e.surName}
                 </Link>
               </div>

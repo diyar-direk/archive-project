@@ -42,7 +42,7 @@ const UpdateInfo = () => {
           context.userDetails.role === "user" &&
           context.userDetails.sectionId !== res.data.data.sectionId._id
         ) {
-          nav("/dashboard/not-found-404");
+          nav("/not-found-404");
           return;
         }
 
@@ -197,7 +197,7 @@ const UpdateInfo = () => {
           }
         }
 
-        if (data.status === 200) nav("/dashboard/informations");
+        if (data.status === 200) nav("/informations");
       } catch (error) {
         console.log(error);
         responseFun(false);

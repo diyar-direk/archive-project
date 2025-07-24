@@ -12,7 +12,7 @@ const columns = [
     headerName: "coordinates",
     sort: true,
     getCell: (e) => (
-      <Link className="name" to={`/dashboard/coordinate/${e._id}`}>
+      <Link className="name" to={`/coordinate/${e._id}`}>
         {e.coordinates}
       </Link>
     ),
@@ -103,15 +103,12 @@ const columns = [
               >
                 <i className="fa-solid fa-trash"></i>
               </div>
-              <Link
-                to={`/dashboard/coordinates/${e._id}`}
-                className="flex update"
-              >
+              <Link to={`/coordinates/${e._id}`} className="flex update">
                 <i className="fa-regular fa-pen-to-square"></i>
               </Link>
             </>
           )}
-          <Link to={`/dashboard/coordinate/${e._id}`} className="flex visit">
+          <Link to={`/coordinate/${e._id}`} className="flex visit">
             <i className="fa-solid fa-circle-user"></i>
           </Link>
         </div>

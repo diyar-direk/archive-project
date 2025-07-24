@@ -14,7 +14,7 @@ const columns = [
     name: "image",
     headerName: "profile",
     getCell: (e) => (
-      <Link to={`/dashboard/people/${e._id}`} className="center">
+      <Link to={`/people/${e._id}`} className="center">
         {e.image ? (
           <MediaComponent
             className="photo"
@@ -34,7 +34,7 @@ const columns = [
     className: "name",
     sort: true,
     getCell: (row) => (
-      <Link to={`/dashboard/people/${row._id}`} className="name">
+      <Link to={`/people/${row._id}`} className="name">
         {row.firstName} {row.fatherName} {row.surName}
       </Link>
     ),
@@ -147,10 +147,7 @@ const columns = [
               >
                 <i className="fa-solid fa-trash"></i>
               </div>
-              <Link
-                to={`/dashboard/update_person/${e._id}`}
-                className="flex update"
-              >
+              <Link to={`/update_person/${e._id}`} className="flex update">
                 <i className="fa-regular fa-pen-to-square"></i>
               </Link>
             </>

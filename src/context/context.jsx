@@ -58,6 +58,9 @@ const Provider = ({ children }) => {
   useEffect(() => {
     getLang();
   }, [language]);
+
+  const [expiredExports, setExpiredExports] = useState(-1);
+
   return (
     <Context.Provider
       value={{
@@ -76,6 +79,8 @@ const Provider = ({ children }) => {
         setProgress,
         progressBar,
         mode,
+        expiredExports,
+        setExpiredExports,
       }}
     >
       {children}

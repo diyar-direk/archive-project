@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { baseURL, Context } from "../context/context";
 import { useCookies } from "react-cookie";
@@ -34,7 +34,7 @@ const Refresh = () => {
     } catch (err) {
       console.log(err);
       if (err.response?.status === 403) {
-        setCookie("archive_cookie", "", { path: "/", maxAge: 0 });
+        setCookie("archive_cookie", "", { path: "/login", maxAge: 0 });
       }
     } finally {
       setLoading(false);
@@ -46,7 +46,7 @@ const Refresh = () => {
       refreshToken();
     } else if (!cookie.archive_cookie) {
       setLoading(false);
-      nav("/");
+      nav("/login");
     } else {
       setLoading(false);
     }

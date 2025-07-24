@@ -4,7 +4,7 @@ import { baseURL, Context } from "../../../context/context";
 import Table from "../../../components/table/Table";
 import { Link } from "react-router-dom";
 import { dateFormatter } from "../../../utils/dateFormatter";
-import TabelFilterDiv from "../../../components/tabelFilterData/TabelFilterDiv";
+import ExportFilters from "./ExportFilters";
 const columns = [
   {
     name: "code",
@@ -33,7 +33,7 @@ const columns = [
             <Link
               className="name"
               key={i}
-              to={`/dashboard/informations/${question.informationId._id}`}
+              to={`/informations/${question.informationId._id}`}
             >
               {e.questions[i + 1]
                 ? `${question.informationId.subject} , `
@@ -84,10 +84,7 @@ const columns = [
             >
               <i className="fa-solid fa-trash"></i>
             </div>
-            <Link
-              to={`/dashboard/update_export/${e._id}`}
-              className="flex update"
-            >
+            <Link to={`/update_export/${e._id}`} className="flex update">
               <i className="fa-regular fa-pen-to-square"></i>
             </Link>
           </>
@@ -117,8 +114,11 @@ const ExportsDataShow = () => {
       from: "",
       to: "",
     },
+    expirationDate: "",
   });
   const [search, setSearch] = useState("");
+
+  const { expiredExports, setExpiredExports } = context;
 
   const getData = useCallback(async () => {
     setLoading(true);
@@ -130,13 +130,12 @@ const ExportsDataShow = () => {
     params.append("limit", limit);
     params.append("page", page);
 
-    Object.keys(filters).forEach((key) => {
-      if (key !== "date" && filters[key]) {
-        params.append(key, filters[key]._id || filters[key]);
-      }
-    });
     if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
     if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (filters.expirationDate === "expired")
+      params.append("expirationDate[lt]", Date.now());
+    if (filters.expirationDate === "unexpired")
+      params.append("expirationDate[gte]", Date.now());
     if (Object.keys(sort).length) {
       const sortParams = Object.values(sort)
         .map((v) => v)
@@ -145,10 +144,18 @@ const ExportsDataShow = () => {
     }
     if (search) params.append("search", search);
     try {
-      const { data } = await axios.get(`${baseURL}/exports`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params,
-      });
+      const [tabelData, expiredExportsCount] = await Promise.all([
+        axios.get(`${baseURL}/exports`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params,
+        }),
+        axios.get(`${baseURL}/exports/expiredExports`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+      const { data } = tabelData;
+      const { results } = expiredExportsCount.data;
+      if (results !== expiredExports) setExpiredExports(results);
       dataLength.current = data[search ? "numberOfActiveResults" : "total"];
       allData.current = data.data?.map((e) => e._id);
       setData(data.data);
@@ -165,20 +172,16 @@ const ExportsDataShow = () => {
       return () => clearTimeout(timeOut);
     }
   }, [page, filters, search, limit, sort, getData]);
-  const [beforeFiltering, setBeforeFiltering] = useState({
-    date: { from: "", to: "" },
-  });
 
   return (
     <>
       <h1 className="title">exports</h1>
       {openFiltersDiv && (
-        <TabelFilterDiv
-          beforeFiltering={beforeFiltering}
-          setBeforeFiltering={setBeforeFiltering}
+        <ExportFilters
           setFilter={setFilters}
-          setPage={setPage}
+          filter={filters}
           setIsopen={setOpenFiltersDiv}
+          setPage={setPage}
         />
       )}
       <Table

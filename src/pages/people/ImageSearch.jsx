@@ -72,7 +72,7 @@ const ImageSearch = () => {
               </div>
               <Link
                 className="btn"
-                to={`/dashboard/informations/${tableData.informationId}`}
+                to={`/informations/${tableData.informationId}`}
               >
                 {language?.filter?.details}
               </Link>
@@ -90,17 +90,11 @@ const ImageSearch = () => {
               </div>
 
               <div className="flex info">
-                <Link
-                  to={`/dashboard/people/${tableData._id}`}
-                  className="name flex"
-                >
+                <Link to={`/people/${tableData._id}`} className="name flex">
                   {tableData.firstName} {tableData.fatherName}
                   {tableData.surName}
                 </Link>
-                <Link
-                  to={`/dashboard/people/${tableData._id}`}
-                  className="profile-btn"
-                >
+                <Link to={`/people/${tableData._id}`} className="profile-btn">
                   {language?.filter?.visit_profile}
                 </Link>
               </div>

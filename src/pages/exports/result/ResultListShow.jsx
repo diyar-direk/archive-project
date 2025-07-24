@@ -61,10 +61,7 @@ const columns = [
             >
               <i className="fa-solid fa-trash"></i>
             </div>
-            <Link
-              to={`/dashboard/update_result/${e._id}`}
-              className="flex update"
-            >
+            <Link to={`/update_result/${e._id}`} className="flex update">
               <i className="fa-regular fa-pen-to-square"></i>
             </Link>
           </>

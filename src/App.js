@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import People from "./pages/people/People";
 import Profile from "./pages/people/Profile";
@@ -59,11 +59,11 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<LoginForm />} />
+        <Route path="/login" element={<LoginForm />} />
         <Route path="*" element={<PageNotFound />} />
         <Route element={<Refresh />}>
           <Route element={<DashboardAuth />}>
-            <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="/" element={<Dashboard />}>
               <Route path="*" element={<PageNotFound />} />
               <Route path="error-403" element={<AccessDenied />} />
               <Route element={<AdminAuth />}>

@@ -11,7 +11,7 @@ const Navbar = () => {
 
   const location = useLocation();
   const { links, language } = useLanguage();
-  
+
   window.addEventListener("click", () => {
     const langDiv = document.querySelector(
       "nav .setting .lang + div.languages.active-div"
@@ -104,7 +104,7 @@ const Navbar = () => {
   const [, , removeCookie] = useCookies(["archive_cookie"]);
 
   const handleLogout = () => {
-    navigate("/");
+    navigate("/login");
     removeCookie("archive_cookie");
     window.location.reload();
   };
@@ -117,13 +117,15 @@ const Navbar = () => {
             <i className={link.icon}></i>
             <h1 className="flex-1">{link.title}</h1>
             <i className="arrow fa-solid fa-chevron-right"></i>
+            {link.element}
           </div>
           <article>
             {link?.children?.map(
               (e, i) =>
                 e.role.includes(context.userDetails.role) && (
-                  <NavLink key={i} to={e.path}>
-                    {e.title}
+                  <NavLink className="center between" key={i} to={e.path}>
+                    <span>{e.title}</span>
+                    {e.element}
                   </NavLink>
                 )
             )}
@@ -187,7 +189,7 @@ const Navbar = () => {
         }
       } else {
         const path = form.replaceAll(" ", "_");
-        nav(`/dashboard/${path}`);
+        nav(`/${path}`);
       }
       setForm("");
     }
@@ -251,10 +253,18 @@ const Navbar = () => {
                 >
                   kurdish
                 </h2>
+                <h2
+                  onClick={selectLang}
+                  className={`${context?.language === "TU" ? "active" : ""}`}
+                  data-lang="TU"
+                >
+                  turkish
+                </h2>
               </div>
             </article>
             <h4 className="c-pointer log-out center" onClick={handleLogout}>
-              <i className="fa-solid fa-right-from-bracket"></i> {language?.header?.log_out}
+              <i className="fa-solid fa-right-from-bracket"></i>{" "}
+              {language?.header?.log_out}
             </h4>
           </div>
         </div>
@@ -323,17 +333,17 @@ const Navbar = () => {
           <Link
             title="people"
             className="fa-solid fa-people-group"
-            to={"/dashboard/people"}
+            to={"/people"}
           ></Link>
           <Link
             title="search by image"
             className="fa-solid fa-magnifying-glass"
-            to={"/dashboard/search_by_image"}
+            to={"/search_by_image"}
           ></Link>
           <Link
             title="informations"
             className="fa-solid fa-sitemap"
-            to={"/dashboard/informations"}
+            to={"/informations"}
           ></Link>
         </div>
       </div>

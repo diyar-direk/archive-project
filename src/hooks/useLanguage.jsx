@@ -1,219 +1,248 @@
-import { useContext } from "react";
-import { Context } from "../context/context";
+import { useContext, useEffect, useMemo } from "react";
+import { baseURL, Context } from "../context/context";
+import axios from "axios";
 const useLanguage = () => {
   const context = useContext(Context);
   const language = context?.selectedLang;
-  const links = [
-    {
-      icon: "fa-solid fa-chart-column",
-      children: [
-        {
-          title: "status",
-          path: "status",
-          role: ["admin", "user"],
-        },
-      ],
-      title: "status",
-      role: ["admin", "user"],
-    },
+  const { token, role } = context.userDetails;
+  const { expiredExports, setExpiredExports } = context;
 
-    {
-      icon: "fa-solid fa-user-group",
-      children: [
-        { title: language?.header?.users, path: "users", role: ["admin"] },
-        {
-          title: language?.header?.add_users,
-          path: "add_user",
-          role: ["admin"],
-        },
-      ],
-      title: language?.header?.users,
-      role: ["admin"],
-    },
-    {
-      icon: "fa-solid fa-people-group",
-      children: [
-        {
-          title: language?.header?.people,
-          path: "people",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.add_person,
-          path: "add_person",
-          role: ["admin", "user"],
-        },
-      ],
-      title: language?.header?.people,
-      role: ["admin", "user"],
-    },
-    {
-      icon: "fa-solid fa-map-location-dot",
-      children: [
-        {
-          title: language?.header?.countries,
-          path: "countries",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.governments,
-          path: "governorates",
-          role: ["admin", "user"],
-        },
-        {
-          title: "lang.Counties",
-          path: "counties",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.cities,
-          path: "cities",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.villages,
-          path: "villages",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.streets,
-          path: "streets",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.regions,
-          path: "regions",
-          role: ["admin", "user"],
-        },
-      ],
-      title: language?.header?.adress,
-      role: ["admin", "user"],
-    },
+  useEffect(() => {
+    if (expiredExports >= 0 && role !== "admin") return;
+    axios
+      .get(`${baseURL}/exports/expiredExports`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => setExpiredExports(res.data.results))
+      .catch((err) => console.log(err));
+  }, [expiredExports, token, setExpiredExports, role]);
 
-    {
-      icon: "fa-solid fa-layer-group",
-      children: [
-        {
-          title: language?.header?.sections,
-          path: "sections",
-          role: ["admin", "user"],
-        },
-        {
-          title: "Fields",
-          path: "fields",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.sources,
-          path: "sources",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.events,
-          path: "event",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.parties,
-          path: "party",
-          role: ["admin", "user"],
-        },
-      ],
-      title: language?.header?.categories,
-      role: ["admin", "user"],
-    },
-    {
-      icon: "fa-solid fa-sitemap",
-      children: [
-        {
-          title: language?.header?.information,
-          path: "informations",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.add_information,
-          path: "add_information",
-          role: ["admin", "user"],
-        },
-      ],
-      title: language?.header?.information,
-      role: ["admin", "user"],
-    },
-    {
-      icon: "fa-solid fa-thumbtack",
-      children: [
-        {
-          title: language?.header?.coordinates,
-          path: "coordinates",
-          role: ["admin", "user"],
-        },
-        {
-          title: language?.header?.add_coordinates,
-          path: "add_coordinates",
-          role: ["admin", "user"],
-        },
-      ],
-      title: language?.header?.coordinates,
-      role: ["admin", "user"],
-    },
-    {
-      icon: "fa-solid fa-file-import",
-      children: [
-        {
-          title: "exports",
-          path: "exports",
-          role: ["admin"],
-        },
-        {
-          title: "add export",
-          path: "add_export",
-          role: ["admin"],
-        },
-      ],
-      title: "Outgoing & incoming",
-      role: ["admin"],
-    },
-    {
-      icon: "fa-solid fa-rectangle-list",
-      children: [
-        {
-          title: "reports",
-          path: "reports",
-          role: ["admin"],
-        },
-        {
-          title: "add report",
-          path: "add_report",
-          role: ["admin"],
-        },
-        {
-          title: "results",
-          path: "results",
-          role: ["admin"],
-        },
-        {
-          title: "add result",
-          path: "add_result",
-          role: ["admin"],
-        },
-      ],
-      title: "reports & results",
-      role: ["admin"],
-    },
+  const links = useMemo(
+    () => [
+      {
+        icon: "fa-solid fa-chart-column",
+        children: [
+          {
+            title: "status",
+            path: "status",
+            role: ["admin", "user"],
+          },
+        ],
+        title: "status",
+        role: ["admin", "user"],
+      },
 
-    {
-      icon: "fa-solid fa-folder-open",
-      children: [
-        {
-          title: language?.header?.backUps,
-          path: "backup",
-          role: ["admin"],
-        },
-      ],
-      title: language?.header?.backUps,
-      role: ["admin"],
-    },
-  ];
+      {
+        icon: "fa-solid fa-user-group",
+        children: [
+          { title: language?.header?.users, path: "users", role: ["admin"] },
+          {
+            title: language?.header?.add_users,
+            path: "add_user",
+            role: ["admin"],
+          },
+        ],
+        title: language?.header?.users,
+        role: ["admin"],
+      },
+      {
+        icon: "fa-solid fa-people-group",
+        children: [
+          {
+            title: language?.header?.people,
+            path: "people",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.add_person,
+            path: "add_person",
+            role: ["admin", "user"],
+          },
+        ],
+        title: language?.header?.people,
+        role: ["admin", "user"],
+      },
+      {
+        icon: "fa-solid fa-map-location-dot",
+        children: [
+          {
+            title: language?.header?.countries,
+            path: "countries",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.governments,
+            path: "governorates",
+            role: ["admin", "user"],
+          },
+          {
+            title: "lang.Counties",
+            path: "counties",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.cities,
+            path: "cities",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.villages,
+            path: "villages",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.streets,
+            path: "streets",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.regions,
+            path: "regions",
+            role: ["admin", "user"],
+          },
+        ],
+        title: language?.header?.adress,
+        role: ["admin", "user"],
+      },
+
+      {
+        icon: "fa-solid fa-layer-group",
+        children: [
+          {
+            title: language?.header?.sections,
+            path: "sections",
+            role: ["admin", "user"],
+          },
+          {
+            title: "Fields",
+            path: "fields",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.sources,
+            path: "sources",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.events,
+            path: "event",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.parties,
+            path: "party",
+            role: ["admin", "user"],
+          },
+        ],
+        title: language?.header?.categories,
+        role: ["admin", "user"],
+      },
+      {
+        icon: "fa-solid fa-sitemap",
+        children: [
+          {
+            title: language?.header?.information,
+            path: "informations",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.add_information,
+            path: "add_information",
+            role: ["admin", "user"],
+          },
+        ],
+        title: language?.header?.information,
+        role: ["admin", "user"],
+      },
+      {
+        icon: "fa-solid fa-thumbtack",
+        children: [
+          {
+            title: language?.header?.coordinates,
+            path: "coordinates",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.add_coordinates,
+            path: "add_coordinates",
+            role: ["admin", "user"],
+          },
+        ],
+        title: language?.header?.coordinates,
+        role: ["admin", "user"],
+      },
+      {
+        icon: "fa-solid fa-file-import",
+        element:
+          expiredExports >= 0 ? (
+            <div className="expired-exports-count">
+              {expiredExports > 9 ? "+9" : expiredExports}
+            </div>
+          ) : null,
+        children: [
+          {
+            title: "exports",
+            path: "exports",
+            role: ["admin"],
+            element:
+              expiredExports >= 0 ? (
+                <div className="expired-exports-count">
+                  {expiredExports > 9 ? "+9" : expiredExports}
+                </div>
+              ) : null,
+          },
+          {
+            title: "add export",
+            path: "add_export",
+            role: ["admin"],
+          },
+        ],
+        title: "Outgoing & incoming",
+        role: ["admin"],
+      },
+      {
+        icon: "fa-solid fa-rectangle-list",
+        children: [
+          {
+            title: "reports",
+            path: "reports",
+            role: ["admin"],
+          },
+          {
+            title: "add report",
+            path: "add_report",
+            role: ["admin"],
+          },
+          {
+            title: "results",
+            path: "results",
+            role: ["admin"],
+          },
+          {
+            title: "add result",
+            path: "add_result",
+            role: ["admin"],
+          },
+        ],
+        title: "reports & results",
+        role: ["admin"],
+      },
+
+      {
+        icon: "fa-solid fa-folder-open",
+        children: [
+          {
+            title: language?.header?.backUps,
+            path: "backup",
+            role: ["admin"],
+          },
+        ],
+        title: language?.header?.backUps,
+        role: ["admin"],
+      },
+    ],
+    [language, expiredExports]
+  );
 
   return { language, links };
 };

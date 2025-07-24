@@ -9,7 +9,7 @@ const DashboardAuth = () => {
   return context?.userDetails.token ? (
     <Outlet />
   ) : (
-    <Navigate state={{ from: location }} replace to={"/"} />
+    <Navigate state={{ from: location }} replace to={"/login"} />
   );
 };
 

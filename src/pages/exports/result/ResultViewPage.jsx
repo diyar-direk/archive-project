@@ -24,7 +24,7 @@ const ResultViewPage = () => {
       setData(data.data);
     } catch (error) {
       console.error(error);
-      nav("/dashboard/error-404");
+      nav("/error-404");
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ const ResultViewPage = () => {
       <div className="profile wrap flex">
         <div className="info">
           <Link
-            to={`/dashboard/update_result/${id}`}
+            to={`/update_result/${id}`}
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">

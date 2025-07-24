@@ -191,10 +191,10 @@ const Table = ({
             <i className="fa-solid fa-magnifying-glass" />
           </label>
         )}
-        {(location.pathname.includes("/dashboard/people") ||
-          location.pathname.includes("/dashboard/informations")) && (
+        {(location.pathname.includes("/people") ||
+          location.pathname.includes("/informations")) && (
           <Link
-            to="/dashboard/search_by_image"
+            to="/search_by_image"
             title={language?.header?.serach_by_image}
             className="table-form-icons"
           >
@@ -204,7 +204,7 @@ const Table = ({
         )}
         {!hideAddBtn && addPageUrl && (
           <Link
-            to={`/dashboard/${addPageUrl}`}
+            to={`/${addPageUrl}`}
             title="add data"
             className="table-form-icons"
           >
