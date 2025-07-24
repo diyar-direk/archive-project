@@ -97,6 +97,7 @@
     text-transform: capitalize;
     margin-top: 20px;
     color: var(--font-color);
+    font-size: 25px;
   }
   .chart-pagination {
     position: absolute;
@@ -172,7 +173,7 @@
     max-height: 450px;
     & h1 {
       margin-top: 0px;
-      font-size: 25px;
+      font-size: 20px;
     }
   }
 }
@@ -193,6 +194,7 @@
   .status-section {
     gap: 10px;
     & div {
+      flex: 100px;
       padding: 15px;
       & i {
         font-size: 14px;
@@ -208,7 +210,7 @@
     max-height: 350px;
     & h1 {
       margin-top: 0px;
-      font-size: 20px;
+      font-size: 18px;
     }
     & .chart-pagination {
       & button {
@@ -223,6 +225,16 @@
   }
 }
 @media (max-width: 500px) {
+  .chart-card-container {
+    & .doughnut {
+      overflow: auto;
+      flex: 150px;
+    }
+    & .bar {
+      flex: 200px 1;
+      overflow: auto;
+    }
+  }
   .export-as-word {
     & i {
       padding: 8px;
@@ -256,7 +268,7 @@
     padding: 10px;
     & h1 {
       margin-top: 0px;
-      font-size: 18px;
+      font-size: 16px;
     }
   }
 }
