@@ -24,11 +24,11 @@ const ExportFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const staticFilter = [
       {
         name: "expirationDate",
-        label: "expirationDate",
-        ifemptyLabel: "any expirationDate",
+        label: language.exports.expiration_date,
+        ifemptyLabel: language.table.any,
         values: [
-          { value: "expired", label: "expired" },
-          { value: "unexpired", label: "unexpired" },
+          { value: "expired", label: language.table.expired },
+          { value: "unexpired", label: language.table.not_expired },
         ],
       },
     ];

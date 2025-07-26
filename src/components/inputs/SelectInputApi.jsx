@@ -158,7 +158,9 @@ const SelectInputApi = ({
             </h2>
           ))}
           {loading && <p className="font-color">{language?.table?.loading}</p>}
-          {!hasMore && <p className="font-color">no more data</p>}
+          {!hasMore && (
+            <p className="font-color">{language?.table?.no_more_data}</p>
+          )}
         </article>
         {!isTabelsFilter && isArray && value?.length > 0 ? (
           <div className="flex selceted-itms">

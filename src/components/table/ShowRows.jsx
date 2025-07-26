@@ -1,5 +1,6 @@
 import { useCallback, useContext, useMemo, useState } from "react";
 import { Context } from "./../../context/context";
+import useLanguage from "../../hooks/useLanguage";
 
 document.addEventListener("click", () => {
   document.querySelector(".show-rows > article.active") &&
@@ -10,6 +11,7 @@ document.addEventListener("click", () => {
 const ShowRows = ({ columns, setColumns }) => {
   const [search, setSearch] = useState("");
   const context = useContext(Context);
+  const { language } = useLanguage();
   const { role } = context.userDetails;
   const updateRows = useCallback(
     (column) => {
@@ -35,7 +37,12 @@ const ShowRows = ({ columns, setColumns }) => {
                 checked={!column.hidden}
                 onChange={() => updateRows(column)}
               />
-              <label htmlFor={column.name}>{column.headerName}</label>
+              <label htmlFor={column.name}>
+                {column.headerName}
+                {typeof column.headerName === "function"
+                  ? column.headerName(language)
+                  : column.headerName}
+              </label>
             </div>
           ) : (
             (column.name.includes(search) ||
@@ -68,7 +75,7 @@ const ShowRows = ({ columns, setColumns }) => {
         className="table-form-icons"
       >
         <i className="fa-solid fa-ellipsis" />
-        <span>columns</span>
+        <span>{language.table.columns}</span>
       </div>
       <article onClick={(e) => e.stopPropagation()}>
         <input
@@ -80,7 +87,7 @@ const ShowRows = ({ columns, setColumns }) => {
         />
         {inputs}
         <h4>
-          columns avibel: <span> {inputs.length}</span>
+          {language.table.columns_available} <span> {inputs.length}</span>
         </h4>
       </article>
     </div>
