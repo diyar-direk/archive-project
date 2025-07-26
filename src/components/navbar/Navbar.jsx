@@ -52,8 +52,7 @@ const Navbar = () => {
     context.setMode(document.body.classList.contains("dark"));
   };
 
-  const openDiv = (ele) => {
-    console.log(ele);
+  const openDiv = (ele) => { 
     ele.stopPropagation();
     const allDivs = document.querySelectorAll(
       "aside >div> div > .links > .center"
