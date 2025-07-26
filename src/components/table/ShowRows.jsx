@@ -60,7 +60,7 @@ const ShowRows = ({ columns, setColumns }) => {
             )
           ))
       ),
-    [columns, updateRows, search, role]
+    [columns, updateRows, search, role, language]
   );
 
   return (

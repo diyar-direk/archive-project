@@ -233,7 +233,7 @@ const InfoPage = () => {
       {data.media && <MediaShow id={id} data={data?.media} getData={getData} />}
 
       <div className="media">
-        <h1> questions </h1>
+        <h1> {language?.exports?.questions} </h1>
       </div>
 
       {role === "admin" &&
