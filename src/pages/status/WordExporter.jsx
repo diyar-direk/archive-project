@@ -1,6 +1,7 @@
 import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { dateFormatter } from "../../utils/dateFormatter";
+import useLanguage from "../../hooks/useLanguage";
 
 const today = dateFormatter(new Date());
 
@@ -11,6 +12,7 @@ const WordExporter = ({
   totalCategoriesCount,
   totalAddressCount,
 }) => {
+  const { language } = useLanguage();
   const generateDoc = async () => {
     const doc = new Document({
       sections: [
@@ -107,7 +109,7 @@ const WordExporter = ({
       <i
         className="fa-solid fa-download"
         onClick={generateDoc}
-        title="export as word file"
+        title={language.statistics.export_as_word}
       />
     </div>
   );

@@ -31,6 +31,15 @@
     "InvalidCoordinates": "Invalid coordinates"
   },
   "header": {
+    "outgoing_incoming": "Outgoing and Incoming",
+    "incoming": "Incoming",
+    "add_export": "Add Export",
+    "reports_results": "Reports and Results",
+    "reports": "Reports",
+    "results": "Results",
+    "add_report": "Add Report",
+    "add_result": "Add Result",
+    "statistics": "Statistics",
     "serach_for_pages": "Search for pages",
     "log_out": "Log out",
     "users": "Users",
@@ -72,6 +81,27 @@
     "repeated_data": "reapeted data",
     "show_shortCut": "Show Shortcut"
   },
+  "statistics": {
+    "information": "Information",
+    "people": "People",
+    "coordinates": "Coordinates",
+    "categories": "Categories",
+    "adress_information": "Address Information",
+    "information_for_each_county": "Information for each County",
+    "information_for_each_governorate": "Information for each Governorate",
+    "information_for_each_city": "Information for each City",
+    "information_for_each_village": "Information for each Village",
+    "information_for_each_region": "Information for each Region",
+    "information_for_each_street": "Information for each Street",
+    "information_for_each_section": "Information for each Section",
+    "information_for_each_source": "Information for each Source",
+    "information_for_each_party": "Information for each Party",
+    "information_for_each_event": "Information for each Event",
+    "information_for_country": "Information for each Country",
+    "count": "Count",
+    "export_as_word": "Export as Word File"
+  },
+
   "table": {
     "delete": "Delete",
     "cancel": "Cancel",

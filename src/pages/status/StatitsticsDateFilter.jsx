@@ -1,8 +1,11 @@
+import useLanguage from "../../hooks/useLanguage";
+
 const StatitsticsDateFilter = ({ dateFilter, setDateFilter }) => {
+  const { language } = useLanguage();
   return (
     <div className="statistic-date-fltr">
       <article>
-        <label htmlFor="from">date From:</label>
+        <label htmlFor="from">{language.table.from}</label>
         <input
           type="date"
           value={dateFilter?.from || ""}
@@ -13,7 +16,7 @@ const StatitsticsDateFilter = ({ dateFilter, setDateFilter }) => {
         />
       </article>
       <article>
-        <label htmlFor="to">date To:</label>
+        <label htmlFor="to">{language.table.to}</label>
         <input
           type="date"
           value={dateFilter?.to || ""}

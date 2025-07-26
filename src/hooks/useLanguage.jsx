@@ -23,12 +23,12 @@ const useLanguage = () => {
         icon: "fa-solid fa-chart-column",
         children: [
           {
-            title: "status",
+            title: language?.header?.statistics || "Statistics",
             path: "status",
             role: ["admin", "user"],
           },
         ],
-        title: "status",
+        title: language?.header?.statistics || "Statistics",
         role: ["admin", "user"],
       },
 
@@ -181,7 +181,7 @@ const useLanguage = () => {
           ) : null,
         children: [
           {
-            title: "exports",
+            title:  language?.header?.incoming,
             path: "exports",
             role: ["admin"],
             element:
@@ -192,39 +192,39 @@ const useLanguage = () => {
               ) : null,
           },
           {
-            title: "add export",
+            title: language?.header?.add_export,
             path: "add_export",
             role: ["admin"],
           },
         ],
-        title: "Outgoing & incoming",
+        title: language?.header?.outgoing_incoming || "Exports",
         role: ["admin"],
       },
       {
         icon: "fa-solid fa-rectangle-list",
         children: [
           {
-            title: "reports",
+            title: language?.header?.reports,
             path: "reports",
             role: ["admin"],
           },
           {
-            title: "add report",
+            title: language?.header?.add_report,
             path: "add_report",
             role: ["admin"],
           },
           {
-            title: "results",
+            title: language?.header?.results,
             path: "results",
             role: ["admin"],
           },
           {
-            title: "add result",
+            title: language?.header?.add_result,
             path: "add_result",
             role: ["admin"],
           },
         ],
-        title: "reports & results",
+        title:language?.header?.reports_results,
         role: ["admin"],
       },
 

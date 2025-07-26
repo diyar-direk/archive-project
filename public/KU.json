@@ -31,6 +31,15 @@
     "InvalidCoordinates": "Koordînatên nederbasdar"
   },
   "header": {
+    "outgoing_incoming": "",
+    "incoming": "",
+    "add_export": " ",
+    "reports_results": "  ",
+    "reports": "",
+    "results": "",
+    "add_report": " ",
+    "add_result": " ",
+    "statistics": "",
     "serach_for_pages": "Li rûpelan bigere",
     "log_out": "Derkeve",
     "users": "Bikarhêner",
@@ -71,6 +80,27 @@
     "hide_shortCut": "Kurtebirê veşêre",
     "repeated_data": "Daneyên dubarekirî",
     "show_shortCut": "Kurtebirê nîşan bide"
+  },
+  "statistics": {
+    "information": "",
+    "people": "",
+    "users": "",
+    "coordinates": "",
+    "categories": "",
+    "adress_information": "",
+    "information_for_each_county": "",
+    "information_for_each_governorate": "",
+    "information_for_each_city": "",
+    "information_for_each_village": "",
+    "information_for_each_region": "",
+    "information_for_each_street": "",
+    "information_for_each_section": " ",
+    "information_for_each_source": "",
+    "information_for_each_party": "",
+    "information_for_each_event": "",
+    "information_for_country": " ",
+    "count": "",
+    "export_as_word": ""
   },
   "table": {
     "delete": "Jêbirin",

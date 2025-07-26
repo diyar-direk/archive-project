@@ -31,6 +31,15 @@
     "InvalidCoordinates": "إحداثيات غير صالحة"
   },
   "header": {
+    "outgoing_incoming": " صادرات وواردات",
+    "incoming": "الوارد",
+    "add_export": "إضافة صادر",
+    "reports_results": "التقارير والنتائج",
+    "reports": "التقارير الدورية",
+    "results": " حصيلة الاعمال",
+    "add_report": " إضافة تقرير",
+    "add_result": " إضافة حصيلة",
+    "statistics": "إحصائيات",
     "serach_for_pages": "البحث عن الصفحات",
     "log_out": "تسجيل الخروج",
     "users": "المستخدمون",
@@ -72,6 +81,28 @@
     "repeated_data": "بيانات مكررة",
     "show_shortCut": "إظهار الاختصار"
   },
+  "statistics": {
+    "information": " المعلومات",
+    "people": " الأشخاص",
+    "users": " المستخدمين",
+    "coordinates": " الإحداثيات",
+    "categories": " الفئات",
+    "adress_information": "  العناوين",
+    "information_for_each_county": "إحصائيات المعلومات لكل مقاطعة",
+    "information_for_each_governorate": "إحصائيات المعلومات لكل محافظة",
+    "information_for_each_city": "إحصائيات المعلومات لكل مدينة",
+    "information_for_each_village": "إحصائيات المعلومات لكل قرية",
+    "information_for_each_region": "إحصائيات المعلومات لكل منطقة",
+    "information_for_each_street": "إحصائيات المعلومات لكل شارع",
+    "information_for_each_section": "إحصائيات المعلومات لكل قسم",
+    "information_for_each_source": "إحصائيات المعلومات لكل مصدر",
+    "information_for_each_party": "إحصائيات المعلومات لكل حزب",
+    "information_for_each_event": "إحصائيات المعلومات لكل حدث",
+    "information_for_country": "إحصائيات المعلومات لكل دولة",
+    "count": "العدد",
+    "export_as_word": "تصدير كملف وورد"
+  },
+
   "table": {
     "delete": "حذف",
     "cancel": "إلغاء",

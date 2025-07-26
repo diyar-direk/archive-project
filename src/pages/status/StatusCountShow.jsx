@@ -1,4 +1,5 @@
 import Skeleton from "react-loading-skeleton";
+import useLanguage from "../../hooks/useLanguage";
 
 const StatusCountShow = ({
   allData,
@@ -6,6 +7,7 @@ const StatusCountShow = ({
   totalCategoriesCount,
   loading,
 }) => {
+  const { language } = useLanguage();
   if (loading)
     return (
       <section className="flex gap-20 mb-10">
@@ -40,7 +42,9 @@ const StatusCountShow = ({
             color: "rgb(255, 99, 132)",
           }}
         />
-        <h1 className="flex-1">{allData?.informationCount} information </h1>
+        <h1 className="flex-1">
+          {allData?.informationCount} {language.statistics.information}
+        </h1>
       </div>
       <div
         className="center gap-10"
@@ -53,7 +57,7 @@ const StatusCountShow = ({
             color: "rgb(75, 192, 192)",
           }}
         />
-        <h1 className="flex-1"> {allData?.personCount} person </h1>
+        <h1 className="flex-1"> {allData?.personCount} {language.statistics.people} </h1>
       </div>
       <div
         className="center gap-10"
@@ -68,7 +72,7 @@ const StatusCountShow = ({
             color: "rgb(153, 102, 255)",
           }}
         />
-        <h1 className="flex-1">{allData?.coordinateCount} coordinate </h1>
+        <h1 className="flex-1">{allData?.coordinateCount} {language.statistics.coordinates} </h1>
       </div>
       <div
         className="center gap-10"
@@ -83,7 +87,7 @@ const StatusCountShow = ({
             color: "rgba(255, 159, 64,1)",
           }}
         />
-        <h1 className="flex-1">{totalAddressCount} address </h1>
+        <h1 className="flex-1">{totalAddressCount} {language.statistics.adress_information} </h1>
       </div>
       <div
         className="center gap-10"
@@ -98,7 +102,7 @@ const StatusCountShow = ({
             color: "rgba(54, 162, 235, 1)",
           }}
         />
-        <h1 className="flex-1">{totalCategoriesCount} address </h1>
+        <h1 className="flex-1">{totalCategoriesCount} {language.statistics.categories} </h1>
       </div>
     </section>
   );

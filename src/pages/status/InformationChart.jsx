@@ -6,11 +6,14 @@ import StatusCountShow from "./StatusCountShow";
 import InformationStatisticsEnum from "./InfromationStatisticsEnum";
 import StatitsticsDateFilter from "./StatitsticsDateFilter";
 import WordExporter from "./WordExporter";
+import useLanguage from "../../hooks/useLanguage";
 const chartType = ["bar", "doughnut"];
 
 const DashboardCharts = () => {
   const [loading, setLoading] = useState(false);
   const context = useContext(Context);
+  const { language } = useLanguage();
+  console.log(language);
   const token = context?.userDetails?.token;
   const [dateFilter, setDateFilter] = useState({ from: "", to: "" });
   const [dataCount, setDataCount] = useState(null);
@@ -88,58 +91,58 @@ const DashboardCharts = () => {
     () => [
       {
         categoryType: "country",
-        title: "information on country",
+        title: language.statistics.information_for_country,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "governorate",
-        title: "information on governorate",
+        title: language.statistics.information_for_each_governorate,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "county",
-        title: "information on county",
+        title: language.statistics.information_for_each_county,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "city",
-        title: "information on city",
+        title: language.statistics.information_for_each_city,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "region",
-        title: "information on region",
+        title: language.statistics.information_for_each_region,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "street",
-        title: "information on street",
+        title: language.statistics.information_for_each_street,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "village",
-        title: "information on village",
+        title: language.statistics.information_for_each_village,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "section",
-        title: "information on section",
+        title: language.statistics.information_for_each_section,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
         hide: role !== "admin",
       },
       {
         categoryType: "source",
-        title: "information on source",
+        title: language.statistics.information_for_each_source,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "event",
-        title: "information on event",
+        title: language.statistics.information_for_each_event,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "party",
-        title: "information on party",
+        title: language.statistics.information_for_each_party,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
     ],
