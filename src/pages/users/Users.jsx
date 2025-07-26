@@ -8,7 +8,7 @@ import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {
     name: "username",
-    headerName: "username",
+    headerName: (lang) => lang?.users?.username,
     getCell: (e, currentUser, language) => {
       return `${e.username} ${
         currentUser === e._id ? language?.users?.you : ""
@@ -19,29 +19,29 @@ const columns = [
   },
   {
     name: "role",
-    headerName: "role",
+    headerName: (lang) => lang?.users?.role,
   },
   {
     name: "sectionId",
-    headerName: "sectionId",
+    headerName: (lang) => lang?.users?.section,
     getCell: (e) => e.sectionId?.name || "all sections",
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.users?.created_at,
     getCell: (e) => dateFormatter(e.createdAt),
     sort: true,
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     getCell: (e) => dateFormatter(e.createdAt),
     sort: true,
     hidden: true,
   },
   {
     name: "option",
-    headerName: "option",
+    headerName: (lang) => lang?.table?.options,
     getCell: (e, setOverlay, setSelectedItems) => (
       <div className="center gap-10 options">
         <div

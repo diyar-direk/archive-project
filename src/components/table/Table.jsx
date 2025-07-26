@@ -209,7 +209,7 @@ const Table = ({
             className="table-form-icons"
           >
             <i className="fa-solid fa-plus" />
-            <span>add data</span>
+            <span>{language.table.add_data}</span>
           </Link>
         )}
         <div
@@ -221,7 +221,7 @@ const Table = ({
           className="table-form-icons"
         >
           <i className="fa-solid fa-sliders filter" />
-          <span>filters</span>
+          <span>{language.table.filters}</span>
         </div>
         <ShowRows columns={columnsState} setColumns={setColumnsState} />
       </form>

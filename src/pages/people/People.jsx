@@ -12,7 +12,7 @@ import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {
     name: "image",
-    headerName: "profile",
+    headerName: (lang) => lang?.people?.profile,
     getCell: (e) => (
       <Link to={`/people/${e._id}`} className="center">
         {e.image ? (
@@ -39,96 +39,100 @@ const columns = [
       </Link>
     ),
   },
-  { name: "gender", headerName: "gender" },
-  { name: "motherName", headerName: "motherName" },
-  { name: "maritalStatus", headerName: "maritalStatus" },
-  { name: "occupation", headerName: "occupation", sort: true },
+  { name: "gender", headerName: (lang) => lang?.people?.gender },
+  { name: "motherName", headerName: (lang) => lang?.people?.motherName },
+  { name: "maritalStatus", headerName: (lang) => lang?.people?.marital_status },
+  {
+    name: "occupation",
+    headerName: (lang) => lang?.people?.occupation,
+    sort: true,
+  },
   {
     name: "birthDate",
-    headerName: "birthDate",
+    headerName: (lang) => lang?.people?.date_of_birth,
     getCell: (e) => dateFormatter(e.birthDate),
   },
   {
     name: "placeOfBirth",
-    headerName: "placeOfBirth",
+    headerName: (lang) => lang?.people?.place_of_birth,
   },
   {
     name: "country",
-    headerName: "country",
+    headerName: (lang) => lang?.people?.country,
     getCell: (e) => e.countryId?.name,
   },
   {
     name: "county",
-    headerName: "county",
+    headerName: (lang) => lang?.people?.county,
     getCell: (e) => e.countyId?.name,
   },
   {
     name: "governorate",
-    headerName: "governorate",
+    headerName: (lang) => lang?.people?.governerate,
     getCell: (e) => e.governorateId?.name,
     hidden: true,
   },
   {
     name: "city",
-    headerName: "city",
+    headerName: (lang) => lang?.people?.city,
     getCell: (e) => e.cityId?.name,
     hidden: true,
   },
   {
     name: "street",
-    headerName: "street",
+    headerName: (lang) => lang?.people?.street,
     getCell: (e) => e.streetId?.name,
     hidden: true,
   },
   {
     name: "region",
-    headerName: "region",
+    headerName: (lang) => lang?.people?.region,
     getCell: (e) => e.regionId?.name,
     hidden: true,
   },
   {
     name: "village",
-    headerName: "village",
+    headerName: (lang) => lang?.people?.village,
     getCell: (e) => e.villageId?.name,
     hidden: true,
   },
   {
     name: "section",
-    headerName: "section",
+    headerName: (lang) => lang?.people?.section,
     getCell: (e) => e.sectionId?.name,
     onlyAdminCanSee: true,
   },
   {
     name: "phone",
-    headerName: "phone",
+    headerName: (lang) => lang?.people?.phone,
   },
   {
     name: "email",
-    headerName: "email",
+    headerName: (lang) => lang?.people?.email,
     hidden: true,
   },
   {
     name: "sources",
-    headerName: "sources",
+    headerName: (lang) => lang?.people?.source,
     getCell: (e) => e.sources?.source_name,
     hidden: true,
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.people?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     getCell: (e, setOverlay, setSelectedItems, role) => (
       <>

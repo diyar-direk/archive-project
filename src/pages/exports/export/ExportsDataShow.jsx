@@ -5,16 +5,23 @@ import Table from "../../../components/table/Table";
 import { Link } from "react-router-dom";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import ExportFilters from "./ExportFilters";
+import { use } from "react";
+import useLanguage from "../../../hooks/useLanguage";
 const columns = [
   {
     name: "code",
-    headerName: "code",
+    headerName: (lang) => lang?.exports?.code,
     sort: true,
+    getCell: (e) => (
+      <Link to={`${e._id}`} className="name">
+        {e.code}
+      </Link>
+    ),
   },
   {
     name: "details",
     hidden: true,
-    headerName: "details",
+    headerName: (lang) => lang?.exports?.details,
     getCell: (e) => (
       <Link to={`${e._id}`} className="name">
         {e.details}
@@ -24,7 +31,7 @@ const columns = [
 
   {
     name: "questions",
-    headerName: "informations",
+    headerName: (lang) => lang?.exports?.information,
     getCell: (e) =>
       e.questions?.map((question, i) => {
         const arr = [];
@@ -46,27 +53,27 @@ const columns = [
   },
   {
     name: "expirationDate",
-    headerName: "expirationDate",
+    headerName: (lang) => lang?.exports?.expiration_date,
     sort: true,
     getCell: (e) => dateFormatter(e.expirationDate),
   },
 
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.exports?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     getCell: (e, setOverlay, setSelectedItems) => (
       <>
@@ -105,6 +112,7 @@ const ExportsDataShow = () => {
   const [slectedItems, setSelectedItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
+  const { language } = useLanguage();
   const token = context.userDetails.token;
   const limit = context?.limit;
   const [sort, setSort] = useState({});
@@ -175,7 +183,7 @@ const ExportsDataShow = () => {
 
   return (
     <>
-      <h1 className="title">exports</h1>
+      <h1 className="title">{language.exports.incoming}</h1>
       {openFiltersDiv && (
         <ExportFilters
           setFilter={setFilters}

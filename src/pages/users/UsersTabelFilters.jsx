@@ -34,11 +34,11 @@ const UsersTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const staticFilter = [
       {
         name: "role",
-        ifemptyLabel: "all roles",
-        label: "role",
+        ifemptyLabel: language?.table?.any,
+        label: language?.users?.role,
         values: [
-          { value: "admin", label: "admin" },
-          { value: "user", label: "user" },
+          { value: "admin", label: language?.users?.admin },
+          { value: "user", label: language?.users?.user },
         ],
       },
     ];
@@ -94,12 +94,12 @@ const UsersTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         onChange={(option) =>
           setBeforeFiltering({ ...beforeFiltering, sectionId: option })
         }
-        tabelFilterIgnoreText="any section"
+        tabelFilterIgnoreText={language?.table?.any}
         onIgnore={() =>
           setBeforeFiltering({ ...beforeFiltering, sectionId: "" })
         }
         url="Sections"
-        label="Section"
+        label={language?.users?.section}
       />
     </TabelFilterDiv>
   );

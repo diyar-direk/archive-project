@@ -5,6 +5,7 @@ import { baseURL, Context } from "../../../context/context";
 import Skeleton from "react-loading-skeleton";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import Answers from "./Answers";
+import useLanguage from "../../../hooks/useLanguage";
 
 const ExportViewPage = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const ExportViewPage = () => {
   const context = useContext(Context);
   const { token } = context.userDetails;
   const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
   const [data, setData] = useState({});
   const getData = useCallback(async () => {
     setLoading(true);
@@ -50,19 +52,19 @@ const ExportViewPage = () => {
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">
-            <h2>code</h2>
+            <h2>{language.exports.code}</h2>
             <p>{data.code}</p>
           </div>
           <div className="flex">
-            <h2>details</h2>
+            <h2>{language.exports.details}</h2>
             <p>{data.details}</p>
           </div>
           <div className="flex">
-            <h2>expirationDate</h2>
+            <h2>{language.exports.expiration_date}</h2>
             <p>{dateFormatter(data.expirationDate)}</p>
           </div>
           <div className="flex">
-            <h2>createdAt</h2>
+            <h2>{language.exports.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
           </div>
         </div>

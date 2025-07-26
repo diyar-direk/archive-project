@@ -5,11 +5,14 @@ import "./questions.css";
 import axios from "axios";
 import { baseURL, Context } from "../../../context/context";
 import { getInformations } from "../../info/getInformations";
+import { use } from "react";
+import useLanguage from "../../../hooks/useLanguage";
 
 const QuestionListShow = ({ questions, setQuestions }) => {
   const context = useContext(Context);
   const [overlay, setOverlay] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const { language } = useLanguage();
   const setUpdate = useCallback((e) => {
     setQuestionsList(e);
     setShowQuestionForm(true);
@@ -20,14 +23,14 @@ const QuestionListShow = ({ questions, setQuestions }) => {
     setSelectedItem(e);
   }, []);
   const questionsData = useMemo(() => {
-    if (questions.length === 0) return <p>no data yet</p>;
+    if (questions.length === 0) return <p>{language.exports.no_data}</p>;
     return (
       <table>
         <thead>
           <tr>
-            <th>question</th>
-            <th>information</th>
-            <th>option</th>
+            <th>{language.exports.question}</th>
+            <th>{language.exports.information}</th>
+            <th>{language.exports.option}</th>
           </tr>
         </thead>
         <tbody>
@@ -125,14 +128,11 @@ const QuestionListShow = ({ questions, setQuestions }) => {
       {overlay && (
         <div className="overlay" onClick={() => setOverlay(false)}>
           <div onClick={(e) => e.stopPropagation()}>
-            <h1>
-              are you sure you want to delete ? ترجملي لن تتمكن من استعادتها
-              لاحقا
-            </h1>
+            <h1>{language.exports.are_you_sure_delete}</h1>
 
             <div className="flex gap-10 wrap">
               <div onClick={confirmDelete} className="delete-all overlay-btn">
-                <i className="fa-solid fa-trash"></i> {"delete"}
+                <i className="fa-solid fa-trash"></i> {language.exports.delete}
               </div>
               <div
                 onClick={() => {
@@ -140,7 +140,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
                 }}
                 className="delete-all cencel overlay-btn"
               >
-                <i className="fa-solid fa-ban"></i> {"cancel"}
+                <i className="fa-solid fa-ban"></i> {language.exports.cancel}
               </div>
             </div>
           </div>
@@ -154,7 +154,8 @@ const QuestionListShow = ({ questions, setQuestions }) => {
               className="flex gap-10"
               onClick={(e) => e.target.parentNode.classList.toggle("show")}
             >
-              question list <i className="fa-solid fa-chevron-up" />
+              {language.exports.question_list}{" "}
+              <i className="fa-solid fa-chevron-up" />
             </div>
             <article>{questionsData}</article>
           </section>
@@ -163,7 +164,8 @@ const QuestionListShow = ({ questions, setQuestions }) => {
             onClick={() => setShowQuestionForm(true)}
             type="button"
           >
-            <i className="fa-solid fa-plus" /> <p> add questions</p>
+            <i className="fa-solid fa-plus" />{" "}
+            <p> {language.exports.add_question}</p>
           </button>
         </div>
       )}
@@ -173,8 +175,8 @@ const QuestionListShow = ({ questions, setQuestions }) => {
           <div className="flex direction-revers wrap">
             <SelectInputApi
               fetchData={getInformations}
-              label="information"
-              selectLabel="select information"
+              label={language.exports.information}
+              selectLabel={language.exports.information_placeholder}
               optionLabel={(option) => option?.subject}
               onChange={(option) =>
                 setQuestionsList({
@@ -188,7 +190,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
               }
             />
             <InputWithLabel
-              label="question"
+              label={language.exports.question}
               id="question"
               value={questionsList.question}
               onChange={(e) =>
@@ -197,7 +199,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
                   question: e.target.value,
                 })
               }
-              placeholder="write question's text"
+              placeholder={language.exports.question_placeholder}
               writebelType="textarea"
               rows={5}
             />
@@ -205,7 +207,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
           <div className="flex question-btns gap-20">
             <button type="button" onClick={createNewQuestion} className="save">
               <i className="fa-solid fa-bookmark"></i>
-              save question
+              {language.exports.save}
             </button>
             <button
               type="button"
@@ -213,7 +215,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
               onClick={() => setShowQuestionForm(false)}
             >
               <i className="fa-solid fa-trash-can"></i>
-              cancel question
+              {language.exports.cancel}
             </button>
           </div>
           {error && <p className="error"> {error} </p>}
