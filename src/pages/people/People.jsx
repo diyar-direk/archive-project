@@ -30,7 +30,7 @@ const columns = [
   },
   {
     name: "firstName",
-    headerName: "name",
+    headerName: (lang) => lang?.people?.name,
     className: "name",
     sort: true,
     getCell: (row) => (
