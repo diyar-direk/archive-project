@@ -331,6 +331,7 @@ div.table tbody tr:hover {
 
 .pagination {
   gap: 10px;
+  direction: ltr;
 }
 .pagination .pagination-arrows {
   cursor: pointer;

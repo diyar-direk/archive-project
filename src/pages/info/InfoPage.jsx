@@ -1,18 +1,20 @@
 import axios from "axios";
 import "../people/profile.css";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { baseURL, Context } from "../../context/context";
 import Skeleton from "react-loading-skeleton";
 import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
 import MediaShow from "../../components/categoriesComp/MediaShow";
 import useLanguage from "../../hooks/useLanguage";
+import Answers from "../exports/export/Answers";
 const InfoPage = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const role = context.userDetails.role;
   const lang = context.language;
   const { language } = useLanguage();
   const nav = useNavigate();
@@ -78,6 +80,64 @@ const InfoPage = () => {
       alert(language?.error?.error_downloading);
     }
   };
+
+  const [question, setQuestions] = useState({
+    questions: [],
+  });
+  const [questionPage, setQuestionsPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [questionLoading, setQuestionsLoading] = useState(true);
+  const observer = useRef(null);
+
+  const lastElement = useCallback(
+    (node) => {
+      if (questionLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        const firstEntry = entries[0];
+        if (firstEntry?.isIntersecting && hasMore && !questionLoading) {
+          setQuestionsPage((prev) => prev + 1);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [questionLoading, hasMore]
+  );
+
+  useEffect(() => {
+    if (role !== "admin") return;
+    const fetchQuestions = async () => {
+      setQuestionsLoading(true);
+      try {
+        const { data } = await axios.get(
+          `${baseURL}/questions?informationId=${id}&limit=1&page=${questionPage}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setQuestions((prev) => {
+          const existingIds = new Set(prev.questions?.map((q) => q._id));
+          const newQuestions = data.data.filter((q) => !existingIds.has(q._id));
+
+          return {
+            ...prev,
+            questions: [...(prev.questions || []), ...newQuestions],
+          };
+        });
+        setHasMore(data.data.length > 0);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setQuestionsLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [questionPage, role, id, token]);
 
   return loading ? (
     <div className="flex flex-direction gap-20">
@@ -171,6 +231,25 @@ const InfoPage = () => {
         />
       </div>
       {data.media && <MediaShow id={id} data={data?.media} getData={getData} />}
+
+      <div className="media">
+        <h1> questions </h1>
+      </div>
+
+      {role === "admin" &&
+        question?.questions?.map((q, i) => (
+          <div
+            key={q._id}
+            className="profile wrap flex answers"
+            ref={i === question.questions.length - 1 ? lastElement : null}
+          >
+            <h1 className="font-color">{i + 1}.</h1>
+            <Answers question={q} refreshData={setQuestions} />
+          </div>
+        ))}
+      {role === "admin" && questionLoading && (
+        <Skeleton width="100%" height="100px" />
+      )}
     </div>
   );
 };
