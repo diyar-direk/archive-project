@@ -1,5 +1,6 @@
 import { useCallback, useContext, useMemo } from "react";
 import { Context } from "../../context/context";
+import useLanguage from "../../hooks/useLanguage";
 
 const TabelHeader = ({
   selectable,
@@ -23,6 +24,7 @@ const TabelHeader = ({
   );
   const context = useContext(Context);
   const { role } = context.userDetails;
+  const { language } = useLanguage();
 
   const header = useMemo(
     () =>
@@ -31,7 +33,9 @@ const TabelHeader = ({
           !th.hidden &&
           (!th.onlyAdminCanSee || role === "admin") && (
             <th key={th.headerName}>
-              {th.headerName}
+              {typeof th.headerName === "function"
+                ? th.headerName(language)
+                : th.headerName}
               {th.sort && (
                 <i
                   className="fa-solid fa-chevron-right sort"
@@ -43,7 +47,7 @@ const TabelHeader = ({
             </th>
           )
       ),
-    [column, updateSortStatus, role]
+    [column, updateSortStatus, role, language]
   );
   const checkAll = (e) => {
     const allActiveSelectors = document.querySelectorAll("td .checkbox.active");
