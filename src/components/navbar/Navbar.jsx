@@ -53,6 +53,7 @@ const Navbar = () => {
   };
 
   const openDiv = (ele) => {
+    console.log(ele);
     ele.stopPropagation();
     const allDivs = document.querySelectorAll(
       "aside >div> div > .links > .center"
