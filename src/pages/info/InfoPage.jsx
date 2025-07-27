@@ -170,7 +170,7 @@ const InfoPage = () => {
       <p>{data.note}</p>
       <div className="flex align-center gap-10">
         <h2> {language?.information?.credibility}</h2>
-        <p>{data.credibility}</p>
+        <p>{language?.enums?.credibility[data.credibility]}</p>
       </div>
       <div className="flex align-center gap-10">
         <h2> {language?.information?.country}</h2>

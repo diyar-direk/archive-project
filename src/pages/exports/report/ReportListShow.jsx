@@ -41,6 +41,7 @@ const columns = [
   {
     name: "type",
     headerName: (lang) => lang?.reports?.type,
+    getCell: (value, lang) => lang?.enums?.report_types[value.type],
   },
   {
     name: "createdAt",

@@ -31,7 +31,7 @@ const AddUser = () => {
   const handleForm = (e) => {
     const { id, value } = e.target;
 
-    const usernameRegex = /^[a-zA-Z0-9]+$/;
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
 
     if (id === "username") {
       if (usernameRegex.test(value) || value === "") {

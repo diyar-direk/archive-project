@@ -59,7 +59,8 @@ const AddReport = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.type) return setError("please select type");
+    if (!form.type)
+      return setError(language?.error?.please_selecet_report_type);
     else {
       setLoading(true);
       try {

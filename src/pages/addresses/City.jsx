@@ -21,7 +21,11 @@ import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   { name: "name", headerName: (lang) => lang?.city?.city_name, sort: true },
-  { name: "parent", headerName: (lang) => lang?.city?.parent },
+  {
+    name: "parent",
+    headerName: (lang) => lang?.city?.parent,
+    getCell: (row, lang) => lang?.enums?.city_parent[row.parent],
+  },
   {
     name: "parent name",
     headerName: (lang) => lang?.city?.parent_name,
@@ -102,6 +106,7 @@ const Cities = () => {
       to: "",
     },
   });
+
   const [search, setSearch] = useState("");
   const responseFun = (complete = false) => {
     complete === true
@@ -187,9 +192,11 @@ const Cities = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.parent) {
-      return setError(`please select parent`);
+      return setError(`${language?.error?.please_selecet_parent}`);
     } else if (!form.parentId) {
-      return setError(`please select ${form.parent}`);
+      return setError(
+        `${language.error.please_selecet} ${language.error[form.parent]}`
+      );
     }
     setFormLoading(true);
     try {
@@ -262,6 +269,7 @@ const Cities = () => {
       />
     ));
   }, [language, form]);
+
   return (
     <>
       {responseOverlay && (

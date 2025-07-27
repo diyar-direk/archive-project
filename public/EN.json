@@ -12,6 +12,7 @@
     "access_denied": " Access Denied"
   },
   "error": {
+    "please_selecet": "Please select",
     "please_selecet_maritalStatus": "Please select a maritalStatus",
     "please_selecet_gender": "Please select a gender",
     "please_selecet_country": "Please select a country",
@@ -28,7 +29,16 @@
     "error_downloading": "Error downloading the file.",
     "add_an_image": "Upload an image before searching",
     "somthing_went_wrong": "Something Went Wrong",
-    "InvalidCoordinates": "Invalid coordinates"
+    "InvalidCoordinates": "Invalid coordinates",
+    "please_selecet_parent": "please select governerate or county",
+    "County": "county",
+    "Governorate": "governerate",
+    "please_selecet_field": "Please select a field",
+    "export_date_error": "Date must be in the future",
+    "export_question_error": "you have to add one or more questions",
+    "please_selecet_information": "please select an information",
+    "question_text_error": "please write question text",
+    "please_selecet_report_type": "please selecet report type"
   },
   "header": {
     "outgoing_incoming": "Outgoing & Incoming",
@@ -662,5 +672,35 @@
     "created_at": "Published at",
     "loading": "Loading",
     "no_data": "No data"
+  },
+  "enums": {
+    "role": {
+      "admin": "Admin",
+      "user": "User"
+    },
+    "gender": {
+      "Male": "Male",
+      "Female": "Female"
+    },
+    "maritalStatus": {
+      "Married": "Married",
+      "Single": "Single",
+      "Other": "Other"
+    },
+    "city_parent": {
+      "Governorate": "Governorate",
+      "County": "County"
+    },
+    "credibility": {
+      "High": "High",
+      "Low": "Low",
+      "Medium": "Medium"
+    },
+    "report_types": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "yearly": "Yearly"
+    }
   }
 }

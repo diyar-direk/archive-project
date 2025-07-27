@@ -151,6 +151,7 @@ const Counties = () => {
   };
   const [form, setForm] = useState({ name: "", country: "" });
   const [update, setUpdate] = useState(false);
+  const { language } = useLanguage();
 
   useEffect(() => {
     if (update) {
@@ -163,7 +164,7 @@ const Counties = () => {
   const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.country) return setError("please select country");
+    if (!form.country) return setError(language?.error?.please_selecet_country);
     setFormLoading(true);
     try {
       if (update) {
@@ -202,7 +203,6 @@ const Counties = () => {
     country: "",
   });
 
-  const { language } = useLanguage();
   return (
     <>
       {responseOverlay && (

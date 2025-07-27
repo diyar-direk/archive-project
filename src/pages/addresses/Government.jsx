@@ -168,7 +168,7 @@ const Government = () => {
   const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.country) return setError("please select country");
+    if (!form.country) return setError(language?.error?.please_selecet_country);
     setFormLoading(true);
     try {
       if (update) {

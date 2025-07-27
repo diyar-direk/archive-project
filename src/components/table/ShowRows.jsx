@@ -38,7 +38,6 @@ const ShowRows = ({ columns, setColumns }) => {
                 onChange={() => updateRows(column)}
               />
               <label htmlFor={column.name}>
-                {column.headerName}
                 {typeof column.headerName === "function"
                   ? column.headerName(language)
                   : column.headerName}
@@ -46,7 +45,10 @@ const ShowRows = ({ columns, setColumns }) => {
             </div>
           ) : (
             (column.name.includes(search) ||
-              column.headerName.includes(search)) && (
+              (typeof column.headerName === "function"
+                ? column.headerName(language)
+                : column.headerName
+              ).includes(search)) && (
               <div key={column.name}>
                 <input
                   type="checkbox"
@@ -55,7 +57,11 @@ const ShowRows = ({ columns, setColumns }) => {
                   checked={!column.hidden}
                   onChange={() => updateRows(column)}
                 />
-                <label htmlFor={column.name}>{column.headerName}</label>
+                <label htmlFor={column.name}>
+                  {typeof column.headerName === "function"
+                    ? column.headerName(language)
+                    : column.headerName}
+                </label>
               </div>
             )
           ))

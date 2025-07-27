@@ -247,11 +247,11 @@ const Profile = () => {
             </div>
             <div className="flex">
               <h2>{language?.people?.gender}</h2>
-              <p>{data?.gender}</p>
+              <p>{language?.enums?.gender[data?.gender]}</p>
             </div>
             <div className="flex">
               <h2>{language?.people?.marital_status}</h2>
-              <p>{data?.maritalStatus}</p>
+              <p>{language?.enums?.maritalStatus[data?.maritalStatus]}</p>
             </div>
             <div className="flex">
               <h2>{language?.people?.occupation}</h2>

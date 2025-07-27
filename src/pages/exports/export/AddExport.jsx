@@ -57,9 +57,9 @@ const AddExport = () => {
     today.setHours(0, 0, 0, 0);
     inputDate.setHours(0, 0, 0, 0);
 
-    if (inputDate <= today) return setError("Date must be in the future");
+    if (inputDate <= today) return setError(language?.error?.export_date_error);
     if (form.questions.length === 0)
-      return setError("you have to add one or more questions");
+      return setError(language?.error?.export_question_error);
     setLoading(true);
     try {
       const createdQuestions = await Promise.all(

@@ -20,6 +20,7 @@ const columns = [
   {
     name: "role",
     headerName: (lang) => lang?.users?.role,
+    getCell: (value, translate) => translate?.enums?.role[value?.role],
   },
   {
     name: "sectionId",
@@ -74,7 +75,6 @@ const Users = () => {
   const limit = context?.limit;
   const { language } = useLanguage();
   const [sort, setSort] = useState({});
-  const { role } = context.userDetails;
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
     role: "",
