@@ -10,30 +10,31 @@ import SelectInputApi from "../../components/inputs/SelectInputApi";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { dateFormatter } from "./../../utils/dateFormatter";
+import useLanguage from "../../hooks/useLanguage";
 
 const columns = [
-  { name: "name", headerName: "name", sort: true },
+  { name: "name", headerName: (lang) => lang?.county?.county_name, sort: true },
   {
     name: "country",
-    headerName: "country",
+    headerName: (lang) => lang?.county?.country,
     getCell: (row) => row?.country?.name,
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.county?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
@@ -201,30 +202,31 @@ const Counties = () => {
     country: "",
   });
 
+  const { language } = useLanguage();
   return (
     <>
       {responseOverlay && (
         <SendData
-          data={"language?.header?.Counties"}
+          data={language?.header?.counties}
           response={response.current}
         />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">{"language?.header?.Countiess"}</h1>
+      <h1 className="title">{language?.header?.counties}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
             <h1>
               {update
-                ? "language?.Counties?.update_Counties"
-                : "language?.Counties?.add_new_Counties"}
+                ? language?.county?.update_county
+                : language?.county?.add_new_county}
             </h1>
 
             <InputWithLabel
-              label={"language?.Counties?.Counties_name"}
+              label={language?.county?.county_name}
               ref={ref}
               required
-              placeholder={"language?.Counties?.Counties_name_placeholder"}
+              placeholder={language?.county?.county_name_placeholder}
               value={form.name}
               onInput={(e) => setForm({ ...form, name: e.target.value })}
               id="name"
@@ -232,27 +234,25 @@ const Counties = () => {
 
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
-              selectLabel="select country"
+              selectLabel={language?.county?.select_country}
               optionLabel={(option) => option?.name}
               onChange={(option) => setForm({ ...form, country: option })}
               onIgnore={() => setForm({ ...form, country: "" })}
               url="Countries"
-              label="country"
+              label={language?.county?.country}
               value={form?.country?.name}
             />
             {error && <p className="error"> {error} </p>}
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update
-                  ? "language?.Counties?.save"
-                  : "language?.Counties?.add_btn"}
+                {update ? language?.county?.save : language?.county?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  {"language?.Counties?.cancel"}
+                  {language?.county?.cancel}
                 </button>
               )}
             </div>
@@ -276,12 +276,12 @@ const Counties = () => {
                 onChange={(option) =>
                   setBeforeFiltering({ ...beforeFiltering, country: option })
                 }
-                tabelFilterIgnoreText="any country"
+                tabelFilterIgnoreText={language?.table?.any}
                 onIgnore={() =>
                   setBeforeFiltering({ ...beforeFiltering, country: "" })
                 }
                 url="Countries"
-                label="country"
+                label={language?.county?.country}
               />
             </TabelFilterDiv>
           )}

@@ -14,28 +14,32 @@ import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 const columns = [
-  { name: "name", headerName: "name", sort: true },
+  {
+    name: "name",
+    headerName: (lang) => lang?.government?.government_name,
+    sort: true,
+  },
   {
     name: "country",
-    headerName: "country",
+    headerName: (lang) => lang?.government?.country,
     getCell: (row) => row?.country?.name,
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.government?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
@@ -233,12 +237,12 @@ const Government = () => {
             />
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
-              selectLabel="select country"
+              selectLabel={language?.government?.select_country}
               optionLabel={(option) => option?.name}
               onChange={(option) => setForm({ ...form, country: option })}
               onIgnore={() => setForm({ ...form, country: "" })}
               url="Countries"
-              label="country"
+              label={language?.government?.country}
               value={form?.country?.name}
             />
             {error && <p className="error"> {error} </p>}
@@ -277,12 +281,12 @@ const Government = () => {
                 onChange={(option) =>
                   setBeforeFiltering({ ...beforeFiltering, country: option })
                 }
-                tabelFilterIgnoreText="any country"
+                tabelFilterIgnoreText={language?.table?.any}
                 onIgnore={() =>
                   setBeforeFiltering({ ...beforeFiltering, country: "" })
                 }
                 url="Countries"
-                label="country"
+                label={language?.government?.country}
               />
             </TabelFilterDiv>
           )}

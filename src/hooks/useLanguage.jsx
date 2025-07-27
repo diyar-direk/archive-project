@@ -76,7 +76,7 @@ const useLanguage = () => {
             role: ["admin", "user"],
           },
           {
-            title: "lang.Counties",
+            title: language?.header?.counties,
             path: "counties",
             role: ["admin", "user"],
           },
@@ -181,7 +181,7 @@ const useLanguage = () => {
           ) : null,
         children: [
           {
-            title:  language?.header?.incoming,
+            title: language?.header?.incoming,
             path: "exports",
             role: ["admin"],
             element:
@@ -224,7 +224,7 @@ const useLanguage = () => {
             role: ["admin"],
           },
         ],
-        title:language?.header?.reports_results,
+        title: language?.header?.reports_results,
         role: ["admin"],
       },
 

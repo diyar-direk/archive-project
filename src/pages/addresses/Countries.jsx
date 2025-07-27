@@ -9,23 +9,27 @@ import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
-  { name: "name", headerName: "name", sort: true },
+  {
+    name: "name",
+    headerName: (lang) => lang?.country?.country_name,
+    sort: true,
+  },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.country?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
