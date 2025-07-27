@@ -10,10 +10,10 @@ const useLanguage = () => {
   useEffect(() => {
     if (expiredExports >= 0 && role !== "admin") return;
     axios
-      .get(`${baseURL}/exports/expiredExports`, {
+      .get(`${baseURL}/exports/countExpiredExports`, {
         headers: { Authorization: `Bearer ${token}` },
       })
-      .then((res) => setExpiredExports(res.data.results))
+      .then((res) => setExpiredExports(res.data.count))
       .catch((err) => console.log(err));
   }, [expiredExports, token, setExpiredExports, role]);
 
@@ -181,7 +181,7 @@ const useLanguage = () => {
           ) : null,
         children: [
           {
-            title:  language?.header?.incoming,
+            title: language?.header?.incoming,
             path: "exports",
             role: ["admin"],
             element:
@@ -224,7 +224,7 @@ const useLanguage = () => {
             role: ["admin"],
           },
         ],
-        title:language?.header?.reports_results,
+        title: language?.header?.reports_results,
         role: ["admin"],
       },
 

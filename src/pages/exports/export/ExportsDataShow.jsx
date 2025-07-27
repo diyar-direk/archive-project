@@ -5,7 +5,6 @@ import Table from "../../../components/table/Table";
 import { Link } from "react-router-dom";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import ExportFilters from "./ExportFilters";
-import { use } from "react";
 import useLanguage from "../../../hooks/useLanguage";
 const columns = [
   {
