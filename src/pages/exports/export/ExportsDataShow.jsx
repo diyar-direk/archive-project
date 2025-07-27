@@ -12,7 +12,7 @@ const columns = [
     headerName: (lang) => lang?.exports?.code,
     sort: true,
     getCell: (e) => (
-      <Link to={`${e._id}`} className="name">
+      <Link to={`${e?._id}`} className="name">
         {e.code}
       </Link>
     ),
@@ -22,34 +22,12 @@ const columns = [
     hidden: true,
     headerName: (lang) => lang?.exports?.details,
     getCell: (e) => (
-      <Link to={`${e._id}`} className="name">
+      <Link to={`${e?._id}`} className="name">
         {e.details}
       </Link>
     ),
   },
 
-  {
-    name: "questions",
-    headerName: (lang) => lang?.exports?.information,
-    getCell: (e) =>
-      e.questions?.map((question, i) => {
-        const arr = [];
-        if (i < 3)
-          arr.push(
-            <Link
-              className="name"
-              key={i}
-              to={`/informations/${question.informationId._id}`}
-            >
-              {e.questions[i + 1]
-                ? `${question.informationId.subject} , `
-                : `${question.informationId.subject}`}
-            </Link>
-          );
-        else if (i === 3) arr.push(<span key={i}>...</span>);
-        return arr;
-      }),
-  },
   {
     name: "expirationDate",
     headerName: (lang) => lang?.exports?.expiration_date,
@@ -136,34 +114,36 @@ const ExportsDataShow = () => {
     params.append("active", true);
     params.append("limit", limit);
     params.append("page", page);
+    const exportsDataUrl = `${baseURL}/exports/${
+      filters.expirationDate ? "expiredExports" : ""
+    }`;
 
     if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
     if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
-    if (filters.expirationDate === "expired")
-      params.append("expirationDate[lt]", Date.now());
-    if (filters.expirationDate === "unexpired")
-      params.append("expirationDate[gte]", Date.now());
     if (Object.keys(sort).length) {
       const sortParams = Object.values(sort)
         .map((v) => v)
         .join(",");
       params.append("sort", sortParams);
     }
-    if (search) params.append("search", search);
+    if (search && !filters.expirationDate) params.append("search", search);
     try {
       const [tabelData, expiredExportsCount] = await Promise.all([
-        axios.get(`${baseURL}/exports`, {
+        axios.get(exportsDataUrl, {
           headers: { Authorization: `Bearer ${token}` },
           params,
         }),
-        axios.get(`${baseURL}/exports/expiredExports`, {
+        axios.get(`${baseURL}/exports/countExpiredExports`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
       const { data } = tabelData;
-      const { results } = expiredExportsCount.data;
-      if (results !== expiredExports) setExpiredExports(results);
-      dataLength.current = data[search ? "numberOfActiveResults" : "total"];
+
+      const { count } = expiredExportsCount.data;
+      if (count !== expiredExports) setExpiredExports(count);
+      dataLength.current = filters.expirationDate
+        ? count
+        : data[search ? "numberOfActiveResults" : "total"];
       allData.current = data.data?.map((e) => e._id);
       setData(data.data);
     } catch (error) {
