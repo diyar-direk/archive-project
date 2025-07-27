@@ -5,6 +5,7 @@ import { baseURL, Context } from "../../../context/context";
 import Skeleton from "react-loading-skeleton";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import MediaShow from "../../../components/categoriesComp/MediaShow";
+import useLanguage from "../../../hooks/useLanguage";
 
 const ReportViewPage = () => {
   const { id } = useParams();
@@ -32,6 +33,7 @@ const ReportViewPage = () => {
   useEffect(() => {
     getData();
   }, [getData]);
+  const { language } = useLanguage();
   if (loading) return <Skeleton width="100%" height="400px" />;
 
   return (
@@ -56,7 +58,7 @@ const ReportViewPage = () => {
           </div>
           <div className="flex">
             <h2>type</h2>
-            <p>{data.type}</p>
+            <p>{language?.enums?.report_types[data.type]}</p>
           </div>
           <div className="flex">
             <h2>date</h2>

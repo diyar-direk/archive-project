@@ -77,7 +77,7 @@ const UpdateExport = () => {
     e.preventDefault();
 
     if (form.questions.length === 0)
-      return setError("you have to add one or more questions");
+      return setError(language?.error?.export_question_error);
     setFormLoading(true);
     try {
       const createdQuestions = await Promise.all(

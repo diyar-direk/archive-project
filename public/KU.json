@@ -28,7 +28,16 @@
     "error_downloading": "Çewtiya dakêşana pelê",
     "add_an_image": "Berî lêgerînê wêneyek bar bike",
     "somthing_went_wrong": "Tiştek xelet çû",
-    "InvalidCoordinates": "Koordînatên nederbasdar"
+    "InvalidCoordinates": "Koordînatên nederbasdar",
+    "please_selecet_parent": "",
+    "County": "",
+    "Governorate": "",
+    "please_selecet_field": "",
+    "export_date_error": "",
+    "export_question_error": "",
+    "please_selecet_information": "",
+    "question_text_error": "",
+    "please_selecet_report_type": ""
   },
   "header": {
     "outgoing_incoming": "",
@@ -611,5 +620,35 @@
     "created_at": "Di dîroka weşanê de",
     "loading": "Barkirin",
     "no_data": "Daneyên tune"
+  },
+  "enums": {
+    "role": {
+      "admin": "Admin",
+      "user": "User"
+    },
+    "gender": {
+      "Male": "",
+      "Female": ""
+    },
+    "maritalStatus": {
+      "Married": "",
+      "Single": "",
+      "Other": ""
+    },
+    "city_parent": {
+      "Governorate": "",
+      "County": ""
+    },
+    "credibility": {
+      "High": "",
+      "Low": "",
+      "Medium": ""
+    },
+    "report_types": {
+      "daily": "",
+      "weekly": "",
+      "monthly": "",
+      "yearly": ""
+    }
   }
 }

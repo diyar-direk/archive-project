@@ -30,7 +30,11 @@ const columns = [
     hidden: true,
     sort: true,
   },
-  { name: "credibility", headerName: "credibility" },
+  {
+    name: "credibility",
+    headerName: "credibility",
+    getCell: (row, lang) => lang?.enums?.credibility[row.credibility],
+  },
   {
     name: "countryId",
     headerName: "country",

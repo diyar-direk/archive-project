@@ -10,6 +10,7 @@ import SelectInputApi from "../../components/inputs/SelectInputApi";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { dateFormatter } from "./../../utils/dateFormatter";
+import useLanguage from "../../hooks/useLanguage";
 
 const columns = [
   { name: "name", headerName: "name", sort: true },
@@ -150,6 +151,7 @@ const Counties = () => {
   };
   const [form, setForm] = useState({ name: "", country: "" });
   const [update, setUpdate] = useState(false);
+  const { language } = useLanguage();
 
   useEffect(() => {
     if (update) {
@@ -162,7 +164,7 @@ const Counties = () => {
   const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.country) return setError("please select country");
+    if (!form.country) return setError(language?.error?.please_selecet_country);
     setFormLoading(true);
     try {
       if (update) {

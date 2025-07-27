@@ -21,7 +21,11 @@ import { getInfinityFeatchApis } from "./../../utils/infintyFeatchApis";
 import { dateFormatter } from "./../../utils/dateFormatter";
 const columns = [
   { name: "source_name", headerName: "source_name", sort: true },
-  { name: "source_credibility", headerName: "source_credibility" },
+  {
+    name: "source_credibility",
+    headerName: "source_credibility",
+    getCell: (row, lang) => lang?.enums?.credibility[row.source_credibility],
+  },
   {
     name: "createdAt",
     headerName: "createdAt",
@@ -182,9 +186,9 @@ const Sources = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.source_credibility) {
-      return setError("please select source_credibility");
+      return setError(language?.error?.please_selecet_credibility);
     } else if (!form.field) {
-      return setError("please select field");
+      return setError(language?.error?.please_selecet_field);
     }
     setFormLoading(true);
     try {

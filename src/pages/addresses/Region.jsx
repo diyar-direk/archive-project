@@ -163,7 +163,7 @@ const Region = () => {
   const [error, setError] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.city) return setError("please select city");
+    if (!form.city) return setError(language?.error?.please_selecet_city);
     setFormLoading(true);
     try {
       if (update) {

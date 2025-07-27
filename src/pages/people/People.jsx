@@ -39,9 +39,17 @@ const columns = [
       </Link>
     ),
   },
-  { name: "gender", headerName: (lang) => lang?.people?.gender },
+  {
+    name: "gender",
+    headerName: (lang) => lang?.people?.gender,
+    getCell: (value, lang) => lang?.enums?.gender[value?.gender],
+  },
   { name: "motherName", headerName: (lang) => lang?.people?.motherName },
-  { name: "maritalStatus", headerName: (lang) => lang?.people?.marital_status },
+  {
+    name: "maritalStatus",
+    headerName: (lang) => lang?.people?.marital_status,
+    getCell: (value, lang) => lang?.enums?.maritalStatus[value.maritalStatus],
+  },
   {
     name: "occupation",
     headerName: (lang) => lang?.people?.occupation,

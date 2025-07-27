@@ -5,7 +5,6 @@ import "./questions.css";
 import axios from "axios";
 import { baseURL, Context } from "../../../context/context";
 import { getInformations } from "../../info/getInformations";
-import { use } from "react";
 import useLanguage from "../../../hooks/useLanguage";
 
 const QuestionListShow = ({ questions, setQuestions }) => {
@@ -70,8 +69,9 @@ const QuestionListShow = ({ questions, setQuestions }) => {
 
   const createNewQuestion = useCallback(async () => {
     if (!questionsList.informationId)
-      return setError("please select information");
-    if (!questionsList.question) return setError("please write your question");
+      return setError(language?.error?.please_selecet_information);
+    if (!questionsList.question)
+      return setError(language?.error?.question_text_error);
     setError(false);
 
     setQuestions((prev) => {
@@ -93,7 +93,8 @@ const QuestionListShow = ({ questions, setQuestions }) => {
       _id: Date.now(),
     });
     setShowQuestionForm(false);
-  }, [questionsList, setError, setQuestions]);
+  }, [questionsList, setError, setQuestions, language]);
+
   const { token } = context.userDetails;
 
   const confirmDelete = useCallback(async () => {

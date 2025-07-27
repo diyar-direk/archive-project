@@ -45,7 +45,7 @@ const TabelBody = ({
           case "usersPage":
             return column.getCell(row, context.userDetails._id, language);
           default:
-            return column.getCell(row);
+            return column.getCell(row, language);
         }
       }
       return row[column.name];
