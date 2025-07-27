@@ -11,6 +11,7 @@ const ReportViewPage = () => {
   const { id } = useParams();
   const nav = useNavigate();
   const context = useContext(Context);
+  const { language } = useLanguage();
   const { token } = context.userDetails;
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
@@ -33,7 +34,6 @@ const ReportViewPage = () => {
   useEffect(() => {
     getData();
   }, [getData]);
-  const { language } = useLanguage();
   if (loading) return <Skeleton width="100%" height="400px" />;
 
   return (
@@ -45,27 +45,27 @@ const ReportViewPage = () => {
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">
-            <h2>title</h2>
+            <h2>{language.reports.report_title}</h2>
             <p>{data.title}</p>
           </div>
           <div className="flex">
-            <h2>subject</h2>
+            <h2>{language.reports.report_subject}</h2>
             <p>{data.subject}</p>
           </div>
           <div className="flex">
-            <h2>number</h2>
+            <h2>{language.reports.report_number}</h2>
             <p>{data.number}</p>
           </div>
           <div className="flex">
-            <h2>type</h2>
-            <p>{language?.enums?.report_types[data.type]}</p>
+            <h2>{language.reports.type}</h2>
+            <p>{data.type}</p>
           </div>
           <div className="flex">
-            <h2>date</h2>
+            <h2>{language.reports.report_date}</h2>
             <p>{dateFormatter(data.date)}</p>
           </div>
           <div className="flex">
-            <h2>createdAt</h2>
+            <h2>{language.reports.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
           </div>
         </div>

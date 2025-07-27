@@ -20,33 +20,33 @@ import SelectOptionInput from "../../components/inputs/SelectOptionInput";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
-  { name: "name", headerName: "name", sort: true },
+  { name: "name", headerName: (lang) => lang?.city?.city_name, sort: true },
   {
     name: "parent",
-    headerName: "parent",
+    headerName: (lang) => lang?.city?.parent,
     getCell: (row, lang) => lang?.enums?.city_parent[row.parent],
   },
   {
     name: "parent name",
-    headerName: "parent name",
+    headerName: (lang) => lang?.city?.parent_name,
     getCell: (row) => row.parentId.name,
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.city?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
@@ -242,16 +242,16 @@ const Cities = () => {
     const arrayOfOptionsInput = [
       {
         name: "parent",
-        label: "parent",
-        placeholder: "select parent",
+        label: language?.city?.parent,
+        placeholder: language?.city?.select_parent,
         options: [
           {
             onSelectOption: () =>
               setForm({ ...form, parent: "Governorate", parentId: "" }),
-            text: "Governorate",
+            text: language?.header?.government,
           },
           {
-            text: "County",
+            text: language?.header?.county,
             onSelectOption: () =>
               setForm({ ...form, parent: "County", parentId: "" }),
           },

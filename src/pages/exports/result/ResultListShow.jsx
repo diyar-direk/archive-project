@@ -5,11 +5,21 @@ import Table from "../../../components/table/Table";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import { Link } from "react-router-dom";
 import TabelFilterDiv from "../../../components/tabelFilterData/TabelFilterDiv";
+import useLanguage from "../../../hooks/useLanguage";
 const columns = [
-  { name: "title", headerName: "title", sort: true },
+  {
+    name: "title",
+    headerName: (lang) => lang?.reports?.result_title,
+    sort: true,
+    getCell: (e) => (
+      <Link to={`${e._id}`} className="name">
+        {e.title}
+      </Link>
+    ),
+  },
   {
     name: "subject",
-    headerName: "subject",
+    headerName: (lang) => lang?.reports?.subject,
     hidden: true,
     getCell: (e) => (
       <Link to={`${e._id}`} className="name">
@@ -19,31 +29,31 @@ const columns = [
   },
   {
     name: "date",
-    headerName: "date",
+    headerName: (lang) => lang?.reports?.result_date,
     sort: true,
     getCell: (row) => dateFormatter(row.date),
   },
   {
     name: "number",
-    headerName: "number",
+    headerName: (lang) => lang?.reports?.result_number,
     sort: true,
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.reports?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.reports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     getCell: (e, setOverlay, setSelectedItems) => (
       <>
@@ -84,6 +94,7 @@ const ResultListShow = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const limit = context?.limit;
+  const { language } = useLanguage();
   const [sort, setSort] = useState({});
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
@@ -137,7 +148,7 @@ const ResultListShow = () => {
   });
   return (
     <>
-      <h1 className="title"> results </h1>
+      <h1 className="title"> {language.reports.results} </h1>
       <div className="flex align-start gap-20 wrap">
         <div className="flex-1">
           {openFiltersDiv && (

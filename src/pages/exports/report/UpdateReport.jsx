@@ -204,23 +204,23 @@ const UpdateReport = () => {
     const arrayOfOptionsInput = [
       {
         name: "type",
-        label: "type",
-        placeholder: `select type`,
+        label: language.reports.type,
+        placeholder: language.reports.select_type,
         options: [
           {
             onSelectOption: () => setForm({ ...form, type: "daily" }),
-            text: "daily",
+            text: language.reports.daily,
           },
           {
-            text: "weekly",
+            text: language.reports.weekly,
             onSelectOption: () => setForm({ ...form, type: "weekly" }),
           },
           {
-            text: "monthly",
+            text: language.reports.monthly,
             onSelectOption: () => setForm({ ...form, type: "monthly" }),
           },
           {
-            text: "yearly",
+            text: language.reports.yearly,
             onSelectOption: () => setForm({ ...form, type: "yearly" }),
           },
         ],
@@ -256,15 +256,15 @@ const UpdateReport = () => {
         <div className="form">
           <div className="flex wrap">
             <InputWithLabel
-              label="title"
+              label={language.reports.report_title}
               value={form.title}
               required
               onChange={handleForm}
-              placeholder={"language?.information?.title"}
+              placeholder={language.reports.report_title_placeholder}
               id="title"
             />
             <InputWithLabel
-              label="date"
+              label={language.reports.report_date}
               value={form.date}
               required
               onChange={handleForm}
@@ -272,11 +272,11 @@ const UpdateReport = () => {
               id="date"
             />
             <InputWithLabel
-              label="number"
+              label={language.reports.report_number}
               value={form.number}
               required
               onChange={handleForm}
-              placeholder={"language?.information?.number"}
+              placeholder={language.reports.report_number_placeholder}
               id="number"
             />
             {typeOptions}
@@ -285,14 +285,14 @@ const UpdateReport = () => {
 
         <div className="form">
           <h1>
-            <label htmlFor="subject">subject</label>
+            <label htmlFor="subject">{language.reports.report_subject}</label>
           </h1>
           <div className="flex wrap">
             <InputWithLabel
               value={form.subject}
               required
               onChange={handleForm}
-              placeholder={"language?.information?.subject_placeholder"}
+              placeholder={language.reports.report_subject_palaceholder}
               id="subject"
               rows={6}
               writebelType="textarea"

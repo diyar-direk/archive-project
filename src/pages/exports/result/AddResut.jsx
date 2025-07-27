@@ -191,21 +191,21 @@ const AddResult = () => {
         <SendData data={"result"} response={response.current} />
       )}
       {loading && <Loading />}
-      <h1 className="title"> add result</h1>
+      <h1 className="title"> {language.reports.add_results}</h1>
 
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form">
           <div className="flex wrap">
             <InputWithLabel
-              label="title"
+              label={language.reports.result_title}
               value={form.title}
               required
               onChange={handleForm}
-              placeholder={"language?.information?.title"}
+              placeholder={language.reports.result_title_placeholder}
               id="title"
             />
             <InputWithLabel
-              label="date"
+              label={language.reports.result_date}
               value={form.date}
               required
               onChange={handleForm}
@@ -213,11 +213,11 @@ const AddResult = () => {
               id="date"
             />
             <InputWithLabel
-              label="number"
+              label={language.reports.result_number}
               value={form.number}
               required
               onChange={handleForm}
-              placeholder={"language?.information?.number"}
+              placeholder={language.reports.result_number_placeholder}
               id="number"
             />
           </div>
@@ -225,14 +225,14 @@ const AddResult = () => {
 
         <div className="form">
           <h1>
-            <label htmlFor="subject">subject</label>
+            <label htmlFor="subject">{language.reports.result_subject}</label>
           </h1>
           <div className="flex wrap">
             <InputWithLabel
               value={form.subject}
               required
               onChange={handleForm}
-              placeholder={"language?.information?.subject_placeholder"}
+              placeholder={language.reports.result_subject_placeholder}
               id="subject"
               rows={6}
               writebelType="textarea"

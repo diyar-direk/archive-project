@@ -76,7 +76,7 @@ const useLanguage = () => {
             role: ["admin", "user"],
           },
           {
-            title: "lang.Counties",
+            title: language?.header?.counties,
             path: "counties",
             role: ["admin", "user"],
           },

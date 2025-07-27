@@ -5,11 +5,21 @@ import Table from "../../../components/table/Table";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import { Link } from "react-router-dom";
 import ReportsTabelFilters from "./ReportsTabelFilters";
+import useLanguage from "../../../hooks/useLanguage";
 const columns = [
-  { name: "title", headerName: "title", sort: true },
+  {
+    name: "title",
+    headerName: (lang) => lang?.reports?.report_title,
+    sort: true,
+    getCell: (e) => (
+      <Link to={`${e._id}`} className="name">
+        {e.title}
+      </Link>
+    ),
+  },
   {
     name: "subject",
-    headerName: "subject",
+    headerName: (lang) => lang?.reports?.subject,
     hidden: true,
     getCell: (e) => (
       <Link to={`${e._id}`} className="name">
@@ -19,36 +29,36 @@ const columns = [
   },
   {
     name: "date",
-    headerName: "date",
+    headerName: (lang) => lang?.reports?.report_date,
     sort: true,
     getCell: (row) => dateFormatter(row.date),
   },
   {
     name: "number",
-    headerName: "number",
+    headerName: (lang) => lang?.reports?.report_number,
     sort: true,
   },
   {
     name: "type",
-    headerName: "type",
+    headerName: (lang) => lang?.reports?.type,
     getCell: (value, lang) => lang?.enums?.report_types[value.type],
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.reports?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.reports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     getCell: (e, setOverlay, setSelectedItems) => (
       <>
@@ -88,6 +98,7 @@ const ReportListShow = () => {
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
   const token = context.userDetails.token;
+  const { language } = useLanguage();
   const limit = context?.limit;
   const [sort, setSort] = useState({});
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
@@ -142,7 +153,7 @@ const ReportListShow = () => {
 
   return (
     <>
-      <h1 className="title"> reports </h1>
+      <h1 className="title"> {language.reports.reports} </h1>
       <div className="flex align-start gap-20 wrap">
         <div className="flex-1">
           {openFiltersDiv && (

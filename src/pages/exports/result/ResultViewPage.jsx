@@ -5,6 +5,7 @@ import { baseURL, Context } from "../../../context/context";
 import Skeleton from "react-loading-skeleton";
 import { dateFormatter } from "../../../utils/dateFormatter";
 import MediaShow from "../../../components/categoriesComp/MediaShow";
+import useLanguage from "../../../hooks/useLanguage";
 
 const ResultViewPage = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const ResultViewPage = () => {
   const context = useContext(Context);
   const { token } = context.userDetails;
   const [loading, setLoading] = useState(true);
+  const { language } = useLanguage();
   const [data, setData] = useState({});
   const getData = useCallback(async () => {
     setLoading(true);
@@ -43,23 +45,23 @@ const ResultViewPage = () => {
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">
-            <h2>title</h2>
+            <h2>{language.reports.result_title}</h2>
             <p>{data.title}</p>
           </div>
           <div className="flex">
-            <h2>subject</h2>
+            <h2>{language.reports.result_subject}</h2>
             <p>{data.subject}</p>
           </div>
           <div className="flex">
-            <h2>number</h2>
+            <h2>{language.reports.result_number}</h2>
             <p>{data.number}</p>
           </div>
           <div className="flex">
-            <h2>type</h2>
-            <p>{data.type}</p>
+            <h2>{language.reports.result_date}</h2>
+            <p>{dateFormatter(data.date)}</p>
           </div>
           <div className="flex">
-            <h2>createdAt</h2>
+            <h2>{language.reports.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
           </div>
         </div>
