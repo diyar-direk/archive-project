@@ -229,12 +229,12 @@ const Street = () => {
 
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
-              selectLabel="select city"
+              selectLabel={language?.people?.select_city}
               optionLabel={(option) => option?.name}
               onChange={(option) => setForm({ ...form, city: option })}
               onIgnore={() => setForm({ ...form, city: "" })}
               url="Cities"
-              label="city"
+              label={language?.people?.city}
               value={form?.city?.name}
             />
             {error && <p className="error"> {error} </p>}
@@ -271,12 +271,12 @@ const Street = () => {
                 onChange={(option) =>
                   setBeforeFiltering({ ...beforeFiltering, city: option })
                 }
-                tabelFilterIgnoreText="any city"
+                tabelFilterIgnoreText={language?.table?.any}
                 onIgnore={() =>
                   setBeforeFiltering({ ...beforeFiltering, city: "" })
                 }
                 url="Cities"
-                label="city"
+                label={language?.people?.city}
               />
             </TabelFilterDiv>
           )}

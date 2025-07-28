@@ -140,7 +140,8 @@ const ExportsDataShow = () => {
       const { data } = tabelData;
 
       const { count } = expiredExportsCount.data;
-      if (count !== expiredExports) setExpiredExports(count);
+      if (count !== expiredExports && expiredExports > 0)
+        setExpiredExports(count);
       dataLength.current = filters.expirationDate
         ? count
         : data[search ? "numberOfActiveResults" : "total"];
@@ -169,6 +170,7 @@ const ExportsDataShow = () => {
           filter={filters}
           setIsopen={setOpenFiltersDiv}
           setPage={setPage}
+          expirationCount={expiredExports}
         />
       )}
       <Table

@@ -70,6 +70,7 @@ const Table = ({
   const [dataLoading, setDataLoading] = useState(false);
   const location = useLocation();
   const { language } = useLanguage();
+  const { expiredExports } = context;
 
   useEffect(() => {
     const pages = document.querySelectorAll(".pagination h3");
@@ -222,6 +223,9 @@ const Table = ({
         >
           <i className="fa-solid fa-sliders filter" />
           <span>{language.table.filters}</span>
+          {location.pathname.includes("/exports") && expiredExports > 0 && (
+            <span className="expired-exports">{expiredExports}</span>
+          )}
         </div>
         <ShowRows columns={columnsState} setColumns={setColumnsState} />
       </form>

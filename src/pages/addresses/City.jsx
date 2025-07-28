@@ -263,7 +263,7 @@ const Cities = () => {
         key={input.name}
         label={input.label}
         placeholder={input.placeholder}
-        value={form[input.name]}
+        value={form.parent && language.error[form.parent]}
         onIgnore={() => setForm({ ...form, [input.name]: "" })}
         options={input.options}
       />
@@ -300,14 +300,16 @@ const Cities = () => {
             {form.parent && (
               <SelectInputApi
                 fetchData={getInfinityFeatchApis}
-                selectLabel={`select ${form.parent}`}
+                selectLabel={`${language.error.please_selecet} ${
+                  language.error[form.parent]
+                }`}
                 optionLabel={(option) => option?.name}
                 onChange={(option) => setForm({ ...form, parentId: option })}
                 onIgnore={() => setForm({ ...form, parentId: "" })}
                 url={
                   form.parent === "Governorate" ? "Governorates" : "Counties"
                 }
-                label={form.parent}
+                label={language.error[form.parent]}
                 value={form?.parentId?.name}
                 reset={reset}
                 setReset={setReset}

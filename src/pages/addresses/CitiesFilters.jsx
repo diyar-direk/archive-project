@@ -34,11 +34,11 @@ const CitiesFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const staticFilter = [
       {
         name: "parent",
-        ifemptyLabel: "any parent",
-        label: "parent",
+        ifemptyLabel: language?.table?.any,
+        label: language?.city?.parent,
         values: [
-          { value: "Governorate", label: "Governorate" },
-          { value: "County", label: "County" },
+          { value: "Governorate", label: language?.header?.government },
+          { value: "County", label: language?.header?.county },
         ],
       },
     ];

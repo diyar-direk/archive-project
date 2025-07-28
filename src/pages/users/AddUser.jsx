@@ -160,8 +160,8 @@ const AddUser = () => {
             {form.role === "user" && (
               <SelectInputApi
                 fetchData={getInfinityFeatchApis}
-                selectLabel="section id"
-                label="select section"
+                selectLabel={language?.coordinates?.select_section}
+                label={language?.coordinates?.section}
                 optionLabel={(option) => option?.name}
                 onChange={(option) => setForm({ ...form, sectionId: option })}
                 value={form.sectionId.name}

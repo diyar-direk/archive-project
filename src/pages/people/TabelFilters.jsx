@@ -250,7 +250,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           />
         )
     );
-  }, [beforeFiltering, handleParentChange, role]);
+  }, [beforeFiltering, handleParentChange, role, language]);
 
   return (
     <TabelFilterDiv

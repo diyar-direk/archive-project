@@ -221,22 +221,26 @@ const AddCoordinates = () => {
     const arrayOfApis = [
       {
         name: "cityId",
-        label: "city",
+        label: language?.coordinates?.city,
+        selectLabel: language?.coordinates?.select_city,
         url: "Cities",
       },
       {
         name: "streetId",
-        label: "street",
+        label: language?.coordinates?.street,
+        selectLabel: language?.coordinates?.select_street,
         url: "Streets",
       },
       {
         name: "regionId",
-        label: "region",
+        label: language?.coordinates?.region,
+        selectLabel: language?.coordinates?.select_region,
         url: "Regions",
       },
       {
         name: "villageId",
-        label: "village",
+        label: language?.coordinates?.village,
+        selectLabel: language?.coordinates?.select_village,
         url: "Villages",
       },
     ];
@@ -245,7 +249,7 @@ const AddCoordinates = () => {
       <SelectInputApi
         key={input.name}
         fetchData={getInfinityFeatchApis}
-        selectLabel={`select ${input.label}`}
+        selectLabel={input.selectLabel}
         label={input.label}
         optionLabel={(option) => option?.name}
         onChange={(option) => handleParentChange(input.name, option)}
@@ -254,7 +258,7 @@ const AddCoordinates = () => {
         url={input.url}
       />
     ));
-  }, [form, handleParentChange]);
+  }, [form, handleParentChange, language]);
 
   return (
     <>
@@ -339,8 +343,8 @@ const AddCoordinates = () => {
             {context.userDetails.isAdmin && (
               <SelectInputApi
                 fetchData={getInfinityFeatchApis}
-                selectLabel="section"
-                label="section"
+                selectLabel={language?.coordinates?.select_section}
+                label={language?.coordinates?.section}
                 optionLabel={(option) => option?.name}
                 onChange={(option) => setForm({ ...form, sectionId: option })}
                 value={form.sectionId.name}
@@ -350,8 +354,8 @@ const AddCoordinates = () => {
             )}
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
-              selectLabel="select source"
-              label="source"
+              selectLabel={language?.coordinates?.select_source}
+              label={language?.coordinates?.source}
               optionLabel={(option) => option?.source_name}
               onChange={(option) => setForm({ ...form, sources: option })}
               value={form.sources.source_name}

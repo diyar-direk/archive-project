@@ -3,11 +3,13 @@ import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { Context } from "../../context/context";
+import useLanguage from "../../hooks/useLanguage";
 
 const CoordinatesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});
   const context = useContext(Context);
   const { role } = context.userDetails;
+  const { language } = useLanguage();
   const handleParentChange = useCallback(
     (name, option) => {
       const updated = { ...beforeFiltering };
@@ -59,114 +61,108 @@ const CoordinatesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const arrayOfApis = [
       {
         name: "countryId",
-        label: "country",
+        label: language?.header?.country,
         selectLabel: beforeFiltering?.countryId?.name,
         onChange: (option) => handleParentChange("countryId", option),
-        tabelFilterIgnoreText: "any country",
         url: "Countries",
       },
       {
         name: "countyId",
-        label: "county",
+        label: language?.header?.county,
         selectLabel: beforeFiltering?.countyId?.name,
         onChange: (option) => handleParentChange("countyId", option),
-        tabelFilterIgnoreText: "any county",
         url: "Counties",
       },
       {
-        label: "Government",
         name: "governorateId",
+        label: language?.header?.government,
         selectLabel: beforeFiltering?.governorateId?.name,
         onChange: (option) => handleParentChange("governorateId", option),
-        tabelFilterIgnoreText: "any governorate",
         url: "Governorates",
       },
       {
         name: "cityId",
-        label: "city",
+        label: language?.header?.city,
         selectLabel: beforeFiltering?.cityId?.name,
         onChange: (option) => handleParentChange("cityId", option),
-        tabelFilterIgnoreText: "any city",
         url: "Cities",
       },
       {
         name: "streetId",
-        label: "street",
+        label: language?.header?.street,
         selectLabel: beforeFiltering?.streetId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
             ...prev,
             streetId: option,
           })),
-        tabelFilterIgnoreText: "any street",
         url: "Streets",
       },
       {
         name: "regionId",
-        label: "region",
+        label: language?.header?.region,
         selectLabel: beforeFiltering?.regionId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
             ...prev,
             regionId: option,
           })),
-        tabelFilterIgnoreText: "any region",
         url: "Regions",
       },
       {
         name: "villageId",
-        label: "village",
+        label: language?.header?.village,
         selectLabel: beforeFiltering?.villageId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
             ...prev,
             villageId: option,
           })),
-        tabelFilterIgnoreText: "any village",
         url: "Villages",
       },
       {
         name: "sources",
-        label: "sources",
+        label: language?.header?.source,
         selectLabel: beforeFiltering?.sources?.source_name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, sources: option }),
-        tabelFilterIgnoreText: "any source",
         optionLabel: (option) => option?.source_name,
         url: "Sources",
       },
       {
         name: "sectionId",
-        label: "section",
+        label: language?.header?.section,
         selectLabel: beforeFiltering?.sectionId?.name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, sectionId: option }),
-        tabelFilterIgnoreText: "any section",
         url: "Sections",
         hideSelectoer: role !== "admin",
       },
     ];
 
-    return arrayOfApis.map((input) => (
-      <SelectInputApi
-        key={input.name}
-        className="tabel-filter-select"
-        isTabelsFilter
-        fetchData={getInfinityFeatchApis}
-        selectLabel={input.selectLabel}
-        optionLabel={
-          input.optionLabel ? input.optionLabel : (option) => option?.name
-        }
-        onChange={input.onChange}
-        tabelFilterIgnoreText={input.tabelFilterIgnoreText}
-        onIgnore={() =>
-          setBeforeFiltering({ ...beforeFiltering, [input.name]: "" })
-        }
-        url={input.url}
-        label={input.label}
-      />
-    ));
-  }, [beforeFiltering, handleParentChange]);
+    return arrayOfApis.map(
+      (input) =>
+        !input.hideSelectoer && (
+          <SelectInputApi
+            key={input.name}
+            className="tabel-filter-select"
+            isTabelsFilter
+            fetchData={getInfinityFeatchApis}
+            selectLabel={input.selectLabel}
+            optionLabel={
+              input.optionLabel ? input.optionLabel : (option) => option?.name
+            }
+            onChange={input.onChange}
+            tabelFilterIgnoreText={language?.table?.any}
+            onIgnore={() =>
+              setBeforeFiltering({ ...beforeFiltering, [input.name]: "" })
+            }
+            url={input.url}
+            label={input.label}
+          />
+        )
+    );
+  }, [beforeFiltering, handleParentChange, role, language]);
 
   return (
     <TabelFilterDiv

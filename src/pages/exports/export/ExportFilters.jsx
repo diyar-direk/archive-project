@@ -2,7 +2,13 @@ import { useCallback, useMemo, useState } from "react";
 import useLanguage from "../../../hooks/useLanguage";
 import TabelFilterDiv from "../../../components/tabelFilterData/TabelFilterDiv";
 
-const ExportFilters = ({ filter, setFilter, setIsopen, setPage }) => {
+const ExportFilters = ({
+  filter,
+  setFilter,
+  setIsopen,
+  setPage,
+  expirationCount,
+}) => {
   const { language } = useLanguage();
   const [beforeFiltering, setBeforeFiltering] = useState({ ...filter } || {});
   const openDives = useCallback((e) => {
@@ -33,6 +39,9 @@ const ExportFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       <div className="tabel-filter-select select relative" key={itm.name}>
         <label> {itm.label} </label>
         <div onClick={openDives} className="center gap-10 w-100">
+          {expirationCount > 0 && (
+            <span className="expired-exports pointer-none" />
+          )}
           <span className="pointer-none">
             {beforeFiltering[itm.name] || itm.ifemptyLabel}
           </span>
@@ -62,12 +71,15 @@ const ExportFilters = ({ filter, setFilter, setIsopen, setPage }) => {
               }}
             >
               {value.label}
+              {expirationCount > 0 && (
+                <span className="expired-exports"> {expirationCount} </span>
+              )}
             </h2>
           ))}
         </article>
       </div>
     ));
-  }, [language, openDives, beforeFiltering, closeDiv]);
+  }, [language, openDives, beforeFiltering, closeDiv, expirationCount]);
 
   return (
     <TabelFilterDiv

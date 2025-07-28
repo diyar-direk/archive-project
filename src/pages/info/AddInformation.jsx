@@ -314,8 +314,8 @@ const AddInformation = () => {
     const arrayOfApis = [
       {
         name: "people",
-        label: "people",
-        selectLabel: "select people",
+        label: language?.information?.people,
+        selectLabel: language?.information?.select_people,
         optionLabel: (option) => {
           return `${option?.firstName} ${option?.surName}`;
         },
@@ -323,21 +323,21 @@ const AddInformation = () => {
       },
       {
         name: "events",
-        label: "event",
-        selectLabel: "select events",
+        label: language?.information?.event,
+        selectLabel: language?.information?.select_event,
         url: "Events",
       },
       {
         name: "sources",
-        label: "source",
-        selectLabel: "select sources",
+        label: language?.information?.source,
+        selectLabel: language?.information?.select_source,
         url: "Sources",
         optionLabel: (option) => option.source_name,
       },
       {
         name: "parties",
-        label: "party",
-        selectLabel: "select parties",
+        label: language?.information?.party,
+        selectLabel: language?.information?.select_party,
         url: "Parties",
       },
     ];
@@ -358,7 +358,7 @@ const AddInformation = () => {
         value={form[input.name]}
       />
     ));
-  }, [form, multiSelectInput, ignoreMultiSelectInput]);
+  }, [form, multiSelectInput, ignoreMultiSelectInput, language]);
 
   const handleParentChange = useCallback(
     (name, option) => {
@@ -405,22 +405,26 @@ const AddInformation = () => {
     const arrayOfApis = [
       {
         name: "cityId",
-        label: "city",
+        label: language?.coordinates?.city,
+        selectLabel: language?.coordinates?.select_city,
         url: "Cities",
       },
       {
         name: "streetId",
-        label: "street",
+        label: language?.coordinates?.street,
+        selectLabel: language?.coordinates?.select_street,
         url: "Streets",
       },
       {
         name: "regionId",
-        label: "region",
+        label: language?.coordinates?.region,
+        selectLabel: language?.coordinates?.select_region,
         url: "Regions",
       },
       {
         name: "villageId",
-        label: "village",
+        label: language?.coordinates?.village,
+        selectLabel: language?.coordinates?.select_village,
         url: "Villages",
       },
     ];
@@ -429,7 +433,7 @@ const AddInformation = () => {
       <SelectInputApi
         key={input.name}
         fetchData={getInfinityFeatchApis}
-        selectLabel={`select ${input.label}`}
+        selectLabel={input.selectLabel}
         label={input.label}
         optionLabel={(option) => option?.name}
         onChange={(option) => handleParentChange(input.name, option)}
@@ -438,7 +442,7 @@ const AddInformation = () => {
         url={input.url}
       />
     ));
-  }, [form, handleParentChange]);
+  }, [form, handleParentChange, language]);
 
   return (
     <>
@@ -503,8 +507,8 @@ const AddInformation = () => {
             {context.userDetails.isAdmin && (
               <SelectInputApi
                 fetchData={getInfinityFeatchApis}
-                selectLabel="section"
-                label="section"
+                selectLabel={language?.coordinates?.select_section}
+                label={language?.coordinates?.section}
                 optionLabel={(option) => option?.name}
                 onChange={(option) => setForm({ ...form, sectionId: option })}
                 value={form.sectionId.name}

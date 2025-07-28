@@ -131,7 +131,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const arrayOfApis = [
       {
         name: "people",
-        label: "person",
+        label: language?.header?.person,
         selectLabel: beforeFiltering?.people
           ? `${beforeFiltering?.people?.firstName} ${beforeFiltering?.people?.fatherName} ${beforeFiltering?.people?.surName}`
           : "",
@@ -139,113 +139,101 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           return `${option?.firstName} ${option?.fatherName} ${option?.surName}`;
         },
         onChange: (option) => handleParentChange("people", option),
-        tabelFilterIgnoreText: "any person",
         fetchData: getPeopleApi,
       },
       {
         name: "countryId",
-        label: "country",
+        label: language?.header?.country,
         selectLabel: beforeFiltering?.countryId?.firstName,
         onChange: (option) => handleParentChange("countryId", option),
-        tabelFilterIgnoreText: "any country",
         url: "Countries",
       },
       {
         name: "countyId",
-        label: "county",
+        label: language?.header?.county,
         selectLabel: beforeFiltering?.countyId?.name,
         onChange: (option) => handleParentChange("countyId", option),
-        tabelFilterIgnoreText: "any county",
         url: "Counties",
       },
       {
         name: "governorateId",
-        label: "governorateId",
+        label: language?.header?.government,
         selectLabel: beforeFiltering?.governorateId?.name,
         onChange: (option) => handleParentChange("governorateId", option),
-        tabelFilterIgnoreText: "any governorate",
         url: "Governorates",
       },
       {
         name: "cityId",
-        label: "city",
+        label: language?.header?.city,
         selectLabel: beforeFiltering?.cityId?.name,
         onChange: (option) => handleParentChange("cityId", option),
-        tabelFilterIgnoreText: "any city",
         url: "Cities",
       },
       {
         name: "streetId",
-        label: "street",
+        label: language?.header?.street,
         selectLabel: beforeFiltering?.streetId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
             ...prev,
             streetId: option,
           })),
-        tabelFilterIgnoreText: "any street",
         url: "Streets",
       },
       {
         name: "regionId",
-        label: "region",
+        label: language?.header?.region,
         selectLabel: beforeFiltering?.regionId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
             ...prev,
             regionId: option,
           })),
-        tabelFilterIgnoreText: "any region",
         url: "Regions",
       },
       {
         name: "villageId",
-        label: "village",
+        label: language?.header?.village,
         selectLabel: beforeFiltering?.villageId?.name,
         onChange: (option) =>
           setBeforeFiltering((prev) => ({
             ...prev,
             villageId: option,
           })),
-        tabelFilterIgnoreText: "any village",
         url: "Villages",
       },
       {
         name: "sectionId",
-        label: "section",
+        label: language?.header?.section,
         selectLabel: beforeFiltering?.sectionId?.name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, sectionId: option }),
-        tabelFilterIgnoreText: "any section",
         url: "Sections",
         hideSelectoer: role !== "admin",
       },
       {
         name: "sources",
-        label: "source",
+        label: language?.header?.source,
         selectLabel: beforeFiltering?.sources?.source_name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, sources: option }),
-        tabelFilterIgnoreText: "any source",
         optionLabel: (option) => option?.source_name,
         url: "Sources",
       },
       {
         name: "parties",
-        label: "party",
+        label: language?.header?.party,
         selectLabel: beforeFiltering?.parties?.name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, parties: option }),
-        tabelFilterIgnoreText: "any parties",
         url: "Parties",
       },
       {
         name: "events",
-        label: "event",
+        label: language?.header?.event,
         selectLabel: beforeFiltering?.events?.name,
         onChange: (option) =>
           setBeforeFiltering({ ...beforeFiltering, events: option }),
-        tabelFilterIgnoreText: "any events",
         url: "Events",
       },
     ];
@@ -262,14 +250,14 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           input.optionLabel ? input.optionLabel : (option) => option?.name
         }
         onChange={input.onChange}
-        tabelFilterIgnoreText={input.tabelFilterIgnoreText}
+        tabelFilterIgnoreText={language?.table?.any}
         onIgnore={() =>
           setBeforeFiltering({ ...beforeFiltering, [input.name]: "" })
         }
         url={input.url}
       />
     ));
-  }, [beforeFiltering, handleParentChange]);
+  }, [beforeFiltering, handleParentChange, role, language]);
 
   return (
     <TabelFilterDiv
