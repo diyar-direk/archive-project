@@ -34,12 +34,12 @@ const SourcesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const staticFilter = [
       {
         name: "source_credibility",
-        ifemptyLabel: "any source_credibility",
-        label: "source credibility",
+        ifemptyLabel: language?.table?.any,
+        label: language?.source?.source_credibility,
         values: [
-          { value: "High", label: "High" },
-          { value: "Medium", label: "Medium" },
-          { value: "Low", label: "Low" },
+          { value: "High", label: language?.source?.high },
+          { value: "Medium", label: language?.source?.medium },
+          { value: "Low", label: language?.source?.low },
         ],
       },
     ];
@@ -93,10 +93,10 @@ const SourcesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         selectLabel={beforeFiltering?.field?.name}
         optionLabel={(option) => option?.name}
         onChange={(option) => updateFilters("field", option)}
-        tabelFilterIgnoreText="any field"
+        tabelFilterIgnoreText={language?.table?.any}
         onIgnore={() => setBeforeFiltering({ ...beforeFiltering, field: "" })}
         url="Fields"
-        label="field"
+        label={language?.source?.field}
       />
     </TabelFilterDiv>
   );

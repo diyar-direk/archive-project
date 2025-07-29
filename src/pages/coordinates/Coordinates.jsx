@@ -9,7 +9,7 @@ import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {
     name: "coordinates",
-    headerName: "coordinates",
+    headerName: (lang) => lang?.coordinates?.coordinates,
     sort: true,
     getCell: (e) => (
       <Link className="name" to={`/coordinate/${e._id}`}>
@@ -17,74 +17,79 @@ const columns = [
       </Link>
     ),
   },
-  { name: "note", headerName: "note", sort: true, hidden: true },
+  {
+    name: "note",
+    headerName: (lang) => lang?.coordinates?.note,
+    sort: true,
+    hidden: true,
+  },
   {
     name: "country",
-    headerName: "country",
+    headerName: (lang) => lang?.coordinates?.country,
     getCell: (e) => e.countryId?.name,
   },
   {
     name: "county",
-    headerName: "county",
+    headerName: (lang) => lang?.header?.county,
     getCell: (e) => e.countyId?.name,
   },
   {
     name: "governorate",
-    headerName: "governorate",
+    headerName: (lang) => lang?.coordinates?.government,
     getCell: (e) => e.governorateId?.name,
     hidden: true,
   },
   {
     name: "city",
-    headerName: "city",
+    headerName: (lang) => lang?.coordinates?.city,
     getCell: (e) => e.cityId?.name,
     hidden: true,
   },
   {
     name: "street",
-    headerName: "street",
+    headerName: (lang) => lang?.coordinates?.street,
     getCell: (e) => e.streetId?.name,
     hidden: true,
   },
   {
     name: "region",
-    headerName: "region",
+    headerName: (lang) => lang?.coordinates?.region,
     getCell: (e) => e.regionId?.name,
     hidden: true,
   },
   {
     name: "village",
-    headerName: "village",
+    headerName: (lang) => lang?.coordinates?.village,
     getCell: (e) => e.villageId?.name,
     hidden: true,
   },
   {
     name: "section",
-    headerName: "section",
+    headerName: (lang) => lang?.coordinates?.section,
     getCell: (e) => e.sectionId?.name,
     onlyAdminCanSee: true,
   },
   {
     name: "sources",
-    headerName: "sources",
+    headerName: (lang) => lang?.header?.sources,
     getCell: (e) => e.sources?.source_name,
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.coordinates?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     getCell: (e, setOverlay, setSelectedItems, role) => (
       <>

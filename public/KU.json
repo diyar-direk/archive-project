@@ -12,6 +12,7 @@
     "access_denied": "Gihîştin hate redkirin"
   },
   "error": {
+    "please_selecet": "",
     "please_selecet_maritalStatus": "Ji kerema xwe rewşa zewacê hilbijêrin",
     "please_selecet_gender": "Ji kerema xwe zayend hilbijêrin",
     "please_selecet_country": "Ji kerema xwe welat hilbijêrin",
@@ -77,6 +78,8 @@
     "category": "Kategorî",
     "sections": "Beş",
     "section": "Beş",
+    "fields": "",
+    "field": "",
     "events": "Bûyer",
     "event": "Bûyer",
     "sources": "Çavkanî",
@@ -466,12 +469,28 @@
     "no_data": "Daneyên tune",
     "search_btn": "Lêgerîn"
   },
+  "fields": {
+    "add_new_field": "",
+    "update_field": "",
+    "field_name": " ",
+    "field_name_placeholder": "",
+    "name": "",
+    "add_btn": "",
+    "created_at": "",
+    "loading": "",
+    "save": "",
+    "cancel": "",
+    "no_data": " ",
+    "search_btn": ""
+  },
   "source": {
     "add_new_source": "Çavkaniyek nû zêde bike",
     "update_source": "Vê çavkaniyê nûve bike",
     "source_name": "Navê Çavkaniyê",
     "source_name_placeholder": "Navê çavkaniyê binivîse",
     "source_credibility": "Pêbaweriya Çavkaniyê",
+    "field": "",
+    "select_field": "",
     "high": "Bilind",
     "medium": "Navîn",
     "low": "Nizm",

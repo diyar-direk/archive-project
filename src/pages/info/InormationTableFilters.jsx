@@ -84,12 +84,12 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const staticFilter = [
       {
         name: "credibility",
-        label: "credibility",
-        ifemptyLabel: "any credibility",
+        label: language?.information?.credibility,
+        ifemptyLabel: language?.table?.any,
         values: [
-          { value: "Low", label: "Low" },
-          { value: "Medium", label: "Medium" },
-          { value: "High", label: "High" },
+          { value: "Low", label: language?.information?.low },
+          { value: "Medium", label: language?.information?.medium },
+          { value: "High", label: language?.information?.high },
         ],
       },
     ];

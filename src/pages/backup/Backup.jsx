@@ -8,16 +8,16 @@ import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import { dateFormatter } from "./../../utils/dateFormatter";
 const columns = [
-  { name: "root", headerName: "root" },
+  { name: "root", headerName: (lang) => lang?.backUps?.root },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.backUps?.created_at,
     sort: true,
     getCell: (e) => dateFormatter(e.createdAt),
   },
   {
     name: "useBackup",
-    headerName: "use this Backup",
+    headerName: (lang) => lang?.backUps?.use_this_backup,
     getCell: (e, setOverlay) => (
       <p
         onClick={() => {

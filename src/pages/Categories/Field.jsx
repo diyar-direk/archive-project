@@ -7,24 +7,25 @@ import Loading from "../../components/loading/Loading";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import { dateFormatter } from "../../utils/dateFormatter";
+import useLanguage from "../../hooks/useLanguage";
 const columns = [
-  { name: "name", headerName: "name", sort: true },
+  { name: "name", headerName: (lang) => lang?.fields?.field_name, sort: true },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.fields?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
@@ -72,6 +73,7 @@ const Field = () => {
   const token = context.userDetails.token;
   const limit = context?.limit;
   const [sort, setSort] = useState({});
+  const { language } = useLanguage();
   const { role } = context.userDetails;
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
@@ -194,30 +196,34 @@ const Field = () => {
         <SendData data="Fields" response={response.current} />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">Fields</h1>
+      <h1 className="title">{language?.header?.fields}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
-            <h1>{update ? "update_Fields" : "add_new_Fields"}</h1>
+            <h1>
+              {update
+                ? language?.fields?.update_field
+                : language?.fields?.add_new_field}
+            </h1>
             <InputWithLabel
-              label={"Fields_name"}
+              label={language?.fields?.field_name}
               ref={ref}
               required
-              placeholder="Fields_name_placeholder"
+              placeholder={language?.fields?.field_name_placeholder}
               value={name}
               onInput={(e) => setName(e.target.value)}
               id="name"
             />
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? "save" : "add_btn"}
+                {update ? language?.fields?.save : language?.fields?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  cancel
+                  {language?.fields?.cancel}
                 </button>
               )}
             </div>

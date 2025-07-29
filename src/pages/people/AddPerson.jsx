@@ -388,7 +388,7 @@ const AddPerson = () => {
         </div>
 
         <div className="form">
-          <h1>contact informations</h1>
+          <h1>{language?.people?.contact_information}</h1>
           <div className="flex wrap">
             <InputWithLabel
               label={language?.people?.phone}

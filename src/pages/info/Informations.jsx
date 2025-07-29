@@ -10,12 +10,12 @@ import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {
     name: "subject",
-    headerName: "subject",
+    headerName: (lang) => lang?.information?.subject,
     sort: true,
   },
   {
     name: "details",
-    headerName: "details",
+    headerName: (lang) => lang?.information?.details,
     sort: true,
     className: "name",
     getCell: (e) => (
@@ -26,63 +26,63 @@ const columns = [
   },
   {
     name: "note",
-    headerName: "note",
+    headerName: (lang) => lang?.information?.notes,
     hidden: true,
     sort: true,
   },
   {
     name: "credibility",
-    headerName: "credibility",
+    headerName: (lang) => lang?.information?.credibility,
     getCell: (row, lang) => lang?.enums?.credibility[row.credibility],
   },
   {
     name: "countryId",
-    headerName: "country",
+    headerName: (lang) => lang?.information?.country,
     getCell: (e) => e.countryId?.name,
   },
   {
     name: "countyId",
-    headerName: "county",
+    headerName: (lang) => lang?.header?.county,
     getCell: (e) => e.countyId?.name,
   },
   {
     name: "governorateId",
-    headerName: "governorate",
+    headerName: (lang) => lang?.information?.government,
     hidden: true,
     getCell: (e) => e.governorateId?.name,
   },
   {
     name: "cityId",
-    headerName: "city",
+    headerName: (lang) => lang?.information?.city,
     getCell: (e) => e.cityId?.name,
     hidden: true,
   },
   {
     name: "streetId",
-    headerName: "street",
+    headerName: (lang) => lang?.information?.street,
     getCell: (e) => e.streetId?.name,
     hidden: true,
   },
   {
     name: "regionId",
-    headerName: "region",
+    headerName: (lang) => lang?.information?.region,
     getCell: (e) => e.regionId?.name,
     hidden: true,
   },
   {
     name: "villageId",
-    headerName: "village",
+    headerName: (lang) => lang?.information?.village,
     getCell: (e) => e.villageId?.name,
     hidden: true,
   },
 
   {
     name: "addressDetails",
-    headerName: "addressDetails",
+    headerName: (lang) => lang?.information?.extra_adress_details,
   },
   {
     name: "people",
-    headerName: "people",
+    headerName: (lang) => lang?.information?.people,
     getCell: (e) =>
       e.people?.map((person, i) => {
         const arr = [];
@@ -100,44 +100,44 @@ const columns = [
   },
   {
     name: "section",
-    headerName: "section",
+    headerName: (lang) => lang?.header?.sections,
     getCell: (e) => e.sectionId?.name,
     onlyAdminCanSee: true,
   },
   {
     name: "source",
-    headerName: "source",
+    headerName: (lang) => lang?.header?.sources,
     getCell: (e) => nextJoin(e.sources, "source_name"),
   },
   {
     name: "parties",
-    headerName: "parties",
+    headerName: (lang) => lang?.header?.parties,
     getCell: (e) => nextJoin(e.parties, "name"),
     hidden: true,
   },
   {
     name: "events",
-    headerName: "events",
+    headerName: (lang) => lang?.header?.events,
     getCell: (e) => nextJoin(e.events, "name"),
     hidden: true,
   },
 
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.information?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     getCell: (e, setOverlay, setSelectedItems, role) => (
       <>

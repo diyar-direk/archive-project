@@ -13,28 +13,32 @@ import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { dateFormatter } from "../../utils/dateFormatter";
 
 const columns = [
-  { name: "name", headerName: "name", sort: true },
+  {
+    name: "name",
+    headerName: (lang) => lang?.village?.village_name,
+    sort: true,
+  },
   {
     name: "city",
-    headerName: "city",
+    headerName: (lang) => lang?.village?.city,
     getCell: (row) => row?.city?.name,
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.village?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (

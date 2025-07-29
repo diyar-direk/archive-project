@@ -232,7 +232,7 @@ const UpdateInfo = () => {
       {
         name: "credibility",
         label: language?.information?.credibility,
-        placeholder: `select ${language?.information?.select_credibility}`,
+        placeholder: `${language?.information?.select_credibility}`,
         options: [
           {
             onSelectOption: () => setForm({ ...form, credibility: "High" }),

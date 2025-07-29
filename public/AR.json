@@ -12,10 +12,11 @@
     "access_denied": "تم رفض الوصول"
   },
   "error": {
+    "please_selecet": "يرجى اختيار",
     "please_selecet_maritalStatus": "يرجى اختيار الحالة الاجتماعية",
     "please_selecet_gender": "يرجى اختيار الجنس",
     "please_selecet_country": "يرجى اختيار الدولة",
-    "please_selecet_government": "يرجى اختيار الحكومة",
+    "please_selecet_government": "يرجى اختيار المحافظة",
     "please_selecet_city": "يرجى اختيار المدينة",
     "please_selecet_section": "يرجى اختيار القسم",
     "please_selecet_source": "يرجى اختيار المصدر",
@@ -29,15 +30,15 @@
     "add_an_image": "قم بتحميل صورة قبل البحث",
     "somthing_went_wrong": "حدث خطأ ما",
     "InvalidCoordinates": "إحداثيات غير صالحة",
-    "please_selecet_parent": "",
-    "County": "",
-    "Governorate": "",
-    "please_selecet_field": "",
-    "export_date_error": "",
-    "export_question_error": "",
-    "please_selecet_information": "",
-    "question_text_error": "",
-    "please_selecet_report_type": ""
+    "please_selecet_parent": " يرجى اختيار منطقة الأنتماء",
+    "County": " المقاطعة",
+    "Governorate": " المحافظة",
+    "please_selecet_field": " يرجى اختيار فئة",
+    "export_date_error": " يرجى اختيار تاريخ الانتهاء",
+    "export_question_error": " يرجى اختيار سؤال",
+    "please_selecet_information": " يرجى اختيار معلومة",
+    "question_text_error": " يرجى إدخال نص السؤال",
+    "please_selecet_report_type": " يرجى اختيار نوع التقرير"
   },
   "header": {
     "outgoing_incoming": " صادرات وواردات",
@@ -77,6 +78,8 @@
     "category": "الفئة",
     "sections": "الأقسام",
     "section": "القسم",
+    "fields": "الفئات",
+    "field": "الفئة",
     "events": "الأحداث",
     "event": "الحدث",
     "sources": "المصادر",
@@ -285,7 +288,7 @@
     "occupation_placeholder": "أدخل المهنة",
     "place_date_of_birth": "مكان وتاريخ الميلاد",
     "place_of_residence": "مكان الإقامة",
-    "government": "الحكومة",
+    "government": "المحافظة",
     "phone": "الهاتف",
     "email": "البريد الإلكتروني",
     "created_at": "تاريخ النشر",
@@ -468,12 +471,28 @@
     "no_data": "لا توجد بيانات",
     "search_btn": "بحث"
   },
+  "fields": {
+    "add_new_field": " إضافة فئة جديدة",
+    "update_field": " تحديث هذه الفئة",
+    "field_name": " اسم الفئة",
+    "field_name_placeholder": " أدخل اسم الفئة",
+    "name": "الاسم",
+    "add_btn": "إضافة",
+    "created_at": "تاريخ النشر",
+    "loading": "جار التحميل",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "no_data": "لا توجد بيانات",
+    "search_btn": "بحث"
+  },
   "source": {
     "add_new_source": "إضافة مصدر جديد",
     "update_source": "تحديث هذا المصدر",
     "source_name": "اسم المصدر",
     "source_name_placeholder": "أدخل اسم المصدر",
     "source_credibility": "مصداقية المصدر",
+    "field": "الفئة",
+    "select_field": " اختر فئة",
     "high": "عالية",
     "medium": "متوسطة",
     "low": "منخفضة",
@@ -547,8 +566,8 @@
     "adress": "العنوان",
     "country": "الدولة",
     "select_country": "اختر دولة",
-    "government": "الحكومة",
-    "select_government": "اختر الحكومة",
+    "government": "المحافظة",
+    "select_government": "اختر المحافظة",
     "city": "المدينة",
     "select_city": "اختر المدينة",
     "village": "القرية",
@@ -595,7 +614,7 @@
     "search_by_coordinates": "البحث بالإحداثيات",
     "coordinates": "الإحداثيات",
     "place": "المكان",
-    "government": "الحكومة",
+    "government": "المحافظة",
     "street": "الشارع",
     "region": "المنطقة",
     "source": "المصدر",
@@ -608,7 +627,7 @@
     "adress": "العنوان",
     "country": "الدولة",
     "select_country": "اختر الدولة",
-    "select_government": "اختر الحكومة",
+    "select_government": "اختر المحافظة",
     "city": "المدينة",
     "select_city": "اختر المدينة",
     "village": "القرية",
@@ -677,32 +696,32 @@
   },
   "enums": {
     "role": {
-      "admin": "",
-      "user": ""
+      "admin": " مسؤول",
+      "user": " مستخدم"
     },
     "gender": {
-      "Male": "",
-      "Female": ""
+      "Male": " ذكر",
+      "Female": " أنثى"
     },
     "maritalStatus": {
-      "Married": "",
-      "Single": "",
-      "Other": ""
+      "Married": " متزوج",
+      "Single": " أعزب",
+      "Other": " آخر"
     },
     "city_parent": {
-      "Governorate": "",
-      "County": ""
+      "Governorate": " المحافظة",
+      "County": " المقاطعة"
     },
     "credibility": {
-      "High": "",
-      "Low": "",
-      "Medium": ""
+      "High": " عالية",
+      "Low": " منخفضة",
+      "Medium": " متوسطة"
     },
     "report_types": {
-      "daily": "",
-      "weekly": "",
-      "monthly": "",
-      "yearly": ""
+      "daily": " يومي",
+      "weekly": " أسبوعي",
+      "monthly": " شهري",
+      "yearly": " سنوي"
     }
   }
 }

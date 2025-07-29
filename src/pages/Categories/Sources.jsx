@@ -20,28 +20,32 @@ import SelectOptionInput from "../../components/inputs/SelectOptionInput";
 import { getInfinityFeatchApis } from "./../../utils/infintyFeatchApis";
 import { dateFormatter } from "./../../utils/dateFormatter";
 const columns = [
-  { name: "source_name", headerName: "source_name", sort: true },
+  {
+    name: "source_name",
+    headerName: (lang) => lang?.source?.source_name,
+    sort: true,
+  },
   {
     name: "source_credibility",
-    headerName: "source_credibility",
+    headerName: (lang) => lang?.source?.source_credibility,
     getCell: (row, lang) => lang?.enums?.credibility[row.source_credibility],
   },
   {
     name: "createdAt",
-    headerName: "createdAt",
+    headerName: (lang) => lang?.source?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
   {
     name: "updatedAt",
-    headerName: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
     sort: true,
     getCell: (row) => dateFormatter(row.updatedAt),
     hidden: true,
   },
   {
     name: "options",
-    headerName: "options",
+    headerName: (lang) => lang?.table?.options,
     type: "actions",
     onlyAdminCanSee: true,
     getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
@@ -230,7 +234,7 @@ const Sources = () => {
       {
         name: "source_credibility",
         label: language?.information?.credibility,
-        placeholder: `select ${language?.information?.select_credibility}`,
+        placeholder: ` ${language?.information?.select_credibility}`,
         options: [
           {
             onSelectOption: () =>
@@ -291,12 +295,12 @@ const Sources = () => {
             {sourceCredibilityOptions}
             <SelectInputApi
               fetchData={getInfinityFeatchApis}
-              selectLabel="select field"
+              selectLabel={language?.source?.select_field}
               optionLabel={(option) => option?.name}
               onChange={(option) => setForm({ ...form, field: option })}
               onIgnore={() => setForm({ ...form, field: "" })}
               url="Fields"
-              label="field"
+              label={language?.source?.field}
               value={form?.field?.name}
             />
             {error && <p className="error"> {error} </p>}

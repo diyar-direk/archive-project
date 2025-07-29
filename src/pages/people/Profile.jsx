@@ -274,7 +274,7 @@ const Profile = () => {
               <p> {data?.streetId?.name} </p>
             </div>
             <div className="flex">
-              <h2>{language?.people?.country}region</h2>
+              <h2>{language?.people?.country}</h2>
               <p> {data?.regionId?.name} </p>
             </div>
             <div className="flex">
