@@ -229,6 +229,7 @@ const AddPerson = () => {
     const arrayOfOptionsInput = [
       {
         name: "gender",
+        enums: "gender",
         label: language?.people?.gender,
         placeholder: language?.people?.select_gender,
         options: [
@@ -244,6 +245,7 @@ const AddPerson = () => {
       },
       {
         name: "maritalStatus",
+        enums: "maritalStatus",
         label: language?.people?.marital_status,
         placeholder: language?.people?.select_marital_status,
         options: [
@@ -269,7 +271,9 @@ const AddPerson = () => {
         key={input.name}
         label={input.label}
         placeholder={input.placeholder}
-        value={form[input.name]}
+        value={
+          form[input.name] && language?.enums[input.enums][form[input.name]]
+        }
         onIgnore={() => setForm({ ...form, [input.name]: "" })}
         options={input.options}
       />

@@ -127,7 +127,7 @@ const Sources = () => {
   const [form, setForm] = useState({
     source_name: "",
     field: "",
-    source_credibility: "High",
+    source_credibility: "",
   });
   const [update, setUpdate] = useState(false);
 
@@ -136,7 +136,7 @@ const Sources = () => {
       ref.current.focus();
       setForm(update);
     } else {
-      setForm({ source_name: "", source_credibility: "High" });
+      setForm({ source_name: "", source_credibility: "" });
     }
   }, [update]);
 
@@ -217,7 +217,7 @@ const Sources = () => {
         }
       }
 
-      setForm({ source_name: "", source_credibility: "High", field: "" });
+      setForm({ source_name: "", source_credibility: "", field: "" });
       setError(false);
       getData();
     } catch (error) {
@@ -260,7 +260,9 @@ const Sources = () => {
         key={input.name}
         label={input.label}
         placeholder={input.placeholder}
-        value={form[input.name]}
+        value={
+          form[input.name] && language?.enums?.credibility[form[input.name]]
+        }
         onIgnore={() => setForm({ ...form, [input.name]: "" })}
         options={input.options}
       />

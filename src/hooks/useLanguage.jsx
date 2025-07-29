@@ -114,7 +114,7 @@ const useLanguage = () => {
             role: ["admin", "user"],
           },
           {
-            title: "Fields",
+            title: language?.header?.fields,
             path: "fields",
             role: ["admin", "user"],
           },

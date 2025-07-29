@@ -206,7 +206,7 @@ const Table = ({
         {!hideAddBtn && addPageUrl && (
           <Link
             to={`/${addPageUrl}`}
-            title="add data"
+            title={language.table.add_data}
             className="table-form-icons"
           >
             <i className="fa-solid fa-plus" />
@@ -214,7 +214,7 @@ const Table = ({
           </Link>
         )}
         <div
-          title="filters"
+          title={language.table.filters}
           onClick={(e) => {
             setOpenFiltersDiv(true);
             e.stopPropagation();

@@ -125,7 +125,7 @@ const AddUser = () => {
         key="role"
         label={language?.users?.select_role}
         placeholder={language?.users?.select_role}
-        value={form.role}
+        value={form.role && language?.enums?.role[form.role]}
         onIgnore={() => setForm({ ...form, role: "" })}
         options={input.options}
       />

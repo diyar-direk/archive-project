@@ -193,7 +193,7 @@ const Field = () => {
   return (
     <>
       {responseOverlay && (
-        <SendData data="Fields" response={response.current} />
+        <SendData data={language?.header?.fields} response={response.current} />
       )}
       {formLoading && <Loading />}
       <h1 className="title">{language?.header?.fields}</h1>

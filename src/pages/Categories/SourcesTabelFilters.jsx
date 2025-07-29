@@ -48,7 +48,9 @@ const SourcesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         <label> {itm.label} </label>
         <div onClick={openDives} className="center gap-10 w-100">
           <span className="pointer-none">
-            {beforeFiltering[itm.name] || itm.ifemptyLabel}
+            {beforeFiltering[itm.name]
+              ? language?.enums?.credibility[beforeFiltering[itm.name]]
+              : itm.ifemptyLabel}
           </span>
           <i className="fa-solid fa-sort-down pointer-none" />
         </div>

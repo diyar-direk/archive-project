@@ -43,7 +43,9 @@ const ExportFilters = ({
             <span className="expired-exports pointer-none" />
           )}
           <span className="pointer-none">
-            {beforeFiltering[itm.name] || itm.ifemptyLabel}
+            {beforeFiltering[itm.name]
+              ? language?.table?.expired
+              : itm.ifemptyLabel}
           </span>
           <i className="fa-solid fa-sort-down pointer-none" />
         </div>

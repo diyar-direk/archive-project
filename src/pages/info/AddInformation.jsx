@@ -303,7 +303,9 @@ const AddInformation = () => {
         key={input.name}
         label={input.label}
         placeholder={input.placeholder}
-        value={form[input.name]}
+        value={
+          form[input.name] && language?.enums?.credibility[form[input.name]]
+        }
         onIgnore={() => setForm({ ...form, [input.name]: "" })}
         options={input.options}
       />

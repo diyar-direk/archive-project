@@ -106,6 +106,7 @@ const ExportsDataShow = () => {
   const { expiredExports, setExpiredExports } = context;
 
   const getData = useCallback(async () => {
+    if (search && filters.expirationDate) return;
     setLoading(true);
     setData([]);
     setSelectedItems([]);

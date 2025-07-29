@@ -47,7 +47,9 @@ const CitiesFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         <label> {itm.label} </label>
         <div onClick={openDives} className="center gap-10 w-100">
           <span className="pointer-none">
-            {beforeFiltering[itm.name] || itm.ifemptyLabel}
+            {beforeFiltering[itm.name]
+              ? language?.enums?.city_parent[beforeFiltering[itm.name]]
+              : itm.ifemptyLabel}
           </span>
           <i className="fa-solid fa-sort-down pointer-none" />
         </div>
@@ -95,7 +97,7 @@ const CitiesFilters = ({ filter, setFilter, setIsopen, setPage }) => {
           className="tabel-filter-select"
           isTabelsFilter
           fetchData={getInfinityFeatchApis}
-          selectLabel={`select ${beforeFiltering.parent}`}
+          selectLabel={language?.table?.any}
           optionLabel={(option) => option?.name}
           onChange={(option) =>
             setBeforeFiltering({ ...beforeFiltering, parentId: option })
@@ -108,11 +110,11 @@ const CitiesFilters = ({ filter, setFilter, setIsopen, setPage }) => {
               ? "Governorates"
               : "Counties"
           }
-          label={beforeFiltering.parent}
+          label={language?.enums?.city_parent[beforeFiltering.parent]}
           value={beforeFiltering?.parentId?.name}
           reset={reset}
           setReset={setReset}
-          tabelFilterIgnoreText={`any ${beforeFiltering.parent}`}
+          tabelFilterIgnoreText={language?.table?.any}
         />
       )}
     </TabelFilterDiv>

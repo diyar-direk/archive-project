@@ -72,6 +72,7 @@ const ShowRows = ({ columns, setColumns }) => {
   return (
     <div className="show-rows relative">
       <div
+        title={language.table.columns}
         onClick={(e) => {
           e.stopPropagation();
           document

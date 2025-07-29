@@ -86,6 +86,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         name: "gender",
         ifemptyLabel: language?.table?.any,
         label: language?.people?.gender,
+        enums: "gender",
         values: [
           { value: "Female", label: language?.people?.female },
           { value: "Male", label: language?.people?.male },
@@ -95,6 +96,7 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         name: "maritalStatus",
         label: language?.people?.marital_status,
         ifemptyLabel: language?.table?.all_marital_status,
+        enums: "maritalStatus",
         values: [
           { value: "Married", label: language?.people?.married },
           { value: "Single", label: language?.people?.single },
@@ -107,7 +109,9 @@ const TabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         <label> {itm.label} </label>
         <div onClick={openDives} className="center gap-10 w-100">
           <span className="pointer-none">
-            {beforeFiltering[itm.name] || itm.ifemptyLabel}
+            {beforeFiltering[itm.name]
+              ? language?.enums[itm.enums][beforeFiltering[itm.name]]
+              : itm.ifemptyLabel}
           </span>
           <i className="fa-solid fa-sort-down pointer-none" />
         </div>
