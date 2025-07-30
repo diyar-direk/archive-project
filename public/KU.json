@@ -720,6 +720,11 @@
       "weekly": "",
       "monthly": "",
       "yearly": ""
+    },
+    "images_model": {
+      "informations": "",
+      "results": "",
+      "reports": ""
     }
   }
 }

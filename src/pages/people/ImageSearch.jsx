@@ -12,32 +12,25 @@ const ImageSearch = () => {
   const [image, setImage] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState({ loading: false, loaded: false });
-  const { language } = useLanguage();
-  const [response, setResponse] = useState([]);
   const [overlay, setOverlay] = useState(false);
+  const { language } = useLanguage();
   const queryClient = useQueryClient();
   const nav = useNavigate();
-
+  const [response, setResponse] = useState([]);
   useEffect(() => {
-    const cachedData = queryClient.getQueryData(["images"]);
-    if (cachedData) {
-      setResponse(cachedData);
+    const cached = queryClient.getQueryData(["images"]);
+    if (cached) {
+      setResponse(cached);
       setLoading({ loading: false, loaded: true });
     }
   }, [queryClient]);
 
   const handelImageSubmit = useMutation({
-    mutationKey: ["images"],
     mutationFn: searchByImage,
     onSuccess: (data) => {
       queryClient.setQueryData(["images"], data);
       setResponse(data);
       setLoading({ loading: false, loaded: true });
-    },
-    onError: (error) => {
-      console.error(error);
-      alert(language?.error?.somthing_went_wrong);
-      setLoading({ loading: false, loaded: false });
     },
   });
 
@@ -48,16 +41,26 @@ const ImageSearch = () => {
 
     const formData = new FormData();
     formData.append("image", image);
-
     handelImageSubmit.mutate(formData);
   };
 
-  const data = response?.map((e, i) => {
+  const data = response.map((e, i) => {
     const tableData = e.tableData;
     const similarity = (e.similarity * 100).toFixed(2);
+
+    const { parentModel } = e.tableData;
+    const parentType =
+      parentModel === "SecurityInformation"
+        ? "informations"
+        : parentModel === "Result"
+        ? "results"
+        : parentModel === "Report"
+        ? "reports"
+        : "";
+
     return (
-      <Virtual key={i}>
-        <div className="image-card flex flex-direction gap-20">
+      <Virtual key={e.tableData._id || i}>
+        <div className="image-card flex flex-direction gap-10">
           <h3
             className={
               similarity <= 25
@@ -71,6 +74,10 @@ const ImageSearch = () => {
           </h3>
           {tableData.parentId ? (
             <>
+              <article className="parent-type">
+                <h4>model type</h4>
+                <p> {language?.enums?.images_model[parentType]} </p>
+              </article>
               <div className="flex-1 image">
                 <MediaComponent
                   onClick={() => setOverlay(tableData.src)}
@@ -78,7 +85,7 @@ const ImageSearch = () => {
                   src={tableData.src}
                 />
               </div>
-              <Link className="btn" to={`/informations/${tableData.parentId}`}>
+              <Link className="btn" to={`/${parentType}/${tableData.parentId}`}>
                 {language?.filter?.details}
               </Link>
             </>
@@ -93,10 +100,9 @@ const ImageSearch = () => {
                   />
                 </div>
               </div>
-
               <div className="flex info">
                 <Link to={`/people/${tableData._id}`} className="name flex">
-                  {tableData.firstName} {tableData.fatherName}
+                  {tableData.firstName} {tableData.fatherName}{" "}
                   {tableData.surName}
                 </Link>
                 <Link to={`/people/${tableData._id}`} className="profile-btn">
@@ -125,6 +131,7 @@ const ImageSearch = () => {
           </article>
         </div>
       )}
+
       <div className="arrow-back-page">
         <i
           className="fa-solid fa-share"
@@ -140,7 +147,7 @@ const ImageSearch = () => {
         {image && (
           <i onClick={() => setImage(false)} className="fa-solid fa-xmark"></i>
         )}
-        <label htmlFor="image" className=" center">
+        <label htmlFor="image" className="center">
           <input
             type="file"
             id="image"

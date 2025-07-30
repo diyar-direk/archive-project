@@ -721,6 +721,11 @@
       "weekly": "Weekly",
       "monthly": "Monthly",
       "yearly": "Yearly"
+    },
+    "images_model": {
+      "informations": "information",
+      "results": "result",
+      "reports": "report"
     }
   }
 }

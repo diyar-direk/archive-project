@@ -1,5 +1,12 @@
 import axios from "axios";
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { baseURL, Context } from "../../context/context";
 import MapTiles from "./Map";
 import Skeleton from "react-loading-skeleton";
@@ -41,6 +48,22 @@ const CoordinatesMap = () => {
   useEffect(() => {
     getData();
   }, [page, limit, getData]);
+  const pages = useMemo(() => {
+    const pagesCount = Math.ceil(dataLength.current / limit);
+    const pagination = [];
+    if (pagesCount <= 1 || !pagesCount || !data) return null;
+    for (let i = 0; i < pagesCount; i++)
+      pagination.push(
+        <h3
+          key={i}
+          onClick={() => setPage(i + 1)}
+          className={i + 1 === page ? "active" : ""}
+        >
+          {i + 1}
+        </h3>
+      );
+    return pagination;
+  }, [data, page]);
 
   if (loading) return <Skeleton width="100%" height="100%" />;
   if (!data)
@@ -50,6 +73,7 @@ const CoordinatesMap = () => {
       <div className="profile wrap flex">
         <div className="info">
           <MapTiles coords={data} />
+          <div className="pagination center align-center">{pages}</div>
         </div>
       </div>
     </>

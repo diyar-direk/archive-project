@@ -88,9 +88,6 @@ const UpdatePerson = () => {
     if (!form.maritalStatus)
       setError(language?.error?.please_selecet_maritalStatus);
     else if (!form.gender) setError(language?.error?.please_selecet_gender);
-    else if (!form.countryId) setError(language?.error?.please_selecet_country);
-    else if (!form.governmentId)
-      setError(language?.error?.please_selecet_government);
     else if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
     else if (!form.sources) setError(language?.error?.please_selecet_source);

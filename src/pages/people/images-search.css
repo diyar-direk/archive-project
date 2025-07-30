@@ -178,6 +178,19 @@ body.arabic {
     }
   }
 }
+.parent-type {
+  display: flex;
+  align-items: center;
+  color: var(--font-color);
+  text-transform: capitalize;
+  gap: 5px;
+  h4 {
+    font-size: 17px;
+  }
+  h4::after {
+    content: " : ";
+  }
+}
 @media (max-width: 700px) {
   div.grid-3:has(div.image-card) {
     & div.image-card {

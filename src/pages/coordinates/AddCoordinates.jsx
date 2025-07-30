@@ -70,9 +70,7 @@ const AddCoordinates = () => {
 
     e.preventDefault();
 
-    if (!form.countryId) setError(language?.error?.select_country);
-    else if (!form.governmentId) setError(language?.error?.select_government);
-    else if (!form.cityId) setError(language?.error?.please_selecet_city);
+    if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
     else if (!formData.sources)
       setError(language?.error?.please_selecet_source);

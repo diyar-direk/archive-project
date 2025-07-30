@@ -38,7 +38,7 @@ import ShowRows from "./ShowRows";
 /**
  * @param {React.TableHTMLAttributes<HTMLTableElement> & Utils} props
  */
-
+const imageLocations = ["/people", "/informations", "/reports", "/results"];
 const Table = ({
   tabelData = [],
   allData = [],
@@ -192,8 +192,7 @@ const Table = ({
             <i className="fa-solid fa-magnifying-glass" />
           </label>
         )}
-        {(location.pathname.includes("/people") ||
-          location.pathname.includes("/informations")) && (
+        {imageLocations.includes(location.pathname) && (
           <Link
             to="/search_by_image"
             title={language?.header?.serach_by_image}

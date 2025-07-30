@@ -722,6 +722,11 @@
       "weekly": " أسبوعي",
       "monthly": " شهري",
       "yearly": " سنوي"
+    },
+    "images_model": {
+      "informations": "",
+      "results": "",
+      "reports": ""
     }
   }
 }
