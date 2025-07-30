@@ -17,17 +17,11 @@ const InputWithLabel = ({ label, id, writebelType, ...props }, ref) => {
     <div className="flex flex-direction">
       {label && <label htmlFor={id}>{label}</label>}
       {writebelType === "textarea" ? (
-        <textarea
-          {...props}
-          required
-          id={id}
-          className={props.className || "inp"}
-        />
+        <textarea {...props} id={id} className={props.className || "inp"} />
       ) : (
         <input
           {...props}
           ref={ref || null}
-          required
           id={id}
           className={props.className || "inp"}
           type={props.type || "text"}

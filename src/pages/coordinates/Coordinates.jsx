@@ -233,7 +233,7 @@ const Coordinates = () => {
         selectedItems={slectedItems}
         setSelectedItems={setSelectedItems}
         getData={getData}
-        deleteUrl="people"
+        deleteUrl="Coordinates"
         dataLength={dataLength.current}
         tabelData={data}
         setSort={setSort}

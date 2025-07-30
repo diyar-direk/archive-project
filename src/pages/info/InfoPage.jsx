@@ -232,11 +232,14 @@ const InfoPage = () => {
       </div>
       {data.media && <MediaShow id={id} data={data?.media} getData={getData} />}
 
-      <div className="media">
-        <h1> {language?.exports?.questions} </h1>
-      </div>
+      {role === "admin" && question?.questions?.length > 0 && (
+        <div className="media">
+          <h1> {language?.exports?.questions} </h1>
+        </div>
+      )}
 
       {role === "admin" &&
+        question?.questions?.length > 0 &&
         question?.questions?.map((q, i) => (
           <div
             key={q._id}
@@ -247,6 +250,7 @@ const InfoPage = () => {
             <Answers question={q} refreshData={setQuestions} />
           </div>
         ))}
+
       {role === "admin" && questionLoading && (
         <Skeleton width="100%" height="100px" />
       )}

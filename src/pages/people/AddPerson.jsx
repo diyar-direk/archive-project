@@ -130,6 +130,7 @@ const AddPerson = () => {
             //categories data
             sources: "",
           });
+          setError(false);
         }
       } catch (error) {
         console.log(error);

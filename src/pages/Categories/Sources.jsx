@@ -31,6 +31,11 @@ const columns = [
     getCell: (row, lang) => lang?.enums?.credibility[row.source_credibility],
   },
   {
+    name: "field",
+    headerName: (lang) => lang?.source?.field,
+    getCell: (cell) => cell.field?.name,
+  },
+  {
     name: "createdAt",
     headerName: (lang) => lang?.source?.created_at,
     sort: true,
@@ -106,6 +111,7 @@ const Sources = () => {
     },
   });
   const [search, setSearch] = useState("");
+
   const responseFun = (complete = false) => {
     complete === true
       ? (response.current = true)
@@ -136,7 +142,7 @@ const Sources = () => {
       ref.current.focus();
       setForm(update);
     } else {
-      setForm({ source_name: "", source_credibility: "" });
+      setForm({ source_name: "", source_credibility: "", field: "" });
     }
   }, [update]);
 

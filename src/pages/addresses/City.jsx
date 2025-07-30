@@ -221,7 +221,7 @@ const Cities = () => {
         }
       }
 
-      setForm({ ...form, parentId: "", name: "" });
+      setForm({ parent: "", parentId: "", name: "" });
       getData();
       setError(false);
     } catch (error) {

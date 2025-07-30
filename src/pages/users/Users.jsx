@@ -33,13 +33,7 @@ const columns = [
     getCell: (e) => dateFormatter(e.createdAt),
     sort: true,
   },
-  {
-    name: "updatedAt",
-    headerName: (lang) => lang?.exports?.last_updated,
-    getCell: (e) => dateFormatter(e.createdAt),
-    sort: true,
-    hidden: true,
-  },
+
   {
     name: "option",
     headerName: (lang) => lang?.table?.options,

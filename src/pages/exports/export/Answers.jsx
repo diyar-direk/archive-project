@@ -102,7 +102,7 @@ const Answers = ({ question, refreshData }) => {
           </div>
         </p>
       );
-  }, [question, showTextArea, form.answer, handleSubmit, isSending]);
+  }, [question, showTextArea, form.answer, handleSubmit, isSending, language]);
 
   const confirmDelete = useCallback(async () => {
     setIsSending(true);
