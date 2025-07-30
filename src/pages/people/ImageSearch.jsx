@@ -17,10 +17,14 @@ const ImageSearch = () => {
   const queryClient = useQueryClient();
   const nav = useNavigate();
   const [response, setResponse] = useState([]);
+
   useEffect(() => {
     const cached = queryClient.getQueryData(["images"]);
     if (cached) {
-      setResponse(cached);
+      const unique = Array.from(
+        new Map(cached.map((item) => [item.tableData._id, item])).values()
+      );
+      setResponse(unique);
       setLoading({ loading: false, loaded: true });
     }
   }, [queryClient]);
@@ -28,8 +32,11 @@ const ImageSearch = () => {
   const handelImageSubmit = useMutation({
     mutationFn: searchByImage,
     onSuccess: (data) => {
-      queryClient.setQueryData(["images"], data);
-      setResponse(data);
+      const unique = Array.from(
+        new Map(data.map((item) => [item.tableData._id, item])).values()
+      );
+      queryClient.setQueryData(["images"], unique);
+      setResponse(unique);
       setLoading({ loading: false, loaded: true });
     },
     onError: () => {
@@ -52,7 +59,7 @@ const ImageSearch = () => {
     const tableData = e.tableData;
     const similarity = (e.similarity * 100).toFixed(2);
 
-    const { parentModel } = e.tableData;
+    const { parentModel } = tableData;
     const parentType =
       parentModel === "SecurityInformation"
         ? "informations"
@@ -63,7 +70,7 @@ const ImageSearch = () => {
         : "";
 
     return (
-      <Virtual key={e.tableData._id || i}>
+      <Virtual key={tableData._id || i}>
         <div className="image-card flex flex-direction gap-10">
           <h3
             className={
