@@ -32,6 +32,10 @@ const ImageSearch = () => {
       setResponse(data);
       setLoading({ loading: false, loaded: true });
     },
+    onError: () => {
+      setLoading({ loading: false, loaded: false });
+      alert("error please try agin letter");
+    },
   });
 
   const handleSubmit = (e) => {
