@@ -48,6 +48,7 @@ import ResultListShow from "./pages/exports/result/ResultListShow";
 import AddResult from "./pages/exports/result/AddResut";
 import UpdateResult from "./pages/exports/result/UpdateResult";
 import ResultViewPage from "./pages/exports/result/ResultViewPage";
+import CoordinatesMap from "./pages/coordinates/CoordinatesMap";
 
 function App() {
   const location = useLocation();
@@ -106,6 +107,7 @@ function App() {
               <Route path="add_information" element={<AddInformation />} />
               <Route path="update_info/:id" element={<UpdateInfo />} />
               <Route path="coordinates" element={<Coordinates />} />
+              <Route path="coordinates_map" element={<CoordinatesMap />} />
               <Route path="coordinate/:id" element={<CoordPage />} />
               <Route path="coordinates/:id" element={<UpdateCoordinates />} />
               <Route path="add_coordinates" element={<AddCoordinates />} />

@@ -8,15 +8,21 @@ import "react-loading-skeleton/dist/skeleton.css";
 import Provider from "./context/context";
 import "react-datepicker/dist/react-datepicker.css";
 import { CookiesProvider } from "react-cookie";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
+const queryClient = new QueryClient();
+
 root.render(
   <React.StrictMode>
-    <CookiesProvider>
-      <BrowserRouter>
-        <Provider>
-          <App />
-        </Provider>
-      </BrowserRouter>
-    </CookiesProvider>
+    <QueryClientProvider client={queryClient}>
+      <CookiesProvider>
+        <BrowserRouter>
+          <Provider>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      </CookiesProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );

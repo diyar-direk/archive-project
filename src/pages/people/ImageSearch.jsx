@@ -1,47 +1,55 @@
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import "./images-search.css";
 import Loading from "../../components/loading/Loading";
-import axios from "axios";
-import { baseURL, Context } from "../../context/context";
 import Virtual from "../../components/Virtual";
 import MediaComponent from "../../components/MediaComponent";
 import { Link, useNavigate } from "react-router-dom";
 import useLanguage from "../../hooks/useLanguage";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { searchByImage } from "./api";
+
 const ImageSearch = () => {
   const [image, setImage] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState({ loading: false, loaded: false });
-  const context = useContext(Context);
-  const token = context?.userDetails?.token;
   const { language } = useLanguage();
-
   const [response, setResponse] = useState([]);
   const [overlay, setOverlay] = useState(false);
+  const queryClient = useQueryClient();
+  const nav = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!image) {
-      setError(language?.error?.add_an_image);
-      return;
+  useEffect(() => {
+    const cachedData = queryClient.getQueryData(["images"]);
+    if (cachedData) {
+      setResponse(cachedData);
+      setLoading({ loading: false, loaded: true });
     }
-    try {
-      setLoading({ loading: true, loaded: false });
-      const formData = new FormData();
-      formData.append("image", image);
-      const res = await axios.post(
-        `${baseURL}/media/images/searchImages`,
-        formData,
-        { headers: { Authorization: "Bearer " + token } }
-      );
-      setImage(false);
-      setResponse(res.data);
-      setLoading({ loading: true, loaded: true });
-    } catch (error) {
-      console.log(error);
+  }, [queryClient]);
+
+  const handelImageSubmit = useMutation({
+    mutationKey: ["images"],
+    mutationFn: searchByImage,
+    onSuccess: (data) => {
+      queryClient.setQueryData(["images"], data);
+      setResponse(data);
+      setLoading({ loading: false, loaded: true });
+    },
+    onError: (error) => {
+      console.error(error);
       alert(language?.error?.somthing_went_wrong);
-    } finally {
-      setLoading({ ...loading, loading: false });
-    }
+      setLoading({ loading: false, loaded: false });
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!image) return setError(language?.error?.add_an_image);
+    setLoading({ loading: true, loaded: false });
+
+    const formData = new FormData();
+    formData.append("image", image);
+
+    handelImageSubmit.mutate(formData);
   };
 
   const data = response?.map((e, i) => {
@@ -61,7 +69,7 @@ const ImageSearch = () => {
           >
             {language?.filter?.similarity} {similarity} %
           </h3>
-          {tableData.informationId ? (
+          {tableData.parentId ? (
             <>
               <div className="flex-1 image">
                 <MediaComponent
@@ -70,10 +78,7 @@ const ImageSearch = () => {
                   src={tableData.src}
                 />
               </div>
-              <Link
-                className="btn"
-                to={`/informations/${tableData.informationId}`}
-              >
+              <Link className="btn" to={`/informations/${tableData.parentId}`}>
                 {language?.filter?.details}
               </Link>
             </>
@@ -104,7 +109,6 @@ const ImageSearch = () => {
       </Virtual>
     );
   });
-  const nav = useNavigate();
 
   return (
     <>

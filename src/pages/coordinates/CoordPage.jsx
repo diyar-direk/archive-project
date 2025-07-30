@@ -196,7 +196,7 @@ const CoordPage = () => {
                 <h2>{language?.information?.section}</h2>
                 <p> {data?.sectionId?.name} </p>
               </div>
-              <MapTiles coords={data?.coordinates} />
+              <MapTiles coords={[{ coordinates: data.coordinates }]} />
             </div>
           </div>
 
