@@ -52,25 +52,25 @@ const ExportViewPage = () => {
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">
-            <h2>{language.exports.code}</h2>
+            <h2>{language?.exports?.code}</h2>
             <p>{data.code}</p>
           </div>
           <div className="flex">
-            <h2>{language.exports.details}</h2>
+            <h2>{language?.exports?.details}</h2>
             <p>{data.details}</p>
           </div>
           <div className="flex">
-            <h2>{language.exports.expiration_date}</h2>
+            <h2>{language?.exports?.expiration_date}</h2>
             <p>{dateFormatter(data.expirationDate)}</p>
           </div>
           <div className="flex">
-            <h2>{language.exports.created_at}</h2>
+            <h2>{language?.exports?.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
           </div>
         </div>
       </div>
 
-      {data.questions.map((question, i) => (
+      {data?.questions?.map((question, i) => (
         <div key={question._id} className="profile wrap flex answers">
           <h1 className="font-color">{i + 1}.</h1>
           <Answers question={question} refreshData={setData} />
