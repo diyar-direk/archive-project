@@ -93,7 +93,8 @@
     "backUps": "Hilanîn",
     "hide_shortCut": "Kurtebirê veşêre",
     "repeated_data": "Daneyên dubarekirî",
-    "show_shortCut": "Kurtebirê nîşan bide"
+    "show_shortCut": "Kurtebirê nîşan bide",
+    "coord_map": ""
   },
   "statistics": {
     "information": "",
@@ -339,7 +340,8 @@
     "uplaod_your_image": "Wêneyê xwe bar bike",
     "loading": "Barkirin",
     "no_data": "Daneyên tune",
-    "search": "Lêgerîn"
+    "search": "Lêgerîn",
+    "model_type": ""
   },
   "country": {
     "add_new_country": "Welatekî nû zêde bike",

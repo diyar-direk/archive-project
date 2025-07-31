@@ -10,7 +10,7 @@ import {
 import { baseURL, Context } from "../../context/context";
 import MapTiles from "./Map";
 import Skeleton from "react-loading-skeleton";
-
+const limit = 40;
 const CoordinatesMap = () => {
   const [data, setData] = useState(null);
   const dataLength = useRef(0);
@@ -18,7 +18,6 @@ const CoordinatesMap = () => {
   const [loading, setLoading] = useState(true);
   const context = useContext(Context);
   const token = context.userDetails.token;
-  const limit = 40;
 
   const getData = useCallback(async () => {
     setLoading(true);

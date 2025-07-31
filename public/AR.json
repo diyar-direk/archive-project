@@ -93,7 +93,8 @@
     "backUps": "النسخ الاحتياطية",
     "hide_shortCut": "إخفاء الاختصار",
     "repeated_data": "بيانات مكررة",
-    "show_shortCut": "إظهار الاختصار"
+    "show_shortCut": "إظهار الاختصار",
+    "coord_map": ""
   },
   "statistics": {
     "information": " المعلومات",
@@ -341,7 +342,8 @@
     "uplaod_your_image": "قم بتحميل صورتك",
     "loading": "جار التحميل",
     "no_data": "لا توجد بيانات",
-    "search": "بحث"
+    "search": "بحث",
+    "model_type": ""
   },
   "country": {
     "add_new_country": "إضافة دولة جديدة",

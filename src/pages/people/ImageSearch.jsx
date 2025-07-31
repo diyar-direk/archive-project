@@ -86,7 +86,7 @@ const ImageSearch = () => {
           {tableData.parentId ? (
             <>
               <article className="parent-type">
-                <h4>model type</h4>
+                <h4> {language?.searchImage?.model_type} </h4>
                 <p> {language?.enums?.images_model[parentType]} </p>
               </article>
               <div className="flex-1 image">

@@ -80,7 +80,6 @@
     "section": "Section",
     "fields": "Fields",
     "field": "field",
-
     "events": "Events",
     "event": "Event",
     "sources": "Sources",
@@ -94,7 +93,8 @@
     "backUps": "Backups",
     "hide_shortCut": "Hide Shortcut",
     "repeated_data": "reapeted data",
-    "show_shortCut": "Show Shortcut"
+    "show_shortCut": "Show Shortcut",
+    "coord_map": "coordinates map"
   },
   "statistics": {
     "information": "Information",
@@ -339,7 +339,8 @@
     "uplaod_your_image": "Upload your image",
     "loading": "Loading",
     "no_data": "No data",
-    "search": "Search"
+    "search": "Search",
+    "model_type": "model type"
   },
   "country": {
     "add_new_country": "Add New Country",

@@ -3,6 +3,7 @@ import { toPoint } from "mgrs";
 import { useState } from "react";
 import "./map.css";
 import { Link } from "react-router-dom";
+import useLanguage from "../../hooks/useLanguage";
 
 const provider = (x, y, z) => {
   return `http://localhost:8080/data/syria_0_16/${z}/${x}/${y}.png`;
@@ -32,7 +33,7 @@ function MapTiles({ coords }) {
 
   const defaultCenter =
     points.length > 0 ? [points[0].lat, points[0].lon] : [34.8021, 38.9968];
-
+  const { language } = useLanguage();
   return (
     <div>
       <Map
@@ -67,7 +68,7 @@ function MapTiles({ coords }) {
 
               {points[selectedIndex].id && (
                 <Link to={`/coordinate/${points[selectedIndex].id}`}>
-                  details
+                  {language?.exports?.details}
                 </Link>
               )}
             </div>

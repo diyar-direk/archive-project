@@ -168,7 +168,7 @@ const useLanguage = () => {
             role: ["admin", "user"],
           },
           {
-            title: "coordinates map",
+            title: language?.header?.coordinates_map,
             path: "coordinates_map",
             role: ["admin", "user"],
           },
