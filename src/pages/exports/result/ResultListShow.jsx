@@ -19,7 +19,7 @@ const columns = [
   },
   {
     name: "subject",
-    headerName: (lang) => lang?.reports?.subject,
+    headerName: (lang) => lang?.reports?.result_subject,
     hidden: true,
     getCell: (e) => (
       <Link to={`${e._id}`} className="name">
