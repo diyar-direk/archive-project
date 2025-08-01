@@ -4,7 +4,7 @@ import { useState } from "react";
 import "./map.css";
 import { Link } from "react-router-dom";
 import useLanguage from "../../hooks/useLanguage";
-
+import LocationIcon from "./location-icon.png";
 const provider = (x, y, z) => {
   return `http://localhost:8080/data/syria_0_16/${z}/${x}/${y}.png`;
 };
@@ -45,12 +45,18 @@ function MapTiles({ coords }) {
         defaultCenter={defaultCenter}
       >
         {points.map((point, i) => (
-          <Marker
-            key={i}
-            width={50}
-            anchor={[point.lat, point.lon]}
-            onClick={() => setSelectedIndex(i)}
-          />
+          <Marker anchor={[point.lat, point.lon]}>
+            <div
+              onClick={() => setSelectedIndex(i)}
+              style={{ cursor: "pointer", pointerEvents: "auto" }}
+            >
+              <img
+                alt=""
+                src={LocationIcon}
+                style={{ width: "40px", height: "40px" }}
+              />
+            </div>
+          </Marker>
         ))}
 
         {selectedIndex !== null && points[selectedIndex] && (
