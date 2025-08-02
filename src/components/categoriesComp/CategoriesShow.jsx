@@ -47,7 +47,7 @@ const CategoriesShow = (props) => {
             )
           )
         ) : (
-          <h3 className="font-color">no {props.title} found</h3>
+          <h3 className="font-color"> {language?.filter?.no_data} </h3>
         )}
       </div>
     </div>

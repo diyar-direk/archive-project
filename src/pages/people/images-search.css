@@ -125,6 +125,8 @@ div.grid-3:has(div.image-card) {
         overflow: hidden;
         z-index: 1;
         padding: 10px 20px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
       }
       a.profile-btn:hover {
         background-color: #19d319;
