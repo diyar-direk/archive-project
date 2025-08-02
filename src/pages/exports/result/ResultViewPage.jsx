@@ -48,10 +48,7 @@ const ResultViewPage = () => {
             <h2>{language.reports.result_title}</h2>
             <p>{data.title}</p>
           </div>
-          <div className="flex">
-            <h2>{language.reports.result_subject}</h2>
-            <p>{data.subject}</p>
-          </div>
+
           <div className="flex">
             <h2>{language.reports.result_number}</h2>
             <p>{data.number}</p>
@@ -63,6 +60,10 @@ const ResultViewPage = () => {
           <div className="flex">
             <h2>{language.reports.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
+          </div>
+          <div className="flex">
+            <h2>{language.reports.result_subject}</h2>
+            <p>{data.subject}</p>
           </div>
         </div>
       </div>

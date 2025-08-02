@@ -164,10 +164,6 @@ const InfoPage = () => {
         ></Link>
       </div>
 
-      <h1> {data.subject} </h1>
-
-      <h2>{language?.information?.notes}</h2>
-      <p>{data.note}</p>
       <div className="flex align-center gap-10">
         <h2> {language?.information?.credibility}</h2>
         <p>{language?.enums?.credibility[data.credibility]}</p>
@@ -200,12 +196,16 @@ const InfoPage = () => {
         <h2>{language?.information?.adress}</h2>
         <p>{data.addressDetails ? data.addressDetails : "no Details found"}</p>
       </div>
+      <h2>{language?.information?.subject}</h2>
+      <p>{data.subject}</p>
       <h2>{language?.information?.details}</h2>
       <p>{data.details}</p>
+      <h2>{language?.information?.notes}</h2>
+      <p>{data.note}</p>
 
       <div className="categories grid-3">
         <CategoriesShow
-          title="coordinates"
+          title={language?.information?.coordinates}
           data={data.coordinates}
           name="coordinates"
         />
