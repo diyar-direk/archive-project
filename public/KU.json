@@ -93,7 +93,8 @@
     "backUps": "Hilanîn",
     "hide_shortCut": "Kurtebirê veşêre",
     "repeated_data": "Daneyên dubarekirî",
-    "show_shortCut": "Kurtebirê nîşan bide"
+    "show_shortCut": "Kurtebirê nîşan bide",
+    "coord_map": "Koordînatên xêzî"
   },
   "statistics": {
     "information": "Agahî",
@@ -339,7 +340,8 @@
     "uplaod_your_image": "Wêneyê xwe bar bike",
     "loading": "Barkirin",
     "no_data": "Dane tune ne",
-    "search": "Lêgerîn"
+    "search": "Lêgerîn",
+    "model_type": "Cûreya Modelê"
   },
   "country": {
     "add_new_country": "Welatekî nû zêde bike",
@@ -720,6 +722,12 @@
       "weekly": "Heftane",
       "monthly": "Mehane",
       "yearly": "Salane"
+    },
+
+    "images_model": {
+      "informations": "information",
+      "results": "  result",
+      "reports": "reports"
     }
   }
 }

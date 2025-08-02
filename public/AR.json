@@ -94,7 +94,7 @@
     "hide_shortCut": "إخفاء الاختصار",
     "repeated_data": "بيانات مكررة",
     "show_shortCut": "إظهار الاختصار",
-    "coord_map": ""
+    "coord_map": " إحداثيات الخريطة"
   },
   "statistics": {
     "information": " المعلومات",
@@ -343,7 +343,7 @@
     "loading": "جار التحميل",
     "no_data": "لا توجد بيانات",
     "search": "بحث",
-    "model_type": ""
+    "model_type": " نوع النموذج"
   },
   "country": {
     "add_new_country": "إضافة دولة جديدة",
@@ -726,9 +726,9 @@
       "yearly": " سنوي"
     },
     "images_model": {
-      "informations": "",
-      "results": "",
-      "reports": ""
+      "informations": " المعلومات",
+      "results": " حصيلة الأعمال ",
+      "reports": " التقارير الدورية"
     }
   }
 }

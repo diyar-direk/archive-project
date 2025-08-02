@@ -336,7 +336,8 @@
     "uplaod_your_image": "Görselinizi yükleyin",
     "loading": "Yükleniyor",
     "no_data": "Veri yok",
-    "search": "Ara"
+    "search": "Ara",
+    "model_type": "Model Türü"
   },
   "country": {
     "add_new_country": "Yeni Ülke Ekle",
@@ -717,6 +718,11 @@
       "weekly": "Haftalık",
       "monthly": "Aylık",
       "yearly": "Yıllık"
+    },
+    "images_model": {
+      "informations": "Bilgi",
+      "results": "Sonuç",
+      "reports": "Rapor"
     }
   }
 }
