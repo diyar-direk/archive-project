@@ -5,7 +5,7 @@ const StatitsticsDateFilter = ({ dateFilter, setDateFilter }) => {
   return (
     <div className="statistic-date-fltr">
       <article>
-        <label htmlFor="from">{language.table.from}</label>
+        <label htmlFor="from">{language?.table.from}</label>
         <input
           type="date"
           value={dateFilter?.from || ""}
@@ -16,7 +16,7 @@ const StatitsticsDateFilter = ({ dateFilter, setDateFilter }) => {
         />
       </article>
       <article>
-        <label htmlFor="to">{language.table.to}</label>
+        <label htmlFor="to">{language?.table.to}</label>
         <input
           type="date"
           value={dateFilter?.to || ""}

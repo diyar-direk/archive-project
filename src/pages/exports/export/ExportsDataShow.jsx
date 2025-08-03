@@ -164,7 +164,7 @@ const ExportsDataShow = () => {
 
   return (
     <>
-      <h1 className="title">{language.exports.incoming}</h1>
+      <h1 className="title">{language?.exports?.incoming}</h1>
       {openFiltersDiv && (
         <ExportFilters
           setFilter={setFilters}

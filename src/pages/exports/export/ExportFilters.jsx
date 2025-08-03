@@ -30,9 +30,9 @@ const ExportFilters = ({
     const staticFilter = [
       {
         name: "expirationDate",
-        label: language.exports.expiration_date,
-        ifemptyLabel: language.table.any,
-        values: [{ value: "expired", label: language.table.expired }],
+        label: language?.exports?.expiration_date,
+        ifemptyLabel: language?.table?.any,
+        values: [{ value: "expired", label: language?.table?.expired }],
       },
     ];
     return staticFilter.map((itm) => (

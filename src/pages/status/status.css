@@ -137,6 +137,9 @@
 .chart-container:hover .chart-pagination {
   opacity: 1;
 }
+body.arabic .chart-container .chart-pagination {
+  flex-direction: row-reverse;
+}
 @media (max-width: 1000px) {
   .export-as-word {
     margin: 0;

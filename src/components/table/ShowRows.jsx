@@ -72,7 +72,7 @@ const ShowRows = ({ columns, setColumns }) => {
   return (
     <div className="show-rows relative">
       <div
-        title={language.table.columns}
+        title={language?.table?.columns}
         onClick={(e) => {
           e.stopPropagation();
           document
@@ -82,19 +82,19 @@ const ShowRows = ({ columns, setColumns }) => {
         className="table-form-icons"
       >
         <i className="fa-solid fa-ellipsis" />
-        <span>{language.table.columns}</span>
+        <span>{language?.table?.columns}</span>
       </div>
       <article onClick={(e) => e.stopPropagation()}>
         <input
           type="text"
           className="search"
-          placeholder={language.header.search}
+          placeholder={language?.header.search}
           value={search}
           onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />
         {inputs}
         <h4>
-          {language.table.columns_available} <span> {inputs.length}</span>
+          {language?.table.columns_available} <span> {inputs.length}</span>
         </h4>
       </article>
     </div>

@@ -44,14 +44,14 @@ const Answers = ({ question, refreshData }) => {
           {!showTextArea ? (
             <p onClick={() => setShowTextArea(true)}>
               <i className="fa-solid fa-plus" />{" "}
-              {language.exports.no_answer_yet}
+              {language?.exports?.no_answer_yet}
             </p>
           ) : (
             <form className="w-100" onSubmit={handleSubmit}>
               <textarea
                 rows={5}
                 className="inp"
-                placeholder={language.exports.answer_placeholder}
+                placeholder={language?.exports?.answer_placeholder}
                 required
                 value={form.answer}
                 onChange={(e) =>
@@ -59,13 +59,13 @@ const Answers = ({ question, refreshData }) => {
                 }
               />
               <div className="flex gap-10 wrap">
-                <Button isSending={isSending}>{language.exports.save}</Button>
+                <Button isSending={isSending}>{language?.exports?.save}</Button>
                 <Button
                   onClick={() => setShowTextArea(false)}
                   className="btn cencel"
                   type="button"
                 >
-                  {language.exports.cancel}
+                  {language?.exports?.cancel}
                 </Button>
               </div>
             </form>
@@ -87,7 +87,7 @@ const Answers = ({ question, refreshData }) => {
           <div>
             <article className="delete" onClick={() => setOverlay(true)}>
               <i className="fa-solid fa-trash-can" />
-              <span className="flex-1"> {language.exports.delete_answer}</span>
+              <span className="flex-1">{language?.exports?.delete_answer}</span>
             </article>
             <article
               className="update"
@@ -97,7 +97,7 @@ const Answers = ({ question, refreshData }) => {
               }}
             >
               <i className="fa-solid fa-pen-to-square" />
-              <span className="flex-1"> {language.exports.update_answer}</span>
+              <span className="flex-1">{language?.exports?.update_answer}</span>
             </article>
           </div>
         </p>
@@ -146,7 +146,8 @@ const Answers = ({ question, refreshData }) => {
                 isSending={isSending}
                 isSendingText="deleteing please wait"
               >
-                <i className="fa-solid fa-trash"></i> {language.exports.delete}
+                <i className="fa-solid fa-trash"></i>
+                {language?.exports?.delete}
               </Button>
 
               <Button
@@ -156,7 +157,7 @@ const Answers = ({ question, refreshData }) => {
                 className="delete-all cencel overlay-btn btn"
                 disabled={isSending}
               >
-                <i className="fa-solid fa-ban"></i> {language.exports.cancel}
+                <i className="fa-solid fa-ban"></i> {language?.exports?.cancel}
               </Button>
             </div>
           </div>
@@ -164,11 +165,11 @@ const Answers = ({ question, refreshData }) => {
       )}
       <div className="info">
         <div className="flex">
-          <h2>{language.exports.question}</h2>
+          <h2>{language?.exports?.question}</h2>
           <p>{question.question}</p>
         </div>
         <div className="flex answer-container">
-          <h2>{language.exports.answer}</h2>
+          <h2>{language?.exports?.answer}</h2>
           {answerArea}
         </div>
       </div>

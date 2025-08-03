@@ -195,7 +195,7 @@ const Cities = () => {
       return setError(`${language?.error?.please_selecet_parent}`);
     } else if (!form.parentId) {
       return setError(
-        `${language.error.please_selecet} ${language.error[form.parent]}`
+        `${language?.error?.please_selecet} ${language?.error[form.parent]}`
       );
     }
     setFormLoading(true);
@@ -263,7 +263,7 @@ const Cities = () => {
         key={input.name}
         label={input.label}
         placeholder={input.placeholder}
-        value={form.parent && language.error[form.parent]}
+        value={form.parent && language?.error[form.parent]}
         onIgnore={() => setForm({ ...form, [input.name]: "" })}
         options={input.options}
       />
@@ -300,8 +300,8 @@ const Cities = () => {
             {form.parent && (
               <SelectInputApi
                 fetchData={getInfinityFeatchApis}
-                selectLabel={`${language.error.please_selecet} ${
-                  language.error[form.parent]
+                selectLabel={`${language?.error?.please_selecet} ${
+                  language?.error[form.parent]
                 }`}
                 optionLabel={(option) => option?.name}
                 onChange={(option) => setForm({ ...form, parentId: option })}
@@ -309,7 +309,7 @@ const Cities = () => {
                 url={
                   form.parent === "Governorate" ? "Governorates" : "Counties"
                 }
-                label={language.error[form.parent]}
+                label={language?.error[form.parent]}
                 value={form?.parentId?.name}
                 reset={reset}
                 setReset={setReset}

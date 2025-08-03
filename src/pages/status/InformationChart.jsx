@@ -90,62 +90,62 @@ const DashboardCharts = () => {
     () => [
       {
         categoryType: "country",
-        title: language.statistics.information_for_country,
+        title: language?.statistics.information_for_country,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "governorate",
-        title: language.statistics.information_for_each_governorate,
+        title: language?.statistics.information_for_each_governorate,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "county",
-        title: language.statistics.information_for_each_county,
+        title: language?.statistics.information_for_each_county,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "city",
-        title: language.statistics.information_for_each_city,
+        title: language?.statistics.information_for_each_city,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "region",
-        title: language.statistics.information_for_each_region,
+        title: language?.statistics.information_for_each_region,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "street",
-        title: language.statistics.information_for_each_street,
+        title: language?.statistics.information_for_each_street,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "village",
-        title: language.statistics.information_for_each_village,
+        title: language?.statistics.information_for_each_village,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "section",
-        title: language.statistics.information_for_each_section,
+        title: language?.statistics.information_for_each_section,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
         hide: role !== "admin",
       },
       {
         categoryType: "source",
-        title: language.statistics.information_for_each_source,
+        title: language?.statistics.information_for_each_source,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "event",
-        title: language.statistics.information_for_each_event,
+        title: language?.statistics.information_for_each_event,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
       {
         categoryType: "party",
-        title: language.statistics.information_for_each_party,
+        title: language?.statistics.information_for_each_party,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
       },
     ],
-    [role]
+    [role, language]
   );
 
   return (

@@ -22,14 +22,14 @@ const QuestionListShow = ({ questions, setQuestions }) => {
     setSelectedItem(e);
   }, []);
   const questionsData = useMemo(() => {
-    if (questions.length === 0) return <p>{language.exports.no_data}</p>;
+    if (questions.length === 0) return <p>{language?.exports?.no_data}</p>;
     return (
       <table>
         <thead>
           <tr>
-            <th>{language.exports.question}</th>
-            <th>{language.exports.information}</th>
-            <th>{language.exports.option}</th>
+            <th>{language?.exports.question}</th>
+            <th>{language?.exports.information}</th>
+            <th>{language?.exports.option}</th>
           </tr>
         </thead>
         <tbody>
@@ -129,11 +129,11 @@ const QuestionListShow = ({ questions, setQuestions }) => {
       {overlay && (
         <div className="overlay" onClick={() => setOverlay(false)}>
           <div onClick={(e) => e.stopPropagation()}>
-            <h1>{language.exports.are_you_sure_delete}</h1>
+            <h1>{language?.exports.are_you_sure_delete}</h1>
 
             <div className="flex gap-10 wrap">
               <div onClick={confirmDelete} className="delete-all overlay-btn">
-                <i className="fa-solid fa-trash"></i> {language.exports.delete}
+                <i className="fa-solid fa-trash"></i> {language?.exports.delete}
               </div>
               <div
                 onClick={() => {
@@ -141,7 +141,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
                 }}
                 className="delete-all cencel overlay-btn"
               >
-                <i className="fa-solid fa-ban"></i> {language.exports.cancel}
+                <i className="fa-solid fa-ban"></i> {language?.exports.cancel}
               </div>
             </div>
           </div>
@@ -155,7 +155,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
               className="flex gap-10"
               onClick={(e) => e.target.parentNode.classList.toggle("show")}
             >
-              {language.exports.question_list}{" "}
+              {language?.exports.question_list}{" "}
               <i className="fa-solid fa-chevron-up" />
             </div>
             <article>{questionsData}</article>
@@ -166,7 +166,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
             type="button"
           >
             <i className="fa-solid fa-plus" />{" "}
-            <p> {language.exports.add_question}</p>
+            <p> {language?.exports.add_question}</p>
           </button>
         </div>
       )}
@@ -176,8 +176,8 @@ const QuestionListShow = ({ questions, setQuestions }) => {
           <div className="flex direction-revers wrap">
             <SelectInputApi
               fetchData={getInformations}
-              label={language.exports.information}
-              selectLabel={language.exports.information_placeholder}
+              label={language?.exports.information}
+              selectLabel={language?.exports.information_placeholder}
               optionLabel={(option) => option?.subject}
               onChange={(option) =>
                 setQuestionsList({
@@ -191,7 +191,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
               }
             />
             <InputWithLabel
-              label={language.exports.question}
+              label={language?.exports.question}
               id="question"
               value={questionsList.question}
               onChange={(e) =>
@@ -200,7 +200,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
                   question: e.target.value,
                 })
               }
-              placeholder={language.exports.question_placeholder}
+              placeholder={language?.exports.question_placeholder}
               writebelType="textarea"
               rows={5}
             />
@@ -208,7 +208,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
           <div className="flex question-btns gap-20">
             <button type="button" onClick={createNewQuestion} className="save">
               <i className="fa-solid fa-bookmark"></i>
-              {language.exports.save}
+              {language?.exports.save}
             </button>
             <button
               type="button"
@@ -216,7 +216,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
               onClick={() => setShowQuestionForm(false)}
             >
               <i className="fa-solid fa-trash-can"></i>
-              {language.exports.cancel}
+              {language?.exports.cancel}
             </button>
           </div>
           {error && <p className="error"> {error} </p>}

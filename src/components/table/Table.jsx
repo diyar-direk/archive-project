@@ -205,15 +205,15 @@ const Table = ({
         {!hideAddBtn && addPageUrl && (
           <Link
             to={`/${addPageUrl}`}
-            title={language.table.add_data}
+            title={language?.table?.add_data}
             className="table-form-icons"
           >
             <i className="fa-solid fa-plus" />
-            <span>{language.table.add_data}</span>
+            <span>{language?.table?.add_data}</span>
           </Link>
         )}
         <div
-          title={language.table.filters}
+          title={language?.table?.filters}
           onClick={(e) => {
             setOpenFiltersDiv(true);
             e.stopPropagation();
@@ -221,7 +221,7 @@ const Table = ({
           className="table-form-icons"
         >
           <i className="fa-solid fa-sliders filter" />
-          <span>{language.table.filters}</span>
+          <span>{language?.table?.filters}</span>
           {location.pathname.includes("/exports") && expiredExports > 0 && (
             <span className="expired-exports">{expiredExports}</span>
           )}

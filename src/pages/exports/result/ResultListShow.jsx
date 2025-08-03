@@ -148,7 +148,7 @@ const ResultListShow = () => {
   });
   return (
     <>
-      <h1 className="title"> {language.reports.results} </h1>
+      <h1 className="title"> {language?.reports.results} </h1>
       <div className="flex align-start gap-20 wrap">
         <div className="flex-1">
           {openFiltersDiv && (

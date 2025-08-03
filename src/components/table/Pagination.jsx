@@ -101,13 +101,13 @@ const Pagination = ({ dataLength, currentPage, loading, setPage }) => {
   return (
     <div className="between table-pagination">
       <h2>
-        {language.table.number_of_items} <span>{dataLength || 0}</span>
+        {language?.table.number_of_items} <span>{dataLength || 0}</span>
       </h2>
 
       <div className="pagination flex align-center">{createPags}</div>
 
       <h2>
-        {language.table.choose_number_rows}
+        {language?.table.choose_number_rows}
         <select value={limit} onChange={updateLimit}>
           <option value="10">10</option>
           <option value="15">15</option>

@@ -147,38 +147,38 @@ const UpdateExport = () => {
         <div className="form">
           <div className="flex wrap">
             <InputWithLabel
-              label={language.exports.code}
+              label={language?.exports.code}
               required
               id="code"
               value={form.code}
               onChange={handleForm}
-              placeholder={language.exports.code_placeholder}
+              placeholder={language?.exports.code_placeholder}
             />
 
             <InputWithLabel
-              label={language.exports.expiration_date}
+              label={language?.exports.expiration_date}
               value={form.expirationDate}
               required
               onChange={handleForm}
               type="date"
               id="expirationDate"
-              placeholder={language.exports.expiration_date}
+              placeholder={language?.exports.expiration_date}
             />
           </div>
           <div className="flex wrap">
             <InputWithLabel
-              label={language.exports.details}
+              label={language?.exports.details}
               id="details"
               value={form.details}
               onChange={handleForm}
-              placeholder={language.exports.details_placeholder}
+              placeholder={language?.exports.details_placeholder}
               writebelType="textarea"
               rows={5}
             />
           </div>
         </div>
         <div className="form">
-          <h1>{language.exports.questions}</h1>
+          <h1>{language?.exports.questions}</h1>
           <QuestionListShow questions={form.questions} setQuestions={setForm} />
         </div>
 
