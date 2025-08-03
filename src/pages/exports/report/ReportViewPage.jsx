@@ -49,16 +49,12 @@ const ReportViewPage = () => {
             <p>{data.title}</p>
           </div>
           <div className="flex">
-            <h2>{language.reports.report_subject}</h2>
-            <p>{data.subject}</p>
-          </div>
-          <div className="flex">
             <h2>{language.reports.report_number}</h2>
             <p>{data.number}</p>
           </div>
           <div className="flex">
             <h2>{language.reports.type}</h2>
-            <p>{data.type}</p>
+            <p>{language?.enums?.report_types[data?.type]}</p>
           </div>
           <div className="flex">
             <h2>{language.reports.report_date}</h2>
@@ -67,6 +63,10 @@ const ReportViewPage = () => {
           <div className="flex">
             <h2>{language.reports.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
+          </div>
+          <div className="flex">
+            <h2>{language.reports.report_subject}</h2>
+            <p>{data.subject}</p>
           </div>
         </div>
       </div>

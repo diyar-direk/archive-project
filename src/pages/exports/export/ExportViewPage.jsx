@@ -55,10 +55,7 @@ const ExportViewPage = () => {
             <h2>{language?.exports?.code}</h2>
             <p>{data.code}</p>
           </div>
-          <div className="flex">
-            <h2>{language?.exports?.details}</h2>
-            <p>{data.details}</p>
-          </div>
+
           <div className="flex">
             <h2>{language?.exports?.expiration_date}</h2>
             <p>{dateFormatter(data.expirationDate)}</p>
@@ -66,6 +63,10 @@ const ExportViewPage = () => {
           <div className="flex">
             <h2>{language?.exports?.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
+          </div>
+          <div className="flex">
+            <h2>{language?.exports?.details}</h2>
+            <p>{data.details}</p>
           </div>
         </div>
       </div>

@@ -184,10 +184,7 @@ const CoordPage = () => {
                 <h2>{language?.information?.village}</h2>
                 <p> {data?.villageId?.name} </p>
               </div>
-              <div className="flex">
-                <h2>{language?.information?.notes}</h2>
-                <p> {data?.note} </p>
-              </div>
+
               <div className="flex">
                 <h2>{language?.information?.source}</h2>
                 <p> {data?.sources?.source_name} </p>
@@ -195,6 +192,10 @@ const CoordPage = () => {
               <div className="flex">
                 <h2>{language?.information?.section}</h2>
                 <p> {data?.sectionId?.name} </p>
+              </div>
+              <div className="flex">
+                <h2>{language?.information?.notes}</h2>
+                <p> {data?.note} </p>
               </div>
               <MapTiles coords={[{ coordinates: data.coordinates }]} />
             </div>

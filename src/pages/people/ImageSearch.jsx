@@ -39,7 +39,7 @@ const ImageSearch = () => {
       setResponse(unique);
       setLoading({ loading: false, loaded: true });
     },
-    onError: () => {
+    onError: (err) => {
       setLoading({ loading: false, loaded: false });
       alert("error please try agin letter");
     },
