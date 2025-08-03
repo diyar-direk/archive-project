@@ -98,7 +98,7 @@ const InformationStatisticsEnum = ({
     >
       {chartPagination}
       {data?.length === 0 && (
-        <h2 className="no-data">{language?.people.no_data}</h2>
+        <h2 className="no-data">{language?.people?.no_data}</h2>
       )}
     </BarChart>
   ) : (
@@ -109,7 +109,7 @@ const InformationStatisticsEnum = ({
     >
       {chartPagination}
       {data?.length === 0 && (
-        <h2 className="no-data">{language?.people.no_data}</h2>
+        <h2 className="no-data">{language?.people?.no_data}</h2>
       )}
     </DoughnutChart>
   );

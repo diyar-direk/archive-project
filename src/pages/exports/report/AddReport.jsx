@@ -196,23 +196,23 @@ const AddReport = () => {
     const arrayOfOptionsInput = [
       {
         name: "type",
-        label: language?.reports.type,
-        placeholder: language?.reports.select_type,
+        label: language?.reports?.type,
+        placeholder: language?.reports?.select_type,
         options: [
           {
             onSelectOption: () => setForm({ ...form, type: "daily" }),
-            text: language?.reports.daily,
+            text: language?.reports?.daily,
           },
           {
-            text: language?.reports.weekly,
+            text: language?.reports?.weekly,
             onSelectOption: () => setForm({ ...form, type: "weekly" }),
           },
           {
-            text: language?.reports.monthly,
+            text: language?.reports?.monthly,
             onSelectOption: () => setForm({ ...form, type: "monthly" }),
           },
           {
-            text: language?.reports.yearly,
+            text: language?.reports?.yearly,
             onSelectOption: () => setForm({ ...form, type: "yearly" }),
           },
         ],
@@ -238,21 +238,21 @@ const AddReport = () => {
         <SendData data={"report"} response={response.current} />
       )}
       {loading && <Loading />}
-      <h1 className="title">{language?.reports.add_report}</h1>
+      <h1 className="title">{language?.reports?.add_report}</h1>
 
       <form onSubmit={handleSubmit} className="dashboard-form">
         <div className="form">
           <div className="flex wrap">
             <InputWithLabel
-              label={language?.reports.report_title}
+              label={language?.reports?.report_title}
               value={form.title}
               required
               onChange={handleForm}
-              placeholder={language?.reports.report_title_placeholder}
+              placeholder={language?.reports?.report_title_placeholder}
               id="title"
             />
             <InputWithLabel
-              label={language?.reports.report_date}
+              label={language?.reports?.report_date}
               value={form.date}
               required
               onChange={handleForm}
@@ -260,11 +260,11 @@ const AddReport = () => {
               id="date"
             />
             <InputWithLabel
-              label={language?.reports.report_number}
+              label={language?.reports?.report_number}
               value={form.number}
               required
               onChange={handleForm}
-              placeholder={language?.reports.report_number_placeholder}
+              placeholder={language?.reports?.report_number_placeholder}
               id="number"
             />
             {typeOptions}
@@ -273,14 +273,14 @@ const AddReport = () => {
 
         <div className="form">
           <h1>
-            <label htmlFor="subject">{language?.reports.report_subject}</label>
+            <label htmlFor="subject">{language?.reports?.report_subject}</label>
           </h1>
           <div className="flex wrap">
             <InputWithLabel
               value={form.subject}
               required
               onChange={handleForm}
-              placeholder={language?.reports.report_subject_placeholder}
+              placeholder={language?.reports?.report_subject_placeholder}
               id="subject"
               rows={6}
               writebelType="textarea"

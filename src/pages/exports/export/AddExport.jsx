@@ -148,7 +148,7 @@ const AddExport = () => {
         </div>
 
         <div className="form">
-          <h1>{language?.exports.questions}</h1>
+          <h1>{language?.exports?.questions}</h1>
           <QuestionListShow questions={form.questions} setQuestions={setForm} />
         </div>
 

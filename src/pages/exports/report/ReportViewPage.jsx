@@ -45,27 +45,27 @@ const ReportViewPage = () => {
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">
-            <h2>{language?.reports.report_title}</h2>
+            <h2>{language?.reports?.report_title}</h2>
             <p>{data.title}</p>
           </div>
           <div className="flex">
-            <h2>{language?.reports.report_number}</h2>
+            <h2>{language?.reports?.report_number}</h2>
             <p>{data.number}</p>
           </div>
           <div className="flex">
-            <h2>{language?.reports.type}</h2>
+            <h2>{language?.reports?.type}</h2>
             <p>{language?.enums?.report_types[data?.type]}</p>
           </div>
           <div className="flex">
-            <h2>{language?.reports.report_date}</h2>
+            <h2>{language?.reports?.report_date}</h2>
             <p>{dateFormatter(data.date)}</p>
           </div>
           <div className="flex">
-            <h2>{language?.reports.created_at}</h2>
+            <h2>{language?.reports?.created_at}</h2>
             <p>{dateFormatter(data.createdAt)}</p>
           </div>
           <div className="flex">
-            <h2>{language?.reports.report_subject}</h2>
+            <h2>{language?.reports?.report_subject}</h2>
             <p>{data.subject}</p>
           </div>
         </div>

@@ -43,7 +43,7 @@ const StatusCountShow = ({
           }}
         />
         <h1 className="flex-1">
-          {allData?.informationCount} {language?.statistics.information}
+          {allData?.informationCount} {language?.statistics?.information}
         </h1>
       </div>
       <div
@@ -59,7 +59,7 @@ const StatusCountShow = ({
         />
         <h1 className="flex-1">
           {" "}
-          {allData?.personCount} {language?.statistics.people}{" "}
+          {allData?.personCount} {language?.statistics?.people}{" "}
         </h1>
       </div>
       <div
@@ -76,7 +76,7 @@ const StatusCountShow = ({
           }}
         />
         <h1 className="flex-1">
-          {allData?.coordinateCount} {language?.statistics.coordinates}{" "}
+          {allData?.coordinateCount} {language?.statistics?.coordinates}{" "}
         </h1>
       </div>
       <div
@@ -93,7 +93,7 @@ const StatusCountShow = ({
           }}
         />
         <h1 className="flex-1">
-          {totalAddressCount} {language?.statistics.adress_information}{" "}
+          {totalAddressCount} {language?.statistics?.adress_information}{" "}
         </h1>
       </div>
       <div
@@ -110,7 +110,7 @@ const StatusCountShow = ({
           }}
         />
         <h1 className="flex-1">
-          {totalCategoriesCount} {language?.statistics.categories}{" "}
+          {totalCategoriesCount} {language?.statistics?.categories}{" "}
         </h1>
       </div>
     </section>

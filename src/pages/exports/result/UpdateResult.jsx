@@ -215,15 +215,15 @@ const UpdateResult = () => {
         <div className="form">
           <div className="flex wrap">
             <InputWithLabel
-              label={language?.reports.result_title}
+              label={language?.reports?.result_title}
               value={form.title}
               required
               onChange={handleForm}
-              placeholder={language?.reports.result_title_placeholder}
+              placeholder={language?.reports?.result_title_placeholder}
               id="title"
             />
             <InputWithLabel
-              label={language?.reports.result_date}
+              label={language?.reports?.result_date}
               value={form.date}
               required
               onChange={handleForm}
@@ -231,11 +231,11 @@ const UpdateResult = () => {
               id="date"
             />
             <InputWithLabel
-              label={language?.reports.result_number}
+              label={language?.reports?.result_number}
               value={form.number}
               required
               onChange={handleForm}
-              placeholder={language?.reports.result_number_placeholder}
+              placeholder={language?.reports?.result_number_placeholder}
               id="number"
             />
           </div>
@@ -243,14 +243,14 @@ const UpdateResult = () => {
 
         <div className="form">
           <h1>
-            <label htmlFor="subject">{language?.reports.result_subject}</label>
+            <label htmlFor="subject">{language?.reports?.result_subject}</label>
           </h1>
           <div className="flex wrap">
             <InputWithLabel
               value={form.subject}
               required
               onChange={handleForm}
-              placeholder={language?.reports.result_subject_placeholder}
+              placeholder={language?.reports?.result_subject_placeholder}
               id="subject"
               rows={6}
               writebelType="textarea"

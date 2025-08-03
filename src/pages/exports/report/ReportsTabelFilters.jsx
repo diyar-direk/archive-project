@@ -32,13 +32,13 @@ const ReportsTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
     const staticFilter = [
       {
         name: "type",
-        ifemptyLabel: language?.reports.any,
-        label: language?.reports.type,
+        ifemptyLabel: language?.reports?.any,
+        label: language?.reports?.type,
         values: [
-          { value: "daily", label: language?.reports.daily },
-          { value: "weekly", label: language?.reports.weekly },
-          { value: "monthly", label: language?.reports.monthly },
-          { value: "yearly", label: language?.reports.yearly },
+          { value: "daily", label: language?.reports?.daily },
+          { value: "weekly", label: language?.reports?.weekly },
+          { value: "monthly", label: language?.reports?.monthly },
+          { value: "yearly", label: language?.reports?.yearly },
         ],
       },
     ];

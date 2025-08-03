@@ -109,7 +109,7 @@ const WordExporter = ({
       <i
         className="fa-solid fa-download"
         onClick={generateDoc}
-        title={language?.statistics.export_as_word}
+        title={language?.statistics?.export_as_word}
       />
     </div>
   );

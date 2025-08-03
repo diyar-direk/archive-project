@@ -88,13 +88,13 @@ const ShowRows = ({ columns, setColumns }) => {
         <input
           type="text"
           className="search"
-          placeholder={language?.header.search}
+          placeholder={language?.header?.search}
           value={search}
           onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />
         {inputs}
         <h4>
-          {language?.table.columns_available} <span> {inputs.length}</span>
+          {language?.table?.columns_available} <span> {inputs.length}</span>
         </h4>
       </article>
     </div>
