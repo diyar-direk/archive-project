@@ -37,17 +37,24 @@ const ImageSearch = () => {
       );
       queryClient.setQueryData(["images"], unique);
       setResponse(unique);
+      setError(false);
       setLoading({ loading: false, loaded: true });
     },
     onError: (err) => {
-      setLoading({ loading: false, loaded: false });
-      alert("error please try agin letter");
+      setLoading({ loading: false, loaded: true });
+      if (err?.response?.status === 404) {
+        setResponse([]);
+        setError(language?.searchImage?.no_matches);
+      } else {
+        alert(language?.error?.something_wrong);
+      }
     },
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!image) return setError(language?.error?.add_an_image);
+    setError(false);
     setLoading({ loading: true, loaded: false });
 
     const formData = new FormData();
@@ -186,19 +193,12 @@ const ImageSearch = () => {
       </form>
 
       {loading.loaded && response.length < 1 ? (
-        <h3 className="font-color">{language?.searchImage?.no_data}</h3>
+        <h3 className="font-color">
+          {error || language?.searchImage?.no_data}
+        </h3>
       ) : response.length > 0 ? (
         <div className="grid-3">{data}</div>
-      ) : (
-        loading.loaded && (
-          <h2
-            style={{ textAlign: "center" }}
-            className="font-color text-capitalize"
-          >
-            {language?.searchImage?.no_data}
-          </h2>
-        )
-      )}
+      ) : null}
     </>
   );
 };
