@@ -93,7 +93,8 @@
     "backUps": "Yedeklemeler",
     "hide_shortCut": "Kısayolu Gizle",
     "repeated_data": "Tekrarlanan veriler",
-    "show_shortCut": "Kısayolu Göster"
+    "show_shortCut": "Kısayolu Göster",
+    "coord_map": "Koordinat Haritası"
   },
   "statistics": {
     "information": "Bilgi",
