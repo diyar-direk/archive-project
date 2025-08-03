@@ -99,6 +99,7 @@
   "statistics": {
     "information": "Information",
     "people": "People",
+    "users": " Users",
     "coordinates": "Coordinates",
     "categories": "Categories",
     "adress_information": "Address Information",
@@ -221,6 +222,7 @@
   "reports": {
     "reports": "Reports",
     "results": "Results",
+    "add_results": "Add Results",
     "report_title": " Report Title",
     "report_title_placeholder": " Enter Report Title",
     "report_date": " Report Date",

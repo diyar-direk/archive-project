@@ -99,6 +99,7 @@
   "statistics": {
     "information": "Bilgi",
     "people": "Kişiler",
+    "users": " Kullanıcılar",
     "coordinates": "Koordinatlar",
     "categories": "Kategoriler",
     "adress_information": "Adres Bilgileri",
@@ -219,6 +220,7 @@
   "reports": {
     "reports": "Raporlar",
     "results": "Sonuçlar",
+    "add_results": "Sonuç Ekle",
     "report_title": "Rapor Başlığı",
     "report_title_placeholder": "Rapor Başlığını Girin",
     "report_date": "Rapor Tarihi",

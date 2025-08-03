@@ -88,7 +88,7 @@ const ShowRows = ({ columns, setColumns }) => {
         <input
           type="text"
           className="search"
-          placeholder="search for rows"
+          placeholder={language.header.search}
           value={search}
           onChange={(e) => setSearch(e.target.value.toLowerCase())}
         />

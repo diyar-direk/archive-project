@@ -13,7 +13,6 @@ const DashboardCharts = () => {
   const [loading, setLoading] = useState(false);
   const context = useContext(Context);
   const { language } = useLanguage();
-  console.log(language);
   const token = context?.userDetails?.token;
   const [dateFilter, setDateFilter] = useState({ from: "", to: "" });
   const [dataCount, setDataCount] = useState(null);
