@@ -4,7 +4,7 @@ import axios from "axios";
 import DoughnutChart from "./DoughnutChart";
 import BarChart from "./BarChart";
 import Skeleton from "react-loading-skeleton";
-
+import useLanguage from "../../hooks/useLanguage";
 /**
  * @typedef {object} InformationStatisticsEnumProps
  * @property {"country" | "section" | "source" | "event" | "party"} CategoryType
@@ -24,6 +24,7 @@ const InformationStatisticsEnum = ({
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const { language } = useLanguage();
   const context = useContext(Context);
   const token = context?.userDetails?.token;
   const getData = useCallback(async () => {
@@ -96,7 +97,9 @@ const InformationStatisticsEnum = ({
       dataArray={data?.map((item) => item.infoCount)}
     >
       {chartPagination}
-      {data?.length === 0 && <h2 className="no-data">no more data</h2>}
+      {data?.length === 0 && (
+        <h2 className="no-data">{language.people.no_data}</h2>
+      )}
     </BarChart>
   ) : (
     <DoughnutChart
@@ -105,7 +108,9 @@ const InformationStatisticsEnum = ({
       dataArray={data?.map((item) => item.infoCount)}
     >
       {chartPagination}
-      {data?.length === 0 && <h2 className="no-data">no more data</h2>}
+      {data?.length === 0 && (
+        <h2 className="no-data">{language.people.no_data}</h2>
+      )}
     </DoughnutChart>
   );
 };
