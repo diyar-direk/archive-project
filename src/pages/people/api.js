@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import { baseURL } from "../../context/context";
 
-const token = Cookies.get("archive_cookie");
 export const getPeopleApi = async ({ page = 1, search }) => {
+  const token = Cookies.get("archive_cookie");
   try {
     const { data } = await axios.get(`${baseURL}/people`, {
       headers: {
@@ -33,6 +33,7 @@ export const getPeopleApi = async ({ page = 1, search }) => {
 };
 
 export const searchByImage = async (formData) => {
+  const token = Cookies.get("archive_cookie");
   const { data } = await axios.post(
     `${baseURL}/media/images/searchImages`,
     formData,

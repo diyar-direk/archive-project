@@ -13,12 +13,12 @@ const columns = [
     name: "createdAt",
     headerName: (lang) => lang?.backUps?.created_at,
     sort: true,
-    getCell: (e) => dateFormatter(e.createdAt),
+    getCell: (e) => dateFormatter(e.createdAt, "fullDate"),
   },
   {
     name: "useBackup",
     headerName: (lang) => lang?.backUps?.use_this_backup,
-    getCell: (e, setOverlay) => (
+    getCell: (e, setOverlay, lang) => (
       <p
         onClick={() => {
           setOverlay({ isActive: true, root: e });
@@ -26,7 +26,7 @@ const columns = [
         style={{ color: "#27c12d", fontWeight: "500" }}
         className="c-pointer text-capitalize"
       >
-        use_this_backup
+        {lang?.backUps?.use_this_backup}
       </p>
     ),
     type: "backup",

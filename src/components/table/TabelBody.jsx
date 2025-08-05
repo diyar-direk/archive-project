@@ -41,7 +41,7 @@ const TabelBody = ({
               setUpdate
             );
           case "backup":
-            return column.getCell(row, setBackupOverlay);
+            return column.getCell(row, setBackupOverlay, language);
           case "usersPage":
             return column.getCell(row, context.userDetails._id, language);
           default:

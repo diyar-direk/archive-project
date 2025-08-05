@@ -41,12 +41,14 @@ const ImageSearch = () => {
       setLoading({ loading: false, loaded: true });
     },
     onError: (err) => {
+      console.log(err);
+
       setLoading({ loading: false, loaded: true });
       if (err?.response?.status === 404) {
         setResponse([]);
-        setError(language?.searchImage?.no_matches);
+        setError(language?.searchImage?.no_data);
       } else {
-        alert(language?.error?.something_wrong);
+        alert(language?.login?.error);
       }
     },
   });

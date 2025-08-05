@@ -8,7 +8,7 @@ const useLanguage = () => {
   const { expiredExports, setExpiredExports } = context;
 
   useEffect(() => {
-    if (expiredExports >= 0 && role !== "admin") return;
+    if (expiredExports >= 0 || role !== "admin") return;
     axios
       .get(`${baseURL}/exports/countExpiredExports`, {
         headers: { Authorization: `Bearer ${token}` },
