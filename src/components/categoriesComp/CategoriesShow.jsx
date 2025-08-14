@@ -21,7 +21,7 @@ const CategoriesShow = (props) => {
               ) : (
                 <Link
                   style={{ display: "block" }}
-                  to={`/coordinate/${e._id}`}
+                  to={`/coordinates/coordinate/${e._id}`}
                   className="font-color people-cat"
                   key={e._id}
                 >
@@ -33,14 +33,14 @@ const CategoriesShow = (props) => {
               )
             ) : (
               <div className="flex align-center people-cat gap-10" key={e._id}>
-                <Link to={`/people/${e._id}`} className="profile-image">
+                <Link to={`/people/people/${e._id}`} className="profile-image">
                   {e.image ? (
                     <MediaComponent src={e.image} type="image" showUserIcon />
                   ) : (
                     <i className="fa-solid fa-user"></i>
                   )}
                 </Link>
-                <Link to={`/people/${e._id}`} className="name">
+                <Link to={`/people/people/${e._id}`} className="name">
                   {e.firstName} {e.surName}
                 </Link>
               </div>

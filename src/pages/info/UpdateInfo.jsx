@@ -46,7 +46,7 @@ const UpdateInfo = () => {
           return;
         }
 
-        setForm(res.data.data);
+        setForm({ ...res.data.data, date: res.data.data.date.split("T")[0] });
         setDocuments({
           image: res.data.data.media.images,
           video: res.data.data.media.videos,
@@ -99,6 +99,8 @@ const UpdateInfo = () => {
     e.preventDefault();
     if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
+    else if (!form.departmentId)
+      setError(language?.error?.please_selecet_department);
     else if (form?.sources?.length < 1)
       setError(language?.error?.please_selecet_source);
     else if (!form.credibility)
@@ -450,7 +452,7 @@ const UpdateInfo = () => {
                 <InputWithLabel
                   label={language?.information?.subject}
                   required
-                  value={form.subject}
+                  value={form.subject || ""}
                   onChange={handleForm}
                   placeholder={language?.information?.subject_placeholder}
                   id="subject"
@@ -459,7 +461,7 @@ const UpdateInfo = () => {
                 />
                 <InputWithLabel
                   label={language?.information?.notes}
-                  value={form.note}
+                  value={form.note || ""}
                   onChange={handleForm}
                   required
                   placeholder={language?.information?.notes_placeholder}
@@ -477,7 +479,7 @@ const UpdateInfo = () => {
 
                 <InputWithLabel
                   label={language?.information?.extra_adress_details}
-                  value={form.addressDetails}
+                  value={form.addressDetails || ""}
                   onChange={handleForm}
                   placeholder={
                     language?.information?.extra_adress_details_placeholder
@@ -506,7 +508,26 @@ const UpdateInfo = () => {
                     url="Sections"
                   />
                 )}
+                <SelectInputApi
+                  fetchData={getInfinityFeatchApis}
+                  selectLabel={language?.information?.select_department}
+                  label={language?.information?.department}
+                  optionLabel={(option) => option?.name}
+                  onChange={(option) =>
+                    setForm({ ...form, departmentId: option })
+                  }
+                  value={form.departmentId.name}
+                  onIgnore={() => setForm({ ...form, departmentId: "" })}
+                  url="Departments"
+                />
                 {multiSelectInputs}
+                <InputWithLabel
+                  label={language?.information?.date}
+                  value={form.date}
+                  onChange={handleForm}
+                  id="date"
+                  type="date"
+                />
                 {credibilityOptions}
               </div>
             </div>
@@ -519,7 +540,7 @@ const UpdateInfo = () => {
               </h1>
               <div className="flex wrap">
                 <InputWithLabel
-                  value={form.details}
+                  value={form.details || ""}
                   required
                   onChange={handleForm}
                   placeholder={language?.information?.details_placeholder}

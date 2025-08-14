@@ -13,6 +13,8 @@
   },
   "error": {
     "please_selecet": "Please select",
+    "please_selecet_department": "Please select a department",
+    "please_selecet_recipient": "Please select a recipient",
     "please_selecet_maritalStatus": "Please select a maritalStatus",
     "please_selecet_gender": "Please select a gender",
     "please_selecet_country": "Please select a country",
@@ -41,6 +43,8 @@
     "please_selecet_report_type": "please selecet report type"
   },
   "header": {
+    "departments": "Departments",
+    "recipients": "Recipients",
     "outgoing_incoming": "Outgoing & Incoming",
     "incoming": "Incoming",
     "add_export": "Add Export",
@@ -110,6 +114,8 @@
     "information_for_each_region": "Information for each Region",
     "information_for_each_street": "Information for each Street",
     "information_for_each_section": "Information for each Section",
+    "information_for_each_department": "Information for each Department",
+    "export_for_each_recipient": "export for each Recipient",
     "information_for_each_source": "Information for each Source",
     "information_for_each_party": "Information for each Party",
     "information_for_each_event": "Information for each Event",
@@ -349,6 +355,19 @@
     "update_country": "Update this Country",
     "country_name": "Country Name",
     "country_name_placeholder": "Enter country name",
+    "add_btn": "Add",
+    "save": "Save",
+    "cancel": "cancel",
+    "created_at": "Published at",
+    "loading": "Loading",
+    "no_data": "No data",
+    "search_btn": "Search"
+  },
+  "department": {
+    "add_new_department": "Add New Department",
+    "update_department": "Update this Department",
+    "department_name": "Department Name",
+    "department_name_placeholder": "Enter department name",
     "add_btn": "Add",
     "save": "Save",
     "cancel": "cancel",
@@ -610,7 +629,10 @@
     "loading": "Loading...",
     "delete": "delete",
     "show_details": "Show Details",
-    "no_data": "No data"
+    "no_data": "No data",
+    "select_department": "Select a Department",
+    "department": "Department",
+    "date": "Date"
   },
   "coordinates": {
     "search_by_coordinates": "Search by Coordinates",
@@ -696,6 +718,23 @@
     "loading": "Loading",
     "no_data": "No data"
   },
+
+  "recipient": {
+    "add_new_recipient": "Add New Recipient",
+    "update_recipient": "Update this Recipient",
+    "recipient_name": "Recipient Name",
+    "recipient_name_placeholder": "Enter recipient name",
+    "add_btn": "Add",
+    "save": "Save",
+    "cancel": "cancel",
+    "created_at": "Published at",
+    "loading": "Loading",
+    "no_data": "No data",
+    "search_btn": "Search",
+    "recipient": "Recipient",
+    "select_recipient": "Select Recipient"
+  },
+
   "enums": {
     "role": {
       "admin": "Admin",

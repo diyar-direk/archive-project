@@ -14,7 +14,7 @@ const columns = [
     name: "image",
     headerName: (lang) => lang?.people?.profile,
     getCell: (e) => (
-      <Link to={`/people/${e._id}`} className="center">
+      <Link to={`/people/people/${e._id}`} className="center">
         {e.image ? (
           <MediaComponent
             className="photo"
@@ -34,7 +34,7 @@ const columns = [
     className: "name",
     sort: true,
     getCell: (row) => (
-      <Link to={`/people/${row._id}`} className="name">
+      <Link to={`/people/people/${row._id}`} className="name">
         {row.firstName} {row.fatherName} {row.surName}
       </Link>
     ),
@@ -276,7 +276,7 @@ const People = () => {
         />
       )}
       <Table
-        addPageUrl="add_person"
+        addPageUrl="people/add_person"
         columns={columns}
         selectable={role === "admin"}
         loading={loading}

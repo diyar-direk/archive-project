@@ -13,6 +13,7 @@
   },
   "error": {
     "please_selecet": "Ji kerema hilbijêre",
+    "please_selecet_department": "",
     "please_selecet_maritalStatus": "Ji kerema xwe rewşa zewacê hilbijêrin",
     "please_selecet_gender": "Ji kerema xwe zayend hilbijêrin",
     "please_selecet_country": "Ji kerema xwe welat hilbijêrin",
@@ -41,6 +42,8 @@
     "please_selecet_report_type": "Ji kerema xwe cûreya raporê hilbijêre"
   },
   "header": {
+    "departments": "",
+    "recipients": "",
     "outgoing_incoming": "Dahate û hinarde",
     "incoming": "Dahate",
     "add_export": "Hinardeyekê derbaske",
@@ -110,6 +113,8 @@
     "information_for_each_region": "Bîlançoya agahiyan ya her heremekê",
     "information_for_each_street": "Bîlançoya agahiyan ya her kolanekê",
     "information_for_each_section": "Bîlançoya agahiyan ya her beşekî",
+    "information_for_each_department": "",
+    "export_for_each_recipient": "",
     "information_for_each_source": "Bîlançoya agahiyan ya her Çavkaniyekî",
     "information_for_each_party": "Bîlançoya agahiyan ya her partiyê",
     "information_for_each_event": "Bîlançoya agahiyan ya her bûyerê",
@@ -355,6 +360,19 @@
     "loading": "Barkirin",
     "no_data": "Dane tune ne",
     "search_btn": "Lêgerîn"
+  },
+  "department": {
+    "add_new_department": "",
+    "update_department": "",
+    "department_name": "",
+    "department_name_placeholder": "",
+    "add_btn": "",
+    "save": "",
+    "cancel": "",
+    "created_at": "",
+    "loading": "",
+    "no_data": "",
+    "search_btn": ""
   },
   "government": {
     "add_new_government": "Parêzgehek nû zêde bike",
@@ -608,7 +626,10 @@
     "loading": "Barkirin...",
     "delete": "Jêbirin",
     "show_details": "Hûrguliyan nîşan bide",
-    "no_data": "Daneyên tune"
+    "no_data": "Daneyên tune",
+    "select_department": "",
+    "department": "",
+    "date": ""
   },
   "coordinates": {
     "search_by_coordinates": "Bi Koordînatan bigere",
@@ -694,6 +715,23 @@
     "loading": "Barkirin",
     "no_data": "Dane tune ne"
   },
+
+  "recipient": {
+    "add_new_recipient": "",
+    "update_recipient": "",
+    "recipient_name": "",
+    "recipient_name_placeholder": "",
+    "add_btn": "",
+    "save": "",
+    "cancel": "",
+    "created_at": "",
+    "loading": "",
+    "no_data": "",
+    "search_btn": "",
+    "recipient": "",
+    "select_recipient": ""
+  },
+
   "enums": {
     "role": {
       "admin": "Rêvebir",

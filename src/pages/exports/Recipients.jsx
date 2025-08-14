@@ -1,0 +1,279 @@
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import Table from "../../components/table/Table";
+import { baseURL, Context } from "../../context/context";
+import axios from "axios";
+import SendData from "../../components/response/SendData";
+import Loading from "../../components/loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
+import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
+import InputWithLabel from "../../components/inputs/InputWithLabel";
+import { dateFormatter } from "../../utils/dateFormatter";
+const columns = [
+  {
+    name: "name",
+    headerName: (lang) => lang?.recipient?.recipient_name,
+    sort: true,
+  },
+  {
+    name: "createdAt",
+    headerName: (lang) => lang?.recipient?.created_at,
+    sort: true,
+    getCell: (row) => dateFormatter(row.createdAt),
+  },
+  {
+    name: "updatedAt",
+    headerName: (lang) => lang?.exports?.last_updated,
+    sort: true,
+    getCell: (row) => dateFormatter(row.updatedAt),
+    hidden: true,
+  },
+  {
+    name: "options",
+    headerName: (lang) => lang?.table?.options,
+    type: "actions",
+    onlyAdminCanSee: true,
+    getCell: (e, setOverlay, setSelectedItems, role, setUpdate) => (
+      <>
+        <div className="options center">
+          {role && (
+            <>
+              <div
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setOverlay(true);
+                  const allSelectors = document.querySelectorAll(".checkbox");
+                  allSelectors.forEach((el) => el.classList.remove("active"));
+                  setSelectedItems([e._id]);
+                }}
+                className="flex delete"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </div>
+              <div className="flex update">
+                <i
+                  className="fa-regular fa-pen-to-square"
+                  onClick={() => setUpdate(e)}
+                ></i>
+              </div>
+            </>
+          )}
+        </div>
+      </>
+    ),
+  },
+];
+const Recipients = () => {
+  const response = useRef(true);
+  const [responseOverlay, setResponseOverlay] = useState(false);
+  const ref = useRef(null);
+  const [formLoading, setFormLoading] = useState(false);
+  const [data, setData] = useState([]);
+  const dataLength = useRef(0);
+  const [page, setPage] = useState(1);
+  const allPeople = useRef([]);
+  const [slectedItems, setSelectedItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const context = useContext(Context);
+  const token = context.userDetails.token;
+  const limit = context?.limit;
+  const { language } = useLanguage();
+  const [sort, setSort] = useState({});
+  const { role } = context.userDetails;
+  const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
+  const [filters, setFilters] = useState({
+    date: {
+      from: "",
+      to: "",
+    },
+  });
+  const [search, setSearch] = useState("");
+  const getData = useCallback(async () => {
+    setLoading(true);
+    setData([]);
+    setSelectedItems([]);
+    document.querySelector("th .checkbox")?.classList.remove("active");
+    const params = new URLSearchParams();
+    params.append("active", true);
+    params.append("limit", limit);
+    params.append("page", page);
+    if (filters.date.from) params.append("createdAt[gte]", filters.date.from);
+    if (filters.date.to) params.append("createdAt[lte]", filters.date.to);
+    if (Object.keys(sort).length) {
+      const sortParams = Object.values(sort)
+        .map((v) => v)
+        .join(",");
+      params.append("sort", sortParams);
+    }
+    if (search) params.append("search", search);
+    try {
+      const { data } = await axios.get(`${baseURL}/Recipients`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
+      dataLength.current =
+        data[search ? "numberOfActiveResults" : "numberOfActiveRecipients"];
+      allPeople.current = data.data?.map((e) => e._id);
+      setData(data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, filters, search, limit, sort]);
+  useEffect(() => {
+    if (!search) getData();
+    else {
+      const timeOut = setTimeout(() => getData(), 500);
+      return () => clearTimeout(timeOut);
+    }
+  }, [page, filters, search, limit, sort, getData]);
+  const responseFun = (complete = false) => {
+    complete === true
+      ? (response.current = true)
+      : complete === "reapeted data"
+      ? (response.current = 400)
+      : (response.current = false);
+    setResponseOverlay(true);
+    window.onclick = () => {
+      setResponseOverlay(false);
+    };
+    setTimeout(() => {
+      setResponseOverlay(false);
+    }, 3000);
+  };
+  const [name, setName] = useState("");
+  const [update, setUpdate] = useState(false);
+
+  useEffect(() => {
+    if (update) {
+      ref.current.focus();
+      setName(update.name);
+    } else {
+      setName("");
+    }
+  }, [update]);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFormLoading(true);
+    try {
+      if (update) {
+        const data = await axios.patch(
+          `${baseURL}/Recipients/${update._id}`,
+          {
+            name,
+          },
+          { headers: { Authorization: "Bearer " + token } }
+        );
+
+        if (data.status === 200) {
+          responseFun(true);
+        }
+        setUpdate(false);
+      } else {
+        const data = await axios.post(
+          `${baseURL}/Recipients`,
+          { name: name },
+          { headers: { Authorization: "Bearer " + token } }
+        );
+        if (data.status === 201) {
+          responseFun(true);
+        }
+      }
+
+      setName("");
+      getData();
+    } catch (error) {
+      console.log(error);
+      if (error.status === 400) responseFun("reapeted data");
+      else responseFun(false);
+    } finally {
+      setFormLoading(false);
+    }
+  };
+  const [beforeFiltering, setBeforeFiltering] = useState({
+    date: { from: "", to: "" },
+  });
+
+  return (
+    <>
+      {responseOverlay && (
+        <SendData
+          data={language?.header?.recipients}
+          response={response.current}
+        />
+      )}
+      {formLoading && <Loading />}
+      <h1 className="title">{language?.header?.recipients}</h1>
+      <div className="flex align-start gap-20 wrap">
+        {context.userDetails.isAdmin && (
+          <form onSubmit={handleSubmit} className="addresses">
+            <h1>
+              {update
+                ? language?.recipient?.update_recipient
+                : language?.recipient?.add_new_recipient}
+            </h1>
+
+            <InputWithLabel
+              ref={ref}
+              label={language?.recipient?.recipient_name}
+              required
+              placeholder={language?.recipient?.recipient_name_placeholder}
+              value={name}
+              onInput={(e) => setName(e.target.value)}
+              id="name"
+            />
+
+            <div className="flex wrap gap-10">
+              <button className={`${update ? "save" : ""} btn flex-1`}>
+                {update
+                  ? language?.recipient?.save
+                  : language?.recipient?.add_btn}
+              </button>
+              {update && (
+                <button
+                  onClick={() => setUpdate(false)}
+                  className="btn flex-1 cencel "
+                >
+                  {language?.recipient?.cancel}
+                </button>
+              )}
+            </div>
+          </form>
+        )}
+        <div className="flex-1">
+          {openFiltersDiv && (
+            <TabelFilterDiv
+              beforeFiltering={beforeFiltering}
+              setBeforeFiltering={setBeforeFiltering}
+              setFilter={setFilters}
+              setPage={setPage}
+              setIsopen={setOpenFiltersDiv}
+            />
+          )}
+          <Table
+            columns={columns}
+            selectable={role === "admin"}
+            loading={loading}
+            currentPage={page}
+            setPage={setPage}
+            allData={allPeople.current}
+            selectedItems={slectedItems}
+            setSelectedItems={setSelectedItems}
+            getData={getData}
+            deleteUrl="Recipients"
+            dataLength={dataLength.current}
+            tabelData={data}
+            setSort={setSort}
+            search={search}
+            setSearch={setSearch}
+            openFiltersDiv={openFiltersDiv}
+            setOpenFiltersDiv={setOpenFiltersDiv}
+            setUpdate={setUpdate}
+          />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Recipients;

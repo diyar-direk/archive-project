@@ -121,11 +121,17 @@ const ImageSearch = () => {
                 </div>
               </div>
               <div className="flex info">
-                <Link to={`/people/${tableData._id}`} className="name flex">
+                <Link
+                  to={`/people//people/${tableData._id}`}
+                  className="name flex"
+                >
                   {tableData.firstName} {tableData.fatherName}{" "}
                   {tableData.surName}
                 </Link>
-                <Link to={`/people/${tableData._id}`} className="profile-btn">
+                <Link
+                  to={`/people/people/${tableData._id}`}
+                  className="profile-btn"
+                >
                   {language?.filter?.visit_profile}
                 </Link>
               </div>

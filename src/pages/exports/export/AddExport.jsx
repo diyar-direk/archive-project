@@ -7,6 +7,8 @@ import Loading from "../../../components/loading/Loading";
 import useLanguage from "../../../hooks/useLanguage";
 import InputWithLabel from "../../../components/inputs/InputWithLabel";
 import QuestionListShow from "./QuestionListShow";
+import SelectInputApi from "../../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../../utils/infintyFeatchApis";
 
 const AddExport = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +20,7 @@ const AddExport = () => {
   const [form, setForm] = useState({
     code: "",
     details: "",
+    recipientId: "",
     expirationDate: "",
     questions: [],
   });
@@ -52,6 +55,9 @@ const AddExport = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.recipientId)
+      return setError(language?.error?.please_selecet_recipient);
+
     const inputDate = new Date(form.expirationDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -82,6 +88,7 @@ const AddExport = () => {
         details: form.details,
         expirationDate: form.expirationDate,
         questions: questionPayload,
+        recipientId: form.recipientId._id,
       };
       const data = await axios.post(`${baseURL}/exports`, formData, {
         headers: { Authorization: "Bearer " + token },
@@ -93,6 +100,7 @@ const AddExport = () => {
           code: "",
           details: "",
           expirationDate: "",
+          recipientId: "",
           questions: [],
         });
       }
@@ -132,6 +140,16 @@ const AddExport = () => {
               type="date"
               id="expirationDate"
               placeholder={language?.exports?.expiration_date}
+            />
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel={language?.recipient?.select_recipient}
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, recipientId: option })}
+              onIgnore={() => setForm({ ...form, recipientId: "" })}
+              url="Recipients"
+              label={language?.recipient?.recipient}
+              value={form?.recipientId?.name}
             />
           </div>
           <div className="flex wrap">

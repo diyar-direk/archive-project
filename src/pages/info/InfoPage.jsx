@@ -8,6 +8,7 @@ import CategoriesShow from "../../components/categoriesComp/CategoriesShow";
 import MediaShow from "../../components/categoriesComp/MediaShow";
 import useLanguage from "../../hooks/useLanguage";
 import Answers from "../exports/export/Answers";
+import { dateFormatter } from "../../utils/dateFormatter";
 const InfoPage = () => {
   const { id } = useParams();
   const [data, setData] = useState({});
@@ -165,8 +166,16 @@ const InfoPage = () => {
       </div>
 
       <div className="flex align-center gap-10">
+        <h2> {language?.information?.date}</h2>
+        <p>{dateFormatter(data.date)}</p>
+      </div>
+      <div className="flex align-center gap-10">
         <h2> {language?.information?.credibility}</h2>
         <p>{language?.enums?.credibility[data.credibility]}</p>
+      </div>
+      <div className="flex align-center gap-10">
+        <h2> {language?.information?.department}</h2>
+        <p>{data.departmentId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
         <h2> {language?.information?.country}</h2>

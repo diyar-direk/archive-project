@@ -13,6 +13,7 @@
   },
   "error": {
     "please_selecet": "يرجى اختيار",
+    "please_selecet_department": "",
     "please_selecet_maritalStatus": "يرجى اختيار الحالة الاجتماعية",
     "please_selecet_gender": "يرجى اختيار الجنس",
     "please_selecet_country": "يرجى اختيار الدولة",
@@ -41,6 +42,8 @@
     "please_selecet_report_type": " يرجى اختيار نوع التقرير"
   },
   "header": {
+    "departments": "",
+    "recipients": "",
     "outgoing_incoming": " صادرات وواردات",
     "incoming": "الوارد",
     "add_export": "إضافة صادر",
@@ -111,6 +114,8 @@
     "information_for_each_street": "إحصائيات المعلومات لكل شارع",
     "information_for_each_section": "إحصائيات المعلومات لكل قسم",
     "information_for_each_source": "إحصائيات المعلومات لكل مصدر",
+    "information_for_each_department": "",
+    "export_for_each_recipient": "",
     "information_for_each_party": "إحصائيات المعلومات لكل حزب",
     "information_for_each_event": "إحصائيات المعلومات لكل حدث",
     "information_for_country": "إحصائيات المعلومات لكل دولة",
@@ -357,6 +362,19 @@
     "loading": "جار التحميل",
     "no_data": "لا توجد بيانات",
     "search_btn": "بحث"
+  },
+  "department": {
+    "add_new_department": "",
+    "update_department": "",
+    "department_name": "",
+    "department_name_placeholder": "",
+    "add_btn": "",
+    "save": "",
+    "cancel": "",
+    "created_at": "",
+    "loading": "",
+    "no_data": "",
+    "search_btn": ""
   },
   "government": {
     "add_new_government": "إضافة محافظة جديدة",
@@ -610,7 +628,10 @@
     "loading": "جاري التحميل...",
     "delete": "حذف",
     "show_details": "عرض التفاصيل",
-    "no_data": "لا توجد بيانات"
+    "no_data": "لا توجد بيانات",
+    "select_department": "",
+    "department": "",
+    "date": ""
   },
   "coordinates": {
     "search_by_coordinates": "البحث بالإحداثيات",
@@ -696,6 +717,23 @@
     "loading": "جاري التحميل",
     "no_data": "لا توجد بيانات"
   },
+
+  "recipient": {
+    "add_new_recipient": "",
+    "update_recipient": "",
+    "recipient_name": "",
+    "recipient_name_placeholder": "",
+    "add_btn": "",
+    "save": "",
+    "cancel": "",
+    "created_at": "",
+    "loading": "",
+    "no_data": "",
+    "search_btn": "",
+    "recipient": "",
+    "select_recipient": ""
+  },
+
   "enums": {
     "role": {
       "admin": " مسؤول",

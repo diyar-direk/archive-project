@@ -12,7 +12,7 @@ const columns = [
     headerName: (lang) => lang?.coordinates?.coordinates,
     sort: true,
     getCell: (e) => (
-      <Link className="name" to={`/coordinate/${e._id}`}>
+      <Link className="name" to={`/coordinates/coordinate/${e._id}`}>
         {e.coordinates}
       </Link>
     ),
@@ -108,12 +108,15 @@ const columns = [
               >
                 <i className="fa-solid fa-trash"></i>
               </div>
-              <Link to={`/coordinates/${e._id}`} className="flex update">
+              <Link
+                to={`/coordinates/coordinates/${e._id}`}
+                className="flex update"
+              >
                 <i className="fa-regular fa-pen-to-square"></i>
               </Link>
             </>
           )}
-          <Link to={`/coordinate/${e._id}`} className="flex visit">
+          <Link to={`/coordinates/coordinate/${e._id}`} className="flex visit">
             <i className="fa-solid fa-circle-user"></i>
           </Link>
         </div>
@@ -223,7 +226,7 @@ const Coordinates = () => {
         />
       )}
       <Table
-        addPageUrl="add_coordinates"
+        addPageUrl="coordinates/add_coordinates"
         columns={columns}
         selectable={role === "admin"}
         loading={loading}
