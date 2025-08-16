@@ -106,7 +106,6 @@ const Field = () => {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
-      console.log(data);
       dataLength.current =
         data[search ? "numberOfActiveResults" : "numberOfActiveFields"];
       allPeople.current = data.data?.map((e) => e._id);
