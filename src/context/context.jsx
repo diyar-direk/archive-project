@@ -4,8 +4,8 @@ const userLanguage = navigator.language || navigator.userLanguage;
 const userLang = userLanguage?.startsWith("ar") ? "AR" : "EN";
 export const Context = createContext({});
 
-export const baseURL = `http://localhost:8000/api`;
-export const mediaURL = `http://localhost:8000/files`;
+export const baseURL = `http://192.19.19.150:8000/api`;
+export const mediaURL = `http://192.19.19.150:8000/files`;
 
 const Provider = ({ children }) => {
   const [progressBar, setProgress] = useState(false);
