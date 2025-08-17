@@ -214,6 +214,14 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         hideSelectoer: role !== "admin",
       },
       {
+        name: "departmentId",
+        label: language?.header?.departments,
+        selectLabel: beforeFiltering?.departmentId?.name,
+        onChange: (option) =>
+          setBeforeFiltering({ ...beforeFiltering, departmentId: option }),
+        url: "Departments",
+      },
+      {
         name: "sources",
         label: language?.header?.source,
         selectLabel: beforeFiltering?.sources?.source_name,

@@ -8,6 +8,11 @@ import ExportFilters from "./ExportFilters";
 import useLanguage from "../../../hooks/useLanguage";
 const columns = [
   {
+    name: "recipientId",
+    headerName: (lang) => lang?.recipient?.recipient,
+    getCell: (e) => e.recipientId?.name,
+  },
+  {
     name: "code",
     headerName: (lang) => lang?.exports?.code,
     sort: true,

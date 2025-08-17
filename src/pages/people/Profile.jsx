@@ -113,7 +113,10 @@ const Profile = () => {
                   >
                     {e._id !== id && (
                       <>
-                        <Link to={`/people/${e._id}`} className="profile-image">
+                        <Link
+                          to={`/people/people/${e._id}`}
+                          className="profile-image"
+                        >
                           {e.image ? (
                             <MediaComponent
                               src={e.image}
@@ -124,7 +127,7 @@ const Profile = () => {
                             <i className="fa-solid fa-user"></i>
                           )}
                         </Link>
-                        <Link to={`/people/${e._id}`} className="name">
+                        <Link to={`/people/people/${e._id}`} className="name">
                           {e.firstName} {e.surName}
                         </Link>
                       </>
@@ -229,7 +232,7 @@ const Profile = () => {
         ) : (
           <div className="info">
             <Link
-              to={`/update_person/${id}`}
+              to={`/people/people/update_person/${id}`}
               className="fa-regular fa-pen-to-square"
             ></Link>
             <div className="flex">

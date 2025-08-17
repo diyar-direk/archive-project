@@ -9,6 +9,8 @@ import useLanguage from "../../../hooks/useLanguage";
 import SendData from "../../../components/response/SendData";
 import Loading from "../../../components/loading/Loading";
 import InputWithLabel from "../../../components/inputs/InputWithLabel";
+import SelectInputApi from "../../../components/inputs/SelectInputApi";
+import { getInfinityFeatchApis } from "../../../utils/infintyFeatchApis";
 
 const UpdateExport = () => {
   const { id } = useParams();
@@ -76,6 +78,9 @@ const UpdateExport = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!form.recipientId)
+      return setError(language?.error?.please_selecet_recipient);
+
     if (form.questions.length === 0)
       return setError(language?.error?.export_question_error);
     setFormLoading(true);
@@ -119,6 +124,7 @@ const UpdateExport = () => {
         details: form.details,
         expirationDate: form.expirationDate,
         questions: questionPayload,
+        recipientId: form.recipientId._id,
       };
       const data = await axios.patch(`${baseURL}/exports/${id}`, formData, {
         headers: { Authorization: "Bearer " + token },
@@ -163,6 +169,16 @@ const UpdateExport = () => {
               type="date"
               id="expirationDate"
               placeholder={language?.exports?.expiration_date}
+            />
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel={language?.recipient?.select_recipient}
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, recipientId: option })}
+              onIgnore={() => setForm({ ...form, recipientId: "" })}
+              url="Recipients"
+              label={language?.recipient?.recipient}
+              value={form?.recipientId?.name}
             />
           </div>
           <div className="flex wrap">

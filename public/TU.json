@@ -13,6 +13,7 @@
   },
   "error": {
     "please_selecet": "Lütfen seçiniz",
+    "please_selecet_department": " Lütfen bir departman seçiniz",
     "please_selecet_maritalStatus": "Lütfen medeni durum seçiniz",
     "please_selecet_gender": "Lütfen cinsiyet seçiniz",
     "please_selecet_country": "Lütfen bir ülke seçiniz",
@@ -41,6 +42,8 @@
     "please_selecet_report_type": "Lütfen rapor türü seçiniz"
   },
   "header": {
+    "departments": " Departmanlar",
+    "recipients": "",
     "outgoing_incoming": "Giden & Gelen",
     "incoming": "Gelen",
     "add_export": "Dışa Aktarma Ekle",
@@ -106,6 +109,8 @@
     "information_for_each_county": "Her İlçe İçin Bilgi",
     "information_for_each_governorate": "Her Valilik İçin Bilgi",
     "information_for_each_city": "Her Şehir İçin Bilgi",
+    "information_for_each_department": "",
+    "export_for_each_recipient": "",
     "information_for_each_village": "Her Köy İçin Bilgi",
     "information_for_each_region": "Her Bölge İçin Bilgi",
     "information_for_each_street": "Her Sokak İçin Bilgi",
@@ -355,6 +360,19 @@
     "no_data": "Veri yok",
     "search_btn": "Ara"
   },
+  "department": {
+    "add_new_department": "",
+    "update_department": "",
+    "department_name": "",
+    "department_name_placeholder": "",
+    "add_btn": "",
+    "save": "",
+    "cancel": "",
+    "created_at": "",
+    "loading": "",
+    "no_data": "",
+    "search_btn": ""
+  },
   "government": {
     "add_new_government": "Yeni Valilik Ekle",
     "update_government": "Bu Valiliği Güncelle",
@@ -534,6 +552,21 @@
     "cancel": "İptal",
     "search_btn": "Ara"
   },
+  "recipient": {
+    "add_new_recipient": "",
+    "update_recipient": "",
+    "recipient_name": "",
+    "recipient_name_placeholder": "",
+    "add_btn": "",
+    "save": "",
+    "cancel": "",
+    "created_at": "",
+    "loading": "",
+    "no_data": "",
+    "search_btn": "",
+    "recipient": "",
+    "select_recipient": ""
+  },
   "information": {
     "search_by_subject": "Konuya Göre Ara",
     "subject": "Konu",
@@ -607,6 +640,9 @@
     "loading": "Yükleniyor...",
     "delete": "Sil",
     "show_details": "Detayları Göster",
+    "select_department": "",
+    "department": "",
+    "date": "",
     "no_data": "Veri yok"
   },
   "coordinates": {

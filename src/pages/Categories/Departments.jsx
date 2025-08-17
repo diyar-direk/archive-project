@@ -4,15 +4,19 @@ import { baseURL, Context } from "../../context/context";
 import axios from "axios";
 import SendData from "../../components/response/SendData";
 import Loading from "../../components/loading/Loading";
+import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "../../components/tabelFilterData/TabelFilterDiv";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import { dateFormatter } from "../../utils/dateFormatter";
-import useLanguage from "../../hooks/useLanguage";
 const columns = [
-  { name: "name", headerName: (lang) => lang?.fields?.field_name, sort: true },
+  {
+    name: "name",
+    headerName: (lang) => lang?.department?.department_name,
+    sort: true,
+  },
   {
     name: "createdAt",
-    headerName: (lang) => lang?.fields?.created_at,
+    headerName: (lang) => lang?.department?.created_at,
     sort: true,
     getCell: (row) => dateFormatter(row.createdAt),
   },
@@ -58,7 +62,7 @@ const columns = [
     ),
   },
 ];
-const Field = () => {
+const Departments = () => {
   const response = useRef(true);
   const [responseOverlay, setResponseOverlay] = useState(false);
   const ref = useRef(null);
@@ -72,8 +76,8 @@ const Field = () => {
   const context = useContext(Context);
   const token = context.userDetails.token;
   const limit = context?.limit;
-  const [sort, setSort] = useState({});
   const { language } = useLanguage();
+  const [sort, setSort] = useState({});
   const { role } = context.userDetails;
   const [openFiltersDiv, setOpenFiltersDiv] = useState(false);
   const [filters, setFilters] = useState({
@@ -102,12 +106,12 @@ const Field = () => {
     }
     if (search) params.append("search", search);
     try {
-      const { data } = await axios.get(`${baseURL}/Fields`, {
+      const { data } = await axios.get(`${baseURL}/Departments`, {
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
       dataLength.current =
-        data[search ? "numberOfActiveResults" : "numberOfActiveFields"];
+        data[search ? "numberOfActiveResults" : "numberOfActiveDepartments"];
       allPeople.current = data.data?.map((e) => e._id);
       setData(data.data);
     } catch (error) {
@@ -154,7 +158,7 @@ const Field = () => {
     try {
       if (update) {
         const data = await axios.patch(
-          `${baseURL}/Fields/${update._id}`,
+          `${baseURL}/Departments/${update._id}`,
           {
             name,
           },
@@ -167,7 +171,7 @@ const Field = () => {
         setUpdate(false);
       } else {
         const data = await axios.post(
-          `${baseURL}/Fields`,
+          `${baseURL}/Departments`,
           { name: name },
           { headers: { Authorization: "Bearer " + token } }
         );
@@ -189,40 +193,48 @@ const Field = () => {
   const [beforeFiltering, setBeforeFiltering] = useState({
     date: { from: "", to: "" },
   });
+
   return (
     <>
       {responseOverlay && (
-        <SendData data={language?.header?.fields} response={response.current} />
+        <SendData
+          data={language?.header?.department}
+          response={response.current}
+        />
       )}
       {formLoading && <Loading />}
-      <h1 className="title">{language?.header?.fields}</h1>
+      <h1 className="title">{language?.header?.departments}</h1>
       <div className="flex align-start gap-20 wrap">
         {context.userDetails.isAdmin && (
           <form onSubmit={handleSubmit} className="addresses">
             <h1>
               {update
-                ? language?.fields?.update_field
-                : language?.fields?.add_new_field}
+                ? language?.department?.update_department
+                : language?.department?.add_new_department}
             </h1>
+
             <InputWithLabel
-              label={language?.fields?.field_name}
               ref={ref}
+              label={language?.department?.department_name}
               required
-              placeholder={language?.fields?.field_name_placeholder}
+              placeholder={language?.department?.department_name_placeholder}
               value={name}
               onInput={(e) => setName(e.target.value)}
               id="name"
             />
+
             <div className="flex wrap gap-10">
               <button className={`${update ? "save" : ""} btn flex-1`}>
-                {update ? language?.fields?.save : language?.fields?.add_btn}
+                {update
+                  ? language?.department?.save
+                  : language?.department?.add_btn}
               </button>
               {update && (
                 <button
                   onClick={() => setUpdate(false)}
                   className="btn flex-1 cencel "
                 >
-                  {language?.fields?.cancel}
+                  {language?.department?.cancel}
                 </button>
               )}
             </div>
@@ -248,7 +260,7 @@ const Field = () => {
             selectedItems={slectedItems}
             setSelectedItems={setSelectedItems}
             getData={getData}
-            deleteUrl="Fields"
+            deleteUrl="Departments"
             dataLength={dataLength.current}
             tabelData={data}
             setSort={setSort}
@@ -264,4 +276,4 @@ const Field = () => {
   );
 };
 
-export default Field;
+export default Departments;

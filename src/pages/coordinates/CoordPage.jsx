@@ -152,7 +152,7 @@ const CoordPage = () => {
           <div className="profile wrap flex">
             <div className="info">
               <Link
-                to={`/coordinates/${id}`}
+                to={`/coordinates/coordinates/${id}`}
                 className="fa-regular fa-pen-to-square"
               ></Link>
               <div className="flex">

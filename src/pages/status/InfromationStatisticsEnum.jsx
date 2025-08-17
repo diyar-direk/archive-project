@@ -7,8 +7,9 @@ import Skeleton from "react-loading-skeleton";
 import useLanguage from "../../hooks/useLanguage";
 /**
  * @typedef {object} InformationStatisticsEnumProps
- * @property {"country" | "section" | "source" | "event" | "party"} CategoryType
+ * @property {string} CategoryType
  * @property {"bar" | "doughnut"} ChartType
+ * @property {"countInformation" | "CountExports"} url
  * @property {string} title
  * @property {object} dateFilter
  * @param {InformationStatisticsEnumProps} props
@@ -20,6 +21,7 @@ const InformationStatisticsEnum = ({
   title,
   dateFilter,
   setDataWithPaginations,
+  url = "countInformation",
 }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -31,20 +33,20 @@ const InformationStatisticsEnum = ({
     const params = new URLSearchParams();
     params.append("limit", 10);
     params.append("page", page);
-    params.append("categoryStatistics", categoryType);
+    if (url !== "CountExports")
+      params.append("categoryStatistics", categoryType);
     if (dateFilter.from) params.append("createdAt[gte]", dateFilter.from);
     if (dateFilter.to) params.append("createdAt[lte]", dateFilter.to);
 
     data && setData(null);
     setLoading(true);
     try {
-      const { data } = await axios.get(
-        `${baseURL}/Statistics/countInformation`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params,
-        }
-      );
+      const { data } = await axios.get(`${baseURL}/Statistics/${url}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params,
+      });
+      console.log(data);
+
       setData(data.data);
       setDataWithPaginations((prev) => ({
         ...prev,
@@ -55,7 +57,7 @@ const InformationStatisticsEnum = ({
     }
 
     setLoading(false);
-  }, [page, token, categoryType, dateFilter]);
+  }, [page, token, categoryType, dateFilter, url]);
 
   useEffect(() => {
     if (!dateFilter?.from && !dateFilter?.to) getData();
@@ -89,12 +91,13 @@ const InformationStatisticsEnum = ({
         <Skeleton height={"400px"} width={"100%"} />
       </div>
     );
-  if (!data) return;
   return chartType === "bar" ? (
     <BarChart
       title={title}
       labels={data?.map((item) => item.name)}
-      dataArray={data?.map((item) => item.infoCount)}
+      dataArray={data?.map(
+        (item) => item[url === "countInformation" ? "infoCount" : "exportCount"]
+      )}
     >
       {chartPagination}
       {data?.length === 0 && (
@@ -105,7 +108,9 @@ const InformationStatisticsEnum = ({
     <DoughnutChart
       title={title}
       labels={data?.map((item) => item.name)}
-      dataArray={data?.map((item) => item.infoCount)}
+      dataArray={data?.map(
+        (item) => item[url === "countInformation" ? "infoCount" : "exportCount"]
+      )}
     >
       {chartPagination}
       {data?.length === 0 && (

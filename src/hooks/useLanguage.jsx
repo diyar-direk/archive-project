@@ -50,12 +50,12 @@ const useLanguage = () => {
         children: [
           {
             title: language?.header?.people,
-            path: "people",
+            path: "/people/people",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.add_person,
-            path: "add_person",
+            path: "/people/add_person",
             role: ["admin", "user"],
           },
         ],
@@ -67,37 +67,37 @@ const useLanguage = () => {
         children: [
           {
             title: language?.header?.countries,
-            path: "countries",
+            path: "/addresses/countries",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.governments,
-            path: "governorates",
+            path: "/addresses/governorates",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.counties,
-            path: "counties",
+            path: "/addresses/counties",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.cities,
-            path: "cities",
+            path: "/addresses/cities",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.villages,
-            path: "villages",
+            path: "/addresses/villages",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.streets,
-            path: "streets",
+            path: "/addresses/streets",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.regions,
-            path: "regions",
+            path: "/addresses/regions",
             role: ["admin", "user"],
           },
         ],
@@ -110,27 +110,32 @@ const useLanguage = () => {
         children: [
           {
             title: language?.header?.sections,
-            path: "sections",
+            path: "/categories/sections",
+            role: ["admin", "user"],
+          },
+          {
+            title: language?.header?.departments,
+            path: "/categories/departments",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.fields,
-            path: "fields",
+            path: "/categories/fields",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.sources,
-            path: "sources",
+            path: "/categories/sources",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.events,
-            path: "event",
+            path: "/categories/event",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.parties,
-            path: "party",
+            path: "/categories/party",
             role: ["admin", "user"],
           },
         ],
@@ -159,17 +164,17 @@ const useLanguage = () => {
         children: [
           {
             title: language?.header?.coordinates,
-            path: "coordinates",
+            path: "/coordinates/coordinates",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.add_coordinates,
-            path: "add_coordinates",
+            path: "/coordinates/add_coordinates",
             role: ["admin", "user"],
           },
           {
             title: language?.header?.coord_map,
-            path: "coordinates_map",
+            path: "/coordinates/coordinates_map",
             role: ["admin", "user"],
           },
         ],
@@ -199,6 +204,11 @@ const useLanguage = () => {
           {
             title: language?.header?.add_export,
             path: "add_export",
+            role: ["admin"],
+          },
+          {
+            title: language?.header?.recipients,
+            path: "recipients",
             role: ["admin"],
           },
         ],

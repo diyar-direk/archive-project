@@ -73,7 +73,9 @@ function MapTiles({ coords }) {
               <h4>📍{points[selectedIndex].label}</h4>
 
               {points[selectedIndex].id && (
-                <Link to={`/coordinate/${points[selectedIndex].id}`}>
+                <Link
+                  to={`/coordinates/coordinate/${points[selectedIndex].id}`}
+                >
                   {language?.exports?.details}
                 </Link>
               )}

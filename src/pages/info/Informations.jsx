@@ -9,6 +9,12 @@ import { nextJoin } from "./../../utils/obejctJoin";
 import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {
+    name: "date",
+    headerName: (lang) => lang?.information?.date,
+    sort: true,
+    getCell: (row) => dateFormatter(row.date),
+  },
+  {
     name: "subject",
     headerName: (lang) => lang?.information?.subject,
     sort: true,
@@ -88,7 +94,7 @@ const columns = [
         const arr = [];
         if (i < 3)
           arr.push(
-            <Link className="name" key={i} to={`/people/${person._id}`}>
+            <Link className="name" key={i} to={`/people/people/${person._id}`}>
               {e.people[i + 1]
                 ? `${person.firstName} ${person.surName} , `
                 : `${person.firstName} ${person.surName}`}
@@ -103,6 +109,11 @@ const columns = [
     headerName: (lang) => lang?.header?.sections,
     getCell: (e) => e.sectionId?.name,
     onlyAdminCanSee: true,
+  },
+  {
+    name: "departments",
+    headerName: (lang) => lang?.header?.departments,
+    getCell: (e) => e.departmentId?.name,
   },
   {
     name: "source",
@@ -196,6 +207,7 @@ const Informations = () => {
     parties: "",
     events: "",
     sectionId: "",
+    departmentId: "",
     date: {
       from: "",
       to: "",

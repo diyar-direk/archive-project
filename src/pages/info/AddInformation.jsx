@@ -21,13 +21,14 @@ const AddInformation = () => {
   const [error, setError] = useState(false);
 
   const [form, setForm] = useState({
-    //personal data
     people: [],
     coordinates: [],
     subject: "",
+    date: "",
     note: "",
     details: "",
     sectionId: context.userDetails.sectionId || "",
+    departmentId: "",
     cityId: "",
     countryId: "",
     governmentId: "",
@@ -35,7 +36,6 @@ const AddInformation = () => {
     villageId: "",
     streetId: "",
     addressDetails: "",
-    //categories data
     credibility: "",
     sources: [],
     events: [],
@@ -79,6 +79,8 @@ const AddInformation = () => {
     e.preventDefault();
     if (!form.cityId) setError(language?.error?.please_selecet_city);
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
+    else if (!form.departmentId)
+      setError(language?.error?.please_selecet_department);
     else if (form.sources.length < 1)
       setError(language?.error?.please_selecet_source);
     else if (!form.credibility)
@@ -184,13 +186,14 @@ const AddInformation = () => {
         if (data.status === 201) {
           responseFun(true);
           setForm({
-            //personal data
             people: [],
+            date: "",
             coordinates: [],
             subject: "",
             note: "",
             details: "",
             sectionId: context.userDetails.sectionId || "",
+            departmentId: "",
             cityId: "",
             countryId: "",
             governmentId: "",
@@ -198,7 +201,6 @@ const AddInformation = () => {
             villageId: "",
             streetId: "",
             addressDetails: "",
-            //categories data
             credibility: "",
             sources: [],
             events: [],
@@ -518,7 +520,24 @@ const AddInformation = () => {
                 url="Sections"
               />
             )}
+            <SelectInputApi
+              fetchData={getInfinityFeatchApis}
+              selectLabel={language?.information?.select_department}
+              label={language?.information?.department}
+              optionLabel={(option) => option?.name}
+              onChange={(option) => setForm({ ...form, departmentId: option })}
+              value={form.departmentId.name}
+              onIgnore={() => setForm({ ...form, departmentId: "" })}
+              url="Departments"
+            />
             {multiSelectInputs}
+            <InputWithLabel
+              label={language?.information?.date}
+              value={form.date}
+              onChange={handleForm}
+              id="date"
+              type="date"
+            />
             {credibilityOptions}
           </div>
         </div>

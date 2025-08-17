@@ -64,6 +64,7 @@ const DashboardCharts = () => {
     };
     const categoriesEnum = {
       sectionCount: "sections",
+      departmentCount: "departments",
       fieldCount: "fields",
       sourceCount: "sources",
       eventCount: "event",
@@ -130,6 +131,11 @@ const DashboardCharts = () => {
         hide: role !== "admin",
       },
       {
+        categoryType: "department",
+        title: language?.statistics?.information_for_each_department,
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
         categoryType: "source",
         title: language?.statistics?.information_for_each_source,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
@@ -143,6 +149,12 @@ const DashboardCharts = () => {
         categoryType: "party",
         title: language?.statistics?.information_for_each_party,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
+      },
+      {
+        categoryType: "Exports",
+        title: language?.statistics?.export_for_each_recipient,
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+        url: "CountExports",
       },
     ],
     [role, language]
@@ -184,6 +196,7 @@ const DashboardCharts = () => {
                 title={chart.title}
                 dateFilter={dateFilter}
                 setDataWithPaginations={setDataWithPaginations}
+                url={chart.url || "countInformation"}
               />
             )
         )}

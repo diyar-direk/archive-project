@@ -1,26 +1,9 @@
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Outlet, Route, Routes, useLocation } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import People from "./pages/people/People";
-import Profile from "./pages/people/Profile";
-import AddPerson from "./pages/people/AddPerson";
-import Countries from "./pages/addresses/Countries";
-import Government from "./pages/addresses/Government";
-import City from "./pages/addresses/City";
-import Village from "./pages/addresses/Village";
-import Region from "./pages/addresses/Region";
-import Street from "./pages/addresses/Street";
-import Sources from "./pages/Categories/Sources";
-import Event from "./pages/Categories/Event";
-import Party from "./pages/Categories/Party";
 import LoginForm from "./pages/Login/LoginForm";
-import Sections from "./pages/Categories/Sections";
 import Informations from "./pages/info/Informations";
 import AddInformation from "./pages/info/AddInformation";
 import InfoPage from "./pages/info/InfoPage";
-import AddCoordinates from "./pages/coordinates/AddCoordinates";
-import Coordinates from "./pages/coordinates/Coordinates";
-import UpdatePerson from "./pages/people/UpdatePerson";
-import UpdateCoordinates from "./pages/coordinates/UpdateCordinates";
 import Users from "./pages/users/Users";
 import AddUser from "./pages/users/AddUser";
 import UpdateInfo from "./pages/info/UpdateInfo";
@@ -30,11 +13,8 @@ import Refresh from "./Auth/Refresh";
 import AdminAuth from "./Auth/AdminAuth";
 import Backup from "./pages/backup/Backup";
 import PageNotFound from "./components/response/PageNotFound";
-import CoordPage from "./pages/coordinates/CoordPage";
 import AccessDenied from "./components/response/AccessDenied";
 import ImageSearch from "./pages/people/ImageSearch";
-import Field from "./pages/Categories/Field";
-import Counties from "./pages/addresses/Counties";
 import DashboardCharts from "./pages/status/InformationChart";
 import ExportsDataShow from "./pages/exports/export/ExportsDataShow";
 import AddExport from "./pages/exports/export/AddExport";
@@ -48,7 +28,11 @@ import ResultListShow from "./pages/exports/result/ResultListShow";
 import AddResult from "./pages/exports/result/AddResut";
 import UpdateResult from "./pages/exports/result/UpdateResult";
 import ResultViewPage from "./pages/exports/result/ResultViewPage";
-import CoordinatesMap from "./pages/coordinates/CoordinatesMap";
+import CategoriesRouter from "./pages/Categories/CategoriesRouter";
+import addressRouter from "./pages/addresses/addressRouter";
+import personRouter from "./pages/people/personRouter";
+import coordinatesRouter from "./pages/coordinates/coordinatesrouter";
+import Recipients from "./pages/exports/Recipients";
 
 function App() {
   const location = useLocation();
@@ -71,7 +55,7 @@ function App() {
                 <Route path="users" element={<Users />} />
                 <Route path="add_user" element={<AddUser />} />
                 <Route path="backup" element={<Backup />} />
-                <Route path="sections" element={<Sections />} />
+                <Route path="recipients" element={<Recipients />} />
                 <Route path="exports" element={<ExportsDataShow />} />
                 <Route path="add_export" element={<AddExport />} />
                 <Route path="exports/:id" element={<ExportViewPage />} />
@@ -85,32 +69,24 @@ function App() {
                 <Route path="update_result/:id" element={<UpdateResult />} />
                 <Route path="results/:id" element={<ResultViewPage />} />
               </Route>
+              <Route path="/categories/*" element={<Outlet />}>
+                {CategoriesRouter}
+              </Route>
+              <Route path="/addresses/*" element={<Outlet />}>
+                {addressRouter}
+              </Route>
+              <Route path="/people/*" element={<Outlet />}>
+                {personRouter}
+              </Route>
+              <Route path="/coordinates/*" element={<Outlet />}>
+                {coordinatesRouter}
+              </Route>
               <Route path="status" element={<DashboardCharts />} />
-              <Route path="people" element={<People />} />
-              <Route path="people/:id" element={<Profile />} />
               <Route path="search_by_image" element={<ImageSearch />} />
-              <Route path="add_person" element={<AddPerson />} />
-              <Route path="update_person/:id" element={<UpdatePerson />} />
-              <Route path="countries" element={<Countries />} />
-              <Route path="governorates" element={<Government />} />
-              <Route path="counties" element={<Counties />} />
-              <Route path="cities" element={<City />} />
-              <Route path="villages" element={<Village />} />
-              <Route path="regions" element={<Region />} />
-              <Route path="streets" element={<Street />} />
-              <Route path="fields" element={<Field />} />
-              <Route path="sources" element={<Sources />} />
-              <Route path="event" element={<Event />} />
-              <Route path="party" element={<Party />} />
               <Route path="informations" element={<Informations />} />
               <Route path="informations/:id" element={<InfoPage />} />
               <Route path="add_information" element={<AddInformation />} />
               <Route path="update_info/:id" element={<UpdateInfo />} />
-              <Route path="coordinates" element={<Coordinates />} />
-              <Route path="coordinates_map" element={<CoordinatesMap />} />
-              <Route path="coordinate/:id" element={<CoordPage />} />
-              <Route path="coordinates/:id" element={<UpdateCoordinates />} />
-              <Route path="add_coordinates" element={<AddCoordinates />} />
             </Route>
           </Route>
         </Route>

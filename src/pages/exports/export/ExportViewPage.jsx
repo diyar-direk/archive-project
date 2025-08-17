@@ -52,6 +52,11 @@ const ExportViewPage = () => {
             className="fa-regular fa-pen-to-square"
           ></Link>
           <div className="flex">
+            <h2>{language?.recipient?.recipient}</h2>
+            <p>{data.recipientId?.name}</p>
+          </div>
+
+          <div className="flex">
             <h2>{language?.exports?.code}</h2>
             <p>{data.code}</p>
           </div>
