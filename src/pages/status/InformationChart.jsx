@@ -51,41 +51,35 @@ const DashboardCharts = () => {
 
   const [dataWhitPageinations, setDataWithPaginations] = useState({});
 
-  const addressAndCategoriesCount = useMemo(() => {
-    if (!dataCount) return;
-    const addressesEnum = {
-      countryCount: "country",
-      governorateCount: "governorate",
-      countyCount: "county",
-      cityCount: "city",
-      streetCount: "street",
-      regionCount: "region",
-      villageCount: "village",
-    };
-    const categoriesEnum = {
-      sectionCount: "sections",
-      departmentCount: "departments",
-      fieldCount: "fields",
-      sourceCount: "sources",
-      eventCount: "event",
-      partyCount: "parties",
-    };
-    const addressCount = Object.entries(addressesEnum).reduce(
-      (total, [key]) => {
-        const count = dataCount[key] || 0;
-        return total + count;
+  const sectionsCount = useMemo(() => {
+    return {
+      addressesEnum: {
+        countryCount: language?.header?.countries,
+        governorateCount: language?.header?.governments,
+        countyCount: language?.header?.counties,
+        cityCount: language?.header?.cities,
+        streetCount: language?.header?.streets,
+        regionCount: language?.header?.regions,
+        villageCount: language?.header?.villages,
       },
-      0
-    );
-    const categoriesCount = Object.entries(categoriesEnum).reduce(
-      (total, [key]) => {
-        const count = dataCount[key] || 0;
-        return total + count;
+      categoriesEnum: {
+        sectionCount: language?.header?.sections,
+        departmentCount: language?.header?.departments,
+        fieldCount: language?.header?.fields,
+        sourceCount: language?.header?.sources,
+        eventCount: language?.header?.event,
+        partyCount: language?.header?.parties,
       },
-      0
-    );
-    return { addressCount, categoriesCount };
-  }, [dataCount]);
+      incomingCount: {
+        exportCount: language?.header?.incoming,
+        recipientCount: language?.header?.recipients,
+      },
+      reportAndResultCount: {
+        reportCount: language?.header?.reports,
+        resultCount: language?.header?.results,
+      },
+    };
+  }, [language]);
 
   const arrayOfchartes = useMemo(
     () => [
@@ -167,8 +161,7 @@ const DashboardCharts = () => {
           date={dateFilter}
           dataCount={dataCount}
           dataWhitPageinations={dataWhitPageinations}
-          totalCategoriesCount={addressAndCategoriesCount.categoriesCount}
-          totalAddressCount={addressAndCategoriesCount.addressCount}
+          sectionsCount={sectionsCount}
         />
       )}
       {dataCount && (
@@ -180,8 +173,7 @@ const DashboardCharts = () => {
 
       <StatusCountShow
         allData={dataCount}
-        totalCategoriesCount={addressAndCategoriesCount?.categoriesCount}
-        totalAddressCount={addressAndCategoriesCount?.addressCount}
+        sectionsCount={sectionsCount}
         loading={loading}
       />
 

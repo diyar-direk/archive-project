@@ -151,6 +151,9 @@ body.arabic h1.title::after {
 .text-capitalize {
   text-transform: capitalize;
 }
+.colon-after::after {
+  content: " : ";
+}
 
 .flex {
   display: flex;

@@ -9,10 +9,45 @@ const WordExporter = ({
   date,
   dataCount,
   dataWhitPageinations,
-  totalCategoriesCount,
-  totalAddressCount,
+  sectionsCount,
 }) => {
   const { language } = useLanguage();
+
+  const calcTotal = (items) =>
+    Object.keys(items).reduce((acc, key) => acc + (dataCount[key] || 0), 0);
+
+  const generateSection = (title, items, total = null) => {
+    if (!items) return [];
+    const content = [];
+
+    content.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: `. ${total ?? calcTotal(items)} ${title}:`,
+            bold: true,
+            break: 1,
+          }),
+        ],
+      })
+    );
+
+    content.push(
+      ...Object.entries(items).map(
+        ([key, value]) =>
+          new Paragraph({
+            children: [
+              new TextRun({
+                text: `• ${dataCount[key] ?? 0} ${value}`,
+              }),
+            ],
+          })
+      )
+    );
+
+    return content;
+  };
+
   const generateDoc = async () => {
     const doc = new Document({
       sections: [
@@ -20,7 +55,7 @@ const WordExporter = ({
           properties: {},
           children: [
             new Paragraph(
-              `data statistics from date ${date.form || "any date"} to date ${
+              `Data statistics from date ${date.form || "any date"} to date ${
                 date.to || today
               }`
             ),
@@ -28,7 +63,7 @@ const WordExporter = ({
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `. ${dataCount.informationCount} informations`,
+                  text: `. ${dataCount.informationCount} ${language?.statistics?.information}`,
                   bold: true,
                 }),
               ],
@@ -36,7 +71,7 @@ const WordExporter = ({
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `. ${dataCount.personCount} person`,
+                  text: `. ${dataCount.personCount} ${language?.statistics?.people}`,
                   bold: true,
                 }),
               ],
@@ -44,31 +79,28 @@ const WordExporter = ({
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `. ${dataCount.coordinateCount} coordinates`,
+                  text: `. ${dataCount.coordinateCount} ${language?.statistics?.coordinates}`,
                   bold: true,
                 }),
               ],
             }),
 
-            // Addresses
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `. ${totalAddressCount} addresses:`,
-                  bold: true,
-                }),
-              ],
-            }),
-
-            // Categories
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `. ${totalCategoriesCount} categories:`,
-                  bold: true,
-                }),
-              ],
-            }),
+            ...generateSection(
+              language?.statistics?.adress_information,
+              sectionsCount.addressesEnum
+            ),
+            ...generateSection(
+              language?.statistics?.categories,
+              sectionsCount.categoriesEnum
+            ),
+            ...generateSection(
+              language?.header?.outgoing_incoming,
+              sectionsCount.incomingCount
+            ),
+            ...generateSection(
+              language?.header?.outgoing_incoming,
+              sectionsCount.reportAndResultCount
+            ),
 
             ...Object.entries(dataWhitPageinations).flatMap(([key, items]) => {
               if (!Array.isArray(items) || items.length === 0) return [];
