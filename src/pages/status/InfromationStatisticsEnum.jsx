@@ -45,7 +45,6 @@ const InformationStatisticsEnum = ({
         headers: { Authorization: `Bearer ${token}` },
         params,
       });
-      console.log(data);
 
       setData(data.data);
       setDataWithPaginations((prev) => ({
