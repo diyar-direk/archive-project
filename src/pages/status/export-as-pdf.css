@@ -1,0 +1,34 @@
+@media print {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .exported-container {
+    padding: 8mm;
+  }
+  .status-section > div:nth-child(n + 4) {
+    flex: 45%;
+  }
+  .chart-card-container,
+  .chart-card-container .bar,
+  .chart-card-container .doughnut,
+  .exported-container > div {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+
+  .avoid-cut {
+    break-before: page;
+  }
+
+  canvas,
+  svg,
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}

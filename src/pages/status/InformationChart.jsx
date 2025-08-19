@@ -16,6 +16,7 @@ import StatitsticsDateFilter from "./StatitsticsDateFilter";
 import WordExporter from "./WordExporter";
 import useLanguage from "../../hooks/useLanguage";
 import { useReactToPrint } from "react-to-print";
+import DepartmentBarStatistics from "./DepartmentBarStatistics";
 const chartType = ["bar", "doughnut"];
 
 const DashboardCharts = () => {
@@ -41,6 +42,7 @@ const DashboardCharts = () => {
       const { data } = await axios.get(utl, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setDataCount(data.data);
     } catch (error) {
       console.log(error);
@@ -159,6 +161,12 @@ const DashboardCharts = () => {
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
         url: "CountExports",
       },
+      {
+        categoryType: "countAnsweredExports",
+        title: "countAnsweredExports",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+        url: "countAnsweredExports",
+      },
     ],
     [role, language]
   );
@@ -190,7 +198,7 @@ const DashboardCharts = () => {
           setDateFilter={setDateFilter}
         />
       )}
-      <section ref={contentRef}>
+      <section ref={contentRef} className="exported-container">
         <StatusCountShow
           allData={dataCount}
           sectionsCount={sectionsCount}
@@ -212,6 +220,9 @@ const DashboardCharts = () => {
                 />
               )
           )}
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <DepartmentBarStatistics dateFilter={dateFilter} />
         </div>
       </section>
     </>

@@ -1,28 +1,11 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { baseURL, Context } from "../../context/context";
 import axios from "axios";
-import DoughnutChart from "./DoughnutChart";
 import BarChart from "./BarChart";
 import Skeleton from "react-loading-skeleton";
 import useLanguage from "../../hooks/useLanguage";
-/**
- * @typedef {object} InformationStatisticsEnumProps
- * @property {string} CategoryType
- * @property {"bar" | "doughnut"} ChartType
- * @property {"countInformation" | "CountExports" |"countAnsweredExports"} url
- * @property {string} title
- * @property {object} dateFilter
- * @param {InformationStatisticsEnumProps} props
- */
 
-const InformationStatisticsEnum = ({
-  categoryType,
-  chartType,
-  title,
-  dateFilter,
-  setDataWithPaginations,
-  url = "countInformation",
-}) => {
+const DepartmentBarStatistics = ({ dateFilter }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -31,32 +14,30 @@ const InformationStatisticsEnum = ({
   const token = context?.userDetails?.token;
   const getData = useCallback(async () => {
     const params = new URLSearchParams();
-    params.append("limit", 10);
+    params.append("limit", 1);
     params.append("page", page);
-    if (url !== "CountExports")
-      params.append("categoryStatistics", categoryType);
+
     if (dateFilter.from) params.append("createdAt[gte]", dateFilter.from);
     if (dateFilter.to) params.append("createdAt[lte]", dateFilter.to);
 
     data && setData(null);
     setLoading(true);
     try {
-      const { data } = await axios.get(`${baseURL}/Statistics/${url}`, {
-        headers: { Authorization: `Bearer ${token}` },
-        params,
-      });
+      const { data } = await axios.get(
+        `${baseURL}/Statistics/departmentInformation`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params,
+        }
+      );
 
-      setData(data.data);
-      setDataWithPaginations((prev) => ({
-        ...prev,
-        [categoryType]: data.data,
-      }));
+      setData(data.data[0]);
     } catch (error) {
       console.log(error);
     }
 
     setLoading(false);
-  }, [page, token, categoryType, dateFilter, url]);
+  }, [page, token, dateFilter]);
 
   useEffect(() => {
     if (!dateFilter?.from && !dateFilter?.to) getData();
@@ -84,45 +65,24 @@ const InformationStatisticsEnum = ({
     [page, data]
   );
 
-  const keyName = useMemo(
-    () =>
-      url === "countInformation"
-        ? "infoCount"
-        : url === "countAnsweredExports"
-        ? "exportWithAnswersCount"
-        : "exportCount",
-    [url]
-  );
-
   if (loading)
     return (
       <div className="doughnut">
         <Skeleton height={"400px"} width={"100%"} />
       </div>
     );
-  return chartType === "bar" ? (
+  return (
     <BarChart
-      title={title}
-      labels={data?.map((item) => item.name)}
-      dataArray={data?.map((item) => item[keyName])}
+      title={data?.department?.name}
+      labels={data?.countsForSections?.map((item) => item.sectionName)}
+      dataArray={data?.countsForSections?.map((item) => item.count)}
     >
       {chartPagination}
       {data?.length === 0 && (
         <h2 className="no-data">{language?.people?.no_data}</h2>
       )}
     </BarChart>
-  ) : (
-    <DoughnutChart
-      title={title}
-      labels={data?.map((item) => item.name)}
-      dataArray={data?.map((item) => item[keyName])}
-    >
-      {chartPagination}
-      {data?.length === 0 && (
-        <h2 className="no-data">{language?.people?.no_data}</h2>
-      )}
-    </DoughnutChart>
   );
 };
 
-export default InformationStatisticsEnum;
+export default DepartmentBarStatistics;
