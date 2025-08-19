@@ -503,7 +503,7 @@ const UpdateInfo = () => {
                     onChange={(option) =>
                       setForm({ ...form, sectionId: option })
                     }
-                    value={form.sectionId.name}
+                    value={form?.sectionId?.name}
                     onIgnore={() => setForm({ ...form, sectionId: "" })}
                     url="Sections"
                   />
@@ -516,7 +516,7 @@ const UpdateInfo = () => {
                   onChange={(option) =>
                     setForm({ ...form, departmentId: option })
                   }
-                  value={form.departmentId.name}
+                  value={form?.departmentId?.name}
                   onIgnore={() => setForm({ ...form, departmentId: "" })}
                   url="Departments"
                 />

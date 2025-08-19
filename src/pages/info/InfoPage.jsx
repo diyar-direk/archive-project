@@ -70,7 +70,7 @@ const InfoPage = () => {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${id}.zip`;
+      a.download = `Mijara_Agahaiye.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();
