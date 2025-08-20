@@ -8,7 +8,7 @@ import Loading from "../../components/loading/Loading";
 import DocumentsShow from "./DocumentsShow";
 import useLanguage from "../../hooks/useLanguage";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getPeopleApi } from "../people/api";
+import { getCoordsApi, getPeopleApi } from "../people/api";
 import SelectOptionInput from "../../components/inputs/SelectOptionInput";
 import InputWithLabel from "../../components/inputs/InputWithLabel";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
@@ -324,6 +324,15 @@ const AddInformation = () => {
           return `${option?.firstName} ${option?.surName}`;
         },
         fetchData: getPeopleApi,
+      },
+      {
+        name: "coordinates",
+        label: language?.information?.coordinates,
+        selectLabel: language?.information?.select_coordinates,
+        optionLabel: (option) => {
+          return `${option?.coordinates}`;
+        },
+        fetchData: getCoordsApi,
       },
       {
         name: "events",

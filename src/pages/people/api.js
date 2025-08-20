@@ -31,6 +31,35 @@ export const getPeopleApi = async ({ page = 1, search }) => {
     };
   }
 };
+export const getCoordsApi = async ({ page = 1, search }) => {
+  const token = Cookies.get("archive_cookie");
+  try {
+    const { data } = await axios.get(`${baseURL}/Coordinates`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        active: true,
+        page,
+        search,
+        limit: 4,
+      },
+    });
+
+    return {
+      data: data[search ? "data" : "data"],
+      page,
+      hasMore: data.results > 0,
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      data: [],
+      page,
+      hasMore: false,
+    };
+  }
+};
 
 export const searchByImage = async (formData) => {
   const token = Cookies.get("archive_cookie");

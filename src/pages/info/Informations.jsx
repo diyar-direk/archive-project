@@ -105,6 +105,28 @@ const columns = [
       }),
   },
   {
+    name: "coordinates",
+    headerName: (lang) => lang?.information?.coordinates,
+    getCell: (e) =>
+      e.coordinates?.map((coordinate, i) => {
+        const arr = [];
+        if (i < 3)
+          arr.push(
+            <Link
+              className="name"
+              key={i}
+              to={`/coordinates/coordinates/${coordinate._id}`}
+            >
+              {e.coordinates[i + 1]
+                ? `${coordinate.coordinates} , `
+                : `${coordinate.coordinates}`}
+            </Link>
+          );
+        else if (i === 3) arr.push(<span key={i}>...</span>);
+        return arr;
+      }),
+  },
+  {
     name: "section",
     headerName: (lang) => lang?.header?.sections,
     getCell: (e) => e.sectionId?.name,

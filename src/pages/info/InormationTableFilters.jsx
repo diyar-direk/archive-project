@@ -2,7 +2,7 @@ import { useCallback, useContext, useMemo, useState } from "react";
 import useLanguage from "../../hooks/useLanguage";
 import TabelFilterDiv from "./../../components/tabelFilterData/TabelFilterDiv";
 import SelectInputApi from "../../components/inputs/SelectInputApi";
-import { getPeopleApi } from "../people/api";
+import { getCoordsApi, getPeopleApi } from "../people/api";
 import { getInfinityFeatchApis } from "../../utils/infintyFeatchApis";
 import { Context } from "../../context/context";
 
@@ -142,6 +142,18 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         },
         onChange: (option) => handleParentChange("people", option),
         fetchData: getPeopleApi,
+      },
+      {
+        name: "coordinates",
+        label: language?.header?.coordinates,
+        selectLabel: beforeFiltering?.coordinates
+          ? `${beforeFiltering?.coordinates.coordinates}`
+          : "",
+        optionLabel: (option) => {
+          return `${option?.coordinates}`;
+        },
+        onChange: (option) => handleParentChange("coordinates", option),
+        fetchData: getCoordsApi,
       },
       {
         name: "countryId",
