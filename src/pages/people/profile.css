@@ -206,11 +206,14 @@ body.arabic .single-info > div.info-actions {
 .single-info > div > h2::after {
   content: ":";
 }
-div.categories.grid-3 {
+div.categories.show {
   margin: 30px 0;
   border-radius: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
-div.categories.grid-3 > div {
+div.categories.show > div {
   padding: 20px;
   box-shadow: var(--box-shadow);
   border-radius: 6px;
@@ -220,15 +223,16 @@ div.categories.grid-3 > div {
   flex-direction: column;
   justify-content: center;
   min-height: 150px;
+  flex: 300px;
 }
-div.categories.grid-3 > div:nth-child(even) {
+div.categories.show > div:nth-child(even) {
   background-color: var(--aside-color);
 }
-div.categories.grid-3 > div > div {
+div.categories.show > div > div {
   max-height: 250px;
   overflow-y: auto;
 }
-div.categories.grid-3 > div h2 {
+div.categories.show > div h2 {
   text-align: center;
   text-transform: capitalize;
   margin-bottom: 10px;
@@ -236,11 +240,11 @@ div.categories.grid-3 > div h2 {
   background-color: var(--body-color);
   top: 0;
 }
-div.categories.grid-3 > div:nth-child(even) h2 {
+div.categories.show > div:nth-child(even) h2 {
   background-color: var(--aside-color);
 }
 
-div.categories.grid-3 > div p {
+div.categories.show > div p {
   text-transform: capitalize;
   font-size: 18px;
   margin-bottom: 10px;
@@ -252,7 +256,7 @@ div.categories.grid-3 > div p {
 .add-colon::after {
   content: " : ";
 }
-div.categories.grid-3 > div h3 {
+div.categories.show > div h3 {
   text-transform: capitalize;
   font-size: 20px;
   text-align: center;
@@ -475,11 +479,11 @@ div.categories.grid-3 > div h3 {
   .single-info > div > p {
     font-size: 16px;
   }
-  div.categories.grid-3 > div > div h2,
+  div.categories.show > div > div h2,
   .single-info > div h2.font-color {
     font-size: 20px;
   }
-  div.categories.grid-3 > div h3,
+  div.categories.show > div h3,
   .single-info > div h3.font-color {
     font-size: 17px;
   }
@@ -489,7 +493,7 @@ div.categories.grid-3 > div h3 {
     height: 25px;
     font-size: 14px;
   }
-  div.categories.grid-3 > div p,
+  div.categories.show > div p,
   .single-info > div > p {
     font-size: 16px;
   }
@@ -587,11 +591,11 @@ div.categories.grid-3 > div h3 {
   .single-info > div > p {
     font-size: 14px;
   }
-  div.categories.grid-3 > div h2,
+  div.categories.show > div h2,
   .single-info > div h2.font-color {
     font-size: 18px;
   }
-  div.categories.grid-3 > div h3,
+  div.categories.show > div h3,
   .single-info > div h3.font-color {
     font-size: 15px;
   }
@@ -604,10 +608,10 @@ div.categories.grid-3 > div h3 {
   .single-info > div {
     gap: 5px;
   }
-  div.categories.grid-3 {
+  div.categories.show {
     gap: 10px;
   }
-  div.categories.grid-3 > div p,
+  div.categories.show > div p,
   .single-info > div > p {
     font-size: 15px;
   }
@@ -626,7 +630,7 @@ div.categories.grid-3 > div h3 {
   .media > .media-container {
     padding: 20px 10px;
   }
-  div.categories.grid-3 > div > div {
+  div.categories.show > div > div {
     max-height: 190px;
   }
   .media > .media-container > .grid-3 > div.flex-direction > div.center {
@@ -706,15 +710,15 @@ div.categories.grid-3 > div h3 {
   .single-info > div > p {
     font-size: 12px;
   }
-  div.categories.grid-3 > div h2,
+  div.categories.show > div h2,
   .single-info > div h2.font-color {
     font-size: 16px;
   }
-  div.categories.grid-3 > div h3,
+  div.categories.show > div h3,
   .single-info > div h3.font-color {
     font-size: 14px;
   }
-  div.categories.grid-3 > div p,
+  div.categories.show > div p,
   .single-info > div > p {
     font-size: 14px;
   }

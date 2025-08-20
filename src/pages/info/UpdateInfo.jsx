@@ -101,8 +101,7 @@ const UpdateInfo = () => {
     else if (!form.sectionId) setError(language?.error?.please_selecet_section);
     else if (!form.departmentId)
       setError(language?.error?.please_selecet_department);
-    else if (form?.sources?.length < 1)
-      setError(language?.error?.please_selecet_source);
+    else if (!form?.sources) setError(language?.error?.please_selecet_source);
     else if (!form.credibility)
       setError(language?.error?.please_selecet_credibility);
     else {
@@ -208,6 +207,7 @@ const UpdateInfo = () => {
       }
     }
   };
+
   const multiSelectInput = useCallback(
     (itm, name) => {
       const oldItems = form[name] || [];
@@ -283,25 +283,6 @@ const UpdateInfo = () => {
           return `${option?.coordinates}`;
         },
         fetchData: getCoordsApi,
-      },
-      {
-        name: "events",
-        label: language?.information?.event,
-        selectLabel: language?.information?.select_event,
-        url: "Events",
-      },
-      {
-        name: "sources",
-        label: language?.information?.source,
-        selectLabel: language?.information?.select_source,
-        url: "Sources",
-        optionLabel: (option) => option.source_name,
-      },
-      {
-        name: "parties",
-        label: language?.information?.party,
-        selectLabel: language?.information?.select_party,
-        url: "Parties",
       },
     ];
 
@@ -403,6 +384,47 @@ const UpdateInfo = () => {
       />
     ));
   }, [form, handleParentChange, language]);
+
+  const categoriesInputs = useMemo(() => {
+    const inputs = [
+      {
+        name: "events",
+        label: language?.information?.event,
+        selectLabel: language?.information?.select_event,
+        url: "Events",
+      },
+      {
+        name: "sources",
+        label: language?.information?.source,
+        selectLabel: language?.information?.select_source,
+        url: "Sources",
+        optionLabel: (option) => option.source_name,
+        value: form.sources?.source_name,
+      },
+      {
+        name: "parties",
+        label: language?.information?.party,
+        selectLabel: language?.information?.select_party,
+        url: "Parties",
+      },
+    ];
+    return inputs.map((input) => (
+      <SelectInputApi
+        key={input.name}
+        fetchData={getInfinityFeatchApis}
+        selectLabel={input.selectLabel}
+        label={input.label}
+        optionLabel={
+          input.optionLabel ? input.optionLabel : (option) => option?.name
+        }
+        onChange={(option) => setForm({ ...form, [input.name]: option })}
+        value={input.value || form[input.name]?.name}
+        onIgnore={() => setForm({ ...form, [input.name]: "" })}
+        url={input.url}
+      />
+    ));
+  }, [language, form]);
+
   const removeDuplicates = (filesArray) => {
     const fileMap = new Map();
     filesArray.forEach((file) => {
@@ -538,6 +560,7 @@ const UpdateInfo = () => {
                   type="date"
                 />
                 {credibilityOptions}
+                {categoriesInputs}
               </div>
             </div>
 

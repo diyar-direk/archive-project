@@ -138,20 +138,20 @@ const columns = [
     getCell: (e) => e.departmentId?.name,
   },
   {
-    name: "source",
+    name: "sources",
     headerName: (lang) => lang?.header?.sources,
-    getCell: (e) => nextJoin(e.sources, "source_name"),
+    getCell: (e) => e.sources?.source_name,
   },
   {
     name: "parties",
     headerName: (lang) => lang?.header?.parties,
-    getCell: (e) => nextJoin(e.parties, "name"),
+    getCell: (e) => e.parties?.name,
     hidden: true,
   },
   {
     name: "events",
     headerName: (lang) => lang?.header?.events,
-    getCell: (e) => nextJoin(e.events, "name"),
+    getCell: (e) => e.events?.name,
     hidden: true,
   },
 

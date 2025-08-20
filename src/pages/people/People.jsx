@@ -159,7 +159,10 @@ const columns = [
               >
                 <i className="fa-solid fa-trash"></i>
               </div>
-              <Link to={`/update_person/${e._id}`} className="flex update">
+              <Link
+                to={`/people/update_person/${e._id}`}
+                className="flex update"
+              >
                 <i className="fa-regular fa-pen-to-square"></i>
               </Link>
             </>

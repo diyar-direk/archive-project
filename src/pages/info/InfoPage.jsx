@@ -205,6 +205,18 @@ const InfoPage = () => {
         <h2>{language?.information?.adress}</h2>
         <p>{data.addressDetails}</p>
       </div>
+      <div className="flex align-center gap-10">
+        <h2>{language?.information?.sources}</h2>
+        <p>{data?.sources?.source_name}</p>
+      </div>
+      <div className="flex align-center gap-10">
+        <h2>{language?.information?.events}</h2>
+        <p>{data?.events?.name}</p>
+      </div>
+      <div className="flex align-center gap-10">
+        <h2>{language?.information?.parties}</h2>
+        <p>{data?.parties?.name}</p>
+      </div>
       <h2>{language?.information?.subject}</h2>
       <p>{data.subject}</p>
       <h2>{language?.information?.details}</h2>
@@ -212,7 +224,7 @@ const InfoPage = () => {
       <h2>{language?.information?.notes}</h2>
       <p>{data.note}</p>
 
-      <div className="categories grid-3">
+      <div className="categories show">
         <CategoriesShow
           title={language?.information?.coordinates}
           data={data.coordinates}
@@ -222,21 +234,6 @@ const InfoPage = () => {
           title={language?.information?.people}
           name="people"
           data={data.people}
-        />
-        <CategoriesShow
-          title={language?.information?.events}
-          data={data.events}
-          name="name"
-        />
-        <CategoriesShow
-          title={language?.information?.parties}
-          data={data.parties}
-          name="name"
-        />
-        <CategoriesShow
-          title={language?.information?.sources}
-          data={data.sources}
-          name="source_name"
         />
       </div>
       {data.media && <MediaShow id={id} data={data?.media} getData={getData} />}
