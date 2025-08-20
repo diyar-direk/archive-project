@@ -60,8 +60,6 @@ const DashboardCharts = () => {
     fetchDataCount();
   }, [fetchDataCount, dateFilter]);
 
-  const [dataWhitPageinations, setDataWithPaginations] = useState({});
-
   const sectionsCount = useMemo(() => {
     return {
       addressesEnum: {
@@ -178,12 +176,7 @@ const DashboardCharts = () => {
     <>
       {dataCount && (
         <div className="export-as-word flex">
-          <WordExporter
-            date={dateFilter}
-            dataCount={dataCount}
-            dataWhitPageinations={dataWhitPageinations}
-            sectionsCount={sectionsCount}
-          />
+          <WordExporter date={dateFilter} />
           <i
             onClick={reactToPrintFn}
             className="fa-solid fa-file-pdf"
@@ -215,7 +208,6 @@ const DashboardCharts = () => {
                   chartType={chart.chartType}
                   title={chart.title}
                   dateFilter={dateFilter}
-                  setDataWithPaginations={setDataWithPaginations}
                   url={chart.url || "countInformation"}
                 />
               )

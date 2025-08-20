@@ -2,60 +2,63 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 import { saveAs } from "file-saver";
 import { dateFormatter } from "../../utils/dateFormatter";
 import useLanguage from "../../hooks/useLanguage";
+import { useCallback, useContext, useState } from "react";
+import axios from "axios";
+import { baseURL, Context } from "../../context/context";
+import Loading from "../../components/loading/Loading";
 
 const today = dateFormatter(new Date());
 
-const WordExporter = ({
-  date,
-  dataCount,
-  dataWhitPageinations,
-  sectionsCount,
-}) => {
+const WordExporter = ({ date }) => {
   const { language } = useLanguage();
+  const [loading, setLoading] = useState(false);
+  const context = useContext(Context);
+  const token = context?.userDetails?.token;
 
-  const calcTotal = (items) =>
-    Object.keys(items).reduce((acc, key) => acc + (dataCount[key] || 0), 0);
+  const fetchData = useCallback(async () => {
+    const params = new URLSearchParams();
+    if (date.from) params.append("createdAt[gte]", date.from);
+    if (date.to) params.append("createdAt[lte]", date.to);
 
-  const generateSection = (title, items, total = null) => {
-    if (!items) return [];
-    const content = [];
+    setLoading(true);
+    try {
+      const [departments, departmentSections] = await Promise.all([
+        axios.get(`${baseURL}/Statistics/countInformation`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params: {
+            ...params,
+            categoryStatistics: "department",
+          },
+        }),
+        axios.get(`${baseURL}/Statistics/departmentInformation`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params,
+        }),
+      ]);
 
-    content.push(
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: `. ${total ?? calcTotal(items)} ${title}:`,
-            bold: true,
-            break: 1,
-          }),
-        ],
-      })
-    );
-
-    content.push(
-      ...Object.entries(items).map(
-        ([key, value]) =>
-          new Paragraph({
-            children: [
-              new TextRun({
-                text: `• ${dataCount[key] ?? 0} ${value}`,
-              }),
-            ],
-          })
-      )
-    );
-
-    return content;
-  };
+      return {
+        departments: departments?.data?.data,
+        departmentSections: departmentSections.data.data,
+      };
+    } catch (error) {
+      console.log(error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [token, date]);
 
   const generateDoc = async () => {
+    const data = await fetchData();
+    if (!data) return;
+
     const doc = new Document({
       sections: [
         {
           properties: {},
           children: [
             new Paragraph(
-              `Data statistics from date ${date.form || "any date"} to date ${
+              `Data statistics from date ${date.from || "any date"} to date ${
                 date.to || today
               }`
             ),
@@ -63,70 +66,52 @@ const WordExporter = ({
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `. ${dataCount.informationCount} ${language?.statistics?.information}`,
-                  bold: true,
-                }),
-              ],
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `. ${dataCount.personCount} ${language?.statistics?.people}`,
-                  bold: true,
-                }),
-              ],
-            }),
-            new Paragraph({
-              children: [
-                new TextRun({
-                  text: `. ${dataCount.coordinateCount} ${language?.statistics?.coordinates}`,
+                  text: `${
+                    data?.departments?.length || 0
+                  } departments for information`,
                   bold: true,
                 }),
               ],
             }),
 
-            ...generateSection(
-              language?.statistics?.adress_information,
-              sectionsCount.addressesEnum
-            ),
-            ...generateSection(
-              language?.statistics?.categories,
-              sectionsCount.categoriesEnum
-            ),
-            ...generateSection(
-              language?.header?.outgoing_incoming,
-              sectionsCount.incomingCount
-            ),
-            ...generateSection(
-              language?.header?.outgoing_incoming,
-              sectionsCount.reportAndResultCount
-            ),
-
-            ...Object.entries(dataWhitPageinations).flatMap(([key, items]) => {
-              if (!Array.isArray(items) || items.length === 0) return [];
-
-              return [
+            ...(data?.departments?.map(
+              (department) =>
                 new Paragraph({
                   children: [
                     new TextRun({
-                      text: `. ${key.toUpperCase()} statistics:`,
-                      bold: true,
-                      break: 1,
+                      text: `${department.infoCount || 0} info for ${
+                        department.name
+                      }`,
                     }),
                   ],
-                }),
-                ...items.map(
-                  (item) =>
-                    new Paragraph({
-                      children: [
-                        new TextRun({
-                          text: `• ${item.name}: ${item.infoCount}`,
-                        }),
-                      ],
-                    })
-                ),
-              ];
-            }),
+                })
+            ) || []),
+
+            ...(data?.departmentSections?.flatMap((departmentSection) => [
+              new Paragraph({
+                children: [
+                  new TextRun({
+                    text: `${
+                      departmentSection?.countsForSections?.length || 0
+                    } sections for ${departmentSection?.department?.name}`,
+                    bold: true,
+                  }),
+                ],
+              }),
+
+              ...(departmentSection?.countsForSections?.map(
+                (section) =>
+                  new Paragraph({
+                    children: [
+                      new TextRun({
+                        text: `${section?.count || 0} info for ${
+                          section?.sectionName
+                        }`,
+                      }),
+                    ],
+                  })
+              ) || []),
+            ]) || []),
           ],
         },
       ],
@@ -135,6 +120,8 @@ const WordExporter = ({
     const blob = await Packer.toBlob(doc);
     saveAs(blob, "statistics.docx");
   };
+
+  if (loading) return <Loading />;
 
   return (
     <i

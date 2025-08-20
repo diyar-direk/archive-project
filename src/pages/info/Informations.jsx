@@ -5,7 +5,6 @@ import Table from "./../../components/table/Table";
 import useLanguage from "../../hooks/useLanguage";
 import { Link } from "react-router-dom";
 import InormationTableFilters from "./InormationTableFilters";
-import { nextJoin } from "./../../utils/obejctJoin";
 import { dateFormatter } from "../../utils/dateFormatter";
 const columns = [
   {

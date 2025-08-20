@@ -20,7 +20,6 @@ const InformationStatisticsEnum = ({
   chartType,
   title,
   dateFilter,
-  setDataWithPaginations,
   url = "countInformation",
 }) => {
   const [data, setData] = useState(null);
@@ -47,10 +46,6 @@ const InformationStatisticsEnum = ({
       });
 
       setData(data.data);
-      setDataWithPaginations((prev) => ({
-        ...prev,
-        [categoryType]: data.data,
-      }));
     } catch (error) {
       console.log(error);
     }
