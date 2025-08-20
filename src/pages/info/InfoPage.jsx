@@ -70,7 +70,7 @@ const InfoPage = () => {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${id}.zip`;
+      a.download = `Mijara_Agahaiye.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -191,19 +191,19 @@ const InfoPage = () => {
       </div>
       <div className="flex align-center gap-10">
         <h2>{language?.information?.region}</h2>
-        <p>{data.regionId ? data.regionId?.name : "no region found"}</p>
+        <p>{data.regionId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
         <h2>{language?.information?.street}</h2>
-        <p>{data.streetId ? data.streetId?.name : "no street found"}</p>
+        <p>{data.streetId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
         <h2>{language?.information?.village}</h2>
-        <p>{data.villageId ? data.villageId?.name : "no village found"}</p>
+        <p>{data.villageId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
         <h2>{language?.information?.adress}</h2>
-        <p>{data.addressDetails ? data.addressDetails : "no Details found"}</p>
+        <p>{data.addressDetails}</p>
       </div>
       <h2>{language?.information?.subject}</h2>
       <p>{data.subject}</p>

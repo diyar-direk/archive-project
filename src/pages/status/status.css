@@ -1,6 +1,7 @@
 .export-as-word {
   justify-content: flex-end;
   margin-bottom: 10px;
+  gap: 10px;
   & i {
     padding: 10px;
     background: var(--body-color);

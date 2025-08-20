@@ -56,8 +56,8 @@ const BarChart = ({ title, labels, dataArray, children }) => {
   return (
     <div className="chart-container bar">
       {title && <h1>{title}</h1>}
-      <Bar data={data} options={options} />
       {children}
+      <Bar data={data} options={options} />
     </div>
   );
 };

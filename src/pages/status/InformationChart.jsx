@@ -1,12 +1,22 @@
 import axios from "axios";
-import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "./status.css";
+import "./export-as-pdf.css";
 import { baseURL, Context } from "../../context/context";
 import StatusCountShow from "./StatusCountShow";
 import InformationStatisticsEnum from "./InfromationStatisticsEnum";
 import StatitsticsDateFilter from "./StatitsticsDateFilter";
 import WordExporter from "./WordExporter";
 import useLanguage from "../../hooks/useLanguage";
+import { useReactToPrint } from "react-to-print";
+import DepartmentBarStatistics from "./DepartmentBarStatistics";
 const chartType = ["bar", "doughnut"];
 
 const DashboardCharts = () => {
@@ -32,6 +42,7 @@ const DashboardCharts = () => {
       const { data } = await axios.get(utl, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       setDataCount(data.data);
     } catch (error) {
       console.log(error);
@@ -150,49 +161,70 @@ const DashboardCharts = () => {
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
         url: "CountExports",
       },
+      {
+        categoryType: "countAnsweredExports",
+        title: "countAnsweredExports",
+        chartType: chartType[Math.floor(Math.random() * chartType.length)],
+        url: "countAnsweredExports",
+      },
     ],
     [role, language]
   );
 
+  const contentRef = useRef(null);
+  const reactToPrintFn = useReactToPrint({ contentRef });
+
   return (
     <>
       {dataCount && (
-        <WordExporter
-          date={dateFilter}
-          dataCount={dataCount}
-          dataWhitPageinations={dataWhitPageinations}
-          sectionsCount={sectionsCount}
-        />
+        <div className="export-as-word flex">
+          <WordExporter
+            date={dateFilter}
+            dataCount={dataCount}
+            dataWhitPageinations={dataWhitPageinations}
+            sectionsCount={sectionsCount}
+          />
+          <i
+            onClick={reactToPrintFn}
+            className="fa-solid fa-file-pdf"
+            title="export ad pdf"
+          />
+        </div>
       )}
+
       {dataCount && (
         <StatitsticsDateFilter
           dateFilter={dateFilter}
           setDateFilter={setDateFilter}
         />
       )}
+      <section ref={contentRef} className="exported-container">
+        <StatusCountShow
+          allData={dataCount}
+          sectionsCount={sectionsCount}
+          loading={loading}
+        />
 
-      <StatusCountShow
-        allData={dataCount}
-        sectionsCount={sectionsCount}
-        loading={loading}
-      />
-
-      <div className="chart-card-container">
-        {arrayOfchartes.map(
-          (chart) =>
-            !chart.hide && (
-              <InformationStatisticsEnum
-                key={chart.categoryType}
-                categoryType={chart.categoryType}
-                chartType={chart.chartType}
-                title={chart.title}
-                dateFilter={dateFilter}
-                setDataWithPaginations={setDataWithPaginations}
-                url={chart.url || "countInformation"}
-              />
-            )
-        )}
-      </div>
+        <div className="chart-card-container">
+          {arrayOfchartes.map(
+            (chart) =>
+              !chart.hide && (
+                <InformationStatisticsEnum
+                  key={chart.categoryType}
+                  categoryType={chart.categoryType}
+                  chartType={chart.chartType}
+                  title={chart.title}
+                  dateFilter={dateFilter}
+                  setDataWithPaginations={setDataWithPaginations}
+                  url={chart.url || "countInformation"}
+                />
+              )
+          )}
+        </div>
+        <div style={{ marginTop: "20px" }}>
+          <DepartmentBarStatistics dateFilter={dateFilter} />
+        </div>
+      </section>
     </>
   );
 };

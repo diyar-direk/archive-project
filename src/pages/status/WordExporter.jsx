@@ -137,13 +137,11 @@ const WordExporter = ({
   };
 
   return (
-    <div className="export-as-word flex">
-      <i
-        className="fa-solid fa-download"
-        onClick={generateDoc}
-        title={language?.statistics?.export_as_word}
-      />
-    </div>
+    <i
+      className="fa-solid fa-file-word"
+      onClick={generateDoc}
+      title={language?.statistics?.export_as_word}
+    />
   );
 };
 
