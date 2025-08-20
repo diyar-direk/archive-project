@@ -70,7 +70,7 @@ const InfoPage = () => {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Mijara_Agahaiye.zip`;
+      a.download = `Aram Serêkaniyê..Derbarê Civîna Istixbaratê Tirka Û Istixbarata Çete Li Serêkaniyê.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();
