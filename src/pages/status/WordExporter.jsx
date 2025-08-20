@@ -9,7 +9,7 @@ import Loading from "../../components/loading/Loading";
 
 const today = dateFormatter(new Date());
 
-const WordExporter = ({ date }) => {
+const WordExporter = ({ date, coordinateCount }) => {
   const { language } = useLanguage();
   const [loading, setLoading] = useState(false);
   const context = useContext(Context);
@@ -22,7 +22,12 @@ const WordExporter = ({ date }) => {
 
     setLoading(true);
     try {
-      const [departments, departmentSections] = await Promise.all([
+      const [
+        departments,
+        departmentSections,
+        countAnsweredExports,
+        exportForRecipient,
+      ] = await Promise.all([
         axios.get(`${baseURL}/Statistics/countInformation`, {
           headers: { Authorization: `Bearer ${token}` },
           params: {
@@ -34,11 +39,21 @@ const WordExporter = ({ date }) => {
           headers: { Authorization: `Bearer ${token}` },
           params,
         }),
+        axios.get(`${baseURL}/Statistics/countAnsweredExports`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params,
+        }),
+        axios.get(`${baseURL}/Statistics/CountExports`, {
+          headers: { Authorization: `Bearer ${token}` },
+          params,
+        }),
       ]);
 
       return {
         departments: departments?.data?.data,
         departmentSections: departmentSections.data.data,
+        countAnsweredExports: countAnsweredExports.data.data,
+        exportForRecipient: exportForRecipient.data.data,
       };
     } catch (error) {
       console.log(error);
@@ -112,6 +127,63 @@ const WordExporter = ({ date }) => {
                   })
               ) || []),
             ]) || []),
+
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `${
+                    data?.countAnsweredExports?.length || 0
+                  } answered exports`,
+                  bold: true,
+                }),
+              ],
+            }),
+
+            ...(data?.countAnsweredExports?.map(
+              (answeredExport) =>
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: `${
+                        answeredExport.exportWithAnswersCount || 0
+                      } export for ${answeredExport.name}`,
+                    }),
+                  ],
+                })
+            ) || []),
+
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `${
+                    data?.exportForRecipient?.length || 0
+                  } exports for recipient`,
+                  bold: true,
+                }),
+              ],
+            }),
+
+            ...(data?.exportForRecipient?.map(
+              (recipient) =>
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: `${recipient.exportCount || 0} export for ${
+                        recipient.name
+                      }`,
+                    }),
+                  ],
+                })
+            ) || []),
+
+            new Paragraph({
+              children: [
+                new TextRun({
+                  text: `${coordinateCount || 0} coordinates`,
+                  bold: true,
+                }),
+              ],
+            }),
           ],
         },
       ],

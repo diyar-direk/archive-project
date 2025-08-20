@@ -16,7 +16,6 @@ import StatitsticsDateFilter from "./StatitsticsDateFilter";
 import WordExporter from "./WordExporter";
 import useLanguage from "../../hooks/useLanguage";
 import { useReactToPrint } from "react-to-print";
-import DepartmentBarStatistics from "./DepartmentBarStatistics";
 const chartType = ["bar", "doughnut"];
 
 const DashboardCharts = () => {
@@ -158,12 +157,14 @@ const DashboardCharts = () => {
         title: language?.statistics?.export_for_each_recipient,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
         url: "CountExports",
+        hide: role !== "admin",
       },
       {
         categoryType: "countAnsweredExports",
         title: "countAnsweredExports",
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
         url: "countAnsweredExports",
+        hide: role !== "admin",
       },
     ],
     [role, language]
@@ -176,7 +177,10 @@ const DashboardCharts = () => {
     <>
       {dataCount && (
         <div className="export-as-word flex">
-          <WordExporter date={dateFilter} />
+          <WordExporter
+            date={dateFilter}
+            coordinateCount={dataCount?.coordinateCount}
+          />
           <i
             onClick={reactToPrintFn}
             className="fa-solid fa-file-pdf"
@@ -212,9 +216,6 @@ const DashboardCharts = () => {
                 />
               )
           )}
-        </div>
-        <div style={{ marginTop: "20px" }}>
-          <DepartmentBarStatistics dateFilter={dateFilter} />
         </div>
       </section>
     </>
