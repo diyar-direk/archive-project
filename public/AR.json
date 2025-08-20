@@ -757,6 +757,11 @@
       "Low": " منخفضة",
       "Medium": " متوسطة"
     },
+    "source_credibility": {
+      "High": "باران",
+      "Medium": "أبن خالتي",
+      "Low": "زكريا"
+    },
     "report_types": {
       "daily": " يومي",
       "weekly": " أسبوعي",

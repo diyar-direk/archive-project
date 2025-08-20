@@ -752,6 +752,11 @@
       "Low": "Düşük",
       "Medium": "Orta"
     },
+    "source_credibility": {
+      "High": "Baran",
+      "Medium": "Abn khalti",
+      "Low": "Zekria"
+    },
     "report_types": {
       "daily": "Günlük",
       "weekly": "Haftalık",

@@ -28,7 +28,8 @@ const columns = [
   {
     name: "source_credibility",
     headerName: (lang) => lang?.source?.source_credibility,
-    getCell: (row, lang) => lang?.enums?.credibility[row.source_credibility],
+    getCell: (row, lang) =>
+      lang?.enums?.source_credibility[row.source_credibility],
   },
   {
     name: "field",
@@ -245,15 +246,15 @@ const Sources = () => {
           {
             onSelectOption: () =>
               setForm({ ...form, source_credibility: "High" }),
-            text: language?.information?.high,
+            text: language?.enums?.source_credibility?.High,
           },
           {
-            text: language?.information?.medium,
+            text: language?.enums?.source_credibility?.Medium,
             onSelectOption: () =>
               setForm({ ...form, source_credibility: "Medium" }),
           },
           {
-            text: language?.information?.low,
+            text: language?.enums?.source_credibility?.Low,
             onSelectOption: () =>
               setForm({ ...form, source_credibility: "Low" }),
           },
@@ -267,7 +268,8 @@ const Sources = () => {
         label={input.label}
         placeholder={input.placeholder}
         value={
-          form[input.name] && language?.enums?.credibility[form[input.name]]
+          form[input.name] &&
+          language?.enums?.source_credibility[form[input.name]]
         }
         onIgnore={() => setForm({ ...form, [input.name]: "" })}
         options={input.options}

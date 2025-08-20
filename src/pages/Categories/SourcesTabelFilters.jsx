@@ -37,9 +37,12 @@ const SourcesTabelFilters = ({ filter, setFilter, setIsopen, setPage }) => {
         ifemptyLabel: language?.table?.any,
         label: language?.source?.source_credibility,
         values: [
-          { value: "High", label: language?.source?.high },
-          { value: "Medium", label: language?.source?.medium },
-          { value: "Low", label: language?.source?.low },
+          { value: "High", label: language?.enums?.source_credibility?.High },
+          {
+            value: "Medium",
+            label: language?.enums?.source_credibility?.Medium,
+          },
+          { value: "Low", label: language?.enums?.source_credibility?.Low },
         ],
       },
     ];
