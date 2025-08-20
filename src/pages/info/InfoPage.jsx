@@ -186,8 +186,12 @@ const InfoPage = () => {
         <p>{data.cityId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
+        <h2> {language?.header?.county}</h2>
+        <p>{data.countyId?.name}</p>
+      </div>
+      <div className="flex align-center gap-10">
         <h2> {language?.information?.government}</h2>
-        <p>{data.governmentId?.name}</p>
+        <p>{data.governorateId?.name}</p>
       </div>
       <div className="flex align-center gap-10">
         <h2>{language?.information?.region}</h2>

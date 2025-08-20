@@ -96,7 +96,7 @@ const CoordPage = () => {
                     {person._id !== id && (
                       <>
                         <Link
-                          to={`/people/${person._id}`}
+                          to={`/people/people/${person._id}`}
                           className="profile-image"
                         >
                           {person.image ? (
@@ -109,7 +109,10 @@ const CoordPage = () => {
                             <i className="fa-solid fa-user"></i>
                           )}
                         </Link>
-                        <Link to={`/people/${person._id}`} className="name">
+                        <Link
+                          to={`/people/people/${person._id}`}
+                          className="name"
+                        >
                           {person.firstName} {person.surName}
                         </Link>
                       </>

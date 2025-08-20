@@ -232,7 +232,7 @@ const Profile = () => {
         ) : (
           <div className="info">
             <Link
-              to={`/people/people/update_person/${id}`}
+              to={`/people/update_person/${id}`}
               className="fa-regular fa-pen-to-square"
             ></Link>
             <div className="flex">
