@@ -631,7 +631,11 @@
     "no_data": "لا توجد بيانات",
     "select_department": " اختر الفرع",
     "department": " الفرع",
-    "date": " التاريخ"
+    "date": " التاريخ",
+     "opinion":"",
+    "opinion_placeholder":"",
+    "suggestion":"",
+    "suggestion_placeholder":""
   },
   "coordinates": {
     "search_by_coordinates": "البحث بالإحداثيات",

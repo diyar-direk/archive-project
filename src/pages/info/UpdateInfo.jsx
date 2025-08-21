@@ -565,20 +565,37 @@ const UpdateInfo = () => {
             </div>
 
             <div className="form">
-              <h1>
-                <label htmlFor="details">
-                  {language?.information?.details}
-                </label>
-              </h1>
+              <h1>{language?.information?.details_placeholder}</h1>
               <div className="flex wrap">
                 <InputWithLabel
-                  value={form.details || ""}
-                  required
+                  label={language?.information?.opinion}
+                  placeholder={language?.information?.opinion_placeholder}
+                  value={form.opinion}
                   onChange={handleForm}
+                  id="opinion"
+                  rows={6}
+                  writebelType="textarea"
+                />
+              </div>
+              <div className="flex wrap">
+                <InputWithLabel
+                  label={language?.information?.suggestion}
+                  placeholder={language?.information?.suggestion_placeholder}
+                  value={form.suggestion}
+                  onChange={handleForm}
+                  id="suggestion"
+                  rows={6}
+                  writebelType="textarea"
+                />
+                <InputWithLabel
+                  label={language?.information?.details}
                   placeholder={language?.information?.details_placeholder}
+                  value={form.details}
+                  onChange={handleForm}
                   id="details"
                   rows={6}
                   writebelType="textarea"
+                  required
                 />
               </div>
             </div>

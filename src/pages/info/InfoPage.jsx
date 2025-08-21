@@ -227,6 +227,10 @@ const InfoPage = () => {
       <p>{data.details}</p>
       <h2>{language?.information?.notes}</h2>
       <p>{data.note}</p>
+      <h2>{language?.information?.opinion}</h2>
+      <p>{data.opinion}</p>
+      <h2>{language?.information?.suggestion}</h2>
+      <p>{data.suggestion}</p>
 
       <div className="categories show">
         <CategoriesShow

@@ -72,19 +72,25 @@ const WordExporter = ({ date, coordinateCount }) => {
         {
           properties: {},
           children: [
-            new Paragraph(
-              `Data statistics from date ${date.from || "any date"} to date ${
-                date.to || today
-              }`
-            ),
+            new Paragraph({
+              alignment: "center",
+              children: [
+                new TextRun({
+                  text: `Bîlançoya Mehane Ya Navendê Ji Dîroka ${
+                    date.from || ""
+                  } Ta Dîroka ${date.to || today}`,
+                  bold: true,
+                  size: 34,
+                }),
+              ],
+            }),
 
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `${
-                    data?.departments?.length || 0
-                  } departments for information`,
+                  text: `${data?.departments?.length || 0} Şax Ji Bo Agahî`,
                   bold: true,
+                  size: 26,
                 }),
               ],
             }),
@@ -94,9 +100,8 @@ const WordExporter = ({ date, coordinateCount }) => {
                 new Paragraph({
                   children: [
                     new TextRun({
-                      text: `${department.infoCount || 0} info for ${
-                        department.name
-                      }`,
+                      text: `${department.infoCount || 0} ${department.name}`,
+                      size: 24,
                     }),
                   ],
                 })
@@ -108,8 +113,9 @@ const WordExporter = ({ date, coordinateCount }) => {
                   new TextRun({
                     text: `${
                       departmentSection?.countsForSections?.length || 0
-                    } sections for ${departmentSection?.department?.name}`,
+                    } ${departmentSection?.department?.name}`,
                     bold: true,
+                    size: 26,
                   }),
                 ],
               }),
@@ -119,9 +125,8 @@ const WordExporter = ({ date, coordinateCount }) => {
                   new Paragraph({
                     children: [
                       new TextRun({
-                        text: `${section?.count || 0} info for ${
-                          section?.sectionName
-                        }`,
+                        text: `${section?.count || 0} ${section?.sectionName}`,
+                        size: 24,
                       }),
                     ],
                   })
@@ -132,9 +137,13 @@ const WordExporter = ({ date, coordinateCount }) => {
               children: [
                 new TextRun({
                   text: `${
-                    data?.countAnsweredExports?.length || 0
-                  } answered exports`,
+                    data?.countAnsweredExports?.reduce(
+                      (acc, key) => acc + (key.exportWithAnswersCount || 0),
+                      0
+                    ) || 0
+                  } Notên ku bersiva wan hatine dayin`,
                   bold: true,
+                  size: 26,
                 }),
               ],
             }),
@@ -144,9 +153,10 @@ const WordExporter = ({ date, coordinateCount }) => {
                 new Paragraph({
                   children: [
                     new TextRun({
-                      text: `${
-                        answeredExport.exportWithAnswersCount || 0
-                      } export for ${answeredExport.name}`,
+                      text: `${answeredExport.exportWithAnswersCount || 0} ${
+                        answeredExport.name
+                      }`,
+                      size: 24,
                     }),
                   ],
                 })
@@ -157,8 +167,9 @@ const WordExporter = ({ date, coordinateCount }) => {
                 new TextRun({
                   text: `${
                     data?.exportForRecipient?.length || 0
-                  } exports for recipient`,
+                  } Notê Ji Bo Aliyên Eleqedar`,
                   bold: true,
+                  size: 24,
                 }),
               ],
             }),
@@ -168,9 +179,8 @@ const WordExporter = ({ date, coordinateCount }) => {
                 new Paragraph({
                   children: [
                     new TextRun({
-                      text: `${recipient.exportCount || 0} export for ${
-                        recipient.name
-                      }`,
+                      text: `${recipient.exportCount || 0} ${recipient.name}`,
+                      size: 24,
                     }),
                   ],
                 })
@@ -179,8 +189,11 @@ const WordExporter = ({ date, coordinateCount }) => {
             new Paragraph({
               children: [
                 new TextRun({
-                  text: `${coordinateCount || 0} coordinates`,
+                  text: `${
+                    coordinateCount || 0
+                  } Koordînatên ku xebat li ser hatine kirin`,
                   bold: true,
+                  size: 26,
                 }),
               ],
             }),
@@ -190,7 +203,10 @@ const WordExporter = ({ date, coordinateCount }) => {
     });
 
     const blob = await Packer.toBlob(doc);
-    saveAs(blob, "statistics.docx");
+    saveAs(
+      blob,
+      `Bîlanço beşê Erşîfê ${dateFormatter(Date.now(), "fullDate")}.docx`
+    );
   };
 
   if (loading) return <Loading />;

@@ -643,7 +643,11 @@
     "select_department": "",
     "department": "",
     "date": "",
-    "no_data": "Veri yok"
+    "no_data": "Veri yok",
+     "opinion":"",
+    "opinion_placeholder":"",
+    "suggestion":"",
+    "suggestion_placeholder":""
   },
   "coordinates": {
     "search_by_coordinates": "Koordinatlara göre ara",

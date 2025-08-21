@@ -629,7 +629,11 @@
     "no_data": "Daneyên tune",
     "select_department": "",
     "department": "",
-    "date": ""
+    "date": "",
+     "opinion":"",
+    "opinion_placeholder":"",
+    "suggestion":"",
+    "suggestion_placeholder":""
   },
   "coordinates": {
     "search_by_coordinates": "Bi Koordînatan bigere",

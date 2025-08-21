@@ -632,7 +632,11 @@
     "no_data": "No data",
     "select_department": "Select a Department",
     "department": "Department",
-    "date": "Date"
+    "date": "Date",
+    "opinion":"opinion",
+    "opinion_placeholder":"enter opinion",
+    "suggestion":"suggestion",
+    "suggestion_placeholder":"suggestion opinion"
   },
   "coordinates": {
     "search_by_coordinates": "Search by Coordinates",

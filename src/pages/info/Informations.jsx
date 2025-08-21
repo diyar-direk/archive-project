@@ -30,6 +30,18 @@ const columns = [
     ),
   },
   {
+    name: "opinion",
+    headerName: (lang) => lang?.information?.opinion,
+    sort: true,
+    hidden: true,
+  },
+  {
+    name: "suggestion",
+    headerName: (lang) => lang?.information?.suggestion,
+    sort: true,
+    hidden: true,
+  },
+  {
     name: "note",
     headerName: (lang) => lang?.information?.notes,
     hidden: true,
