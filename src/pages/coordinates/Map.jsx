@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import useLanguage from "../../hooks/useLanguage";
 import LocationIcon from "./location-icon.png";
 const provider = (x, y, z) => {
-  return `http://localhost:8080/data/syria_0_16/${z}/${x}/${y}.png`;
+  return `http://192.19.19.1:8080/data/syria_0_16/${z}/${x}/${y}.png`;
 };
 
 const cleanMGRS = (str) => {

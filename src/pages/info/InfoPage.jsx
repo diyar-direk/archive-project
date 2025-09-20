@@ -49,7 +49,7 @@ const InfoPage = () => {
   const handleExport = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/api/information/download-information",
+        "http://192.19.19.1:8000/api/information/download-information",
         {
           method: "POST",
           headers: {

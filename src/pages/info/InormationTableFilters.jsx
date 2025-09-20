@@ -158,7 +158,7 @@ const InormationTableFilters = ({ filter, setFilter, setIsopen, setPage }) => {
       {
         name: "countryId",
         label: language?.header?.country,
-        selectLabel: beforeFiltering?.countryId?.firstName,
+        selectLabel: beforeFiltering?.countryId?.name,
         onChange: (option) => handleParentChange("countryId", option),
         url: "Countries",
       },

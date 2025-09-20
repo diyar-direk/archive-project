@@ -197,6 +197,8 @@
   "exports": {
     "incoming": "الواردات",
     "exports": " الصادرات",
+    "answered_exports": " الصادرات المجابة ",
+
     "code": "الكود",
     "information": " المعلومات",
     "information_placeholder": " اختر معلومة",
@@ -632,10 +634,10 @@
     "select_department": " اختر الفرع",
     "department": " الفرع",
     "date": " التاريخ",
-     "opinion":"",
-    "opinion_placeholder":"",
-    "suggestion":"",
-    "suggestion_placeholder":""
+    "opinion": "رأي",
+    "opinion_placeholder": "أدخل الرأي",
+    "suggestion": "اقتراح",
+    "suggestion_placeholder": "ادخل الاقتراح"
   },
   "coordinates": {
     "search_by_coordinates": "البحث بالإحداثيات",
@@ -762,9 +764,9 @@
       "Medium": " متوسطة"
     },
     "source_credibility": {
-      "High": "باران",
-      "Medium": "أبن خالتي",
-      "Low": "زكريا"
+      "High": "عالية",
+      "Medium": "متوسطة ",
+      "Low": "منخفضة"
     },
     "report_types": {
       "daily": " يومي",
