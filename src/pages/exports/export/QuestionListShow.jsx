@@ -56,7 +56,7 @@ const QuestionListShow = ({ questions, setQuestions }) => {
         </tbody>
       </table>
     );
-  }, [questions, setUpdate, setDeleteAction]);
+  }, [questions, setUpdate, setDeleteAction, language]);
 
   const [showQuestionForm, setShowQuestionForm] = useState(false);
 
@@ -68,8 +68,6 @@ const QuestionListShow = ({ questions, setQuestions }) => {
   const [error, setError] = useState(false);
 
   const createNewQuestion = useCallback(async () => {
-    if (!questionsList.informationId)
-      return setError(language?.error?.please_selecet_information);
     if (!questionsList.question)
       return setError(language?.error?.question_text_error);
     setError(false);

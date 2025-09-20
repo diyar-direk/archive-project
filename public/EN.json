@@ -633,10 +633,11 @@
     "select_department": "Select a Department",
     "department": "Department",
     "date": "Date",
-    "opinion":"opinion",
-    "opinion_placeholder":"enter opinion",
-    "suggestion":"suggestion",
-    "suggestion_placeholder":"suggestion opinion"
+    "opinion": "opinion",
+    "opinion_placeholder": "enter opinion",
+    "suggestion": "suggestion",
+    "suggestion_placeholder": "suggestion opinion",
+    "coordinate_placeholder": "Enter coordinates, separate with , or - or new line"
   },
   "coordinates": {
     "search_by_coordinates": "Search by Coordinates",
@@ -763,9 +764,9 @@
       "Medium": "Medium"
     },
     "source_credibility": {
-      "High": "Baran",
-      "Medium": "Abn khalti",
-      "Low": "Zekria"
+      "High": "High",
+      "Medium": "Medium",
+      "Low": "Low"
     },
     "report_types": {
       "daily": "Daily",

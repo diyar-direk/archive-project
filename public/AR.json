@@ -632,10 +632,11 @@
     "select_department": " اختر الفرع",
     "department": " الفرع",
     "date": " التاريخ",
-     "opinion":"",
-    "opinion_placeholder":"",
-    "suggestion":"",
-    "suggestion_placeholder":""
+    "opinion": "رأي",
+    "opinion_placeholder": "أدخل الرأي",
+    "suggestion": "اقتراح",
+    "suggestion_placeholder": "ادخل الاقتراح",
+    "coordinate_placeholder": "أدخل الإحداثيات وافصلها بفاصلة، - أو بسطر جديد"
   },
   "coordinates": {
     "search_by_coordinates": "البحث بالإحداثيات",
@@ -762,9 +763,9 @@
       "Medium": " متوسطة"
     },
     "source_credibility": {
-      "High": "باران",
-      "Medium": "أبن خالتي",
-      "Low": "زكريا"
+      "High": "عالية",
+      "Medium": "متوسطة ",
+      "Low": "منخفضة"
     },
     "report_types": {
       "daily": " يومي",
