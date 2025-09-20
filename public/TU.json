@@ -649,7 +649,8 @@
     "opinion": "görüş",
     "opinion_placeholder": "görüş girin",
     "suggestion": "Öneriyi",
-    "suggestion_placeholder": "Öneriyi girin"
+    "suggestion_placeholder": "Öneriyi girin",
+    "coordinate_placeholder": "Koordinatları girin, virgül veya - ile ayırın ya da yeni satıra yazın"
   },
   "coordinates": {
     "search_by_coordinates": "Koordinatlara göre ara",

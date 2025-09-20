@@ -31,6 +31,7 @@ const UpdateInfo = () => {
   const { language } = useLanguage();
 
   const [loading, setLoading] = useState(false);
+  const [newCoords, setNewCorrds] = useState("");
 
   useEffect(() => {
     axios
@@ -106,8 +107,48 @@ const UpdateInfo = () => {
       setError(language?.error?.please_selecet_credibility);
     else {
       setLoading(true);
+
+      const coordsList = parseMGRSCoordinates(newCoords);
+
+      const promises = coordsList.map(async (coordObj) => {
+        try {
+          const res = await axios.post(`${baseURL}/Coordinates`, coordObj, {
+            headers: { Authorization: "Bearer " + token },
+          });
+          return { success: true, data: res.data.data };
+        } catch (err) {
+          if (err.response?.status === 400 || err.response?.status === 409) {
+            try {
+              const res = await axios.get(
+                `${baseURL}/Coordinates?active=true&search=${coordObj.coordinates}`,
+                { headers: { Authorization: "Bearer " + token } }
+              );
+              return { success: true, data: res.data.data[0] };
+            } catch (getErr) {
+              return {
+                success: false,
+                data: coordObj,
+                code: getErr.response?.status,
+              };
+            }
+          }
+          return {
+            success: false,
+            data: coordObj,
+            code: err.response?.status,
+          };
+        }
+      });
+
+      const results = await Promise.all(promises);
+
+      const success = results.filter((r) => r.success).map((r) => r.data);
+
       const keys = Object.keys(form);
-      const formData = { ...form };
+      const formData = {
+        ...form,
+        coordinates: [...form.coordinates, ...success],
+      };
 
       keys.forEach((key) => {
         if (
@@ -275,15 +316,6 @@ const UpdateInfo = () => {
         },
         fetchData: getPeopleApi,
       },
-      {
-        name: "coordinates",
-        label: language?.information?.coordinates,
-        selectLabel: language?.information?.select_coordinates,
-        optionLabel: (option) => {
-          return `${option?.coordinates}`;
-        },
-        fetchData: getCoordsApi,
-      },
     ];
 
     return arrayOfApis.map((input) => (
@@ -434,6 +466,20 @@ const UpdateInfo = () => {
     return Array.from(fileMap.values());
   };
 
+  function parseMGRSCoordinates(input) {
+    if (!input) return [];
+
+    return input
+      .split(/[,|\-|\n]/)
+      .map((coord) => coord.trim().replace(/\s+/g, ""))
+      .filter((coord) => coord.length > 0)
+      .map((coordinates) => ({
+        coordinates,
+        sectionId: form.sectionId?._id,
+        sources: form.sources?._id,
+      }));
+  }
+
   const handleFiles = (files) => {
     const imageFiles = files.filter((file) => file.type.startsWith("image/"));
     const videoFiles = files.filter((file) => file.type.startsWith("video/"));
@@ -561,6 +607,29 @@ const UpdateInfo = () => {
                 />
                 {credibilityOptions}
                 {categoriesInputs}
+                <SelectInputApi
+                  label={language?.information?.coordinates}
+                  fetchData={getCoordsApi}
+                  selectLabel={language?.information?.select_coordinates}
+                  optionLabel={(option) => {
+                    return `${option?.coordinates}`;
+                  }}
+                  onChange={(option) => multiSelectInput(option, "coordinates")}
+                  onIgnore={(option) =>
+                    ignoreMultiSelectInput(option, "coordinates")
+                  }
+                  isArray
+                  value={form.coordinates}
+                />
+                <InputWithLabel
+                  label={language?.information?.coordinates}
+                  placeholder={language.information?.coordinate_placeholder}
+                  value={newCoords}
+                  onChange={(e) => setNewCorrds(e.target.value)}
+                  id="newCoords"
+                  rows={6}
+                  writebelType="textarea"
+                />
               </div>
             </div>
 

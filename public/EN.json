@@ -637,7 +637,8 @@
     "opinion": "opinion",
     "opinion_placeholder": "enter opinion",
     "suggestion": "suggestion",
-    "suggestion_placeholder": "suggestion opinion"
+    "suggestion_placeholder": "suggestion opinion",
+    "coordinate_placeholder": "Enter coordinates, separate with , or - or new line"
   },
   "coordinates": {
     "search_by_coordinates": "Search by Coordinates",

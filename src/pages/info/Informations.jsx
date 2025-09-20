@@ -30,38 +30,70 @@ const columns = [
     ),
   },
   {
-    name: "opinion",
-    headerName: (lang) => lang?.information?.opinion,
-    sort: true,
-    hidden: true,
-  },
-  {
-    name: "suggestion",
-    headerName: (lang) => lang?.information?.suggestion,
-    sort: true,
-    hidden: true,
-  },
-  {
-    name: "note",
-    headerName: (lang) => lang?.information?.notes,
-    hidden: true,
-    sort: true,
-  },
-  {
     name: "credibility",
     headerName: (lang) => lang?.information?.credibility,
     getCell: (row, lang) => lang?.enums?.credibility[row.credibility],
-  },
-  {
-    name: "countryId",
-    headerName: (lang) => lang?.information?.country,
-    getCell: (e) => e.countryId?.name,
   },
   {
     name: "countyId",
     headerName: (lang) => lang?.header?.county,
     getCell: (e) => e.countyId?.name,
   },
+
+  {
+    name: "coordinates",
+    headerName: (lang) => lang?.information?.coordinates,
+    getCell: (e) =>
+      e.coordinates?.map((coordinate, i) => {
+        const arr = [];
+        if (i < 3)
+          arr.push(
+            <Link
+              className="name"
+              key={i}
+              to={`/coordinates/coordinates/${coordinate._id}`}
+            >
+              {e.coordinates[i + 1]
+                ? `${coordinate.coordinates} , `
+                : `${coordinate.coordinates}`}
+            </Link>
+          );
+        else if (i === 3) arr.push(<span key={i}>...</span>);
+        return arr;
+      }),
+  },
+
+  {
+    name: "section",
+    headerName: (lang) => lang?.header?.sections,
+    getCell: (e) => e.sectionId?.name,
+    onlyAdminCanSee: true,
+  },
+
+  {
+    name: "departments",
+    headerName: (lang) => lang?.header?.departments,
+    getCell: (e) => e.departmentId?.name,
+  },
+
+  {
+    name: "sources",
+    headerName: (lang) => lang?.header?.sources,
+    getCell: (e) => e.sources?.source_name,
+  },
+
+  {
+    name: "parties",
+    headerName: (lang) => lang?.header?.parties,
+    getCell: (e) => e.parties?.name,
+  },
+  {
+    name: "countryId",
+    headerName: (lang) => lang?.information?.country,
+    getCell: (e) => e.countryId?.name,
+    hidden: true,
+  },
+
   {
     name: "governorateId",
     headerName: (lang) => lang?.information?.government,
@@ -95,8 +127,10 @@ const columns = [
 
   {
     name: "addressDetails",
+    hidden: true,
     headerName: (lang) => lang?.information?.extra_adress_details,
   },
+
   {
     name: "people",
     headerName: (lang) => lang?.information?.people,
@@ -114,56 +148,33 @@ const columns = [
         else if (i === 3) arr.push(<span key={i}>...</span>);
         return arr;
       }),
-  },
-  {
-    name: "coordinates",
-    headerName: (lang) => lang?.information?.coordinates,
-    getCell: (e) =>
-      e.coordinates?.map((coordinate, i) => {
-        const arr = [];
-        if (i < 3)
-          arr.push(
-            <Link
-              className="name"
-              key={i}
-              to={`/coordinates/coordinates/${coordinate._id}`}
-            >
-              {e.coordinates[i + 1]
-                ? `${coordinate.coordinates} , `
-                : `${coordinate.coordinates}`}
-            </Link>
-          );
-        else if (i === 3) arr.push(<span key={i}>...</span>);
-        return arr;
-      }),
-  },
-  {
-    name: "section",
-    headerName: (lang) => lang?.header?.sections,
-    getCell: (e) => e.sectionId?.name,
-    onlyAdminCanSee: true,
-  },
-  {
-    name: "departments",
-    headerName: (lang) => lang?.header?.departments,
-    getCell: (e) => e.departmentId?.name,
-  },
-  {
-    name: "sources",
-    headerName: (lang) => lang?.header?.sources,
-    getCell: (e) => e.sources?.source_name,
-  },
-  {
-    name: "parties",
-    headerName: (lang) => lang?.header?.parties,
-    getCell: (e) => e.parties?.name,
     hidden: true,
   },
+
   {
     name: "events",
     headerName: (lang) => lang?.header?.events,
     getCell: (e) => e.events?.name,
     hidden: true,
+  },
+
+  {
+    name: "opinion",
+    headerName: (lang) => lang?.information?.opinion,
+    sort: true,
+    hidden: true,
+  },
+  {
+    name: "suggestion",
+    headerName: (lang) => lang?.information?.suggestion,
+    sort: true,
+    hidden: true,
+  },
+  {
+    name: "note",
+    headerName: (lang) => lang?.information?.notes,
+    hidden: true,
+    sort: true,
   },
 
   {
