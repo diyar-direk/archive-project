@@ -129,7 +129,7 @@ const AddInformation = () => {
       const keys = Object.keys(form);
       const formData = {
         ...form,
-        coordinates: [...form.coordinates, ...success],
+        coordinates: [...form?.coordinates, ...success],
       };
 
       keys.forEach((key) => {
@@ -628,7 +628,7 @@ const AddInformation = () => {
                 ignoreMultiSelectInput(option, "coordinates")
               }
               isArray
-              value={form.coordinates}
+              value={form?.coordinates}
             />
             <InputWithLabel
               label={language?.information?.coordinates}

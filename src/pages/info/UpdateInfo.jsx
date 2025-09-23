@@ -619,7 +619,7 @@ const UpdateInfo = () => {
                     ignoreMultiSelectInput(option, "coordinates")
                   }
                   isArray
-                  value={form.coordinates}
+                  value={form?.coordinates}
                 />
                 <InputWithLabel
                   label={language?.information?.coordinates}
