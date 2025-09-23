@@ -49,7 +49,7 @@ const InfoPage = () => {
   const handleExport = async () => {
     try {
       const response = await fetch(
-        "http://192.19.19.1:8000/api/information/download-information",
+        "http://localhost:8000/api/information/download-information",
         {
           method: "POST",
           headers: {
@@ -70,7 +70,7 @@ const InfoPage = () => {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Aram Serêkaniyê..Derbarê Civîna Istixbaratê Tirka Û Istixbarata Çete Li Serêkaniyê.zip`;
+      a.download = `${data.subject}_${id}.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();
