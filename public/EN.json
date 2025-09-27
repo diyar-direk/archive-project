@@ -197,6 +197,7 @@
   },
   "exports": {
     "exports": "Exports",
+    "answered_exports": "answer exports for each recipient",
     "incoming": "Incoming",
     "code": "Code",
     "information": "Information",
@@ -633,10 +634,11 @@
     "select_department": "Select a Department",
     "department": "Department",
     "date": "Date",
-    "opinion":"opinion",
-    "opinion_placeholder":"enter opinion",
-    "suggestion":"suggestion",
-    "suggestion_placeholder":"suggestion opinion"
+    "opinion": "opinion",
+    "opinion_placeholder": "enter opinion",
+    "suggestion": "suggestion",
+    "suggestion_placeholder": "suggestion opinion",
+    "coordinate_placeholder": "Enter coordinates, separate with , or - or new line"
   },
   "coordinates": {
     "search_by_coordinates": "Search by Coordinates",

@@ -70,7 +70,8 @@ const InfoPage = () => {
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = `Aram Serêkaniyê..Derbarê Civîna Istixbaratê Tirka Û Istixbarata Çete Li Serêkaniyê.zip`;
+      console.log(data)
+      a.download = `${data.sources.source_name}..${data.subject}.zip`;
       document.body.appendChild(a);
       a.click();
       a.remove();

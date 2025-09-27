@@ -196,6 +196,7 @@
   "exports": {
     "incoming": "Dahate",
     "exports": "Hindare",
+    "answered_exports": "Bersivên hindarê ji bo her wergirê",
     "code": "Kod",
     "information": "Agahî",
     "information_placeholder": "Agahiyekê hilbijêre",
@@ -361,19 +362,19 @@
     "no_data": "Dane tune ne",
     "search_btn": "Lêgerîn"
   },
-"department": {
-  "add_new_department": "Şaxeke nû zêde bike",
-  "update_department": "Vê şaxê nûve bike",
-  "department_name": "Navê şaxê",
-  "department_name_placeholder": "Navê şaxê binivîse",
-  "add_btn": "Lê zêde bike",
-  "save": "Tomar bike",
-  "cancel": "Betal bike",
-  "created_at": "Dîroka weşanê",
-  "loading": "Tê barkirin",
-  "no_data": "Daneye tune ne",
-  "search_btn": "Lê bigere"
-},
+  "department": {
+    "add_new_department": "Şaxeke nû zêde bike",
+    "update_department": "Vê şaxê nûve bike",
+    "department_name": "Navê şaxê",
+    "department_name_placeholder": "Navê şaxê binivîse",
+    "add_btn": "Lê zêde bike",
+    "save": "Tomar bike",
+    "cancel": "Betal bike",
+    "created_at": "Dîroka weşanê",
+    "loading": "Tê barkirin",
+    "no_data": "Daneye tune ne",
+    "search_btn": "Lê bigere"
+  },
   "government": {
     "add_new_government": "Parêzgehek nû zêde bike",
     "update_government": "Vê parêzgehê nûve bike",
@@ -633,7 +634,8 @@
     "opinion": "Nerîn",
     "opinion_placeholder": "Nerîna xwe binivîse",
     "suggestion": "Pêşniyar",
-    "suggestion_placeholder": "Pêşniyara xwe binivîse"
+    "suggestion_placeholder": "Pêşniyara xwe binivîse",
+    "coordinate_placeholder": "Koordînat binivîse, bi , an - jûda bike yan li rêzên nû"
   },
   "coordinates": {
     "search_by_coordinates": "Bi Koordînatan bigere",
@@ -720,21 +722,21 @@
     "no_data": "Dane tune ne"
   },
 
-"recipient": {
-  "add_new_recipient": "Aliyekî eleqedar zêde bike",
-  "update_recipient": "Vê Aliyê eleqedar nûve bike",
-  "recipient_name": "Navê Aliyê eleqedar",
-  "recipient_name_placeholder": "Navê Aliyê eleqedar binivîse",
-  "add_btn": "Lê zêde bike",
-  "save": "Tomar bike",
-  "cancel": "Betal bike",
-  "created_at": "Dîroka çêkirinê",
-  "loading": "Tê barkirin",
-  "no_data": "Daneye tune ne",
-  "search_btn": "Lê bigere",
-  "recipient": "Aliyê eleqedar",
-  "select_recipient": "Aliyê eleqedar hilbijêre"
-},
+  "recipient": {
+    "add_new_recipient": "Aliyekî eleqedar zêde bike",
+    "update_recipient": "Vê Aliyê eleqedar nûve bike",
+    "recipient_name": "Navê Aliyê eleqedar",
+    "recipient_name_placeholder": "Navê Aliyê eleqedar binivîse",
+    "add_btn": "Lê zêde bike",
+    "save": "Tomar bike",
+    "cancel": "Betal bike",
+    "created_at": "Dîroka çêkirinê",
+    "loading": "Tê barkirin",
+    "no_data": "Daneye tune ne",
+    "search_btn": "Lê bigere",
+    "recipient": "Aliyê eleqedar",
+    "select_recipient": "Aliyê eleqedar hilbijêre"
+  },
 
   "enums": {
     "role": {
@@ -760,9 +762,9 @@
       "Medium": "Navîn"
     },
     "source_credibility": {
-      "High": "Baran",
-      "Medium": "Abn khalti",
-      "Low": "Zekria"
+      "High": "Hatiye Piştrastkirin",
+      "Medium": "Heya Astekê Hatiye Piştrastkirin",
+      "Low": "Nehatiye Piştrastkirin"
     },
     "report_types": {
       "daily": "Rojane",

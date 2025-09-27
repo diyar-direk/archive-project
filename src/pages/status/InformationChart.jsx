@@ -161,7 +161,7 @@ const DashboardCharts = () => {
       },
       {
         categoryType: "countAnsweredExports",
-        title: "countAnsweredExports",
+        title: `${language?.exports?.answered_exports}`,
         chartType: chartType[Math.floor(Math.random() * chartType.length)],
         url: "countAnsweredExports",
         hide: role !== "admin",

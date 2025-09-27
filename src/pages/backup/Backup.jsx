@@ -150,6 +150,7 @@ const Backup = () => {
       document.querySelector(".progres > div > h4").innerHTML =
         "completed successfully";
     } catch (err) {
+      console.log(err)
       alert(err);
     } finally {
       setTimeout(() => {

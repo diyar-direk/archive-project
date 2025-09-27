@@ -33,6 +33,7 @@ import addressRouter from "./pages/addresses/addressRouter";
 import personRouter from "./pages/people/personRouter";
 import coordinatesRouter from "./pages/coordinates/coordinatesrouter";
 import Recipients from "./pages/exports/Recipients";
+import Chat from "./pages/chat/Chat";
 
 function App() {
   const location = useLocation();
@@ -87,6 +88,7 @@ function App() {
               <Route path="informations/:id" element={<InfoPage />} />
               <Route path="add_information" element={<AddInformation />} />
               <Route path="update_info/:id" element={<UpdateInfo />} />
+              <Route path="chat" element={<Chat />} />
             </Route>
           </Route>
         </Route>

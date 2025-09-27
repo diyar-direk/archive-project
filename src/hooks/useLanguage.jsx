@@ -255,6 +255,18 @@ const useLanguage = () => {
         title: language?.header?.backUps,
         role: ["admin"],
       },
+      {
+        icon: "fa-solid fa-comments",
+        children: [
+          {
+            title: "chat",
+            path: "chat",
+            role: ["admin", "user"],
+          },
+        ],
+        title: "chat",
+        role: ["admin", "user"],
+      },
     ],
     [language, expiredExports]
   );

@@ -196,6 +196,8 @@
   "exports": {
     "exports": "Dışa Aktarmalar",
     "incoming": "Gelen",
+    "answered_exports": "Her alıcı için yanıtlanan dışa aktarmalar",
+
     "code": "Kod",
     "information": "Bilgi",
     "information_placeholder": "bilgi seçin",
@@ -360,19 +362,19 @@
     "no_data": "Veri yok",
     "search_btn": "Ara"
   },
-"department": {
-  "add_new_department": "Yeni şube ekle",
-  "update_department": "Bu şubeyi güncelle",
-  "department_name": "Şube adı",
-  "department_name_placeholder": "Şube adını giriniz",
-  "add_btn": "Ekle",
-  "save": "Kaydet",
-  "cancel": "İptal",
-  "created_at": "Yayın tarihi",
-  "loading": "Yükleniyor",
-  "no_data": "Veri yok",
-  "search_btn": "Ara"
-},
+  "department": {
+    "add_new_department": "Yeni şube ekle",
+    "update_department": "Bu şubeyi güncelle",
+    "department_name": "Şube adı",
+    "department_name_placeholder": "Şube adını giriniz",
+    "add_btn": "Ekle",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "created_at": "Yayın tarihi",
+    "loading": "Yükleniyor",
+    "no_data": "Veri yok",
+    "search_btn": "Ara"
+  },
   "government": {
     "add_new_government": "Yeni Valilik Ekle",
     "update_government": "Bu Valiliği Güncelle",
@@ -552,21 +554,21 @@
     "cancel": "İptal",
     "search_btn": "Ara"
   },
-"recipient": {
-  "add_new_recipient": "Yeni alıcı ekle",
-  "update_recipient": "Bu alıcıyı güncelle",
-  "recipient_name": "Alıcı adı",
-  "recipient_name_placeholder": "Alıcı adını giriniz",
-  "add_btn": "Ekle",
-  "save": "Kaydet",
-  "cancel": "İptal",
-  "created_at": "Oluşturulma tarihi",
-  "loading": "Yükleniyor",
-  "no_data": "Veri yok",
-  "search_btn": "Ara",
-  "recipient": "Alıcı",
-  "select_recipient": "Alıcı seçiniz"
-},
+  "recipient": {
+    "add_new_recipient": "Yeni alıcı ekle",
+    "update_recipient": "Bu alıcıyı güncelle",
+    "recipient_name": "Alıcı adı",
+    "recipient_name_placeholder": "Alıcı adını giriniz",
+    "add_btn": "Ekle",
+    "save": "Kaydet",
+    "cancel": "İptal",
+    "created_at": "Oluşturulma tarihi",
+    "loading": "Yükleniyor",
+    "no_data": "Veri yok",
+    "search_btn": "Ara",
+    "recipient": "Alıcı",
+    "select_recipient": "Alıcı seçiniz"
+  },
   "information": {
     "search_by_subject": "Konuya Göre Ara",
     "subject": "Konu",
@@ -644,10 +646,11 @@
     "department": "şube",
     "date": "tarih",
     "no_data": "Veri yok",
-     "opinion":"görüş",
-    "opinion_placeholder":"görüş girin",
-    "suggestion":"Öneriyi",
-    "suggestion_placeholder":"Öneriyi girin"
+    "opinion": "görüş",
+    "opinion_placeholder": "görüş girin",
+    "suggestion": "Öneriyi",
+    "suggestion_placeholder": "Öneriyi girin",
+    "coordinate_placeholder": "Koordinatları girin, virgül veya - ile ayırın ya da yeni satıra yazın"
   },
   "coordinates": {
     "search_by_coordinates": "Koordinatlara göre ara",
@@ -758,7 +761,7 @@
     },
     "source_credibility": {
       "High": "Yüksek",
-      "Medium":"Orta",
+      "Medium": "Orta",
       "Low": "Düşük"
     },
     "report_types": {
