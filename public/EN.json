@@ -763,9 +763,9 @@
       "Medium": "Medium"
     },
     "source_credibility": {
-      "High": "Baran",
-      "Medium": "Abn khalti",
-      "Low": "Zekria"
+      "High": "High",
+      "Medium": "Medium",
+      "Low": "Low"
     },
     "report_types": {
       "daily": "Daily",

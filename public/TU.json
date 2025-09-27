@@ -43,7 +43,7 @@
   },
   "header": {
     "departments": " Departmanlar",
-    "recipients": "",
+    "recipients": "Alıcılar",
     "outgoing_incoming": "Giden & Gelen",
     "incoming": "Gelen",
     "add_export": "Dışa Aktarma Ekle",
@@ -109,8 +109,8 @@
     "information_for_each_county": "Her İlçe İçin Bilgi",
     "information_for_each_governorate": "Her Valilik İçin Bilgi",
     "information_for_each_city": "Her Şehir İçin Bilgi",
-    "information_for_each_department": "",
-    "export_for_each_recipient": "",
+    "information_for_each_department": "Her Departman için Bilgiler",
+    "export_for_each_recipient": "Her paydaş için bilgi istatistikleri",
     "information_for_each_village": "Her Köy İçin Bilgi",
     "information_for_each_region": "Her Bölge İçin Bilgi",
     "information_for_each_street": "Her Sokak İçin Bilgi",
@@ -360,19 +360,19 @@
     "no_data": "Veri yok",
     "search_btn": "Ara"
   },
-  "department": {
-    "add_new_department": "",
-    "update_department": "",
-    "department_name": "",
-    "department_name_placeholder": "",
-    "add_btn": "",
-    "save": "",
-    "cancel": "",
-    "created_at": "",
-    "loading": "",
-    "no_data": "",
-    "search_btn": ""
-  },
+"department": {
+  "add_new_department": "Yeni şube ekle",
+  "update_department": "Bu şubeyi güncelle",
+  "department_name": "Şube adı",
+  "department_name_placeholder": "Şube adını giriniz",
+  "add_btn": "Ekle",
+  "save": "Kaydet",
+  "cancel": "İptal",
+  "created_at": "Yayın tarihi",
+  "loading": "Yükleniyor",
+  "no_data": "Veri yok",
+  "search_btn": "Ara"
+},
   "government": {
     "add_new_government": "Yeni Valilik Ekle",
     "update_government": "Bu Valiliği Güncelle",
@@ -552,21 +552,21 @@
     "cancel": "İptal",
     "search_btn": "Ara"
   },
-  "recipient": {
-    "add_new_recipient": "",
-    "update_recipient": "",
-    "recipient_name": "",
-    "recipient_name_placeholder": "",
-    "add_btn": "",
-    "save": "",
-    "cancel": "",
-    "created_at": "",
-    "loading": "",
-    "no_data": "",
-    "search_btn": "",
-    "recipient": "",
-    "select_recipient": ""
-  },
+"recipient": {
+  "add_new_recipient": "Yeni alıcı ekle",
+  "update_recipient": "Bu alıcıyı güncelle",
+  "recipient_name": "Alıcı adı",
+  "recipient_name_placeholder": "Alıcı adını giriniz",
+  "add_btn": "Ekle",
+  "save": "Kaydet",
+  "cancel": "İptal",
+  "created_at": "Oluşturulma tarihi",
+  "loading": "Yükleniyor",
+  "no_data": "Veri yok",
+  "search_btn": "Ara",
+  "recipient": "Alıcı",
+  "select_recipient": "Alıcı seçiniz"
+},
   "information": {
     "search_by_subject": "Konuya Göre Ara",
     "subject": "Konu",
@@ -640,14 +640,14 @@
     "loading": "Yükleniyor...",
     "delete": "Sil",
     "show_details": "Detayları Göster",
-    "select_department": "",
-    "department": "",
-    "date": "",
+    "select_department": "Bir şube seçin",
+    "department": "şube",
+    "date": "tarih",
     "no_data": "Veri yok",
-     "opinion":"",
-    "opinion_placeholder":"",
-    "suggestion":"",
-    "suggestion_placeholder":""
+     "opinion":"görüş",
+    "opinion_placeholder":"görüş girin",
+    "suggestion":"Öneriyi",
+    "suggestion_placeholder":"Öneriyi girin"
   },
   "coordinates": {
     "search_by_coordinates": "Koordinatlara göre ara",
@@ -757,9 +757,9 @@
       "Medium": "Orta"
     },
     "source_credibility": {
-      "High": "Baran",
-      "Medium": "Abn khalti",
-      "Low": "Zekria"
+      "High": "Yüksek",
+      "Medium":"Orta",
+      "Low": "Düşük"
     },
     "report_types": {
       "daily": "Günlük",
