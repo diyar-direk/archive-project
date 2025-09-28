@@ -1,0 +1,48 @@
+.chat-area {
+  min-height: 100%;
+  width: 70%;
+  margin: auto;
+}
+.chat-area h1 {
+  text-transform: capitalize;
+  font-size: 40px;
+  color: var(--font-color);
+}
+.chat-area h1::after {
+  content: " ?";
+}
+.chat-area form {
+  background-color: var(--aside-color);
+  width: 100%;
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+}
+.chat-area form input {
+  flex: 1;
+  border: none;
+  font-size: 16px;
+  padding: 15px 20px;
+  padding-right: 40px;
+}
+.chat-area form button {
+  position: absolute;
+  right: 20px;
+  background-color: var(--section-color);
+  border: none;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+body.arabic .chat-area form input {
+  padding-right: auto;
+  padding-left: 40px;
+}
+body.arabic .chat-area form button {
+  right: auto;
+  left: 20px;
+}
+body.arabic .chat-area h1::after {
+  content: " ؟";
+}
