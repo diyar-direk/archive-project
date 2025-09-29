@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import "./chat.css";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
-const Chat = () => {
+const ChatArea = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const bottomRef = useRef(null);
@@ -178,4 +178,4 @@ const Chat = () => {
   );
 };
 
-export default Chat;
+export default ChatArea;

@@ -1,7 +1,8 @@
 .chat-area {
   min-height: 100%;
-  width: 70%;
+  width: 1000px;
   margin: auto;
+  padding-bottom: 50px;
 }
 .chat-area h1 {
   text-transform: capitalize;
@@ -17,6 +18,15 @@
   border-radius: 30px;
   overflow: hidden;
   position: relative;
+}
+.chat-area .has-message {
+  position: fixed;
+  bottom: 0;
+  width: 1000px;
+  background: var(--section-color);
+  padding-bottom: 30px;
+  display: flex;
+  justify-content: center;
 }
 .chat-area form input {
   flex: 1;
@@ -45,4 +55,74 @@ body.arabic .chat-area form button {
 }
 body.arabic .chat-area h1::after {
   content: " ؟";
+}
+.messages > div {
+  display: flex;
+  flex-direction: column;
+  color: var(--font-color);
+  margin-bottom: 10px;
+}
+.messages > div h3 {
+  margin-bottom: 10px;
+  text-transform: capitalize;
+}
+.messages .user-msg .message-text {
+  background-color: var(--body-color);
+}
+.messages .message-text {
+  background: var(--body-color);
+  color: var(--font-color);
+  padding: 11px 20px;
+  width: fit-content;
+  max-width: 70%;
+  border-radius: 16px;
+  position: relative;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.messages .user-msg .message-text::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 5px;
+  background: var(--body-color);
+  bottom: 1px;
+  right: 1px;
+  transform: rotate(45deg) translate(50%, 50%);
+  transform-origin: bottom right;
+}
+.messages .ai-msg .message-text {
+  background-color: #426fb429;
+}
+
+.messages .ai-msg .message-text::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 10px;
+  background: #426fb429;
+  bottom: 1px;
+  left: 1px;
+  transform: rotate(45deg) translate(-50%, 50%);
+  transform-origin: bottom left;
+}
+.messages > .user-msg {
+  align-items: flex-start;
+}
+.messages > .ai-msg {
+  align-items: flex-end;
+}
+.messages > div h3::after {
+  content: " : ";
+}
+.messages .message-text .copy-message {
+  color: var(--font-color);
+  cursor: pointer;
+  display: none;
+  margin-left: auto;
+  width: fit-content;
+}
+.messages .message-text:hover .copy-message {
+  display: block;
 }
