@@ -34,6 +34,7 @@ import personRouter from "./pages/people/personRouter";
 import coordinatesRouter from "./pages/coordinates/coordinatesrouter";
 import Recipients from "./pages/exports/Recipients";
 import Chat from "./pages/chat/Chat";
+import ChatArea from "./pages/chat/ChatsArea";
 
 function App() {
   const location = useLocation();
@@ -89,6 +90,7 @@ function App() {
               <Route path="add_information" element={<AddInformation />} />
               <Route path="update_info/:id" element={<UpdateInfo />} />
               <Route path="chat" element={<Chat />} />
+              <Route path="chat/:id" element={<ChatArea />} />
             </Route>
           </Route>
         </Route>

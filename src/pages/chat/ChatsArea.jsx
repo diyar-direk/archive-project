@@ -1,10 +1,36 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import "./chat.css";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { baseURL, Context } from "../../context/context";
 const ChatArea = () => {
+  const { id } = useParams();
+  const [canSubmit, setCanSubmit] = useState(false);
+  const context = useContext(Context);
+  const { token } = context?.userDetails;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+  const getChat = useCallback(async () => {
+    try {
+      const { data } = await axios.get(`${baseURL}/ai_chat/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMessages(data.messages);
+      setCanSubmit(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [id, token]);
+
+  useEffect(() => {
+    getChat();
+  }, [getChat]);
+
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -22,17 +48,36 @@ const ChatArea = () => {
   };
 
   const buildPrompt = (history, newMessage) => {
-    return [...history, { role: "user", content: newMessage }]
-      .map((msg) => `${msg.role === "user" ? "User" : "AI"}: ${msg.content}`)
+    return [...history, { sender: "user", content: newMessage }]
+      .map((msg) => `${msg.sender === "user" ? "User" : "AI"}: ${msg.content}`)
       .join("\n");
   };
 
+  const createMessage = useCallback(
+    async (message, sender) => {
+      try {
+        await axios.post(
+          `${baseURL}/ai_chat/message`,
+          { chatId: id, content: message, sender: sender },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [token, id]
+  );
+
   const sendMessage = useCallback(async () => {
     if (!message.trim()) return;
-
-    setMessages((prev) => [...prev, { role: "user", content: message }]);
+    setCanSubmit(false);
+    setMessages((prev) => [...prev, { sender: "user", content: message }]);
     const currentMessage = message;
     setMessage("");
+    let finalResponse = "";
+    let start = false;
 
     try {
       const response = await fetch("http://192.168.0.176:1234/v1/completions", {
@@ -53,8 +98,7 @@ const ChatArea = () => {
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
 
-      setMessages((prev) => [...prev, { role: "ai", content: "" }]);
-
+      setMessages((prev) => [...prev, { sender: "ai", content: "" }]);
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
@@ -68,36 +112,47 @@ const ChatArea = () => {
         for (const line of lines) {
           if (line.includes("[DONE]")) continue;
 
-          try {
-            const json = JSON.parse(line.replace("data: ", ""));
-            const token = json.choices?.[0]?.text || "";
-
-            const cleanToken = cleanMessage(token);
-
-            setMessages((prev) => {
-              const updated = [...prev];
-              updated[updated.length - 1] = {
-                ...updated[updated.length - 1],
-                content: updated[updated.length - 1].content + cleanToken,
-              };
-              return updated;
-            });
-          } catch (err) {
-            console.error("Error parsing line:", line, err);
+          if (line.includes("<|channel|>final<|message|>")) {
+            start = true;
+            continue;
+          }
+          if (start) {
+            try {
+              const json = JSON.parse(line.replace("data: ", ""));
+              const token = json.choices?.[0]?.text || "";
+              const cleanToken = cleanMessage(token);
+              finalResponse += cleanToken;
+              setMessages((prev) => {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                  ...updated[updated.length - 1],
+                  content: updated[updated.length - 1].content + cleanToken,
+                };
+                return updated;
+              });
+            } catch (err) {
+              console.error("Error parsing line:", line, err);
+            }
           }
         }
       }
     } catch (error) {
       console.error("Error sending message:", error);
     }
-  }, [message, messages]);
+
+    await createMessage(currentMessage, "user");
+    await createMessage(finalResponse, "ai");
+
+    setCanSubmit(true);
+  }, [message, messages, createMessage]);
 
   const handleSubmit = useCallback(
     (e) => {
       e.preventDefault();
+      if (!canSubmit) return;
       sendMessage();
     },
-    [sendMessage]
+    [sendMessage, canSubmit]
   );
 
   const handleCopy = useCallback((text) => {
@@ -113,10 +168,9 @@ const ChatArea = () => {
 
   return (
     <section className="center flex-direction gap-20 chat-area relative">
-      {messages?.length === 0 && <h1>what can i help you with</h1>}
       <div className="messages w-100">
         {messages.map((msg, idx) => {
-          const isAI = msg.role === "ai";
+          const isAI = msg.sender === "ai";
 
           return (
             <div key={idx} className={isAI ? "ai-msg" : "user-msg"}>
@@ -159,8 +213,8 @@ const ChatArea = () => {
         <div ref={bottomRef} />
       </div>
 
-      <div className={`${messages?.length > 0 ? "has-message" : ""} w-100`}>
-        <form onSubmit={handleSubmit} className={`center`}>
+      <div className="has-message w-100">
+        <form onSubmit={handleSubmit} className="center">
           <input
             type="text"
             className="ai-input"
@@ -168,8 +222,9 @@ const ChatArea = () => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             required
+            autoFocus
           />
-          <button type="submit">
+          <button type="submit" disabled={!canSubmit}>
             <i className="fa-solid fa-paper-plane" />
           </button>
         </form>

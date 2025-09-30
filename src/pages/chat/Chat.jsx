@@ -1,10 +1,17 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import "./chat.css";
 import DOMPurify from "dompurify";
 import parse from "html-react-parser";
+import axios from "axios";
+import { baseURL, Context } from "../../context/context";
+import { useNavigate } from "react-router-dom";
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [canSubmit, setCanSubmit] = useState(false);
+  const nav = useNavigate();
+  const context = useContext(Context);
+  const { token, _id: userId } = context.userDetails;
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -22,17 +29,63 @@ const Chat = () => {
   };
 
   const buildPrompt = (history, newMessage) => {
-    return [...history, { role: "user", content: newMessage }]
-      .map((msg) => `${msg.role === "user" ? "User" : "AI"}: ${msg.content}`)
+    return [...history, { sender: "user", content: newMessage }]
+      .map((msg) => `${msg.sender === "user" ? "User" : "AI"}: ${msg.content}`)
       .join("\n");
   };
 
+  const createChat = useCallback(async () => {
+    try {
+      const { data } = await axios.post(
+        `${baseURL}/ai_chat`,
+        { userId, title: message },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const { _id: chatId } = data.data;
+      await axios.post(
+        `${baseURL}/ai_chat/message`,
+        { chatId, content: message, sender: "user" },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return chatId;
+    } catch (error) {
+      console.error("Error sending message:", error);
+    }
+  }, [token, userId, message]);
+
+  const creatResponeMessage = useCallback(
+    async (id, message) => {
+      try {
+        await axios.post(
+          `${baseURL}/ai_chat/message`,
+          { chatId: id, content: message, sender: "ai" },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        nav(`${id}`);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [token, nav]
+  );
+
   const sendMessage = useCallback(async () => {
+    setCanSubmit(false);
     if (!message.trim()) return;
 
-    setMessages((prev) => [...prev, { role: "user", content: message }]);
+    setMessages((prev) => [...prev, { sender: "user", content: message }]);
     const currentMessage = message;
+    const chatId = await createChat();
+
     setMessage("");
+
+    let finalResponse = "";
 
     try {
       const response = await fetch("http://192.168.0.176:1234/v1/completions", {
@@ -47,13 +100,13 @@ const Chat = () => {
 
       if (!response.body) {
         console.error("No stream body");
-        return;
+        return null;
       }
 
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
 
-      setMessages((prev) => [...prev, { role: "ai", content: "" }]);
+      setMessages((prev) => [...prev, { sender: "ai", content: "" }]);
 
       while (true) {
         const { done, value } = await reader.read();
@@ -73,6 +126,7 @@ const Chat = () => {
             const token = json.choices?.[0]?.text || "";
 
             const cleanToken = cleanMessage(token);
+            finalResponse += cleanToken;
 
             setMessages((prev) => {
               const updated = [...prev];
@@ -89,8 +143,10 @@ const Chat = () => {
       }
     } catch (error) {
       console.error("Error sending message:", error);
+      return null;
     }
-  }, [message, messages]);
+    await creatResponeMessage(chatId, finalResponse);
+  }, [message, messages, createChat, creatResponeMessage]);
 
   const handleSubmit = useCallback(
     (e) => {
@@ -116,7 +172,7 @@ const Chat = () => {
       {messages?.length === 0 && <h1>what can i help you with</h1>}
       <div className="messages w-100">
         {messages.map((msg, idx) => {
-          const isAI = msg.role === "ai";
+          const isAI = msg.sender === "ai";
 
           return (
             <div key={idx} className={isAI ? "ai-msg" : "user-msg"}>
