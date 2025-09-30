@@ -1,7 +1,96 @@
+.chat-sidebar {
+  position: fixed;
+  background: var(--body-color);
+  top: 75px;
+  height: -webkit-fill-available;
+  right: 0;
+  width: 300px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.chat-sidebar > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-transform: capitalize;
+  gap: 20px;
+}
+.chat-sidebar > div .sidebar-icon {
+  font-size: 20px;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.chat-sidebar > div .sidebar-icon:hover {
+  background-color: var(--section-color);
+}
+.chat-sidebar > div a {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--font-color);
+  background: var(--section-color);
+}
+.chat-sidebar > div a:hover {
+  background: var(--aside-color);
+}
+.chat-sidebar > div h3 {
+  color: var(--font-color);
+  text-transform: capitalize;
+}
+.chat-sidebar > div h3::after {
+  content: " : ";
+}
+.chat-sidebar > article {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow: auto;
+}
+
+.chat-sidebar > article div {
+  color: var(--font-color);
+  border-radius: 7px;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.chat-sidebar > article div:hover,
+.chat-sidebar > article div:has(a.active) {
+  background-color: var(--section-color);
+}
+
+.chat-sidebar > article div a {
+  white-space: nowrap;
+  padding: 10px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--font-color);
+  font-size: 17px;
+}
+.chat-sidebar > article div i {
+  color: red;
+  font-size: 14px;
+  cursor: pointer;
+  opacity: 0;
+}
+.chat-sidebar > article div:hover i {
+  opacity: 1;
+}
+
+.ai-loading.react-loading-skeleton {
+  min-height: auto;
+}
+
 .chat-area {
   min-height: 100%;
-  width: 1000px;
-  margin: auto;
+  width: 800px;
   padding-bottom: 50px;
 }
 .chat-area h1 {
@@ -13,16 +102,17 @@
   content: " ?";
 }
 .chat-area form {
-  background-color: var(--aside-color);
+  background-color: var(--body-color);
   width: 100%;
   border-radius: 30px;
   overflow: hidden;
   position: relative;
+  padding-inline: 10px;
 }
 .chat-area .has-message {
   position: fixed;
   bottom: 0;
-  width: 1000px;
+  width: 800px;
   background: var(--section-color);
   padding-bottom: 30px;
   display: flex;
@@ -33,17 +123,17 @@
   border: none;
   font-size: 16px;
   padding: 15px 20px;
-  padding-right: 40px;
+  background: var(--body-color);
+  color: var(--font-color);
 }
 .chat-area form button {
-  position: absolute;
-  right: 20px;
   background-color: var(--section-color);
   border: none;
   cursor: pointer;
   width: 40px;
   height: 40px;
   border-radius: 50%;
+  color: var(--font-color);
 }
 body.arabic .chat-area form input {
   padding-right: auto;
