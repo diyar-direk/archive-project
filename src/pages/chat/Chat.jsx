@@ -167,55 +167,65 @@ const Chat = () => {
         alert("فشل النسخ!");
       });
   }, []);
-
+  const [isClosed, setIsClosed] = useState(false);
+  const toggleSideBar = useCallback((e) => {
+    e.stopPropagation();
+    setIsClosed((prev) => !prev);
+  }, []);
   return (
     <>
-      <section className="center flex-direction gap-20 chat-area relative">
+      <section
+        className={`center flex-direction gap-20 chat-area relative ${
+          isClosed ? "closed" : ""
+        }`}
+      >
         {messages?.length === 0 && <h1>what can i help you with</h1>}
-        <div className="messages w-100">
-          {messages.map((msg, idx) => {
-            const isAI = msg.sender === "ai";
+        {messages?.length > 0 && (
+          <div className="messages w-100">
+            {messages.map((msg, idx) => {
+              const isAI = msg.sender === "ai";
 
-            return (
-              <div key={idx} className={isAI ? "ai-msg" : "user-msg"}>
-                {!isAI && <h3>you</h3>}
+              return (
+                <div key={idx} className={isAI ? "ai-msg" : "user-msg"}>
+                  {!isAI && <h3>you</h3>}
 
-                {isAI ? (
-                  msg.content.includes("<") && msg.content.includes(">") ? (
+                  {isAI ? (
+                    msg.content.includes("<") && msg.content.includes(">") ? (
+                      <pre
+                        style={{ whiteSpace: "pre-wrap" }}
+                        className="message-text"
+                      >
+                        {msg.content.replace(/<br\s*\/?>/gi, "\n")}
+                        <i
+                          className="fa-solid fa-copy copy-message"
+                          onClick={() => handleCopy(msg.content)}
+                          title="copy"
+                        />
+                      </pre>
+                    ) : (
+                      <div className="ai-html message-text">
+                        {parse(DOMPurify.sanitize(msg.content))}
+                        <i
+                          className="fa-solid fa-copy copy-message"
+                          onClick={() => handleCopy(msg.content)}
+                          title="copy"
+                        />
+                      </div>
+                    )
+                  ) : (
                     <pre
-                      style={{ whiteSpace: "pre-wrap" }}
+                      style={{ whiteSpace: "pre-wrap", margin: 0 }}
                       className="message-text"
                     >
-                      {msg.content.replace(/<br\s*\/?>/gi, "\n")}
-                      <i
-                        className="fa-solid fa-copy copy-message"
-                        onClick={() => handleCopy(msg.content)}
-                        title="copy"
-                      />
+                      {msg.content}
                     </pre>
-                  ) : (
-                    <div className="ai-html message-text">
-                      {parse(DOMPurify.sanitize(msg.content))}
-                      <i
-                        className="fa-solid fa-copy copy-message"
-                        onClick={() => handleCopy(msg.content)}
-                        title="copy"
-                      />
-                    </div>
-                  )
-                ) : (
-                  <pre
-                    style={{ whiteSpace: "pre-wrap", margin: 0 }}
-                    className="message-text"
-                  >
-                    {msg.content}
-                  </pre>
-                )}
-              </div>
-            );
-          })}
-          <div ref={bottomRef} />
-        </div>
+                  )}
+                </div>
+              );
+            })}
+            <div ref={bottomRef} />
+          </div>
+        )}
 
         <div className={`${messages?.length > 0 ? "has-message" : ""} w-100`}>
           <form onSubmit={handleSubmit} className={`center`}>
@@ -233,7 +243,11 @@ const Chat = () => {
           </form>
         </div>
       </section>
-      <ChatSideBar />
+      <ChatSideBar
+        isClosed={isClosed}
+        toggleSideBar={toggleSideBar}
+        setIsClosed={setIsClosed}
+      />
     </>
   );
 };

@@ -5,7 +5,7 @@ import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import useLanguage from "./../../hooks/useLanguage";
 
-const ChatSideBar = () => {
+const ChatSideBar = ({ isClosed, toggleSideBar, setIsClosed }) => {
   const context = useContext(Context);
   const { _id: userId, token } = context?.userDetails || {};
   const { id } = useParams();
@@ -99,6 +99,15 @@ const ChatSideBar = () => {
     setSelectedChat(null);
   }, [token, selectedChat, id, nav]);
 
+  useEffect(() => {
+    if (window.innerWidth <= 500) {
+      setIsClosed(true);
+      const handleClick = () => setIsClosed(true);
+      window.addEventListener("click", handleClick);
+      return () => window.removeEventListener("click", handleClick);
+    }
+  }, [setIsClosed]);
+
   return (
     <>
       {selectedChat && (
@@ -119,11 +128,15 @@ const ChatSideBar = () => {
           </div>
         </div>
       )}
-      <div className="chat-sidebar">
+      <div className={`chat-sidebar ${isClosed ? "closed" : ""}`}>
         <div>
-          <i className="fa-solid fa-table-cells-large sidebar-icon" />
-          <Link to="/chat">
-            <i className="fa-regular fa-pen-to-square"></i> new chat
+          <i
+            className="fa-solid fa-table-cells-large sidebar-icon"
+            onClick={toggleSideBar}
+          />
+          <Link to="/chat" className="flex gap-10 align-center">
+            <i className="fa-regular fa-pen-to-square"></i>
+            <span>new chat</span>
           </Link>
           <h3 className="w-100">chats</h3>
         </div>

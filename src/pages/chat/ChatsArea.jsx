@@ -166,10 +166,19 @@ const ChatArea = () => {
         alert("فشل النسخ!");
       });
   }, []);
+  const [isClosed, setIsClosed] = useState(false);
+  const toggleSideBar = useCallback((e) => {
+    e.stopPropagation();
+    setIsClosed((prev) => !prev);
+  }, []);
 
   return (
     <>
-      <section className="center flex-direction gap-20 chat-area relative">
+      <section
+        className={`center flex-direction gap-20 chat-area relative ${
+          isClosed ? "closed" : ""
+        }`}
+      >
         <div className="messages w-100">
           {messages.map((msg, idx) => {
             const isAI = msg.sender === "ai";
@@ -215,7 +224,7 @@ const ChatArea = () => {
           <div ref={bottomRef} />
         </div>
 
-        <div className="has-message w-100">
+        <div className="ai-form-container">
           <form onSubmit={handleSubmit} className="center">
             <input
               type="text"
@@ -232,7 +241,11 @@ const ChatArea = () => {
           </form>
         </div>
       </section>
-      <ChatSideBar />
+      <ChatSideBar
+        isClosed={isClosed}
+        toggleSideBar={toggleSideBar}
+        setIsClosed={setIsClosed}
+      />
     </>
   );
 };
