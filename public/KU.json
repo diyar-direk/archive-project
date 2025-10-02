@@ -778,5 +778,13 @@
       "results": "  result",
       "reports": "reports"
     }
+  },
+  "ai_chat": {
+    "header": "",
+    "new_chat": "",
+    "chats": "",
+    "title": "",
+    "ask": "",
+    "you": ""
   }
 }

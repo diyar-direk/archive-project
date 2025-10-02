@@ -775,5 +775,13 @@
       "results": "Sonuç",
       "reports": "Rapor"
     }
+  },
+  "ai_chat": {
+    "header": "",
+    "new_chat": "",
+    "chats": "",
+    "title": "",
+    "ask": "",
+    "you": ""
   }
 }

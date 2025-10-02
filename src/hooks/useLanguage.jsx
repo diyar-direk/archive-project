@@ -259,12 +259,12 @@ const useLanguage = () => {
         icon: "fa-solid fa-comments",
         children: [
           {
-            title: "chat",
+            title: language?.ai_chat?.header,
             path: "chat",
             role: ["admin", "user"],
           },
         ],
-        title: "chat",
+        title: language?.ai_chat?.header,
         role: ["admin", "user"],
       },
     ],

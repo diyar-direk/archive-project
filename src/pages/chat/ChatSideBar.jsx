@@ -136,9 +136,9 @@ const ChatSideBar = ({ isClosed, toggleSideBar, setIsClosed }) => {
           />
           <Link to="/chat" className="flex gap-10 align-center">
             <i className="fa-regular fa-pen-to-square"></i>
-            <span>new chat</span>
+            <span>{language?.ai_chat?.new_chat}</span>
           </Link>
-          <h3 className="w-100">chats</h3>
+          <h3 className="w-100"> {language?.ai_chat?.chats} </h3>
         </div>
 
         <article>
@@ -149,7 +149,7 @@ const ChatSideBar = ({ isClosed, toggleSideBar, setIsClosed }) => {
               ref={i === chats.length - 1 ? lastElement : null}
             >
               <NavLink to={`/chat/${chat._id}`} className="flex-1">
-                {chat.title || "no title"}
+                {chat.title || `${language?.ai_chat?.chat}-${i}`}
               </NavLink>
               <i
                 className="fa-solid fa-trash-can"

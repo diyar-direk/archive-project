@@ -6,6 +6,7 @@ import axios from "axios";
 import { baseURL, Context } from "../../context/context";
 import { useNavigate } from "react-router-dom";
 import ChatSideBar from "./ChatSideBar";
+import useLanguage from "../../hooks/useLanguage";
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -172,6 +173,9 @@ const Chat = () => {
     e.stopPropagation();
     setIsClosed((prev) => !prev);
   }, []);
+
+  const { language } = useLanguage();
+
   return (
     <>
       <section
@@ -179,15 +183,15 @@ const Chat = () => {
           isClosed ? "closed" : ""
         }`}
       >
-        {messages?.length === 0 && <h1>what can i help you with</h1>}
+        {messages?.length === 0 && <h1>{language?.ai_chat?.title} </h1>}
         {messages?.length > 0 && (
-          <div className="messages w-100">
+          <div className="messages w-100 flex-1">
             {messages.map((msg, idx) => {
               const isAI = msg.sender === "ai";
 
               return (
                 <div key={idx} className={isAI ? "ai-msg" : "user-msg"}>
-                  {!isAI && <h3>you</h3>}
+                  {!isAI && <h3> {language?.ai_chat?.you} </h3>}
 
                   {isAI ? (
                     msg.content.includes("<") && msg.content.includes(">") ? (
@@ -232,7 +236,7 @@ const Chat = () => {
             <input
               type="text"
               className="ai-input"
-              placeholder="Ask anything..."
+              placeholder={language?.ai_chat?.ask}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required

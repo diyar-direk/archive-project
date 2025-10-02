@@ -10,6 +10,10 @@
   flex-direction: column;
   gap: 10px;
 }
+body.arabic .chat-sidebar {
+  left: 0;
+  right: auto;
+}
 .chat-sidebar > div {
   display: flex;
   flex-direction: column;

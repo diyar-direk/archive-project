@@ -780,5 +780,13 @@
       "results": " حصيلة الأعمال ",
       "reports": " التقارير الدورية"
     }
+  },
+  "ai_chat": {
+    "header": "",
+    "new_chat": "",
+    "chats": "",
+    "title": "",
+    "ask": "",
+    "you": ""
   }
 }

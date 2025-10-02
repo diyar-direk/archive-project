@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { baseURL, Context } from "../../context/context";
 import ChatSideBar from "./ChatSideBar";
+import useLanguage from "../../hooks/useLanguage";
 const ChatArea = () => {
   const { id } = useParams();
   const [canSubmit, setCanSubmit] = useState(false);
@@ -171,6 +172,7 @@ const ChatArea = () => {
     e.stopPropagation();
     setIsClosed((prev) => !prev);
   }, []);
+  const { language } = useLanguage();
 
   return (
     <>
@@ -179,13 +181,13 @@ const ChatArea = () => {
           isClosed ? "closed" : ""
         }`}
       >
-        <div className="messages w-100">
+        <div className="messages w-100 flex-1">
           {messages.map((msg, idx) => {
             const isAI = msg.sender === "ai";
 
             return (
               <div key={idx} className={isAI ? "ai-msg" : "user-msg"}>
-                {!isAI && <h3>you</h3>}
+                {!isAI && <h3>{language?.ai_chat?.you} </h3>}
 
                 {isAI ? (
                   msg.content.includes("<") && msg.content.includes(">") ? (
@@ -229,7 +231,7 @@ const ChatArea = () => {
             <input
               type="text"
               className="ai-input"
-              placeholder="Ask anything..."
+              placeholder={language?.ai_chat?.ask}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
