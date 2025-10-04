@@ -14,6 +14,9 @@ const ChatArea = () => {
   const { token } = context?.userDetails;
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [controller, setController] = useState(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [error, setError] = useState(null);
 
   const getChat = useCallback(async () => {
     try {
@@ -80,9 +83,16 @@ const ChatArea = () => {
     setMessage("");
     let finalResponse = "";
     let start = false;
+    setError(false);
+    let hasError = false;
+    let aborted = false;
 
     try {
-      const response = await fetch("http://192.168.0.176:1234/v1/completions", {
+      const newController = new AbortController();
+      setController(newController);
+      setIsStreaming(true);
+
+      const response = await fetch("http://192.168.1.150:1234/v1/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -90,6 +100,7 @@ const ChatArea = () => {
           prompt: buildPrompt(messages, currentMessage),
           stream: true,
         }),
+        signal: newController.signal,
       });
 
       if (!response.body) {
@@ -139,12 +150,23 @@ const ChatArea = () => {
         }
       }
     } catch (error) {
-      console.error("Error sending message:", error);
+      if (error.name === "AbortError") {
+        aborted = true;
+        console.log("Stream aborted by user");
+      } else {
+        console.error("Error sending message:", error);
+        hasError = true;
+        setError(true);
+      }
     }
 
-    await createMessage(currentMessage, "user");
-    await createMessage(finalResponse, "ai");
+    if (!hasError || aborted) {
+      await createMessage(currentMessage, "user");
+      await createMessage(finalResponse, "ai");
+    }
 
+    setIsStreaming(false);
+    setController(null);
     setCanSubmit(true);
   }, [message, messages, createMessage]);
 
@@ -223,23 +245,40 @@ const ChatArea = () => {
               </div>
             );
           })}
+          {error && (
+            <h3 className="error-text">some error , please try agin later</h3>
+          )}
           <div ref={bottomRef} />
         </div>
 
         <div className="ai-form-container">
           <form onSubmit={handleSubmit} className="center">
-            <input
-              type="text"
+            <textarea
               className="ai-input"
               placeholder={language?.ai_chat?.ask}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
-              autoFocus
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
             />
-            <button type="submit" disabled={!canSubmit}>
-              <i className="fa-solid fa-paper-plane" />
-            </button>
+            {isStreaming ? (
+              <button
+                type="button"
+                className="stop-btn"
+                onClick={() => controller?.abort()}
+              >
+                <i className="fa-solid fa-stop" />
+              </button>
+            ) : (
+              <button type="submit" disabled={!canSubmit}>
+                <i className="fa-solid fa-paper-plane" />
+              </button>
+            )}
           </form>
         </div>
       </section>

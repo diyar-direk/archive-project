@@ -39,7 +39,7 @@ const ChatSideBar = ({ isClosed, toggleSideBar, setIsClosed }) => {
       setLoading(true);
       try {
         const { data } = await axios.get(
-          `${baseURL}/ai_chat?userId=${userId}&limit=10&page=${page}`,
+          `${baseURL}/ai_chat?userId=${userId}&limit=10&page=${page}&sort=-createdAt`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

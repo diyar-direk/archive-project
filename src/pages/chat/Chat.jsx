@@ -7,10 +7,15 @@ import { baseURL, Context } from "../../context/context";
 import { useNavigate } from "react-router-dom";
 import ChatSideBar from "./ChatSideBar";
 import useLanguage from "../../hooks/useLanguage";
+
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(true);
+  const [error, setError] = useState(null);
+  const [controller, setController] = useState(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+
   const nav = useNavigate();
   const context = useContext(Context);
   const { token, _id: userId } = context.userDetails;
@@ -19,6 +24,7 @@ const Chat = () => {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   const cleanMessage = (text) => {
     return text
       .replace(/<\|.*?\|>/g, " ")
@@ -36,28 +42,31 @@ const Chat = () => {
       .join("\n");
   };
 
-  const createChat = useCallback(async () => {
-    try {
-      const { data } = await axios.post(
-        `${baseURL}/ai_chat`,
-        { userId, title: message },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      const { _id: chatId } = data.data;
-      await axios.post(
-        `${baseURL}/ai_chat/message`,
-        { chatId, content: message, sender: "user" },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      return chatId;
-    } catch (error) {
-      console.error("Error sending message:", error);
-    }
-  }, [token, userId, message]);
+  const createChat = useCallback(
+    async (message) => {
+      try {
+        const { data } = await axios.post(
+          `${baseURL}/ai_chat`,
+          { userId, title: message },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        const { _id: chatId } = data.data;
+        await axios.post(
+          `${baseURL}/ai_chat/message`,
+          { chatId, content: message, sender: "user" },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        return chatId;
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    },
+    [token, userId]
+  );
 
   const creatResponeMessage = useCallback(
     async (id, message) => {
@@ -79,18 +88,23 @@ const Chat = () => {
 
   const sendMessage = useCallback(async () => {
     setCanSubmit(false);
+    setError(false);
     if (!message.trim()) return;
 
     setMessages((prev) => [...prev, { sender: "user", content: message }]);
     const currentMessage = message;
-    const chatId = await createChat();
 
     setMessage("");
-
     let finalResponse = "";
+    let hasError = false;
+    let aborted = false;
 
     try {
-      const response = await fetch("http://192.168.0.176:1234/v1/completions", {
+      const newController = new AbortController();
+      setController(newController);
+      setIsStreaming(true);
+
+      const response = await fetch("http://192.168.1.150:1234/v1/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -98,11 +112,12 @@ const Chat = () => {
           prompt: buildPrompt(messages, currentMessage),
           stream: true,
         }),
+        signal: newController.signal,
       });
 
       if (!response.body) {
         console.error("No stream body");
-        return null;
+        throw new Error("No stream body");
       }
 
       const reader = response.body.getReader();
@@ -115,7 +130,6 @@ const Chat = () => {
         if (done) break;
 
         const chunk = decoder.decode(value, { stream: true });
-
         const lines = chunk
           .split("\n")
           .filter((line) => line.trim().startsWith("data:"));
@@ -144,10 +158,24 @@ const Chat = () => {
         }
       }
     } catch (error) {
-      console.error("Error sending message:", error);
-      return null;
+      if (error.name === "AbortError") {
+        aborted = true;
+        console.log("Stream aborted by user");
+      } else {
+        console.error("Error sending message:", error);
+        hasError = true;
+        setError(true);
+      }
     }
-    await creatResponeMessage(chatId, finalResponse);
+
+    if (!hasError || aborted) {
+      const chatId = await createChat(currentMessage);
+      await creatResponeMessage(chatId, finalResponse);
+    }
+
+    setIsStreaming(false);
+    setController(null);
+    setCanSubmit(true);
   }, [message, messages, createChat, creatResponeMessage]);
 
   const handleSubmit = useCallback(
@@ -168,6 +196,7 @@ const Chat = () => {
         alert("فشل النسخ!");
       });
   }, []);
+
   const [isClosed, setIsClosed] = useState(false);
   const toggleSideBar = useCallback((e) => {
     e.stopPropagation();
@@ -227,23 +256,41 @@ const Chat = () => {
                 </div>
               );
             })}
+            {error && (
+              <h3 className="error-text">some error , please try agin later</h3>
+            )}
             <div ref={bottomRef} />
           </div>
         )}
 
         <div className={`${messages?.length > 0 ? "has-message" : ""} w-100`}>
-          <form onSubmit={handleSubmit} className={`center`}>
-            <input
-              type="text"
+          <form onSubmit={handleSubmit} className="center">
+            <textarea
               className="ai-input"
               placeholder={language?.ai_chat?.ask}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               required
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
             />
-            <button type="submit" disabled={!canSubmit}>
-              <i className="fa-solid fa-paper-plane" />
-            </button>
+            {isStreaming ? (
+              <button
+                type="button"
+                className="stop-btn"
+                onClick={() => controller?.abort()}
+              >
+                <i className="fa-solid fa-stop" />
+              </button>
+            ) : (
+              <button type="submit" disabled={!canSubmit}>
+                <i className="fa-solid fa-paper-plane" />
+              </button>
+            )}
           </form>
         </div>
       </section>

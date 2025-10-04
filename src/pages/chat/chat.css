@@ -147,13 +147,14 @@ body.arabic .chat-sidebar {
   padding-inline: 10px;
 }
 
-.chat-area form input {
+.chat-area form textarea {
   flex: 1;
   border: none;
   font-size: 16px;
   padding: 15px 20px;
   background: var(--body-color);
   color: var(--font-color);
+  height: 52px;
 }
 .chat-area form button {
   background-color: var(--section-color);
@@ -164,7 +165,7 @@ body.arabic .chat-sidebar {
   border-radius: 50%;
   color: var(--font-color);
 }
-body.arabic .chat-area form input {
+body.arabic .chat-area form textarea {
   padding-right: auto;
   padding-left: 40px;
 }
@@ -285,7 +286,7 @@ body.arabic .chat-area h1::after {
   .chat-area h1 {
     font-size: 30px;
   }
-  .chat-area form input {
+  .chat-area form textarea {
     font-size: 14px;
     padding: 10px;
   }
@@ -335,7 +336,7 @@ body.arabic .chat-area h1::after {
   .chat-area h1 {
     font-size: 24px;
   }
-  .chat-area form input {
+  .chat-area form textarea {
     font-size: 13px;
     padding: 9px;
   }
@@ -389,7 +390,7 @@ body.arabic .chat-area h1::after {
   .chat-area h1 {
     font-size: 20px;
   }
-  .chat-area form input {
+  .chat-area form textarea {
     font-size: 12px;
   }
   .messages .message-text {
@@ -412,7 +413,7 @@ body.arabic .chat-area h1::after {
   .chat-area h1 {
     font-size: 17px;
   }
-  .chat-area form input {
+  .chat-area form textarea {
     font-size: 11px;
     padding: 8px;
   }
